@@ -1,0 +1,456 @@
+﻿ingredient,recommendation
+active yeast,neutral
+allspice,neutral
+almond extract,neutral
+almond,preferred
+apple juice,neutral
+apple,preferred
+apricot,preferred
+artichoke heart,neutral
+asparagus spear,preferred
+asparagus,preferred
+avocado,preferred
+baby carrot,preferred
+baby spinach,preferred
+bacon,limit
+baking potato,neutral
+baking powder,neutral
+baking soda,neutral
+balsamic vinegar,neutral
+banana,preferred
+barbecue sauce,neutral
+basil leaf,preferred
+basil,preferred
+basmati rice,neutral
+bay leaf,neutral
+bean sprout,preferred
+bean,preferred
+beef bouillon cube,limit
+beef bouillon,limit
+beef brisket,limit
+beef broth,limit
+beef stock,limit
+beef tenderloin,limit
+beef,limit
+beer,neutral
+beet,neutral
+bell pepper,preferred
+black bean,preferred
+black olive,preferred
+black pepper,neutral
+black peppercorn,neutral
+blueberry,preferred
+brandy,neutral
+bread crumb,limit
+bread flour,limit
+bread,limit
+breadcrumb,limit
+broccoli floret,preferred
+broccoli,preferred
+brown rice,preferred
+brown sugar,neutral
+butter,neutral
+buttermilk,neutral
+butternut squash,preferred
+button mushroom,preferred
+cabbage,preferred
+cake flour,neutral
+canola oil,neutral
+caper,neutral
+caraway seed,neutral
+cardamom powder,neutral
+cardamom seed,neutral
+cardamom,neutral
+carrot,neutral
+cashew nut,preferred
+cashew,preferred
+caster sugar,neutral
+catsup,neutral
+cauliflower,preferred
+cayenne pepper,neutral
+cayenne,neutral
+celery rib,preferred
+celery salt,neutral
+celery seed,neutral
+celery,preferred
+cheddar cheese,neutral
+cheese,neutral
+cherry tomato,preferred
+chick pea,preferred
+chicken bouillon cube,neutral
+chicken bouillon,neutral
+chicken breast half,preferred
+chicken breast,preferred
+chicken broth,neutral
+chicken stock,neutral
+chicken thigh,preferred
+chicken,preferred
+chickpea,preferred
+chili powder,neutral
+chili sauce,neutral
+chive,neutral
+chocolate chip,neutral
+chocolate,neutral
+chutney,neutral
+cider vinegar,neutral
+cilantro leaf,neutral
+cilantro,neutral
+cinnamon,neutral
+clove,neutral
+cocoa powder,neutral
+cocoa,neutral
+coconut milk,neutral
+coconut oil,neutral
+coconut,preferred
+cod,neutral
+coffee,neutral
+cold water,neutral
+confectioner ' sugar,neutral
+confectioner sugar,neutral
+cooking oil,neutral
+cooking spray,neutral
+cooking wine,neutral
+coriander leaf,preferred
+coriander seed,neutral
+coriander,preferred
+corn kernel,neutral
+corn oil,neutral
+corn syrup,neutral
+corn tortilla,neutral
+corn,preferred
+cornflour,neutral
+cornmeal,neutral
+cornstarch,neutral
+cottage cheese,neutral
+couscous,neutral
+crabmeat,neutral
+cream cheese,neutral
+cream chicken soup,limit
+cream mushroom soup,limit
+cream tartar,neutral
+cream,neutral
+creme fraiche,neutral
+crisco,limit
+cucumber,neutral
+cumin powder,neutral
+cumin seed,neutral
+cumin,neutral
+curry powder,neutral
+dark brown sugar,neutral
+dark chocolate,neutral
+dark rum,neutral
+dark soy sauce,neutral
+date,neutral
+dijon mustard,neutral
+dill pickle,neutral
+dill weed,neutral
+dill,neutral
+egg noodle,neutral
+egg white,neutral
+egg yolk,neutral
+egg,neutral
+eggplant,neutral
+elbow macaroni,neutral
+english cucumber,preferred
+extra virgin olive oil,neutral
+fennel seed,neutral
+fenugreek seed,neutral
+feta cheese,neutral
+feta,neutral
+fettuccine,neutral
+fish sauce,neutral
+flat leaf parsley,neutral
+flour tortilla,neutral
+flour,neutral
+french bread,neutral
+garam masala powder,neutral
+garam masala,neutral
+garbanzo bean,neutral
+garlic clove,neutral
+garlic powder,neutral
+garlic salt,neutral
+garlic,preferred
+ghee,neutral
+ginger root,preferred
+ginger,preferred
+gingerroot,preferred
+goat cheese,neutral
+grain rice,neutral
+grain white rice,neutral
+green bean,preferred
+green bell pepper,preferred
+green cabbage,preferred
+green chili,neutral
+green chilies,neutral
+green olive,preferred
+green onion,preferred
+green pea,preferred
+green pepper,preferred
+gruyere cheese,neutral
+ham,limit
+hamburger bun,neutral
+hamburger,limit
+hard egg,neutral
+head cabbage,preferred
+head cauliflower,preferred
+heavy cream,limit
+heavy whipping cream,limit
+herb,neutral
+hoisin sauce,neutral
+honey,limit
+horseradish,preferred
+hot water,neutral
+hummus,preferred
+ice water,neutral
+ice,neutral
+iceberg lettuce,preferred
+icing sugar,neutral
+italian dressing,neutral
+italian parsley,neutral
+italian sausage,limit
+italian seasoning,neutral
+italian spice,neutral
+jalapeno pepper,neutral
+jalapeno,neutral
+jasmine rice,neutral
+kalamata olive,preferred
+kale,neutral
+kernel corn,neutral
+ketchup,limit
+kidney bean,preferred
+kosher salt black pepper,neutral
+kosher salt,neutral
+lamb,limit
+large shrimp,neutral
+lasagna noodle,neutral
+lea perrins worcestershire sauce,neutral
+leek,neutral
+lemon juice,neutral
+lemon peel,preferred
+lemon wedge,preferred
+lemon zest,neutral
+lemon,preferred
+lemongrass,neutral
+lentil,preferred
+lettuce leaf,preferred
+lettuce,preferred
+lime juice,neutral
+lime wedge,preferred
+lime,preferred
+linguine,neutral
+macaroni,neutral
+mango chutney,neutral
+mango,preferred
+maple syrup,neutral
+margarine,neutral
+marinara sauce,neutral
+marjoram,neutral
+marshmallow,limit
+mascarpone cheese,neutral
+mayonnaise,neutral
+mexican cheese,neutral
+milk,preferred
+mint leaf,neutral
+mint,neutral
+mirin,neutral
+miso paste,preferred
+molasses,neutral
+monterey jack cheese,neutral
+mozzarella cheese,neutral
+mushroom,preferred
+mustard powder,neutral
+mustard seed,neutral
+mustard,neutral
+nutmeg,neutral
+oats,preferred
+oatmeal,preferred
+oil,neutral
+olive oil,preferred
+olive,preferred
+onion flake,neutral
+onion powder,neutral
+onion soup mix,limit
+onion,preferred
+orange bell pepper,preferred
+orange juice,neutral
+orange peel,neutral
+orange zest,neutral
+orange,preferred
+oregano leaf,neutral
+oregano,neutral
+orzo pasta,neutral
+oyster sauce,neutral
+palm sugar,neutral
+panko bread crumb,neutral
+panko breadcrumb,neutral
+paprika,neutral
+parmesan cheese,neutral
+parsley flake,neutral
+parsley leaf,neutral
+parsley,neutral
+parsnip,neutral
+pasta,neutral
+pea,neutral
+peach,preferred
+peanut butter,neutral
+peanut oil,neutral
+peanut,neutral
+pear,preferred
+pecan,preferred
+penne pasta,neutral
+pepper sauce,neutral
+pepper,neutral
+peppercorn,neutral
+pesto sauce,neutral
+pie crust,neutral
+pine nut,preferred
+pineapple chunk,preferred
+pineapple juice,neutral
+pineapple,preferred
+pinto bean,preferred
+pistachio,neutral
+pita bread,neutral
+pizza crust,neutral
+pizza sauce,neutral
+plain flour,neutral
+plain yogurt,preferred
+plum tomato,preferred
+polenta,neutral
+pork chop,limit
+pork,neutral
+portabella mushroom,preferred
+potato,limit
+prawn,neutral
+pumpkin,preferred
+purpose flour,neutral
+radish,preferred
+raisin,preferred
+red bell pepper,preferred
+red chili powder,neutral
+red chilies,neutral
+red kidney bean,preferred
+red lentil,preferred
+red onion,preferred
+red pepper flake,neutral
+red pepper,preferred
+red potato,neutral
+red wine vinegar,neutral
+red wine,neutral
+rice vinegar,neutral
+rice wine vinegar,neutral
+rice wine,neutral
+rice,limit
+ricotta cheese,neutral
+rom tomato,preferred
+romaine lettuce,preferred
+romano cheese,neutral
+rosemary,neutral
+rum,neutral
+russet potato,neutral
+saffron,neutral
+sage,neutral
+salmon fillet,preferred
+salmon,preferred
+salsa,neutral
+salt black pepper,neutral
+salt pepper,neutral
+salt,neutral
+sauce,neutral
+sauerkraut,preferred
+sausage,limit
+scallion,preferred
+sea salt,neutral
+seasoning salt,neutral
+self raising flour,neutral
+self rising flour,neutral
+sesame oil,neutral
+sesame seed,neutral
+shallot,neutral
+sharp cheddar cheese,neutral
+sherry wine,neutral
+sherry,neutral
+shortening,neutral
+shrimp,neutral
+sirloin steak,limit
+sirloin,limit
+snap pea,preferred
+snow pea,preferred
+soy sauce,neutral
+soya sauce,neutral
+soymilk,neutral
+spaghetti noodle,neutral
+spaghetti sauce,neutral
+spaghetti,neutral
+spaghettini,neutral
+spanish onion,preferred
+spinach leaf,preferred
+spinach,preferred
+spring onion,preferred
+steak,limit
+stewing beef,limit
+stir fry sauce,neutral
+strawberry,preferred
+sugar,limit
+sultana,preferred
+sunflower oil,neutral
+swiss cheese,neutral
+tabasco sauce,neutral
+table salt,neutral
+taco seasoning mix,limit
+taco seasoning,neutral
+tahini,neutral
+tarragon,neutral
+tequila,neutral
+teriyaki sauce,neutral
+thyme leaf,neutral
+thyme leave,neutral
+thyme,neutral
+tofu,preferred
+tomato juice,neutral
+tomato paste,preferred
+tomato puree,preferred
+tomato sauce,neutral
+tomato,preferred
+tortilla chip,neutral
+tortilla,neutral
+tuna,preferred
+turkey,preferred
+turmeric powder,neutral
+turmeric,preferred
+turnip,preferred
+vanilla essence,neutral
+vanilla extract,neutral
+vanilla ice cream,neutral
+vanilla,neutral
+vegetable broth,neutral
+vegetable oil,neutral
+vegetable stock,neutral
+vinegar,neutral
+vodka,neutral
+walnut,preferred
+water chestnut,neutral
+water,neutral
+wheat bread,neutral
+wheat flour,neutral
+whipping cream,neutral
+white bread,neutral
+white flour,neutral
+white mushroom,preferred
+white onion,preferred
+white pepper,neutral
+white rice,neutral
+white sugar,neutral
+white vinegar,neutral
+white wine vinegar,neutral
+white wine,neutral
+wine vinegar,neutral
+worcestershire sauce,neutral
+yeast,neutral
+yellow bell pepper,preferred
+yellow cornmeal,neutral
+yellow onion,preferred
+yellow pepper,preferred
+yellow squash,preferred
+yogurt,preferred
+yukon gold potato,neutral
+zucchini,preferred

@@ -1,0 +1,71 @@
+<mat-toolbar color="primary" style="background-color: #00415c">
+  <img
+    src="../assets/images/MealPlanIQ_Logo.png"
+    alt="MealPlanIQ"
+    routerLink=""
+    style="cursor: pointer; width: 100px"
+  />
+  <ng-container *ngIf="user$ | async as user; else loginButton">
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <img
+        width="30"
+        height="30"
+        class="profile-image-toolbar"
+        [src]="user.photoURL ?? 'assets/images/image-placeholder.png'"
+      />
+      {{ user.displayName }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+  </ng-container>
+  <ng-template #loginButton>
+    <div>
+      <button mat-button routerLink="login">
+        <mat-icon>login</mat-icon>
+        Sign in
+      </button>
+      <button mat-button class="menu-button" (click)="sidenav.toggle()">
+        <mat-icon>{{ isMenuOpen ? "menu_open" : "menu" }}</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</mat-toolbar>
+
+<div class="content">
+  <router-outlet></router-outlet>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      autoFocus="false"
+      mode="over"
+      [(opened)]="isMenuOpen"
+      class="sidenav"
+      position="end"
+      (click)="onSidenavClick()"
+    >
+      <a mat-button routerLink="/">Generate Meal Plan</a>
+      <a mat-button routerLink="/splash">Home</a>
+      <a mat-button routerLink="/mission">About</a>
+      <a mat-button routerLink="/philosophy">Philosophy</a>
+      <a mat-button routerLink="/approach">Our Approach</a>
+      <a mat-button routerLink="/leadership">Leadership</a>
+      <a mat-button routerLink="/timeline">Timeline</a>
+      <a mat-button routerLink="/contact">Contact</a>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item routerLink="/profile">
+    <mat-icon>account_circle</mat-icon>
+    Profile
+  </button>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Sign out
+  </button>
+</mat-menu>
