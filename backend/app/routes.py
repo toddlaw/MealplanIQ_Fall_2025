@@ -1,7 +1,8 @@
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
-import stripe
+from app.payment_stripe import create_charge
+from app.payment_stripe import create_subscription
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
@@ -32,23 +33,13 @@ def page_not_found(e):
     print(request.path)
     return redirect('/')
 
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
-
 @app.route('/create-charge', methods=['POST'])
-def create_charge():
-    try:
-        token = request.json.get('token')
-        amount = request.json.get('amount')
-
-        charge = stripe.Charge.create(
-            amount=amount,
-            currency='usd',
-            description='Example charge',
-            source=token
-        )
-        return jsonify(charge), 200
-    except stripe.error.StripeError as e:
-        return jsonify(error=str(e)), 400
+def handle_create_charge():
+    email = request.json.get('email')
+    token = request.json.get('token')
+    plan_id = request.json.get('plan_id')
+    # return create_charge(token, amount)
+    return create_subscription(email, token, plan_id)
 
 @app.route('/api/endpoint', methods=['POST'])
 def receive_data():
