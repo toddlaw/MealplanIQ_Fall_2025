@@ -1,51 +1,52 @@
-<div class="form-container mat-elevation-z5 text-center" #start>
-  <div class="text-container">
-    <h1 class="beta">
+<!-- <div class="form-container mat-elevation-z5 text-center" #start> -->
+<div class="flex flex-col items-center justify-center min-h-screen" #start>
+  <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
+    <h1 class="text-rose-600 font-black" >
       MealPlanIQ is currently in beta and we are working to make it better! We
       appreciate your patience.
     </h1>
-    <h1 class="header">
+    <h2>
       Fighting cancer, heart disease, or diabetes? Want to lose weight or gain
       muscle?
-    </h1>
-    <p class="sub-text">
+    </h2>
+    <p>
       <i>MealPlan IQ</i> combines a registered dietician's advice with your
       preferences and restrictions to generate
       <strong><i>personalized</i> and <i>optimized</i> meal plans</strong> that
       meet government-recommended nutritional requirements.
     </p>
-    <p class="sub-header">Give it a try!</p>
-    <p class="sub-header">
+    <p class="text-lg">Give it a try!</p>
+    <p class="text-center text-2xl">
       ① Select your health goal:
     </p>
-  </div>
-  <div class="content">
+
+  <div class="container flex flex-wrap items-center justify-center">
     <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
-      <div class="row">
-        <div class="example-button-container">
+      <div class="grid-rows">
+        <div class="grid-cols-4 p-8">
           <button
             *ngFor="let item of healthGoals; let i = index"
             type="button"
-            mat-fab
-            class="health-goal-btn"
-            color="primary"
+            class="text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-4 text-center me-2 mb-2"
             [class.selected-btn]="selectedHealthGoalIndex === i"
             (click)="healthGoalChange(i, item.value)"
           >
             <span>
               {{ item.viewValue1 }}
-              <br class="br-btn" />
+              <br/>
               {{ item.viewValue2 }}
-              <br class="br-btn" />
+              <br/>
               {{ item.viewValue3 != "" ? " " + item.viewValue3 : null }}
-              <!-- {{ item.viewValue3 }} -->
+              <br/>
             </span>
           </button>
-        </div>
+          </div>
       </div>
-      <p class="sub-header">
+
+      <p class="text-center text-2xl">
         ② Personalize your diet
       </p>
+
       <div class="row">
         <mat-accordion class="mat-accordian" multi>
           <mat-expansion-panel #peoplePanel [expanded]="panelOpenState">
@@ -191,6 +192,7 @@
           </mat-expansion-panel>
         </mat-accordion>
       </div>
+
       <div>
         <div class="row">
           <mat-form-field class="dietary-constraints">
@@ -340,6 +342,7 @@
       </div>
     </form>
   </div>
+</div>
 </div>
 
 <br />

@@ -1,8 +1,10 @@
-<div class="form-container mat-elevation-z5 text-center" *ngIf="!showSpinner">
+
+<div class="container mat-elevation-z5 " *ngIf="!showSpinner">
   <h1>
     {{ (user$ | async)?.displayName }}, Generate a customized meal plan from
     hundreds of recipes for your needs!
   </h1>
+
   <div class="content">
     <div class="row">
       <mat-form-field>
@@ -13,6 +15,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+  
       <mat-form-field>
         <input
           matInput
@@ -115,6 +118,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <mat-form-field>
         <mat-label>Gender</mat-label>
         <mat-select required [(ngModel)]="selectedGender">
@@ -123,6 +127,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <mat-form-field>
         <mat-label>Dietary Constraints</mat-label>
         <mat-select required [(ngModel)]="selectedDietaryConstraint">
@@ -273,9 +278,9 @@
       </button>
     </div>
   </div>
-</div>
 
-<div class="spinner-container" *ngIf="showSpinner">
+
+<div class="spinner-container flex justify-center items-center " *ngIf="showSpinner">
   <mat-spinner></mat-spinner>
 </div>
 
