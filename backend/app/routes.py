@@ -1,8 +1,7 @@
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
-from app.payment_stripe import create_charge
-from app.payment_stripe import create_subscription
+from app.payment_stripe import create_subscription, cancel_subscription
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
@@ -33,17 +32,22 @@ def page_not_found(e):
     print(request.path)
     return redirect('/')
 
-@app.route('/create-charge', methods=['POST'])
+@app.route('/create-subscription', methods=['POST'])
 def handle_create_charge():
     email = request.json.get('email')
     token = request.json.get('token')
-    plan_id = request.json.get('plan_id')
-    # return create_charge(token, amount)
-    return create_subscription(email, token, plan_id)
+    plan_type = request.json.get('plan_type')
+    return create_subscription(email, token, plan_type)
+
+@app.route('/cancel-subscription', methods=['POST'])
+def handle_cancel_subscription():
+    subscription_id = request.json.get('subscription_id')
+    return cancel_subscription(subscription_id)
+
 
 @app.route('/api/endpoint', methods=['POST'])
 def receive_data():
     data = request.json
-
     response = gen_meal_plan(data)
     return jsonify(response)
+

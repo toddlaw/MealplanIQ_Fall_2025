@@ -5,3 +5,8 @@ venv
 .flaskenv
 .env
 node_modules/
+build/
+dist/
+*.pyc
+*.pyo
+*.pyd
