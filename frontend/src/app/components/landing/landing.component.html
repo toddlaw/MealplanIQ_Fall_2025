@@ -64,8 +64,10 @@
                 ></mat-icon>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <div class="sub-container">
-              <div class="add-people-icons">
+
+
+            <div class="grid grid-cols-3">
+              <div class="add-people-icons col-span-1">
                 <button
                   [style.visibility]="
                     people.length > MIN_PEOPLE ? 'visible' : 'hidden'
@@ -76,9 +78,7 @@
                 >
                   <mat-icon class="icon-display red-icon">remove</mat-icon>
                 </button>
-                <span class="person-number" style="width: 20px">{{
-                  people.length
-                }}</span>
+                <span class="person-number">{{people.length}}</span>
                 <button
                   [style.visibility]="
                     people.length < MAX_PEOPLE ? 'visible' : 'hidden'
@@ -90,24 +90,34 @@
                   <mat-icon class="icon-display green-icon">add</mat-icon>
                 </button>
               </div>
-              <div>
+
+              <div class="col-span-1"></div>
+
+              <div class="col-span-1 flex justify-end">
                 <mat-button-toggle-group>
                   <mat-button-toggle
                     value=""
                     (click)="setSelectedUnit('metric')"
                     checked
-                    >Metric</mat-button-toggle
-                  >
+                    >Metric
+                  </mat-button-toggle>
                   <mat-button-toggle
                     value=""
                     (click)="setSelectedUnit('imperial')"
-                    >Imperial</mat-button-toggle
-                  >
+                    >Imperial
+                    </mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
             </div>
+  
+              
+          <div class="grid grid-cols-2 gap-4 pt-5">
             <ng-container *ngFor="let person of people; let i = index" class="">
-              <div class="row no-wrap">
+              <div class="col-span-2">
+              <h3> Person {{i+1}}</h3>
+            </div>
+
+              <div class="col-span-1">
                 <mat-form-field class="age">
                   <input
                     matInput
@@ -118,8 +128,10 @@
                     [name]="'age' + i"
                     required
                   />
-                </mat-form-field>
-
+                </mat-form-field> 
+              </div>
+            
+              <div class="col-span-1">
                 <mat-form-field class="gender">
                   <mat-label>Gender</mat-label>
                   <mat-select
@@ -135,7 +147,9 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+                </div>
 
+                <div class="col-span-1">
                 <mat-form-field class="weight">
                   <input
                     matInput
@@ -151,7 +165,9 @@
                     required
                   />
                 </mat-form-field>
+                </div>
 
+                <div class="col-span-1">
                 <mat-form-field class="height">
                   <input
                     matInput
@@ -167,7 +183,9 @@
                     required
                   />
                 </mat-form-field>
+                </div>
 
+                <div class="col-span-1">
                 <mat-form-field class="activity-level">
                   <mat-label>Activity Level</mat-label>
                   <mat-select
@@ -184,15 +202,23 @@
                   </mat-select>
                 </mat-form-field>
               </div>
+              <div class="col-span-1"></div>
             </ng-container>
+          </div>
+
+       
+
+
+          <div class="flex items-center justify-center">
             <button
-              mat-button
-              color="primary"
               type="button"
+              class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
               (click)="closePanel()"
             >
               Done
             </button>
+          </div>
+        
           </mat-expansion-panel>
         </mat-accordion>
       </div>
