@@ -1,7 +1,13 @@
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
+from flask_cors import CORS
 
+
+# enable CORS
+CORS(app)
+
+# serve static files
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
 def index(path):

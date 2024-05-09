@@ -1,6 +1,5 @@
 # As per https://www150.statcan.gc.ca/n1/pub/82-003-x/2008004/article/10703/t/5800493-eng.htm#:~:text=EER%20%3D%20%2D114.1%2D50.9*,and%201.45%20if%20very%20active
 
-@staticmethod
 def energy_calculator_function(age, bmi, gender, weight, height, activity_level):
     """
     original energy calculator

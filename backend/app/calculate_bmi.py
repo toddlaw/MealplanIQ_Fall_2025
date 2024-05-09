@@ -1,4 +1,4 @@
-@staticmethod
+
 def bmi_calculator_function(weight, height):
     """
     original bmi calculator
