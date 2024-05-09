@@ -1,6 +1,10 @@
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
+from flask_cors import CORS
+
+# Enable CORS for all domains on all routes
+CORS(app)
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
