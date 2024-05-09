@@ -109,16 +109,12 @@
                 </div>
               </div>
 
-              <div
-                class="lg:grid grid-cols-2 gap-4 pt-5 md:grid-cols-1 justify-center"
-              >
-                <ng-container
-                  *ngFor="let person of people; let i = index"
-                  class=""
-                >
-                  <div class="col-span-2">
-                    <h3>Person {{ i + 1 }}</h3>
-                  </div>
+        
+                <ng-container *ngFor="let person of people; let i = index">
+                    <h3 class="pt-8">Person {{ i + 1 }}</h3>
+
+                  
+                  <div class="grid grid-flow-row-desnse grid-cols-2 grid-rows-3">
 
                   <div class="col-span-1">
                     <mat-form-field class="age">
@@ -206,14 +202,15 @@
                     </mat-form-field>
                   </div>
                   <div class="col-span-1"></div>
+                </div>
                 </ng-container>
-              </div>
+              
 
               <div class="flex items-center justify-center">
                 <button
                   type="button"
-                  class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
                   (click)="closePanel()"
+                  class="rounded-lg text-white bg-secondary hover:bg-secondary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center justify-items-center"
                 >
                   Done
                 </button>
