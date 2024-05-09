@@ -56,11 +56,10 @@
           <mat-expansion-panel #peoplePanel [expanded]="panelOpenState">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                People
+                People &nbsp;
                 <mat-icon
                   class="icon-display"
-                  svgIcon="people"
-                  style="padding-left: 10px"
+                  fontIcon="group_add"
                 ></mat-icon>
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -206,7 +205,7 @@
             </ng-container>
           </div>
 
-          <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center pt-8 pb-3">
             <button
               type="button"
               class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
@@ -223,7 +222,13 @@
       <div class="max-w-md mx-auto pt-8">
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field class="dietary-constraints">
-            <mat-label>Dietary Constraints</mat-label>
+            <mat-label>Dietary Constraints
+              <mat-icon 
+              fontIcon="eco" 
+              color="default"
+              >
+              </mat-icon>
+            </mat-label>
             <mat-select
               required
               [(ngModel)]="selectedDietaryConstraint"
@@ -242,7 +247,11 @@
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field class="religious-constraints">
             <mat-label>Religious Constraints
-            <mat-icon svgIcon="religious" class="mat-icon-right">icon</mat-icon>
+            <mat-icon 
+              fontIcon="church"
+              color="default"
+              >
+              </mat-icon>
           </mat-label>
             <mat-select
               required
@@ -262,8 +271,11 @@
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field class="liked-foods">
             <mat-label>Liked Foods 
-              <mat-icon svgIcon="liked-foods" class="mat-icon-right">icon</mat-icon
-            >
+              <mat-icon
+              fontIcon="thumb_up"
+              color="default"
+              >
+              </mat-icon>
             </mat-label>
             <mat-select [formControl]="likedFoods" multiple name="likedFoods">
               <mat-select-trigger>
@@ -286,8 +298,11 @@
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field class="favourite-cuisines">
             <mat-label>Disliked Foods
-              <mat-icon svgIcon="disliked-foods" class="mat-icon-right">icon
-                </mat-icon>
+              <mat-icon
+              fontIcon="thumb_down"
+              color="default"
+              >
+              </mat-icon>
             </mat-label>
             <mat-select [formControl]="dislikedFoods" multiple>
               <mat-select-trigger>
@@ -308,7 +323,13 @@
 
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field class="favourite-cuisines">
-            <mat-label>Favourite Cuisines</mat-label>
+            <mat-label>Favourite Cuisines
+              <mat-icon
+              fontIcon="favorite"
+              color="default"
+              >
+              </mat-icon>
+            </mat-label>
             <mat-select [formControl]="cuisines" multiple>
               <mat-select-trigger>
                 {{cuisines.value?.[0] || ''}}
@@ -328,7 +349,13 @@
 
         <div class="grid md:grid-cols-1 gap-6">
           <mat-form-field>
-            <mat-label>Allergies</mat-label>
+            <mat-label>Allergies
+              <mat-icon
+              fontIcon="grain"
+              color="default"
+              >
+              </mat-icon>
+            </mat-label>
             <mat-select [formControl]="allergies" multiple>
               <mat-select-trigger>
                 {{ allergies.value?.[0] || ''}}
@@ -349,7 +376,13 @@
 
         <div class="relative z-0 w-full mb-5 group">
           <mat-form-field class="">
-            <mat-label>Meal plan range</mat-label>
+            <div class="flex items-center"> <!-- Add a div and flex layout -->
+              <mat-label>Meal plan range &nbsp;</mat-label>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="mealPlanRange"
+              ></mat-datepicker-toggle>
+            </div>
             <mat-date-range-input
               [formGroup]="startDate"
               [rangePicker]="mealPlanRange"
@@ -367,13 +400,10 @@
                 readonly
               />
             </mat-date-range-input>
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="mealPlanRange"
-            ></mat-datepicker-toggle>
             <mat-date-range-picker #mealPlanRange></mat-date-range-picker>
           </mat-form-field>
         </div>
+        
 
         <div class="text-center">
           <p class="text-2xl">③ Generate your meal plan!</p>
