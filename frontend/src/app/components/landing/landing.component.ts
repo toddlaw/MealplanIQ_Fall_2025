@@ -17,6 +17,8 @@ import {
   allergiesList,
   startDate,
   endDate,
+  breakfastList,
+  snackList,
 } from './form-values';
 import {
   MatDialog,
@@ -100,6 +102,8 @@ export class LandingComponent implements OnInit {
   readonly allergiesList = allergiesList;
   readonly startDate = startDate;
   readonly endDate = endDate;
+  readonly breakfastList = breakfastList;
+  readonly snackList = snackList;
 
   selectedUnit: string = 'metric';
   selectedDietaryConstraint: string = '';
@@ -109,6 +113,8 @@ export class LandingComponent implements OnInit {
   dislikedFoods = new FormControl('');
   cuisines = new FormControl('');
   allergies = new FormControl('');
+  breakfasts = new FormControl('');
+  snacks = new FormControl('');
   expandedStates: boolean[][] = [];
   snackExpandedStates: boolean[] = [];
 
@@ -171,6 +177,8 @@ export class LandingComponent implements OnInit {
       dislikedFoods: this.dislikedFoods.value,
       favouriteCuisines: this.cuisines.value,
       allergies: this.allergies.value,
+      snacks: this.snacks.value,
+      breakfasts: this.breakfasts.value,
       minDate: this.startDate.get('start')!.value?.getTime(),
       maxDate: this.startDate.get('end')!.value?.getTime(),
       includedRecipes: this.includedRecipes,

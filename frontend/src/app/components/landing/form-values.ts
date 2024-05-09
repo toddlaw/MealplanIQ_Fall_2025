@@ -90,6 +90,31 @@ export const allergiesList = [
   'Wheat',
 ];
 
+export const breakfastList = [
+  'Bagel',
+  'Cereal',
+  'Coffee',
+  'Cream of Wheat',
+  'Hashbrowns',
+  'Juice',
+  'Oatmeal',
+  'Pancakes',
+  'Toast',
+  'Waffles'
+]
+
+export const snackList = [
+  'Barriers',
+  'Crackers',
+  'Dried Fruit',
+  'Fruit',
+  'Nuts',
+  'Snack Bars',
+  'Trail Mix',
+  'Veggies & Dip',
+  'Yogurt'
+]
+
 const today = new Date();
 const tomorrow = today.getDate() + 1;
 const weekFromTomorrow = today.getDate() + 8;
