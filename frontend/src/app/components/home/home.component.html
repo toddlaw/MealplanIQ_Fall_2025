@@ -1,5 +1,4 @@
-
-<div class="container mat-elevation-z5 " *ngIf="!showSpinner">
+<div class="container mat-elevation-z5" *ngIf="!showSpinner">
   <h1>
     {{ (user$ | async)?.displayName }}, Generate a customized meal plan from
     hundreds of recipes for your needs!
@@ -10,12 +9,15 @@
       <mat-form-field>
         <mat-label>Unit</mat-label>
         <mat-select [(ngModel)]="selectedUnit" (ngModelChange)="changeUnit()">
-          <mat-option *ngFor="let unit of units" [value]="unit.value">
+          <mat-option
+            *ngFor="let unit of units"
+            [value]="unit.value"
+          >
             {{ unit.viewValue }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-  
+
       <mat-form-field>
         <input
           matInput
@@ -279,39 +281,42 @@
     </div>
   </div>
 
-
-<div class="spinner-container flex justify-center items-center " *ngIf="showSpinner">
-  <mat-spinner></mat-spinner>
-</div>
-
-<div class="recipe-section" *ngIf="recipesFetched">
-  <div class="bmiTdee">
-    <h2 class="centered-text">BMI: {{ bmiValue }}</h2>
-    <div class="vertical-line"></div>
-    <h2 class="centered-text">Total Daily Calorie Intake: {{ tdeeValue }}</h2>
+  <div
+    class="spinner-container flex justify-center items-center"
+    *ngIf="showSpinner"
+  >
+    <mat-spinner></mat-spinner>
   </div>
-  <h1 class="centered-text">Recipes</h1>
-  <mat-list *ngIf="recipe && recipe.length > 0">
-    <mat-list-item *ngFor="let recipeItem of recipe">
-      <mat-icon matListIcon>local_dining</mat-icon>
-      <div matLine>
-        <h1>
-          {{ recipeItem.title }} <mat-icon>arrow_right_alt</mat-icon>
-          {{ recipeItem.country }}
-        </h1>
-      </div>
-      <div matLine>Calories: {{ recipeItem.calories }}</div>
-      <div matLine>Carbohydrates: {{ recipeItem.carbohydrates }}</div>
-      <div matLine>Fat: {{ recipeItem.fat }}</div>
-      <div matLine>Protein: {{ recipeItem.protein }}</div>
-      <div matLine>ingredients: {{ recipeItem.ingredients }}</div>
-      <div matLine>Price: ${{ recipeItem.price }}</div>
-      <!-- Add other recipe properties you want to display -->
-    </mat-list-item>
-  </mat-list>
-  <p *ngIf="!recipe || recipe.length === 0">No recipes found.</p>
 
-  <div class="total-price" *ngIf="recipe && recipe.length > 0">
-    <h3 class="centered-text">Total Price: ${{ getTotalPrice() }}</h3>
+  <div class="recipe-section" *ngIf="recipesFetched">
+    <div class="bmiTdee">
+      <h2 class="centered-text">BMI: {{ bmiValue }}</h2>
+      <div class="vertical-line"></div>
+      <h2 class="centered-text">Total Daily Calorie Intake: {{ tdeeValue }}</h2>
+    </div>
+    <h1 class="centered-text">Recipes</h1>
+    <mat-list *ngIf="recipe && recipe.length > 0">
+      <mat-list-item *ngFor="let recipeItem of recipe">
+        <mat-icon matListIcon>local_dining</mat-icon>
+        <div matLine>
+          <h1>
+            {{ recipeItem.title }} <mat-icon>arrow_right_alt</mat-icon>
+            {{ recipeItem.country }}
+          </h1>
+        </div>
+        <div matLine>Calories: {{ recipeItem.calories }}</div>
+        <div matLine>Carbohydrates: {{ recipeItem.carbohydrates }}</div>
+        <div matLine>Fat: {{ recipeItem.fat }}</div>
+        <div matLine>Protein: {{ recipeItem.protein }}</div>
+        <div matLine>ingredients: {{ recipeItem.ingredients }}</div>
+        <div matLine>Price: ${{ recipeItem.price }}</div>
+        <!-- Add other recipe properties you want to display -->
+      </mat-list-item>
+    </mat-list>
+    <p *ngIf="!recipe || recipe.length === 0">No recipes found.</p>
+
+    <div class="total-price" *ngIf="recipe && recipe.length > 0">
+      <h3 class="centered-text">Total Price: ${{ getTotalPrice() }}</h3>
+    </div>
   </div>
 </div>

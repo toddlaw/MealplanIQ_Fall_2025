@@ -4,6 +4,11 @@ from app.generate_meal_plan import gen_meal_plan
 from flask_cors import CORS
 
 
+# Enable CORS for all domains on all routes
+CORS(app)
+
+
+
 # enable CORS
 CORS(app)
 

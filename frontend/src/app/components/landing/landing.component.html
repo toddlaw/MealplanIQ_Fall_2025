@@ -1,7 +1,7 @@
 <!-- <div class="form-container mat-elevation-z5 text-center" #start> -->
 <div class="container mx-auto flex flex-col items-center justify-center min-h-screen" #start>
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
-    <h1 class="text-rose-600 font-black" >
+    <h1 class="text-rose-600 font-black">
       MealPlanIQ is currently in beta and we are working to make it better! We
       appreciate your patience.
     </h1>
@@ -15,10 +15,12 @@
       <strong><i>personalized</i> and <i>optimized</i> meal plans</strong> that
       meet government-recommended nutritional requirements.
     </p>
+
     <h1 class="text-lg text-center">Give it a try!</h1>
     <p class="text-center text-2xl">
       ① Select your health goal:
     </p>
+
 
     <div class="container flex flex-wrap items-center justify-center text-center">
       <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
@@ -27,29 +29,26 @@
             <button
               *ngFor="let item of healthGoals; let i = index"
               type="button"
-              class="text-white bg-blue-400 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-3xl text-lg p-8 text-center me-4 mb-4 shadow-xl"
+              class="text-white bg-primary hover:bg-primary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-4 text-center me-2 mb-2"
               [ngClass]="{
-                'bg-blue-800': selectedHealthGoalIndex === i,
-                'bg-blue-400': selectedHealthGoalIndex !== i
+                'bg-primary-strong': selectedHealthGoalIndex === i,
+                'bg-primary': selectedHealthGoalIndex !== i
               }"
               (click)="healthGoalChange(i, item.value)"
             >
               <span>
                 {{ item.viewValue1 }}
-                <br/>
+                <br />
                 {{ item.viewValue2 }}
-                <br/>
+                <br />
                 {{ item.viewValue3 != "" ? " " + item.viewValue3 : null }}
-                <br/>
+                <br />
               </span>
             </button>
           </div>
         </div>
-    
 
-      <p class="text-center text-2xl">
-        ② Personalize your diet
-      </p>
+        <p class="text-center text-2xl">② Personalize your diet</p>
 
       <div class="row">
         <mat-accordion class="mat-accordian" multi>
@@ -64,159 +63,342 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
 
+              <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="add-people-icons col-span-1">
+                  <button
+                    [style.visibility]="
+                      people.length > MIN_PEOPLE ? 'visible' : 'hidden'
+                    "
+                    mat-icon-button
+                    type="button"
+                    (click)="changeFields(-1)"
+                  >
+                    <mat-icon class="icon-display red-icon">remove</mat-icon>
+                  </button>
+                  <span class="person-number">{{ people.length }}</span>
+                  <button
+                    [style.visibility]="
+                      people.length < MAX_PEOPLE ? 'visible' : 'hidden'
+                    "
+                    mat-icon-button
+                    type="button"
+                    (click)="changeFields(1)"
+                  >
+                    <mat-icon class="icon-display green-icon">add</mat-icon>
+                  </button>
+                </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3">
-              <div class="add-people-icons col-span-1">
-                <button
-                  [style.visibility]="
-                    people.length > MIN_PEOPLE ? 'visible' : 'hidden'
-                  "
-                  mat-icon-button
-                  type="button"
-                  (click)="changeFields(-1)"
-                >
-                  <mat-icon class="icon-display red-icon">remove</mat-icon>
-                </button>
-                <span class="person-number">{{people.length}}</span>
-                <button
-                  [style.visibility]="
-                    people.length < MAX_PEOPLE ? 'visible' : 'hidden'
-                  "
-                  mat-icon-button
-                  type="button"
-                  (click)="changeFields(1)"
-                >
-                  <mat-icon class="icon-display green-icon">add</mat-icon>
-                </button>
-              </div>
+                <div class="md:col-span-1"></div>
 
-              <div class="md:col-span-1"></div>
-
-              <div class="md:col-span-1 flex justify-end">
-                <mat-button-toggle-group>
-                  <mat-button-toggle
-                    value=""
-                    (click)="setSelectedUnit('metric')"
-                    checked
-                    >Metric
-                  </mat-button-toggle>
-                  <mat-button-toggle
-                    value=""
-                    (click)="setSelectedUnit('imperial')"
-                    >Imperial
+                <div class="md:col-span-1 flex justify-end">
+                  <mat-button-toggle-group>
+                    <mat-button-toggle
+                      value=""
+                      (click)="setSelectedUnit('metric')"
+                      checked
+                      >Metric
                     </mat-button-toggle>
-                </mat-button-toggle-group>
-              </div>
-            </div>
-  
-              
-          <div class="lg:grid grid-cols-2 gap-4 pt-5 md:grid-cols-1 justify-center">
-            <ng-container *ngFor="let person of people; let i = index" class="">
-              <div class="col-span-2">
-              <h3> Person {{i+1}}</h3>
-            </div>
-
-              <div class="col-span-1">
-                <mat-form-field class="age">
-                  <input
-                    matInput
-                    type="number"
-                    placeholder="Age"
-                    [(ngModel)]="person.age"
-                    min="1"
-                    [name]="'age' + i"
-                    required
-                  />
-                </mat-form-field> 
-              </div>
-            
-              <div class="col-span-1">
-                <mat-form-field class="gender">
-                  <mat-label>Gender</mat-label>
-                  <mat-select
-                    required
-                    [(ngModel)]="person.gender"
-                    [name]="'gender' + i"
-                  >
-                    <mat-option
-                      *ngFor="let gender of genders"
-                      [value]="gender.value"
-                    >
-                      {{ gender.viewValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                    <mat-button-toggle
+                      value=""
+                      (click)="setSelectedUnit('imperial')"
+                      >Imperial
+                    </mat-button-toggle>
+                  </mat-button-toggle-group>
                 </div>
-
-                <div class="col-span-1">
-                <mat-form-field class="weight">
-                  <input
-                    matInput
-                    type="number"
-                    [placeholder]="
-                      selectedUnit === 'metric'
-                        ? 'Weight' + ' (KG)'
-                        : 'Weight ' + ' (LBS)'
-                    "
-                    [(ngModel)]="person.weight"
-                    [name]="'weight' + i"
-                    min="0"
-                    required
-                  />
-                </mat-form-field>
-                </div>
-
-                <div class="col-span-1">
-                <mat-form-field class="height">
-                  <input
-                    matInput
-                    type="number"
-                    [placeholder]="
-                      selectedUnit === 'metric'
-                        ? 'Height' + ' (CM)'
-                        : 'Height' + ' (IN)'
-                    "
-                    [(ngModel)]="person.height"
-                    [name]="'height' + i"
-                    min="0"
-                    required
-                  />
-                </mat-form-field>
-                </div>
-
-                <div class="col-span-1">
-                <mat-form-field class="activity-level">
-                  <mat-label>Activity Level</mat-label>
-                  <mat-select
-                    required
-                    [(ngModel)]="person.activityLevel"
-                    [name]="'activityLevel' + i"
-                  >
-                    <mat-option
-                      *ngFor="let activityLevel of activityLevels"
-                      [value]="activityLevel.value"
-                    >
-                      {{ activityLevel.viewValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
               </div>
-              <div class="col-span-1"></div>
-            </ng-container>
+
+              <div
+                class="lg:grid grid-cols-2 gap-4 pt-5 md:grid-cols-1 justify-center"
+              >
+                <ng-container
+                  *ngFor="let person of people; let i = index"
+                  class=""
+                >
+                  <div class="col-span-2">
+                    <h3>Person {{ i + 1 }}</h3>
+                  </div>
+
+                  <div class="col-span-1">
+                    <mat-form-field class="age">
+                      <input
+                        matInput
+                        type="number"
+                        placeholder="Age"
+                        [(ngModel)]="person.age"
+                        min="1"
+                        [name]="'age' + i"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-span-1">
+                    <mat-form-field class="gender">
+                      <mat-label>Gender</mat-label>
+                      <mat-select
+                        required
+                        [(ngModel)]="person.gender"
+                        [name]="'gender' + i"
+                      >
+                        <mat-option
+                          *ngFor="let gender of genders"
+                          [value]="gender.value"
+                        >
+                          {{ gender.viewValue }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-span-1">
+                    <mat-form-field class="weight">
+                      <input
+                        matInput
+                        type="number"
+                        [placeholder]="
+                          selectedUnit === 'metric'
+                            ? 'Weight' + ' (KG)'
+                            : 'Weight ' + ' (LBS)'
+                        "
+                        [(ngModel)]="person.weight"
+                        [name]="'weight' + i"
+                        min="0"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-span-1">
+                    <mat-form-field class="height">
+                      <input
+                        matInput
+                        type="number"
+                        [placeholder]="
+                          selectedUnit === 'metric'
+                            ? 'Height' + ' (CM)'
+                            : 'Height' + ' (IN)'
+                        "
+                        [(ngModel)]="person.height"
+                        [name]="'height' + i"
+                        min="0"
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-span-1">
+                    <mat-form-field class="activity-level">
+                      <mat-label>Activity Level</mat-label>
+                      <mat-select
+                        required
+                        [(ngModel)]="person.activityLevel"
+                        [name]="'activityLevel' + i"
+                      >
+                        <mat-option
+                          *ngFor="let activityLevel of activityLevels"
+                          [value]="activityLevel.value"
+                        >
+                          {{ activityLevel.viewValue }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-span-1"></div>
+                </ng-container>
+              </div>
+
+              <div class="flex items-center justify-center">
+                <button
+                  type="button"
+                  class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
+                  (click)="closePanel()"
+                >
+                  Done
+                </button>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <div class="max-w-md mx-auto pt-8">
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field class="dietary-constraints">
+              <mat-label>Dietary Constraints</mat-label>
+              <mat-select
+                required
+                [(ngModel)]="selectedDietaryConstraint"
+                name="dietaryConstraint"
+              >
+                <mat-option
+                  *ngFor="let vegetarian of vegetarians"
+                  [value]="vegetarian.value"
+                >
+                  {{ vegetarian.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
 
           <div class="flex items-center justify-center pt-8 pb-3">
+
+          <!-- <div class="grid md:grid-cols-1 gap-6"> -->
+            <mat-form-field class="religious-constraints">
+              <mat-label
+                >Religious Constraints
+                <mat-icon svgIcon="religious" class="mat-icon-right"
+                  >icon</mat-icon
+                >
+              </mat-label>
+              <mat-select
+                required
+                [(ngModel)]="selectedReligiousConstraint"
+                name="religiousConstraint"
+              >
+                <mat-option
+                  *ngFor="let Religious of religiousConstraints"
+                  [value]="Religious.value"
+                >
+                  {{ Religious.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field class="liked-foods">
+              <mat-label
+                >Liked Foods
+                <mat-icon svgIcon="liked-foods" class="mat-icon-right"
+                  >icon</mat-icon
+                >
+              </mat-label>
+              <mat-select [formControl]="likedFoods" multiple name="likedFoods">
+                <mat-select-trigger>
+                  {{likedFoods.value?.[0] || ''}}
+                  <span *ngIf="(likedFoods.value?.length || 0) > 1">
+                    (+{{ (likedFoods.value?.length || 0) - 1 }}
+                    {{ likedFoods.value?.length === 2 ? "other" : "others" }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let likedFood of likedFoodsList"
+                  [value]="likedFood"
+                >
+                  {{ likedFood }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field class="favourite-cuisines">
+              <mat-label
+                >Disliked Foods
+                <mat-icon svgIcon="disliked-foods" class="mat-icon-right"
+                  >icon
+                </mat-icon>
+              </mat-label>
+              <mat-select [formControl]="dislikedFoods" multiple>
+                <mat-select-trigger>
+                  {{dislikedFoods.value?.[0] || ''}}
+                  <span *ngIf="(dislikedFoods.value?.length || 0) > 1">
+                    (+{{ (dislikedFoods.value?.length || 0) - 1 }}
+                    {{
+                      dislikedFoods.value?.length === 2 ? "other" : "others"
+                    }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let dislikedFoods of dislikedFoodsList"
+                  [value]="dislikedFoods"
+                  >{{ dislikedFoods }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field class="favourite-cuisines">
+              <mat-label>Favourite Cuisines</mat-label>
+              <mat-select [formControl]="cuisines" multiple>
+                <mat-select-trigger>
+                  {{cuisines.value?.[0] || ''}}
+                  <span *ngIf="(cuisines.value?.length || 0) > 1">
+                    (+{{ (cuisines.value?.length || 0) - 1 }}
+                    {{ cuisines.value?.length === 2 ? "other" : "others" }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let cuisine of cuisinesList"
+                  [value]="cuisine"
+                  >{{ cuisine }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field>
+              <mat-label>Allergies</mat-label>
+              <mat-select [formControl]="allergies" multiple>
+                <mat-select-trigger>
+                  {{ allergies.value?.[0] || ''}}
+                  <span *ngIf="(allergies.value?.length || 0) > 1">
+                    (+{{ (allergies.value?.length || 0) - 1 }}
+                    {{ allergies.value?.length === 2 ? "other" : "others" }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let allergy of allergiesList"
+                  [value]="allergy"
+                >
+                  {{ allergy }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="relative z-0 w-full mb-5 group">
+            <mat-form-field class="">
+              <mat-label>Meal plan range</mat-label>
+              <mat-date-range-input
+                [formGroup]="startDate"
+                [rangePicker]="mealPlanRange"
+              >
+                <input
+                  matStartDate
+                  placeholder="Start date"
+                  formControlName="start"
+                  readonly
+                />
+                <input
+                  matEndDate
+                  placeholder="End date"
+                  formControlName="end"
+                  readonly
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="mealPlanRange"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #mealPlanRange></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+
+          <div class="text-center">
+            <p class="text-2xl">③ Generate your meal plan!</p>
             <button
-              type="button"
-              class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
-              (click)="closePanel()"
+              mat-raised-button
+              type="submit"
+              class="rounded-lg text-white bg-secondary hover:bg-secondary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
             >
-              Done
+              <mat-icon>search</mat-icon>
             </button>
           </div>
         
-          </mat-expansion-panel>
-        </mat-accordion>
+          <!-- </mat-expansion-panel> -->
+        <!-- </mat-accordion> -->
       </div>
 
       <div class="max-w-md mx-auto pt-8">
@@ -416,8 +598,8 @@
          </div>
       </div>
     </form>
+
   </div>
-</div>
 </div>
 
 <br />
@@ -436,12 +618,15 @@
     <h1 class="centered-text text-xl">
       Sorry, there was an error generating your meal plan
     </h1>
-    <h2 class="centered-text text-xl link"><a (click)="this.scrollToTop()">Please try again</a></h2>
+    <h2 class="centered-text text-xl link">
+      <a (click)="this.scrollToTop()">Please try again</a>
+    </h2>
   </div>
 </div>
 <div class="container" *ngIf="!this.isEmpty(mealPlanResponse)">
   <h2 class="sub-header" *ngIf="searchClicked">
-    ④ Want to change this plan? Select the meals you don't like and search again.
+    ④ Want to change this plan? Select the meals you don't like and search
+    again.
   </h2>
 
   <div *ngIf="mealPlanResponse.constraints_loosened">
@@ -485,7 +670,7 @@
               alt="Image"
             />
             <mat-card-title
-              style="margin: 0px; text-align: center; line-height: 25px;"
+              style="margin: 0px; text-align: center; line-height: 25px"
               >{{ recipe.title }}</mat-card-title
             >
             <img
@@ -535,9 +720,10 @@
               width="50"
               alt="Image"
             />
-            <mat-card-title style="margin: 0px; text-align: center; line-height: 25px;">{{
-              snack.title
-            }}</mat-card-title>
+            <mat-card-title
+              style="margin: 0px; text-align: center; line-height: 25px"
+              >{{ snack.title }}</mat-card-title
+            >
             <img
               src="../../../assets/images/{{
                 snackExpandedStates[i] ? 'chevron-up.png' : 'chevron-down.png'
