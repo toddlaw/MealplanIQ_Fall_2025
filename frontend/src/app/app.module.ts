@@ -45,6 +45,7 @@ import { LeadershipComponent } from './components/leadership/leadership.componen
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { SplashComponent } from './components/splash/splash.component';
     TimelineComponent,
     ContactComponent,
     SplashComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,7 +96,7 @@ import { SplashComponent } from './components/splash/splash.component';
     HttpClientModule,
     MatTableModule,
     MatDialogModule,
-    MatSidenavModule
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
