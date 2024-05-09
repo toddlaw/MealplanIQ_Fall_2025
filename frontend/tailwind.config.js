@@ -6,12 +6,16 @@ module.exports = {
       primary: {
         light: "#c4d2b7",
         DEFAULT: "#88a56f",
-        strong: "#7fc742",
+        strong: "#66a530",
       },
       secondary: {
-        light: "#c6e2ff",
-        DEFAULT: "6fa3a5",
-        strong: "#48a2ff",
+        light: "#f2f2f2",
+        DEFAULT: "#4e76a5",
+        strong: "#3a6ba5",
+      },
+      white: {
+        light: "#f9f9f9",
+        DEFAULT: "#ffffff",
       },
       background: {
         light: "#f9f9f9",
