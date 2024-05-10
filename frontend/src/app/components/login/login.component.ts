@@ -3,6 +3,7 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from 'src/app/services/auth.service';
+// import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private toast: HotToastService,
     private router: Router,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    // private usersService: UsersService
   ) {}
 
   ngOnInit(): void {}
@@ -49,6 +51,7 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe(() => {
+        // this.userService.setUser(user.uid, user.email);
         this.router.navigate(['/']);
       });
   }

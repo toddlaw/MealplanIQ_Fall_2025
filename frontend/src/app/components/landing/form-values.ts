@@ -34,11 +34,16 @@ export const vegetarians: Vegetarian[] = [
 ];
 
 export const healthGoals: HealthGoal[] = [
-  { value: 'fight_cancer', viewValue1: 'Fight', viewValue2: 'Cancer', viewValue3: '' },
-  { value: 'fight_heart_disease', viewValue1: 'Fight', viewValue2: 'Heart', viewValue3: 'Disease' },
-  { value: 'fight_diabetes', viewValue1: 'Fight', viewValue2: 'Diabetes', viewValue3: '' },
-  { value: 'lose_weight', viewValue1: 'Lose', viewValue2: 'Weight', viewValue3: '' },
-  { value: 'sports_build_muscle', viewValue1: 'Build', viewValue2: 'Muscle', viewValue3: '' },
+  // { value: 'fight_cancer', viewValue1: 'Fight', viewValue2: 'Cancer', viewValue3: '' },
+  // { value: 'fight_heart_disease', viewValue1: 'Fight', viewValue2: 'Heart', viewValue3: 'Disease' },
+  // { value: 'fight_diabetes', viewValue1: 'Fight', viewValue2: 'Diabetes', viewValue3: '' },
+  // { value: 'lose_weight', viewValue1: 'Lose', viewValue2: 'Weight', viewValue3: '' },
+  // { value: 'sports_build_muscle', viewValue1: 'Build', viewValue2: 'Muscle', viewValue3: '' },
+  { value: 'fight_cancer', viewValue: 'Fight Cancer'},
+  { value: 'fight_heart_disease', viewValue: 'Fight Heart Disease'},
+  { value: 'fight_diabetes', viewValue: 'Fight Diabetes'},
+  { value: 'lose_weight', viewValue: 'Lose Weight'},
+  { value: 'sports_build_muscle', viewValue: 'Build Muscle'},
 ];
 
 export const religiousConstraints: Religious[] = [
@@ -89,6 +94,31 @@ export const allergiesList = [
   'Tree Nut',
   'Wheat',
 ];
+
+export const breakfastList = [
+  'Bagel',
+  'Cereal',
+  'Coffee',
+  'Cream of Wheat',
+  'Hashbrowns',
+  'Juice',
+  'Oatmeal',
+  'Pancakes',
+  'Toast',
+  'Waffles'
+]
+
+export const snackList = [
+  'Barriers',
+  'Crackers',
+  'Dried Fruit',
+  'Fruit',
+  'Nuts',
+  'Snack Bars',
+  'Trail Mix',
+  'Veggies & Dip',
+  'Yogurt'
+]
 
 const today = new Date();
 const tomorrow = today.getDate() + 1;

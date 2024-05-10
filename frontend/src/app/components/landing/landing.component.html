@@ -27,24 +27,21 @@
     >
       <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
         <div class="grid-rows">
-          <div class="grid-cols-4 p-8">
+          <div
+            class="grid-cols-4 p-8 flex flex-wrap justify-center items-center"
+          >
             <button
               *ngFor="let item of healthGoals; let i = index"
               type="button"
-              class="text-white bg-primary hover:bg-primary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-4 text-center me-2 mb-2"
+              class="health-goal-button text-white bg-primary hover:bg-primary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm text-center me-2 mb-2"
               [ngClass]="{
                 'bg-primary-strong': selectedHealthGoalIndex === i,
                 'bg-primary': selectedHealthGoalIndex !== i
               }"
               (click)="healthGoalChange(i, item.value)"
             >
-              <span>
-                {{ item.viewValue1 }}
-                <br />
-                {{ item.viewValue2 }}
-                <br />
-                {{ item.viewValue3 != "" ? " " + item.viewValue3 : null }}
-                <br />
+              <span class="health-goal-text">
+                {{ item.viewValue }}
               </span>
             </button>
           </div>
@@ -364,8 +361,50 @@
             </mat-form-field>
           </div>
 
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field>
+              <mat-label
+                >Breakfast Preferences
+                <mat-icon fontIcon="coffee" color="default"> </mat-icon>
+              </mat-label>
+              <mat-select [formControl]="breakfasts" multiple>
+                <mat-select-trigger>
+                  {{ breakfasts.value?.[0] || ''}}
+                  <span *ngIf="(breakfasts.value?.length || 0) > 1">
+                    (+{{ (breakfasts.value?.length || 0) - 1 }}
+                    {{ breakfasts.value?.length === 2 ? "other" : "others" }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let food of breakfastList" [value]="food">
+                  {{ food }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid md:grid-cols-1 gap-6">
+            <mat-form-field>
+              <mat-label
+                >Snack Preferences
+                <mat-icon fontIcon="coffee" color="default"> </mat-icon>
+              </mat-label>
+              <mat-select [formControl]="snacks" multiple>
+                <mat-select-trigger>
+                  {{ snacks.value?.[0] || ''}}
+                  <span *ngIf="(snacks.value?.length || 0) > 1">
+                    (+{{ (snacks.value?.length || 0) - 1 }}
+                    {{ snacks.value?.length === 2 ? "other" : "others" }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let food of snackList" [value]="food">
+                  {{ food }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
           <div class="relative z-0 w-full mb-5 group">
-            <mat-form-field class="">
+            <mat-form-field>
               <div class="flex items-center">
                 <!-- Add a div and flex layout -->
                 <mat-label>Meal plan range &nbsp;</mat-label>
