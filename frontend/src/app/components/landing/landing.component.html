@@ -22,37 +22,7 @@
     <h1 class="text-lg text-center">Give it a try!</h1>
     <p class="text-center text-2xl">① Select your health goal:</p>
 
-    <!-- <div
-      class="container flex flex-wrap items-center justify-center text-center"
-    >
-      <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
-        <div class="grid-rows">
-          <div class="flex flex-wrap gap-2 center pt-5 pb-8">
-            <button
-              *ngFor="let item of healthGoals; let i = index"
-              type="button"
-              class="btn focus:ring-blue-300 "
-              [ngClass]="{
-                'bg-primary-strong': selectedHealthGoalIndex === i,
-                'bg-primary': selectedHealthGoalIndex !== i
-              }"
-              (click)="healthGoalChange(i, item.value)"
-            >
-              <span>
-                {{ item.viewValue1 }}
-                <br />
-                {{ item.viewValue2 }}
-                <br />
-                {{ item.viewValue3 != "" ? " " + item.viewValue3 : null }}
-                <br />
-              </span>
-            </button>
-          </div>
-        </div>  -->
-
-        <div
-        class="container flex flex-wrap items-center justify-center text-center"
-      >
+      <div class="container flex flex-wrap items-center justify-center text-center">
         <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
           <div class="grid-rows">
             <div
@@ -74,7 +44,7 @@
               </button>
             </div>
           </div>
-
+  
 
 
         <p class="text-center text-2xl">② Personalize your diet</p>
