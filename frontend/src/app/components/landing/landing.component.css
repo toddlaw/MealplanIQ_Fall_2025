@@ -1,6 +1,17 @@
 
-  .btn {
-    width: calc(22% - 8px); /* 20% width for each button with 4px gap between them */
-    @apply text-white bg-primary hover:bg-primary-strong font-medium rounded-lg p-4 text-center;
+.health-goal-button {
+    width: 80px;
+    height: 90px;
+    cursor: pointer;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
   }
+  
+  .health-goal-text {
+    display: inline-block;
+    width: 50px;
+  }
+  
+  
 
