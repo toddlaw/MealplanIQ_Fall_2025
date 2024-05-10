@@ -51,3 +51,4 @@ def receive_data():
     response = gen_meal_plan(data)
     return jsonify(response)
 
+
