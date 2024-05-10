@@ -4,7 +4,7 @@
   #start
 >
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
-    <h1 class="text-rose-600 font-black">
+    <h1 class="text-red">
       MealPlanIQ is currently in beta and we are working to make it better! We
       appreciate your patience.
     </h1>
@@ -27,11 +27,11 @@
     >
       <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
         <div class="grid-rows">
-          <div class="grid-cols-4 p-8">
+          <div class="flex flex-wrap gap-2 center pt-5 pb-8">
             <button
               *ngFor="let item of healthGoals; let i = index"
               type="button"
-              class="text-white bg-primary hover:bg-primary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-4 text-center me-2 mb-2"
+              class="btn focus:ring-blue-300 "
               [ngClass]="{
                 'bg-primary-strong': selectedHealthGoalIndex === i,
                 'bg-primary': selectedHealthGoalIndex !== i
@@ -48,7 +48,7 @@
               </span>
             </button>
           </div>
-        </div>
+        </div> 
 
         <p class="text-center text-2xl">② Personalize your diet</p>
 
