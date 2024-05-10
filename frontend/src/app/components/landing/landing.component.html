@@ -27,7 +27,9 @@
     >
       <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
         <div class="grid-rows">
-          <div class="grid-cols-4 p-8 flex flex-wrap">
+          <div
+            class="grid-cols-4 p-8 flex flex-wrap justify-center items-center"
+          >
             <button
               *ngFor="let item of healthGoals; let i = index"
               type="button"
