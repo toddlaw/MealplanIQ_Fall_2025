@@ -1,0 +1,161 @@
+{
+  "meal_plan": [
+    {
+      "date": "2024-05-11",
+      "content": [
+        {
+          "breakfast": [
+            {
+              "type": "simple",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian"
+            }
+          ],
+          "snack1": [
+            {
+              "type": "simple",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian"
+            }
+          ],
+          "lunch": [
+            {
+              "type": "simple",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian"
+            },
+            {
+              "type": "normal",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian",
+              "ingredients": [
+                {
+                  "name": "Chicken",
+                  "quantity": "200g"
+                },
+                {
+                  "name": "Lemon",
+                  "quantity": "1"
+                },
+                {
+                  "name": "Herbs",
+                  "quantity": "1"
+                }
+              ],
+              "instructions": [
+                "Step 1: Preheat oven to 200C",
+                "Step 2: Mix all ingredients",
+                "Step 3: Bake for 30 minutes"
+              ],
+              "cook_time": "90 minutes",
+              "prep_time": "15 minutes"
+            }
+          ],
+          "snack2": [
+            {
+              "type": "simple",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian"
+            }
+          ],
+          "dinner": [
+            {
+              "type": "simple",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian"
+            },
+            {
+              "type": "normal",
+              "title": "Roasted Lemon Herb Chicken",
+              "nutrition": {
+                "calories": 300,
+                "protein": 20,
+                "carbs": 10,
+                "fat": 15
+              },
+              "id": "5309",
+              "cuision": "American",
+              "region": "Australian",
+              "sub_region": "Australian",
+              "ingredients": [
+                {
+                  "name": "Chicken",
+                  "quantity": "200g"
+                },
+                {
+                  "name": "Lemon",
+                  "quantity": "1"
+                },
+                {
+                  "name": "Herbs",
+                  "quantity": "1"
+                }
+              ],
+              "instructions": [
+                "Step 1: Preheat oven to 200C",
+                "Step 2: Mix all ingredients",
+                "Step 3: Bake for 30 minutes"
+              ],
+              "cook_time": "90 minutes",
+              "prep_time": "15 minutes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

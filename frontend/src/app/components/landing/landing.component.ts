@@ -4,6 +4,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import {
   units,
   activityLevels,
@@ -106,9 +107,9 @@ export class LandingComponent implements OnInit {
   readonly snackList = snackList;
 
   selectedUnit: string = 'metric';
-  selectedDietaryConstraint: string = '';
+  selectedDietaryConstraint: string = vegetarians[0].value;
   selectedHealthGoal: string = healthGoals[0].value;
-  selectedReligiousConstraint: string = '';
+  selectedReligiousConstraint: string = religiousConstraints[0].value;
   likedFoods = new FormControl('');
   dislikedFoods = new FormControl('');
   cuisines = new FormControl('');
@@ -185,40 +186,46 @@ export class LandingComponent implements OnInit {
       excludedRecipes: this.excludedRecipes,
     };
 
-    this.http
-      .post('http://127.0.0.1:5000/api/endpoint', data, {
-        responseType: 'text',
-      })
-      .subscribe(
-        (response) => {
-          this.element.nativeElement.style.display = 'none';
-          this.errorDiv.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.mealPlanResponse = JSON.parse(response);
+    // if (!data.maxDate && data.minDate) {
+    //   data.maxDate = data.minDate;
+    // }
+    console.log(data.maxDate);
+    console.log(data.minDate);
 
-          const numDays = this.getNumDays(this.mealPlanResponse);
-          for (let i = 0; i < numDays; i++) {
-            this.expandedStates.push(
-              new Array(this.mealPlanResponse.days[i].recipes.length).fill(
-                false
-              )
-            );
-            this.selectedOptions.push(new Array(3).fill('keep'));
-          }
+    // this.http
+    //   .post('http://127.0.0.1:5000/api/endpoint', data, {
+    //     responseType: 'text',
+    //   })
+    //   .subscribe(
+    //     (response) => {
+    //       this.element.nativeElement.style.display = 'none';
+    //       this.errorDiv.nativeElement.style.display = 'none';
+    //       this.showSpinner = false;
+    //       this.mealPlanResponse = JSON.parse(response);
 
-          this.snackExpandedStates = new Array(
-            this.mealPlanResponse.snacks.length
-          ).fill(false);
+    //       const numDays = this.getNumDays(this.mealPlanResponse);
+    //       for (let i = 0; i < numDays; i++) {
+    //         this.expandedStates.push(
+    //           new Array(this.mealPlanResponse.days[i].recipes.length).fill(
+    //             false
+    //           )
+    //         );
+    //         this.selectedOptions.push(new Array(3).fill('keep'));
+    //       }
 
-          this.includeAllRecipes(this.mealPlanResponse.days);
-        },
-        (error) => {
-          console.error('Error sending data:', error);
-          this.element.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.errorDiv.nativeElement.style.display = 'block';
-        }
-      );
+    //       this.snackExpandedStates = new Array(
+    //         this.mealPlanResponse.snacks.length
+    //       ).fill(false);
+
+    //       this.includeAllRecipes(this.mealPlanResponse.days);
+    //     },
+    //     (error) => {
+    //       console.error('Error sending data:', error);
+    //       this.element.nativeElement.style.display = 'none';
+    //       this.showSpinner = false;
+    //       this.errorDiv.nativeElement.style.display = 'block';
+    //     }
+    //   );
   }
 
   /**
