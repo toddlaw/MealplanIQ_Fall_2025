@@ -65,8 +65,8 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <div class="grid grid-cols-1 md:grid-cols-3">
-                <div class="add-people-icons col-span-1">
+              <div class="grid grid-cols-2 ">
+                <div class="add-people-icons justify-start ">
                   <button
                     [style.visibility]="
                       people.length > MIN_PEOPLE ? 'visible' : 'hidden'
@@ -90,9 +90,7 @@
                   </button>
                 </div>
 
-                <div class="md:col-span-1"></div>
-
-                <div class="md:col-span-1 flex justify-end">
+                <div class="grid justify-items-end pr-5">
                   <mat-button-toggle-group>
                     <mat-button-toggle
                       value=""
@@ -114,7 +112,7 @@
                     <h3 class="pt-8">Person {{ i + 1 }}</h3>
 
                   
-                  <div class="grid grid-flow-row-desnse grid-cols-2 grid-rows-3">
+                  <div class="grid md:grid-cols-2 gap-4">
 
                   <div class="col-span-1">
                     <mat-form-field class="age">
@@ -210,7 +208,7 @@
                 <button
                   type="button"
                   (click)="closePanel()"
-                  class="rounded-lg text-white bg-secondary hover:bg-secondary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center justify-items-center"
+                  class="justify-items-center px-28 text-white py-2"
                 >
                   Done
                 </button>
