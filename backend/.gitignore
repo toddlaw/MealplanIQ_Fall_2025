@@ -10,3 +10,4 @@ dist/
 *.pyc
 *.pyo
 *.pyd
+service-account.json
