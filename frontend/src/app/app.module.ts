@@ -46,6 +46,8 @@ import { TimelineComponent } from './components/timeline/timeline.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
 
+import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,6 +65,7 @@ import { SplashComponent } from './components/splash/splash.component';
     TimelineComponent,
     ContactComponent,
     SplashComponent,
+    ShoppingListComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,7 +86,7 @@ import { SplashComponent } from './components/splash/splash.component';
     OverlayModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    // provideFirestore(() => getFirestore()),
     // provideStorage(() => getStorage()),
     HotToastModule.forRoot(),
     MatMenuModule,

@@ -172,40 +172,4 @@
       ]
     }
   ]
-},
-
-[
-  {
-  "date": "2024-05-11",
-      "shopping-list": [
-        {
-          "name": "Chicken",
-          "quantity": "400g"
-        },
-        {
-          "name": "Lemon",
-          "quantity": "2"
-        },
-        {
-          "name": "Herbs",
-          "quantity": "2"
-        }
-      ],
-}, {
-  "date": "2024-05-11",
-      "shopping-list": [
-        {
-          "name": "Chicken",
-          "quantity": "400g"
-        },
-        {
-          "name": "Lemon",
-          "quantity": "2"
-        },
-        {
-          "name": "Herbs",
-          "quantity": "2"
-        }
-      ],
 }
-]

@@ -1,0 +1,10 @@
+<h2 class="text-xl font-bold mb-4">Shopping List</h2>
+
+<div *ngFor="let item of data">
+  <h3 class="text-lg font-semibold mb-2">{{ item.date }}</h3>
+  <ul>
+    <li *ngFor="let listItem of item['shopping-list']">
+      {{ listItem.name }} - {{ listItem.quantity }}
+    </li>
+  </ul>
+</div>
