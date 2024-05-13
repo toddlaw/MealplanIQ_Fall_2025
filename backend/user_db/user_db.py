@@ -28,9 +28,12 @@ class DatabaseManager:
         self.create_favourite_cuisines()
         self.create_liked_food()
         self.create_disliked_food()
+        self.create_user_allergies()
         self.create_user_dietary_constraints()
         self.create_user_religious_constraints()
         self.create_user_favourite_cuisines()
+        self.create_user_liked_food()
+        self.create_user_disliked_food()
         self.populate_allergies_table()
         self.populate_dietary_constraints_table()
         self.populate_religious_constraints_table()
@@ -350,6 +353,7 @@ class DatabaseManager:
         sql = """
         INSERT INTO dietary_constraints (name) VALUES
         ('None'),
+        ('Vegetarian'),
         ('Vegan'),
         ('Pescatarian')
         """
@@ -384,9 +388,18 @@ class DatabaseManager:
         sql = """
         INSERT INTO allergies (name) VALUES
         ('None'),
-        ('Peanuts'),
+        ('Peanut'),
         ('Gluten'),
-        ('Dairy')
+        ('Dairy'),
+        ('Grain'),
+        ('Seafood'),
+        ('Sesame'),
+        ('Shellfish'),
+        ('Soy'),
+        ('Egg'),
+        ('Sulfite'),
+        ('Tree Nut'),
+        ('Wheat')
         """
         try:
             cursor.execute(sql)
@@ -482,7 +495,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         sql = """
         INSERT INTO user_profile (user_id, user_name, gender, height, age, weight, activity_level, selected_unit, health_goal)
-        VALUES (%s, ,%s, %s, %s, %s, %s, %s, %s, %s);
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
         values = (user_id, user_name, gender, height, age, weight, activity_level, selected_unit, health_goal)
         try:
@@ -494,7 +507,7 @@ class DatabaseManager:
             print(f"Error inserting user profile: {e}")
 
 
-    def insert_user_dietary_constraints(self, user_id, dietary_constraint_name):
+    def insert_user_dietary_constraint(self, user_id, dietary_constraint_name):
         cursor = self.db.cursor()
         find_id_sql = """
         SELECT id FROM dietary_constraints WHERE name = %s;
@@ -657,6 +670,92 @@ class DatabaseManager:
             print(f"Error deleting tables: {e}")
         finally:
             cursor.close()
+
+    # ------------------- look up table functions -------------------
+    def get_allergy_ids(self, allergy_names):
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(allergy_names))
+        sql = f"SELECT id, name FROM allergies WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(allergy_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def add_user_allergies(self, user_id, allergies):
+        allergy_ids = self.get_allergy_ids(allergies)
+        cursor = self.db.cursor()
+        values = [(user_id, allergy_ids[allergy]) for allergy in allergies if allergy in allergy_ids]
+        sql = "INSERT INTO user_allergies (user_id, allergy_id) VALUES (%s, %s)"
+        try:
+            cursor.executemany(sql, values)
+            self.db.commit()
+            print("User allergies added successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user allergies: {e}")
+
+    def get_liked_food_ids(self, liked_food_names):
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(liked_food_names))
+        sql = f"SELECT id, name FROM liked_food WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(liked_food_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def add_user_liked_foods(self, user_id, liked_food):
+        liked_food_ids = self.get_liked_food_ids(liked_food)
+        cursor = self.db.cursor()
+        values = [(user_id, liked_food_ids[food]) for food in liked_food if food in liked_food_ids]
+        sql = "INSERT INTO user_liked_food (user_id, liked_food_id) VALUES (%s, %s)"
+        try:
+            cursor.executemany(sql, values)
+            self.db.commit()
+            print("User liked food added successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user liked food: {e}")
+
+    def get_disliked_food_ids(self, disliked_food_names):
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(disliked_food_names))
+        sql = f"SELECT id, name FROM disliked_food WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(disliked_food_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def add_user_disliked_foods(self, user_id, disliked_food):
+        disliked_food_ids = self.get_disliked_food_ids(disliked_food)
+        cursor = self.db.cursor()
+        values = [(user_id, disliked_food_ids[food]) for food in disliked_food if food in disliked_food_ids]
+        sql = "INSERT INTO user_disliked_food (user_id, disliked_food_id) VALUES (%s, %s)"
+        try:
+            cursor.executemany(sql, values)
+            self.db.commit()
+            print("User disliked food added successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user disliked food: {e}")
+
+    def get_favourite_cuisine_ids(self, cuisine_names):
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(cuisine_names))
+        sql = f"SELECT id, name FROM favourite_cuisines WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(cuisine_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def add_user_favourite_cuisines(self, user_id, cuisines):
+        cuisine_ids = self.get_favourite_cuisine_ids(cuisines)
+        cursor = self.db.cursor()
+        values = [(user_id, cuisine_ids[cuisine]) for cuisine in cuisines if cuisine in cuisine_ids]
+        sql = "INSERT INTO user_favourite_cuisines (user_id, cuisine_id) VALUES (%s, %s)"
+        try:
+            cursor.executemany(sql, values)
+            self.db.commit()
+            print("User favourite cuisines added successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user favourite cuisines: {e}")
+
     
 def instantiate_database():
     db = DatabaseManager()
