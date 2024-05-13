@@ -2,6 +2,7 @@ from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription
+from backend import db_manager
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
@@ -47,9 +48,9 @@ def handle_cancel_subscription():
 
 @app.route('/api', methods=['POST'])
 def receive_data():
-    print("Received data")
-    print(request.json)
+    print("Received data", request.json)
     data = request.json
+
     response = gen_meal_plan(data)
     return jsonify(response)
 

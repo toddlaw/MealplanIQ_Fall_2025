@@ -17,7 +17,28 @@ class DatabaseManager:
         if not self.initialized:
             self.db = self.connect_to_database()
             self.initialized = True
+            self.initialize_and_populate_tables()
 
+
+    def initialize_and_populate_tables(self):
+        self.create_user_profile_table()
+        self.create_dietary_constraints()
+        self.create_religious_constraints()
+        self.create_allergies()
+        self.create_favourite_cuisines()
+        self.create_liked_food()
+        self.create_disliked_food()
+        self.create_user_dietary_constraints()
+        self.create_user_religious_constraints()
+        self.create_user_favourite_cuisines()
+        self.populate_allergies_table()
+        self.populate_dietary_constraints_table()
+        self.populate_religious_constraints_table()
+        self.populate_favourite_cuisines_table()
+        self.populate_liked_food_table()
+        self.populate_disliked_food_table()
+
+        
     @staticmethod
     def connect_to_database():
         return pymysql.connect(
@@ -640,7 +661,6 @@ class DatabaseManager:
 
 
 # if __name__ == '__main__':
-#     db = connect_to_database()
-#     create_and_populate_subscription_status_table()
-
+#     db = DatabaseManager()
+#     db.delete_all_tables()
 
