@@ -531,7 +531,7 @@ class DatabaseManager:
             print(f"Error inserting user dietary constraint: {e}")
     
 
-    def insert_user_religious_constraints(self, user_id, religious_constraint_name):
+    def insert_user_religious_constraint(self, user_id, religious_constraint_name):
         cursor = self.db.cursor()
         find_id_sql = """
         SELECT id FROM religious_constraints WHERE name = %s;
@@ -764,7 +764,7 @@ def instantiate_database():
 
 
 
-# if __name__ == '__main__':
-#     db = DatabaseManager()
-#     db.delete_all_tables()
+if __name__ == '__main__':
+    db = DatabaseManager()
+    db.delete_all_tables()
 

@@ -49,35 +49,44 @@ def handle_cancel_subscription():
 @app.route('/api', methods=['POST'])
 def receive_data():
     print("Received data", request.json)
-    db = instantiate_database()
     data = request.json
-    user_id = 100
-    user_name = "Test" 
-    person = data.get('people')[0] if data.get('people') else {}
-    gender = person.get('gender')
-    height = person.get('height')
-    weight = person.get('weight')
-    age = person.get('age')
-    activity_level = person.get('activityLevel')
-    selected_unit = data.get('selectedUnit')
-    goal = data.get('healthGoal') 
-    allergies = data.get('allergies')
-    liked_foods = data.get('likedFoods')
-    disliked_foods = data.get('dislikedFoods')
-    favourite_cuisines = data.get('favouriteCuisines')
-    religious_constrains = data.get('religiousConstraint')
-    dietary_constrains = data.get('dietaryConstraint')
-
-    db.insert_user_profile(user_id, user_name, gender, height, weight, age, activity_level, selected_unit, goal)
-    db.add_user_allergies(user_id, allergies)
-    db.add_user_liked_foods(user_id, liked_foods)
-    db.add_user_disliked_foods(user_id, disliked_foods)
-    db.add_user_favourite_cuisines(user_id, favourite_cuisines)
-    db.insert_user_religious_constraints(user_id, religious_constrains)
-    db.insert_user_dietary_constraint(user_id, dietary_constrains)
-
-    
+    user_data = _extract_user_profile_data_from_json(data)
+    extract_data = _extract_data_from_json(data)
+    db = instantiate_database()
+    db.insert_user_profile(**user_data)
+    _process_user_data(db, user_data['user_id'], extract_data)
     response = gen_meal_plan(data)
     return jsonify(response)
 
+def _extract_user_profile_data_from_json(data):
+    person = data.get('people')[0] if data.get('people') else {}
+    return {
+        'user_id': 100,  # Example static ID, should be dynamically set if needed
+        'user_name': "Test",  # Example static name
+        'gender': person.get('gender'),
+        'height': person.get('height'),
+        'weight': person.get('weight'),
+        'age': person.get('age'),
+        'activity_level': person.get('activityLevel'),
+        'selected_unit': data.get('selectedUnit'),
+        'health_goal': data.get('healthGoal')
+    }
+
+def _extract_data_from_json(data):
+    return {
+        'allergies': data.get('allergies'),
+        'liked_foods': data.get('likedFoods'),
+        'disliked_foods': data.get('dislikedFoods'),
+        'favourite_cuisines': data.get('favouriteCuisines'),
+        'religious_constraint': data.get('religiousConstraint'),
+        'dietary_constraint': data.get('dietaryConstraint')
+    }
+
+def _process_user_data(db, user_id, extract_data):
+    db.add_user_allergies(user_id, extract_data['allergies'])
+    db.add_user_liked_foods(user_id, extract_data['liked_foods'])
+    db.add_user_disliked_foods(user_id, extract_data['disliked_foods'])
+    db.add_user_favourite_cuisines(user_id, extract_data['favourite_cuisines'])
+    db.insert_user_religious_constraint(user_id, extract_data['religious_constraint'])
+    db.insert_user_dietary_constraint(user_id, extract_data['dietary_constraint'])
 
