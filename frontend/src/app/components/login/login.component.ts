@@ -50,10 +50,23 @@ export class LoginComponent implements OnInit {
           error: ({ message }) => `There was an error: ${message} `,
         })
       )
-      .subscribe(() => {
-        // this.userService.setUser(user.uid, user.email);
+      .subscribe((userCredential) => {
+        const { user } = userCredential; // Extracting user information from UserCredential
+        if (user) {
+          console.log('User logged in:', user.uid); // Accessing the user ID (uid)
+          localStorage.setItem('email', email);
+          localStorage.setItem('uid', user.uid);
+          // You can also use user.uid to store or handle the user ID as needed
+          
+          this.router.navigate(['/']);
+        } else {
+          console.error('User is null');
+        }
+        
         this.router.navigate(['/']);
       });
+
+      
   }
   showPassword = false;
 

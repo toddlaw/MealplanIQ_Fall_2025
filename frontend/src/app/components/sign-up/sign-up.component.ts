@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
-import { UsersService } from 'src/app/services/users.service';
+// import { UsersService } from 'src/app/services/users.service';
 
 export function passwordsMatchValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -50,7 +50,7 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toast: HotToastService,
-    private usersService: UsersService,
+    // private usersService: UsersService,
     private fb: NonNullableFormBuilder
   ) {}
 
@@ -73,6 +73,7 @@ export class SignUpComponent implements OnInit {
   }
 
   submit() {
+
     const { name, email, password } = this.signUpForm.value;
 
     if (!this.signUpForm.valid || !name || !password || !email) {
@@ -82,25 +83,23 @@ export class SignUpComponent implements OnInit {
     this.authService
       .signUp(email, password)
       .pipe(
-        switchMap(({ user: { uid } }) => {
-          console.log(`uid: ${uid}, email: ${email}`);
-          return this.usersService.addUser({ uid, email, displayName: name });
-        }),
         this.toast.observe({
           success: 'Congrats! You are all signed up',
           loading: 'Signing up...',
           error: ({ message }) => `${message}`,
         })
       )
-      .subscribe(
-        (success) => {
-          this.router.navigate(['/']);
+      .subscribe({
+        next: (userCredential) => {
+          this.toast.observe({ success: 'Congrats! You are all signed up', error: `Error: an error occurs during login` }); // Show success toast
+          console.log(userCredential);
+          // this.router.navigate(['/']);
         },
-        (error) => {
-          console.error(error);
+        error: (Error) => {
+          this.toast.error(`Error: ${Error.message}`); // Show error toast
+          console.error(Error);
         }
-      );
-    console.log('submit');
+      });
   }
   showPassword = false;
 

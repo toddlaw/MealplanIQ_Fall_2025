@@ -5,13 +5,14 @@ import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { MissionComponent } from './components/mission/mission.component';
-import { ApproachComponent} from './components/approach/approach.component';
+import { ApproachComponent } from './components/approach/approach.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { LeadershipComponent } from './components/leadership/leadership.component';
 import { PhilosophyComponent } from './components/philosophy/philosophy.component';
 import { TechnologyComponent } from './components/technology/technology.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { SplashComponent } from './components/splash/splash.component';
+import { Guard } from './services/guard.service'; // Import your guard here
 
 import {
   canActivate,
@@ -47,7 +48,7 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [Guard],
   },
   {
     path: 'mission',

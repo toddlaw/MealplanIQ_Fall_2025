@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { UsersService } from 'src/app/services/users.service';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';

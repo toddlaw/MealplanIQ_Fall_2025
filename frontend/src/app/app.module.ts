@@ -21,7 +21,7 @@ import { LandingComponent } from './components/landing/landing.component';
 import { TermsAndConditionsComponent } from './components/tac-dialog/tac-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProfileComponent } from './components/profile/profile.component';
-import { getStorage, provideStorage } from '@angular/fire/storage';
+// import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
@@ -84,7 +84,7 @@ import { SplashComponent } from './components/splash/splash.component';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
+    // provideStorage(() => getStorage()),
     HotToastModule.forRoot(),
     MatMenuModule,
     MatRadioModule,
@@ -94,7 +94,7 @@ import { SplashComponent } from './components/splash/splash.component';
     HttpClientModule,
     MatTableModule,
     MatDialogModule,
-    MatSidenavModule
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

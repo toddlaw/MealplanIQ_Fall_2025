@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { UsersService } from 'src/app/services/users.service';
+//  import { UsersService } from 'src/app/services/users.service';
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -45,7 +45,7 @@ interface Cost {
 })
 export class HomeComponent implements OnInit {
   showSpinner: boolean = false;
-  user$ = this.usersService.currentUserProfile$;
+  // user$ = this.usersService.currentUserProfile$;
   minDate: Date;
   maxDate: Date;
   age: number = 0;
@@ -119,7 +119,7 @@ export class HomeComponent implements OnInit {
     { value: '$$$$', viewValue: '$$$$' },
   ];
 
-  constructor(private http: HttpClient, private usersService: UsersService) {
+  constructor(private http: HttpClient) {
     const currentDate = new Date();
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 7);
