@@ -4,7 +4,7 @@
   #start
 >
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
-    <h1 class="text-rose-600 font-black">
+    <h1 class="text-red">
       MealPlanIQ is currently in beta and we are working to make it better! We
       appreciate your patience.
     </h1>
@@ -62,8 +62,8 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <div class="grid grid-cols-1 md:grid-cols-3">
-                <div class="add-people-icons col-span-1">
+              <div class="grid grid-cols-2 ">
+                <div class="add-people-icons justify-start ">
                   <button
                     [style.visibility]="
                       people.length > MIN_PEOPLE ? 'visible' : 'hidden'
@@ -87,9 +87,7 @@
                   </button>
                 </div>
 
-                <div class="md:col-span-1"></div>
-
-                <div class="md:col-span-1 flex justify-end">
+                <div class="grid justify-items-end pr-5">
                   <mat-button-toggle-group>
                     <mat-button-toggle
                       value=""
@@ -106,16 +104,12 @@
                 </div>
               </div>
 
-              <div
-                class="lg:grid grid-cols-2 gap-4 pt-5 md:grid-cols-1 justify-center"
-              >
-                <ng-container
-                  *ngFor="let person of people; let i = index"
-                  class=""
-                >
-                  <div class="col-span-2">
-                    <h3>Person {{ i + 1 }}</h3>
-                  </div>
+        
+                <ng-container *ngFor="let person of people; let i = index">
+                    <h3 class="pt-8">Person {{ i + 1 }}</h3>
+
+                  
+                  <div class="grid md:grid-cols-2 gap-4">
 
                   <div class="col-span-1">
                     <mat-form-field class="age">
@@ -203,14 +197,15 @@
                     </mat-form-field>
                   </div>
                   <div class="col-span-1"></div>
+                </div>
                 </ng-container>
-              </div>
+              
 
               <div class="flex items-center justify-center">
                 <button
                   type="button"
-                  class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
                   (click)="closePanel()"
+                  class="justify-items-center px-28 text-white py-2"
                 >
                   Done
                 </button>
@@ -437,11 +432,13 @@
           <div class="container text-center">
             <p class="text-2xl">③ Generate your meal plan!</p>
             <button
-              mat-raised-button
               type="submit"
-              class="rounded-lg text-white bg-secondary hover:bg-secondary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center justify-items-center"
+              class="rounded-lg bg-primary text-white px-40 py-3"
             >
-              <mat-icon>search</mat-icon>
+            <mat-icon
+            fontIcon="search"
+            class="pt-1"></mat-icon>
+             
             </button>
           </div>
         </div>
