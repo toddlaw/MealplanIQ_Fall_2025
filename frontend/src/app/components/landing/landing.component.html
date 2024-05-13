@@ -450,9 +450,11 @@
 
 <!-- start of response ui -->
 <div #scrollToMe hidden>
-  <div class="loading-meal-plan">
-    <h1 class="centered-text text-xl">Generating your meal plan...</h1>
-    <div class="spinner-container">
+  <div class="loading-meal-plan flex flex-col items-center justify-center h-screen">
+    <div>
+    <h1 class="centered-text text-xl mb-4">Generating your meal plan...</h1>
+    </div>
+    <div class="centered-text p-8"> 
       <mat-spinner></mat-spinner>
     </div>
   </div>
