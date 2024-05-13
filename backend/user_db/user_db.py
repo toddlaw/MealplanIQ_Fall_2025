@@ -119,7 +119,43 @@ def create_favourite_cuisines(db):
     finally:
         db.close()
 
-# Look-up tables
+def create_liked_food(db):
+    cursor = db.cursor()
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS liked_food (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) UNIQUE
+    );
+    """
+    try:
+        cursor.execute(create_table_sql)
+        db.commit()
+        print("Food table created successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error creating food table: {e}")
+    finally:
+        db.close()
+
+def create_disliked_food(db):
+    cursor = db.cursor()
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS disliked_food (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) UNIQUE
+    );
+    """
+    try:
+        cursor.execute(create_table_sql)
+        db.commit()
+        print("Disliked food table created successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error creating disliked food table: {e}")
+    finally:
+        db.close()
+
+# ------------------ Look-up tables ------------------ 
 def create_user_dietary_constraints(db):
     cursor = db.cursor()
     create_table_sql = """
@@ -183,7 +219,6 @@ def create_user_favourite_cuisines(db):
     finally:
         db.close()
 
-
 def create_user_allergies(db):
     cursor = db.cursor()
     sql = """
@@ -204,6 +239,49 @@ def create_user_allergies(db):
         print(f"Error creating user allergies table: {e}")
     finally:
         db.close()
+
+def create_user_liked_food(db):
+    cursor = db.cursor()
+    sql = """
+    CREATE TABLE IF NOT EXISTS user_liked_food (
+        user_id INT,
+        liked_food_id INT,
+        PRIMARY KEY (user_id, liked_food_id),
+        FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
+        FOREIGN KEY (liked_food_id) REFERENCES liked_food(id)
+    );
+    """
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print("User liked food table created successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error creating user liked food table: {e}")
+    finally:
+        db.close()
+
+def create_user_disliked_food(db):
+    cursor = db.cursor()
+    sql = """
+    CREATE TABLE IF NOT EXISTS user_disliked_food (
+        user_id INT,
+        disliked_food_id INT,
+        PRIMARY KEY (user_id, disliked_food_id),
+        FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
+        FOREIGN KEY (disliked_food_id) REFERENCES disliked_food(id)
+    );
+    """
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print("User disliked food table created successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error creating user disliked food table: {e}")
+    finally:
+        db.close()
+
 
 def create_and_populate_subscription_status_table():
     db = connect_to_database()
@@ -256,7 +334,7 @@ def create_user_subscription_table():
     finally:
         db.close()
 
- # Initiate tables
+ # ------------------ Initiate dictionary tables ------------------ 
 def populate_dietary_constraints_table():
     db = connect_to_database()
     cursor = db.cursor()
@@ -314,7 +392,76 @@ def populate_allergies_table():
         print(f"Error adding allergies: {e}")
     finally:
         cursor.close()
+    
+def populate_favourite_cuisines_table():
+    db = connect_to_database()
+    cursor = db.cursor()
+    sql = """
+    INSERT INTO favourite_cuisines (name) VALUES
+    ('None'),
+    ('American'),
+    ('Italian'),
+    ('Mexican'),
+    ('Japanese'),
+    ('Indian'),
+    ('Greek'),
+    ('Chinese')
+    """
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print("Cuisines added successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error adding cuisines: {e}")
+    finally:
+        cursor.close()
 
+def populate_liked_food_table():
+    db = connect_to_database()
+    cursor = db.cursor()
+    sql = """
+    INSERT INTO liked_food (name) VALUES
+    ('None'),
+    ('Pizza'),
+    ('Burger'),
+    ('Pasta'),
+    ('Sushi'),
+    ('Salad'),
+    ('Ice Cream')
+    """
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print("Liked food added successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error adding liked food: {e}")
+    finally:
+        cursor.close()
+
+def populate_disliked_food_table():
+    db = connect_to_database()
+    cursor = db.cursor()
+    sql = """
+    INSERT INTO disliked_food (name) VALUES
+    ('None'),
+    ('Anchovies'),
+    ('Olives'),
+    ('Cilantro'),
+    ('Blue Cheese'),
+    ('Liver'),
+    ('Tofu')
+    """
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print("Disliked food added successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error adding disliked food: {e}")
+    finally:
+        cursor.close()
 
 # Test functions
 def test_insert_user_profile(db):
@@ -331,6 +478,174 @@ def test_insert_user_profile(db):
     except pymysql.Error as e:
         db.rollback()
         print(f"Error inserting user profile: {e}")
+    finally:
+        cursor.close()
+
+# ------------------- Insert data with inputs -------------------
+def insert_user_profile(db, user_id, gender, height, age, weight, activity_level, selected_unit, health_goal):
+    cursor = db.cursor()
+    sql = """
+    INSERT INTO user_profile (user_id, gender, height, age, weight, activity_level, selected_unit, health_goal)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+    """
+    values = (user_id, gender, height, age, weight, activity_level, selected_unit, health_goal)
+    try:
+        cursor.execute(sql, values)
+        db.commit()
+        print("User profile inserted successfully.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user profile: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_dietary_constraints(db, user_id, dietary_constraint_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM dietary_constraints WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_dietary_constraints (user_id, dietary_constraint_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (dietary_constraint_name,))
+        result = cursor.fetchone()
+        if result:
+            dietary_constraint_id = result[0]
+            cursor.execute(insert_sql, (user_id, dietary_constraint_id))
+            db.commit()
+            print("User dietary constraint inserted successfully.")
+        else:
+            print("No dietary constraint found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user dietary constraint: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_religious_constraints(db, user_id, religious_constraint_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM religious_constraints WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_religious_constraints (user_id, religious_constraint_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (religious_constraint_name,))
+        result = cursor.fetchone()
+        if result:
+            religious_constraint_id = result[0]
+            cursor.execute(insert_sql, (user_id, religious_constraint_id))
+            db.commit()
+            print("User religious constraint inserted successfully.")
+        else:
+            print("No religious constraint found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user religious constraint: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_allergies(db, user_id, allergy_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM allergies WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_allergies (user_id, allergy_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (allergy_name,))
+        result = cursor.fetchone()
+        if result:
+            allergy_id = result[0]
+            cursor.execute(insert_sql, (user_id, allergy_id))
+            db.commit()
+            print("User allergy inserted successfully.")
+        else:
+            print("No allergy found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user allergy: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_favourite_cuisines(db, user_id, cuisine_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM favourite_cuisines WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_favourite_cuisines (user_id, cuisine_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (cuisine_name,))
+        result = cursor.fetchone()
+        if result:
+            cuisine_id = result[0]
+            cursor.execute(insert_sql, (user_id, cuisine_id))
+            db.commit()
+            print("User favourite cuisine inserted successfully.")
+        else:
+            print("No cuisine found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user favourite cuisine: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_liked_food(db, user_id, food_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM liked_food WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_liked_food (user_id, liked_food_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (food_name,))
+        result = cursor.fetchone()
+        if result:
+            food_id = result[0]
+            cursor.execute(insert_sql, (user_id, food_id))
+            db.commit()
+            print("User liked food inserted successfully.")
+        else:
+            print("No food found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user liked food: {e}")
+    finally:
+        cursor.close()
+
+def insert_user_disliked_food(db, user_id, food_name):
+    cursor = db.cursor()
+    find_id_sql = """
+    SELECT id FROM disliked_food WHERE name = %s;
+    """
+    insert_sql = """
+    INSERT INTO user_disliked_food (user_id, disliked_food_id)
+    VALUES (%s, %s);
+    """
+    try:
+        cursor.execute(find_id_sql, (food_name,))
+        result = cursor.fetchone()
+        if result:
+            food_id = result[0]
+            cursor.execute(insert_sql, (user_id, food_id))
+            db.commit()
+            print("User disliked food inserted successfully.")
+        else:
+            print("No food found with that name.")
+    except pymysql.Error as e:
+        db.rollback()
+        print(f"Error inserting user disliked food: {e}")
     finally:
         cursor.close()
 
@@ -354,8 +669,27 @@ def delete_all_tables(db):
     finally:
         cursor.close()
 
+# function calls to initiate tables
+def initiate_dictionary_tables(db):
+    create_allergies(db)
+    create_dietary_constraints(db)
+    create_religious_constraints(db)
+    create_favourite_cuisines(db)
+    create_liked_food(db)
+    create_disliked_food(db)
+
+def create_lookup_tables(db):
+    create_user_allergies(db)
+    create_user_dietary_constraints(db)
+    create_user_religious_constraints(db)
+    create_user_favourite_cuisines(db)
+    create_user_liked_food(db)
+    create_user_disliked_food(db)
+
+
 if __name__ == '__main__':
     db = connect_to_database()
-    # create_user_profile_table(db)
-    # test_insert_user_profile(db)
+
+
+
 
