@@ -20,8 +20,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private toast: HotToastService,
     private router: Router,
-    private fb: NonNullableFormBuilder,
-    // private usersService: UsersService
+    private fb: NonNullableFormBuilder // private usersService: UsersService
   ) {}
 
   ngOnInit(): void {}
@@ -47,7 +46,8 @@ export class LoginComponent implements OnInit {
         this.toast.observe({
           success: 'Logged in successfully',
           loading: 'Logging in...',
-          error: ({ message }) => `There was an error: ${message} `,
+          error: () =>
+            `There was an error: Please check your email and password and try again. `,
         })
       )
       .subscribe((userCredential) => {
@@ -57,16 +57,14 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('email', email);
           localStorage.setItem('uid', user.uid);
           // You can also use user.uid to store or handle the user ID as needed
-          
+
           this.router.navigate(['/']);
         } else {
           console.error('User is null');
         }
-        
+
         this.router.navigate(['/']);
       });
-
-      
   }
   showPassword = false;
 

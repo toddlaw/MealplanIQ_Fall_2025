@@ -191,40 +191,44 @@ export class LandingComponent implements OnInit {
     console.log(data.maxDate);
     console.log(data.minDate);
 
-    // this.http
-    //   .post('http://127.0.0.1:5000/api/endpoint', data, {
-    //     responseType: 'text',
-    //   })
-    //   .subscribe(
-    //     (response) => {
-    //       this.element.nativeElement.style.display = 'none';
-    //       this.errorDiv.nativeElement.style.display = 'none';
-    //       this.showSpinner = false;
-    //       this.mealPlanResponse = JSON.parse(response);
+    if (!data.likedFoods) {
+      data.likedFoods = 'None';
+    }
 
-    //       const numDays = this.getNumDays(this.mealPlanResponse);
-    //       for (let i = 0; i < numDays; i++) {
-    //         this.expandedStates.push(
-    //           new Array(this.mealPlanResponse.days[i].recipes.length).fill(
-    //             false
-    //           )
-    //         );
-    //         this.selectedOptions.push(new Array(3).fill('keep'));
-    //       }
+    this.http
+      .post('http://127.0.0.1:5000/api/endpoint', data, {
+        responseType: 'text',
+      })
+      .subscribe(
+        (response) => {
+          this.element.nativeElement.style.display = 'none';
+          this.errorDiv.nativeElement.style.display = 'none';
+          this.showSpinner = false;
+          this.mealPlanResponse = JSON.parse(response);
 
-    //       this.snackExpandedStates = new Array(
-    //         this.mealPlanResponse.snacks.length
-    //       ).fill(false);
+          const numDays = this.getNumDays(this.mealPlanResponse);
+          for (let i = 0; i < numDays; i++) {
+            this.expandedStates.push(
+              new Array(this.mealPlanResponse.days[i].recipes.length).fill(
+                false
+              )
+            );
+            this.selectedOptions.push(new Array(3).fill('keep'));
+          }
 
-    //       this.includeAllRecipes(this.mealPlanResponse.days);
-    //     },
-    //     (error) => {
-    //       console.error('Error sending data:', error);
-    //       this.element.nativeElement.style.display = 'none';
-    //       this.showSpinner = false;
-    //       this.errorDiv.nativeElement.style.display = 'block';
-    //     }
-    //   );
+          this.snackExpandedStates = new Array(
+            this.mealPlanResponse.snacks.length
+          ).fill(false);
+
+          this.includeAllRecipes(this.mealPlanResponse.days);
+        },
+        (error) => {
+          console.error('Error sending data:', error);
+          this.element.nativeElement.style.display = 'none';
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'block';
+        }
+      );
   }
 
   /**
