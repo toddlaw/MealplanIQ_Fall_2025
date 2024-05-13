@@ -57,6 +57,7 @@ class DatabaseManager:
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_profile (
             user_id INT PRIMARY KEY,
+            user_name VARCHAR(255),
             gender VARCHAR(255),
             height DOUBLE,
             age INT,
@@ -477,13 +478,13 @@ class DatabaseManager:
             print(f"Error inserting user profile: {e}")
 
     # ------------------- Insert data with inputs -------------------
-    def insert_user_profile(self, user_id, gender, height, age, weight, activity_level, selected_unit, health_goal):
+    def insert_user_profile(self, user_id, user_name, gender, height, age, weight, activity_level, selected_unit, health_goal):
         cursor = self.db.cursor()
         sql = """
-        INSERT INTO user_profile (user_id, gender, height, age, weight, activity_level, selected_unit, health_goal)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+        INSERT INTO user_profile (user_id, user_name, gender, height, age, weight, activity_level, selected_unit, health_goal)
+        VALUES (%s, ,%s, %s, %s, %s, %s, %s, %s, %s);
         """
-        values = (user_id, gender, height, age, weight, activity_level, selected_unit, health_goal)
+        values = (user_id, user_name, gender, height, age, weight, activity_level, selected_unit, health_goal)
         try:
             cursor.execute(sql, values)
             self.db.commit()
@@ -656,6 +657,10 @@ class DatabaseManager:
             print(f"Error deleting tables: {e}")
         finally:
             cursor.close()
+    
+def instantiate_database():
+    db = DatabaseManager()
+    return db
 
 
 
