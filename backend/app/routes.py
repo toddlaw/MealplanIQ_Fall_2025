@@ -45,8 +45,10 @@ def handle_cancel_subscription():
     return cancel_subscription(subscription_id)
 
 
-@app.route('/api/endpoint', methods=['POST'])
+@app.route('/api', methods=['POST'])
 def receive_data():
+    print("Received data")
+    print(request.json)
     data = request.json
     response = gen_meal_plan(data)
     return jsonify(response)
