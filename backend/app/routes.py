@@ -45,6 +45,16 @@ def handle_cancel_subscription():
     subscription_id = request.json.get('subscription_id')
     return cancel_subscription(subscription_id)
 
+@app.route('/signup', methods=['POST'])
+def handle_signup():
+    data = request.json
+    user_id = data.get('user_id')
+    user_name = data.get('user_name')
+    email = data.get('email')
+    db = instantiate_database()
+    result = db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
+    return result
+
 
 @app.route('/api', methods=['POST'])
 def receive_data():
@@ -53,7 +63,7 @@ def receive_data():
     user_data = _extract_user_profile_data_from_json(data)
     extract_data = _extract_data_from_json(data)
     db = instantiate_database()
-    db.insert_user_profile(**user_data)
+    db.update_user_profile(**user_data)
     _process_user_data(db, user_data['user_id'], extract_data)
     response = gen_meal_plan(data)
     return jsonify(response)
@@ -62,7 +72,6 @@ def _extract_user_profile_data_from_json(data):
     person = data.get('people')[0] if data.get('people') else {}
     return {
         'user_id': 100,  # Example static ID, should be dynamically set if needed
-        'user_name': "Test",  # Example static name
         'gender': person.get('gender'),
         'height': person.get('height'),
         'weight': person.get('weight'),
