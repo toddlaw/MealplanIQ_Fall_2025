@@ -68,6 +68,9 @@ def gen_meal_plan(data):
     formatted_min_date = min_date.strftime('%Y/%m/%d')
     formatted_max_date = max_date.strftime('%Y/%m/%d')
 
+    print("Min date:", formatted_min_date)
+    print("Max date:", formatted_max_date)
+
     # Calculating the difference in days
     difference = max_date - min_date
     days = difference.days + 1

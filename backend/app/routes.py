@@ -3,9 +3,8 @@ from app import app
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from user_db.user_db import instantiate_database
-
 import stripe
-from app.send_email import scheduled_email_test
+# from app.send_email import scheduled_email_test
 
 
 @app.route('/', defaults={'path': ''}) 
@@ -68,10 +67,19 @@ def receive_data():
     db = instantiate_database()
     db.update_user_profile(**user_data)
     _process_user_data(db, user_data['user_id'], extract_data)
-    response = gen_meal_plan(data)
+    print("gen_meal_plan input data", data)
+    is_user_id_valid = db.check_user_id_existence(user_data['user_id'])
+    # is_user_subscription_valid = db.check_user_subscription_validity(user_data['user_id'])
+    if not is_user_id_valid:
+        response = gen_meal_plan(data)
+    else:
+
+        
+
+
     # scheduled_email_test()
     # print("email content", create_sample_email_content(response))
-    print("Response", response)
+    # print("Response", response)
     return jsonify(response)
 
 def _extract_user_profile_data_from_json(data):
@@ -104,6 +112,9 @@ def _process_user_data(db, user_id, extract_data):
     db.add_user_favourite_cuisines(user_id, extract_data['favourite_cuisines'])
     db.insert_user_religious_constraint(user_id, extract_data['religious_constraint'])
     db.insert_user_dietary_constraint(user_id, extract_data['dietary_constraint'])
+
+def _retrieve_user_data(db, user_id):
+    
 
 
 endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'

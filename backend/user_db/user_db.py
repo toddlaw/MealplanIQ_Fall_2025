@@ -65,6 +65,7 @@ class DatabaseManager:
             user_name VARCHAR(255),
             email VARCHAR(255),
             gender VARCHAR(255),
+            last_meal_plan_date DATETIME,
             height DOUBLE,
             age INT,
             weight DOUBLE,
@@ -478,15 +479,15 @@ class DatabaseManager:
 
 
     # ------------------- Insert data with inputs -------------------
-    def insert_user_and_set_default_subscription_signup(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
+    def insert_user_and_set_default_subscription_signup(self, user_id, user_name, email,last_meal_plan_date=None, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
         cursor = self.db.cursor()
 
         # Insert into user_profile
         sql_user_profile = """
         INSERT INTO user_profile (user_id, user_name, email, gender, height, age, weight, activity_level, selected_unit, health_goal)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
-        values_user_profile = (user_id, user_name, email, gender, height, age, weight, activity_level, selected_unit, health_goal)
+        values_user_profile = (user_id, user_name, email, last_meal_plan_date, gender, height, age, weight, activity_level, selected_unit, health_goal)
         sql_subscription = """
         INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, subscription_expiry_date)
         VALUES (%s, 3, NULL, NULL);
@@ -548,7 +549,6 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error updating user profile: {e}")
-
 
 
     def insert_user_dietary_constraint(self, user_id, dietary_constraint_name):
@@ -694,6 +694,24 @@ class DatabaseManager:
             self.db.rollback()
             print(f"Error inserting user disliked food: {e}")
     
+    # ------------------- Update data -------------------
+    def update_user_profile(self, user_id, last_meal_plan_date):
+        cursor = self.db.cursor()
+        sql = """
+        UPDATE user_profile
+        SET last_meal_plan_date = %s
+        WHERE user_id = %s;
+        """
+        values = (last_meal_plan_date, user_id)
+        try:
+            cursor.execute(sql, values)
+            self.db.commit()
+            print("User profile updated successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error updating user profile: {e}")    
+
+
 
 
     # delete test data
@@ -714,6 +732,14 @@ class DatabaseManager:
             print(f"Error deleting tables: {e}")
         finally:
             cursor.close()
+
+    # ------------------- retrieve data -------------------
+    def get_user_profile(self, user_id):
+        cursor = self.db.cursor()
+        sql = "SELECT * FROM user_profile WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result
 
     # ------------------- look up table functions -------------------
     def get_allergy_ids(self, allergy_names):
@@ -801,6 +827,25 @@ class DatabaseManager:
             print(f"Error adding user favourite cuisines: {e}")
 
     
+
+# ------------------- Validate User ----------------------
+    def check_user_id_existence(self, user_id):
+        cursor = self.db.cursor()
+        sql = "SELECT user_id FROM user_profile WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return True if result else False
+    
+    def check_user_subscription_validity(self, user_id):
+        # If subscription_type_id is 3, then user is unscubscribed
+        cursor = self.db.cursor()
+        sql = "SELECT subscription_type_id FROM user_subscription WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        if result[0] == 3:
+            return False
+        return True
+    
 def instantiate_database():
     db = DatabaseManager()
     return db
@@ -811,5 +856,5 @@ def instantiate_database():
 if __name__ == '__main__':
     db = DatabaseManager()
     # db.delete_all_tables()
-    db.insert_user_and_set_default_subscription_signup(100, 'Julie', "test@test.ca")
+    # db.insert_user_and_set_default_subscription_signup(100, 'Julie', "test@test.ca")
 
