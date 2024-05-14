@@ -58,3 +58,22 @@ body {
 .dialog-content {
   overflow-y: auto; /* or overflow-y: scroll; */
 }
+
+/* Hide the scrollbar while still allowing scrolling */
+.hide_scroll {
+  overflow: auto; /* or overflow: scroll; */
+}
+
+/* Style the scrollbar */
+.hide_scroll::-webkit-scrollbar {
+  width: 0; /* Set the width of the scrollbar to 0 */
+}
+
+/* Optionally, you can also style other scrollbar elements like the track and thumb */
+.hide_scroll::-webkit-scrollbar-track {
+  background: transparent; /* Set the track color to transparent */
+}
+
+.hide_scroll::-webkit-scrollbar-thumb {
+  background: transparent; /* Set the thumb color to transparent */
+}
