@@ -395,7 +395,7 @@
             </mat-form-field>
           </div>
 
-          <div class="relative z-0 w-full mb-5 group">
+          <div class="relative z-0 w-full mb-5 group flex justify-center">
             <mat-form-field>
               <div class="flex items-center">
                 <!-- Add a div and flex layout -->
@@ -456,6 +456,7 @@
     </div>
   </div>
 </div>
+
 <div #errorDiv hidden>
   <div class="loading-meal-plan p-5 text-center">
     <h1 class="centered-text text-xl">
@@ -464,18 +465,23 @@
     <h2 class="centered-text text-xl link"><a (click)="this.scrollToTop()">Please try again</a></h2>
   </div>
 </div>
-<div class="container" *ngIf="!this.isEmpty(mealPlanResponse)">
-  <h2 class="sub-header" *ngIf="searchClicked">
-    ④ Want to change this plan? Select the meals you don't like and search again.
-  </h2>
 
+
+<!-- response ui starts here -->
+<div class="container py-5 px-20">
+<div *ngIf="!this.isEmpty(mealPlanResponse)">
+  <p class="text-2xl text-center" *ngIf="searchClicked">
+    ④ Want to change this plan? <br />
+    Select the meals you don't like and search again.
+  </p>
   <div *ngIf="mealPlanResponse.constraints_loosened">
-    <p class="change-recipe-text" style="font-style: italic">
+    <p class="change-recipe-text text-center" style="font-style: italic">
       {{ OUT_OF_RANGE }}
     </p>
     <br />
   </div>
 
+  <!-- recipe change option -->
     <button
       mat-raised-button
       color="primary"
@@ -484,16 +490,15 @@
     >
       Get full meal plan
     </button>
-    <div
-      *ngFor="let day of mealPlanResponse.days; index as i"
-      class="recipe-day"
-      [ngClass]="{ 'no-top-margin': i === 0 }"
-    >
+
+    <!-- recipe cards start here  -->
+
+    <div *ngFor="let day of mealPlanResponse.days; index as i"
+      class="recipe-day text-center"
+      [ngClass]="{ 'no-top-margin': i === 0 }">
+
       <h2>{{ day.date }}</h2>
-      <div
-        *ngFor="let recipe of day.recipes; index as j"
-        class="recipe-container"
-      >
+      <div *ngFor="let recipe of day.recipes; index as j" class="recipe-container">
         <div class="recipe-row">
           <div class="meal-type">
             <h3 style="font-size: 18px; margin-bottom: 0px">
@@ -616,4 +621,5 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
+</div>
 </div>
