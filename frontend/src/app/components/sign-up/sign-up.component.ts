@@ -73,13 +73,12 @@ export class SignUpComponent implements OnInit {
   }
 
   submit() {
-
     const { name, email, password } = this.signUpForm.value;
 
     if (!this.signUpForm.valid || !name || !password || !email) {
       return;
     }
-    
+
     this.authService
       .signUp(email, password)
       .pipe(
@@ -91,14 +90,18 @@ export class SignUpComponent implements OnInit {
       )
       .subscribe({
         next: (userCredential) => {
-          this.toast.observe({ success: 'Congrats! You are all signed up', error: `Error: an error occurs during login` }); // Show success toast
+          this.toast.observe({
+            success: 'Congrats! You are all signed up',
+            error: `Error: an error occurs during login`,
+          }); // Show success toast
           console.log(userCredential);
-          // this.router.navigate(['/']);
+          localStorage.setItem('uid', userCredential.user.uid);
+          this.router.navigate(['/']);
         },
         error: (Error) => {
           this.toast.error(`Error: ${Error.message}`); // Show error toast
           console.error(Error);
-        }
+        },
       });
   }
   showPassword = false;
