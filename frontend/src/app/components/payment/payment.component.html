@@ -1,36 +1,14 @@
-<form id="payment-form" (submit)="handleForm($event)">
-  <div>
-    <label for="email">Email</label>
-    <input id="email" [(ngModel)]="email" name="email" type="email" required>
-    <label for="plan_type">Plan Type</label>
-    <select id="plan_type" [(ngModel)]="plan_type" name="plan_type" required>
-      <option value="monthly">Monthly</option>
-      <option value="yearly">Yearly</option>
-    </select>
-  </div>
+<div class="text-center">
+<h1>With Subscription, you can</h1>
+<h3>Generate meal plan for longer period and set up a different goal!</h3>
+</div>
 
-  <!-- <div>
-    <label for="cardNumber">Card Number</label>
-    <div id="card-number-element"></div>
-  </div>
+<!-- <stripe-pricing-table pricing-table-id="prctbl_1PEs5V08iagEEr2SLOqM2qll"
+  publishable-key="pk_test_51PDZUy08iagEEr2S8IXXXI3iiuXBPVXGzcLUJrx6J16oJae2MlZz4Ug0TaxQb4hHEKoqhZ7CS85vltpw9I26TEHg00ZJKSXM3Z">
+</stripe-pricing-table> -->
 
-  <div>
-    <label for="cardExpiry">Expiration Date</label>
-    <div id="card-expiry-element"></div>
-  </div>
+<!-- <stripe-pricing-table [pricing-table-id]="stripePricingTableId" [publishable-key]="stripePublicKey">
+</stripe-pricing-table> -->
 
-  <div>
-    <label for="cardCvc">CVC</label>
-    <div id="card-cvc-element"></div>
-  </div> -->
-
-  <div id="card-element"></div>
-
-  <button id="submit">
-    <div class="spinner hidden" id="spinner"></div>
-    <span id="button-text">Pay now</span>
-  </button>
-  <div id="payment-message" class="hidden"></div>
-  <div id="card-errors" role="alert"></div>
-</form>
-<script src="https://js.stripe.com/v3/"></script>
+<stripe-pricing-table [attr.pricing-table-id]="stripePricingTableId" [attr.publishable-key]="stripePublicKey">
+</stripe-pricing-table>
