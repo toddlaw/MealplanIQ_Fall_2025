@@ -4,7 +4,7 @@
   #start
 >
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
-    <h1 class="text-rose-600 font-black">
+    <h1 class="text-red">
       MealPlanIQ is currently in beta and we are working to make it better! We
       appreciate your patience.
     </h1>
@@ -62,8 +62,8 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <div class="grid grid-cols-1 md:grid-cols-3">
-                <div class="add-people-icons col-span-1">
+              <div class="grid grid-cols-2 ">
+                <div class="add-people-icons justify-start ">
                   <button
                     [style.visibility]="
                       people.length > MIN_PEOPLE ? 'visible' : 'hidden'
@@ -87,9 +87,7 @@
                   </button>
                 </div>
 
-                <div class="md:col-span-1"></div>
-
-                <div class="md:col-span-1 flex justify-end">
+                <div class="grid justify-items-end pr-5">
                   <mat-button-toggle-group>
                     <mat-button-toggle
                       value=""
@@ -106,16 +104,12 @@
                 </div>
               </div>
 
-              <div
-                class="lg:grid grid-cols-2 gap-4 pt-5 md:grid-cols-1 justify-center"
-              >
-                <ng-container
-                  *ngFor="let person of people; let i = index"
-                  class=""
-                >
-                  <div class="col-span-2">
-                    <h3>Person {{ i + 1 }}</h3>
-                  </div>
+        
+                <ng-container *ngFor="let person of people; let i = index">
+                    <h3 class="pt-8">Person {{ i + 1 }}</h3>
+
+                  
+                  <div class="grid md:grid-cols-2 gap-4">
 
                   <div class="col-span-1">
                     <mat-form-field class="age">
@@ -203,14 +197,15 @@
                     </mat-form-field>
                   </div>
                   <div class="col-span-1"></div>
+                </div>
                 </ng-container>
-              </div>
+              
 
               <div class="flex items-center justify-center">
                 <button
                   type="button"
-                  class="rounded-lg text-white bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center"
                   (click)="closePanel()"
+                  class="justify-items-center px-28 text-white py-2"
                 >
                   Done
                 </button>
@@ -218,9 +213,6 @@
             </mat-expansion-panel>
           </mat-accordion>
         </div>
-
-        <!-- </mat-expansion-panel> -->
-        <!-- </mat-accordion> -->
 
         <div class="max-w-md mx-auto pt-8">
           <div class="grid md:grid-cols-1 gap-6">
@@ -365,7 +357,7 @@
             <mat-form-field>
               <mat-label
                 >Breakfast Preferences
-                <mat-icon fontIcon="coffee" color="default"> </mat-icon>
+                <mat-icon fontIcon="bakery_dining" class="text-sm"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="breakfasts" multiple>
                 <mat-select-trigger>
@@ -386,7 +378,7 @@
             <mat-form-field>
               <mat-label
                 >Snack Preferences
-                <mat-icon fontIcon="coffee" color="default"> </mat-icon>
+                <mat-icon fontIcon="egg"></mat-icon>
               </mat-label>
               <mat-select [formControl]="snacks" multiple>
                 <mat-select-trigger>
@@ -403,7 +395,7 @@
             </mat-form-field>
           </div>
 
-          <div class="relative z-0 w-full mb-5 group">
+          <div class="relative z-0 w-full mb-5 group flex justify-center">
             <mat-form-field>
               <div class="flex items-center">
                 <!-- Add a div and flex layout -->
@@ -437,11 +429,13 @@
           <div class="container text-center">
             <p class="text-2xl">③ Generate your meal plan!</p>
             <button
-              mat-raised-button
               type="submit"
-              class="rounded-lg text-white bg-secondary hover:bg-secondary-strong focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium p-2 text-center justify-items-center"
+              class="rounded-lg bg-primary text-white px-40 py-3"
             >
-              <mat-icon>search</mat-icon>
+            <mat-icon
+            fontIcon="search"
+            class="pt-1"></mat-icon>
+             
             </button>
           </div>
         </div>
@@ -453,13 +447,16 @@
 
 <!-- start of response ui -->
 <div #scrollToMe hidden>
-  <div class="loading-meal-plan">
-    <h1 class="centered-text text-xl">Generating your meal plan...</h1>
-    <div class="spinner-container">
+  <div class="loading-meal-plan flex flex-col items-center justify-center h-screen">
+    <div>
+    <h1 class="centered-text text-xl mb-4">Generating your meal plan...</h1>
+    </div>
+    <div class="centered-text p-8"> 
       <mat-spinner></mat-spinner>
     </div>
   </div>
 </div>
+
 <div #errorDiv hidden>
   <div class="loading-meal-plan p-5 text-center">
     <h1 class="centered-text text-xl">
@@ -468,18 +465,23 @@
     <h2 class="centered-text text-xl link"><a (click)="this.scrollToTop()">Please try again</a></h2>
   </div>
 </div>
-<div class="container" *ngIf="!this.isEmpty(mealPlanResponse)">
-  <h2 class="sub-header" *ngIf="searchClicked">
-    ④ Want to change this plan? Select the meals you don't like and search again.
-  </h2>
 
+
+<!-- response ui starts here -->
+<div class="container py-5 px-20">
+<div *ngIf="!this.isEmpty(mealPlanResponse)">
+  <p class="text-2xl text-center" *ngIf="searchClicked">
+    ④ Want to change this plan? <br />
+    Select the meals you don't like and search again.
+  </p>
   <div *ngIf="mealPlanResponse.constraints_loosened">
-    <p class="change-recipe-text" style="font-style: italic">
+    <p class="change-recipe-text text-center" style="font-style: italic">
       {{ OUT_OF_RANGE }}
     </p>
     <br />
   </div>
 
+  <!-- recipe change option -->
     <button
       mat-raised-button
       color="primary"
@@ -488,16 +490,15 @@
     >
       Get full meal plan
     </button>
-    <div
-      *ngFor="let day of mealPlanResponse.days; index as i"
-      class="recipe-day"
-      [ngClass]="{ 'no-top-margin': i === 0 }"
-    >
+
+    <!-- recipe cards start here  -->
+
+    <div *ngFor="let day of mealPlanResponse.days; index as i"
+      class="recipe-day text-center"
+      [ngClass]="{ 'no-top-margin': i === 0 }">
+
       <h2>{{ day.date }}</h2>
-      <div
-        *ngFor="let recipe of day.recipes; index as j"
-        class="recipe-container"
-      >
+      <div *ngFor="let recipe of day.recipes; index as j" class="recipe-container">
         <div class="recipe-row">
           <div class="meal-type">
             <h3 style="font-size: 18px; margin-bottom: 0px">
@@ -620,4 +621,5 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
+</div>
 </div>
