@@ -525,29 +525,30 @@
             </div> -->
             
             
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3">
               <!-- Loop for recipes -->
-              <ng-container *ngFor="let recipe of day.recipes; index as j">
-                <mat-card>
-                  <div class="flex justify-items-center p-2">
-                    <img [src]="getImageUrl(recipe.id)" height="300" width="300" alt="Image" />
-                  </div>
-                  <div class="p-2">
-                    <mat-card-title>{{ recipe.title }}</mat-card-title>
-                    <mat-card-subtitle>{{ mealNames[j] }}</mat-card-subtitle>
-                    <mat-card-content>
-                      <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
-                      <p>Cuisine: {{ recipe.region }}</p>
-                      <p>Prep time: {{ recipe.prep_time }}</p>
-                    </mat-card-content>
-                  </div>
-                </mat-card>
+              <ng-container *ngFor="let recipe of day.recipes; index as j" class="w-full">
+      
+                  <mat-card class="meal-card w-full h-full">
+                    <div class="flex justify-items-center p-2">
+                      <img [src]="getImageUrl(recipe.id)" height="300" width="300" alt="Image" />
+                    </div>
+                    <div class="p-2">
+                      <mat-card-title>{{ recipe.title }}</mat-card-title>
+                      <mat-card-subtitle>{{ mealNames[j] }}</mat-card-subtitle>
+                      <mat-card-content>
+                        <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
+                        <p>Cuisine: {{ recipe.region }}</p>
+                        <p>Prep time: {{ recipe.prep_time }}</p>
+                      </mat-card-content>
+                    </div>
+                  </mat-card>
               </ng-container>
             
               <!-- Loop for snacks -->
-              <div *ngIf="mealPlanResponse.snacks.length > 0">
-                <ng-container *ngFor="let snack of mealPlanResponse.snacks; index as i">
-                  <mat-card>
+              <ng-container *ngIf="mealPlanResponse.snacks.length > 0">
+                <div *ngFor="let snack of mealPlanResponse.snacks; index as i" class="w-full">
+                  <mat-card class="meal-card w-full w-full">
                     <div class="flex justify-items-center p-2">
                       <img [src]="getImageUrl(snack.id)" height="300" width="300" alt="Image" />
                     </div>
@@ -562,8 +563,8 @@
                       </mat-card-content>
                     </div>
                   </mat-card>
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
             </div>
             
         
