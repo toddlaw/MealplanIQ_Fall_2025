@@ -17,11 +17,11 @@ from . import app, scheduler
 from flask_apscheduler import APScheduler
 
 
-SERVICE_ACCOUNT_FILE = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/service-key.json'
+SERVICE_ACCOUNT_FILE = 'key_json path'
 credentials = service_account.Credentials.from_service_account_file(
   filename=SERVICE_ACCOUNT_FILE,
   scopes=['https://mail.google.com/'],
-  subject='워렌이메일'
+  subject='워렌쓰 이메일'
 )
 
 service_gmail = build('gmail', 'v1', credentials=credentials)
@@ -64,27 +64,82 @@ def send_message(service, user_id, message):
     print('An error occurred: %s' % e)
     return None
   
-def scheduled_email(sender_email, receiver_email, subject, message_text):
+def scheduled_email(sender_email, receiver_email, subject, week_number):
     # sender_email = 'your-email@domain.com'
     # receiver_email = 'receiver-email@example.com'
     # subject = 'Test Email'
     # message_text = 'This is a test email sent by Flask scheduler!'
+    message_text = create_sample_email_content(week_number)
     message = create_message(sender_email, receiver_email, subject, message_text)
     send_message(service_gmail, 'me', message)
 
-def scheduled_email_test(sender_email, receiver_email, subject, message_text):
-    run_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
-    try:
-        job_id = "email_job_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        scheduler.add_job(func=scheduled_email, id=job_id, args=[sender_email, receiver_email, subject, message_text], trigger='date', run_date=run_time)
-        print(f"Email scheduled to send at {run_time} with job ID {job_id}.")
-    except Exception as e:
-        print(f"Failed to schedule email: {str(e)}")
+def scheduled_email_test():
+    initial_run_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+    
+    sender_email = '워렌쓰 이메일'
+    receiver_email = '받는사람 이메일'
+    subject = 'Text Email'
+    num_of_emails_to_be_sent = 2
+
+    for i in range(num_of_emails_to_be_sent):
+        run_time = initial_run_time + datetime.timedelta(minutes=2 * i)
+        job_id = f"email_job_{(run_time + datetime.timedelta(weeks=i)).strftime('%Y%m%d%H%M%S')}"
+        try:
+            scheduler.add_job(func=scheduled_email, 
+                              id=job_id,
+                              args=[sender_email, receiver_email, subject, i + 1],
+                              trigger='date', 
+                              run_date=run_time)
+            print(f"Email scheduled to send at {run_time} with job ID {job_id}.")
+        except Exception as e:
+            print(f"Failed to schedule email for week {i+1}: {str(e)}")
+
+def create_sample_email_content(week_number):
+    response = {
+        "days": [
+            {
+                "date": "2024-05-01",
+                "recipes": [
+                    {
+                        "title": "Recipe 1",
+                        "id": 1
+                    },
+                    {
+                        "title": "Recipe 2",
+                        "id": 2
+                    }
+                ]
+            },
+            {
+                "date": "2024-05-02",
+                "recipes": [
+                    {
+                        "title": "Recipe 3",
+                        "id": 3
+                    },
+                    {
+                        "title": "Recipe 4",
+                        "id": 4
+                    }
+                ]
+            }
+        ]
+    }
+    days = response['days']
+    email_content = ""
+    email_content += f"Meal Plan for Week {week_number}\n\n"
+    for day in days:
+        email_content += f"Date: {day['date']}\n"
+        for recipe in day['recipes']:
+            email_content += f"title: {recipe['title']}, id: {recipe['id']}\n"
+        email_content += "\n"
+    return email_content
+
 
 
 def main():
-  sender_email = '워렌이메일'
-  to_email = '받는사람'
+  sender_email = 'warren@mealplaniq.com'
+  to_email = 'ohjeoung5224@gamil.com'
   subject = 'Text Email'
   message_text = 'text email with image?!!'
   # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'

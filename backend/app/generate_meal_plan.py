@@ -60,6 +60,8 @@ def gen_meal_plan(data):
     adjust_nutrients(macros, micros, diet_info['plan'], data['people'])
 
     MILLISECONDS_IN_DAY = 86400 * 1000
+    print(data["maxDate"])
+    print(data["minDate"])
     days = int((data["maxDate"] - data["minDate"]) / MILLISECONDS_IN_DAY)
 
     if "nutrient" in diet_info["nutrients"]:
