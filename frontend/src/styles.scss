@@ -59,21 +59,20 @@ body {
   overflow-y: auto; /* or overflow-y: scroll; */
 }
 
-/* Hide the scrollbar while still allowing scrolling */
+/* add this class name if you want to hide the scroll bar in the html element while maintaining its functionality */
 .hide_scroll {
-  overflow: auto; /* or overflow: scroll; */
+  overflow: auto;
 }
 
 /* Style the scrollbar */
 .hide_scroll::-webkit-scrollbar {
-  width: 0; /* Set the width of the scrollbar to 0 */
+  width: 0; 
 }
 
-/* Optionally, you can also style other scrollbar elements like the track and thumb */
 .hide_scroll::-webkit-scrollbar-track {
-  background: transparent; /* Set the track color to transparent */
+  background: transparent; 
 }
 
 .hide_scroll::-webkit-scrollbar-thumb {
-  background: transparent; /* Set the thumb color to transparent */
+  background: transparent;/
 }
