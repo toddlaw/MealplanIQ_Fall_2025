@@ -1,0 +1,33 @@
+.text-date {
+  font-size: 28px;
+}
+
+.shopping-item {
+  border-left: 4px solid var(--primary-color);
+}
+
+.text-item {
+  line-height: 34px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Hide the scrollbar while still allowing scrolling */
+.container {
+  overflow: auto; /* or overflow: scroll; */
+}
+
+/* Style the scrollbar */
+.container::-webkit-scrollbar {
+  width: 0; /* Set the width of the scrollbar to 0 */
+}
+
+/* Optionally, you can also style other scrollbar elements like the track and thumb */
+.container::-webkit-scrollbar-track {
+  background: transparent; /* Set the track color to transparent */
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: transparent; /* Set the thumb color to transparent */
+}

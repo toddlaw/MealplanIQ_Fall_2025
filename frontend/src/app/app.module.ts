@@ -47,6 +47,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,7 @@ import { ShoppingListComponent } from './components/dialogues/shopping-list/shop
     MatDialogModule,
     MatSidenavModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
