@@ -1,8 +1,9 @@
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
-from app.payment_stripe import create_subscription, cancel_subscription
+from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from user_db.user_db import instantiate_database
+import stripe
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
@@ -55,7 +56,6 @@ def handle_signup():
     result = db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
     return result
 
-
 @app.route('/api', methods=['POST'])
 def receive_data():
     print("Received data", request.json)
@@ -99,3 +99,38 @@ def _process_user_data(db, user_id, extract_data):
     db.insert_user_religious_constraint(user_id, extract_data['religious_constraint'])
     db.insert_user_dietary_constraint(user_id, extract_data['dietary_constraint'])
 
+
+endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    event = None
+    payload = request.data
+    sig_header = request.headers['STRIPE_SIGNATURE']
+
+    try:
+        event = stripe.Webhook.construct_event(
+            # change endpoint_secret to os.getenv('STRIPE_WEBHOOK_SECRET') when live mode
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        print("ValueError: ", e)
+        return jsonify(error='Invalid payload'), 400
+    except stripe.error.SignatureVerificationError as e:
+        print("SignatureVerificationError: ", e)
+        return jsonify(error='Invalid signature'), 400
+    
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # Get the user_id from Firebase
+        # user_id = firebase_auth.current_user.uid
+
+        return handle_checkout_session_completed(session)
+        # return handle_checkout_session_completed(session, user_id)
+    else:
+        print('Unhandled event type {}'.format(event['type']))
+        return jsonify(success=True), 200
+    
