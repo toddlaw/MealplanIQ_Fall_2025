@@ -61,7 +61,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_profile (
-            user_id INT PRIMARY KEY,
+            user_id VARCHAR(255) PRIMARY KEY,
             user_name VARCHAR(255),
             email VARCHAR(255),
             gender VARCHAR(255),
@@ -187,7 +187,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_dietary_constraints (
-            user_id INT,
+            user_id VARCHAR(255),
             dietary_constraint_id INT,
             PRIMARY KEY (user_id, dietary_constraint_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -207,7 +207,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_religious_constraints (
-            user_id INT,
+            user_id VARCHAR(255),
             religious_constraint_id INT,
             PRIMARY KEY (user_id, religious_constraint_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -227,7 +227,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_favourite_cuisines (
-            user_id INT,
+            user_id VARCHAR(255),
             cuisine_id INT,
             PRIMARY KEY (user_id, cuisine_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -247,7 +247,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         sql = """
         CREATE TABLE IF NOT EXISTS user_allergies (
-            user_id INT,
+            user_id VARCHAR(255),
             allergy_id INT,
             PRIMARY KEY (user_id, allergy_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -266,7 +266,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         sql = """
         CREATE TABLE IF NOT EXISTS user_liked_food (
-            user_id INT,
+            user_id VARCHAR(255),
             liked_food_id INT,
             PRIMARY KEY (user_id, liked_food_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -286,7 +286,7 @@ class DatabaseManager:
         cursor = self.db.cursor()
         sql = """
         CREATE TABLE IF NOT EXISTS user_disliked_food (
-            user_id INT,
+            user_id VARCHAR(255),
             disliked_food_id INT,
             PRIMARY KEY (user_id, disliked_food_id),
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -333,9 +333,9 @@ class DatabaseManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_subscription (
-            user_id INT PRIMARY KEY,
+            user_id VARCHAR(255) PRIMARY KEY,
             subscription_type_id INT,
-            subscription_stripe_id INT,
+            subscription_stripe_id VARCHAR(255),
             subscription_expiry_date DATE,
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
             FOREIGN KEY (subscription_type_id) REFERENCES subscription_status(subscription_type_id)
