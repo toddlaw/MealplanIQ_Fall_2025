@@ -3,8 +3,10 @@ from app import app
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from user_db.user_db import instantiate_database
+
 import stripe
 from app.send_email import scheduled_email_test
+
 
 @app.route('/', defaults={'path': ''}) 
 @app.route('/<path:path>')
@@ -67,9 +69,9 @@ def receive_data():
     db.update_user_profile(**user_data)
     _process_user_data(db, user_data['user_id'], extract_data)
     response = gen_meal_plan(data)
-    scheduled_email_test()
+    # scheduled_email_test()
     # print("email content", create_sample_email_content(response))
-    # print("Response", response)
+    print("Response", response)
     return jsonify(response)
 
 def _extract_user_profile_data_from_json(data):
