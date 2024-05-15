@@ -1,3 +1,4 @@
+import datetime
 from flask import redirect, request, jsonify, send_from_directory
 from app import app
 from app.generate_meal_plan import gen_meal_plan
@@ -65,18 +66,21 @@ def receive_data():
     user_data = _extract_user_profile_data_from_json(data)
     extract_data = _extract_data_from_json(data)
     db = instantiate_database()
+    user_name = 'Julie'
+    user_id = 105
+    email = 'test@test.ca'
+
+    db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
     db.update_user_profile(**user_data)
-    _process_user_data(db, user_data['user_id'], extract_data)
+    _process_user_data(db, user_id, extract_data)
     print("gen_meal_plan input data", data)
-    is_user_id_valid = db.check_user_id_existence(user_data['user_id'])
-    # is_user_subscription_valid = db.check_user_subscription_validity(user_data['user_id'])
-    if not is_user_id_valid:
-        response = gen_meal_plan(data)
-    else:
-
+    is_user_id_valid = db.check_user_id_existence(user_id)
+    print("is_user_id_valid", is_user_id_valid)
+    is_user_subscription_valid = db.check_user_subscription_validity(user_id)
+    if is_user_id_valid:
+        db.update_user_last_date_plan_profile(user_id, data['maxDate'])
+    response = gen_meal_plan(data)
         
-
-
     # scheduled_email_test()
     # print("email content", create_sample_email_content(response))
     # print("Response", response)
@@ -85,7 +89,7 @@ def receive_data():
 def _extract_user_profile_data_from_json(data):
     person = data.get('people')[0] if data.get('people') else {}
     return {
-        'user_id': 100,  # Example static ID, should be dynamically set if needed
+        'user_id': 105,  # Example static ID, should be dynamically set if needed
         'gender': person.get('gender'),
         'height': person.get('height'),
         'weight': person.get('weight'),
@@ -97,6 +101,7 @@ def _extract_user_profile_data_from_json(data):
 
 def _extract_data_from_json(data):
     return {
+        # 'maxDate': data.get('maxDate'),
         'allergies': data.get('allergies'),
         'liked_foods': data.get('likedFoods'),
         'disliked_foods': data.get('dislikedFoods'),
@@ -106,6 +111,7 @@ def _extract_data_from_json(data):
     }
 
 def _process_user_data(db, user_id, extract_data):
+    # db.update_user_last_date_plan_profile(user_id, extract_data['maxDate'])
     db.add_user_allergies(user_id, extract_data['allergies'])
     db.add_user_liked_foods(user_id, extract_data['liked_foods'])
     db.add_user_disliked_foods(user_id, extract_data['disliked_foods'])
@@ -113,7 +119,7 @@ def _process_user_data(db, user_id, extract_data):
     db.insert_user_religious_constraint(user_id, extract_data['religious_constraint'])
     db.insert_user_dietary_constraint(user_id, extract_data['dietary_constraint'])
 
-def _retrieve_user_data(db, user_id):
+# def _retrieve_user_data(db, user_id):
     
 
 

@@ -65,7 +65,7 @@ class DatabaseManager:
             user_name VARCHAR(255),
             email VARCHAR(255),
             gender VARCHAR(255),
-            last_meal_plan_date DATETIME,
+            last_meal_plan_date BIGINT,
             height DOUBLE,
             age INT,
             weight DOUBLE,
@@ -77,7 +77,7 @@ class DatabaseManager:
         try:
             cursor.execute(create_table_sql)
             self.db.commit()
-            print("Table created successfully")
+            print("User profile table created successfully")
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error creating table: {e}")
@@ -93,7 +93,7 @@ class DatabaseManager:
         try:
             cursor.execute(create_dietary_constraints_table_sql)
             self.db.commit()
-            print("Table created successfully")
+            print("Dietary constraint table created successfully")
         except pymysql.Error as e:
             db.rollback()
             print(f"Error creating table: {e}")
@@ -479,28 +479,30 @@ class DatabaseManager:
 
 
     # ------------------- Insert data with inputs -------------------
-    def insert_user_and_set_default_subscription_signup(self, user_id, user_name, email,last_meal_plan_date=None, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
+    def insert_user_and_set_default_subscription_signup(self, user_id, user_name, email, last_meal_plan_date=None, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
         cursor = self.db.cursor()
 
         # Insert into user_profile
         sql_user_profile = """
-        INSERT INTO user_profile (user_id, user_name, email, gender, height, age, weight, activity_level, selected_unit, health_goal)
+        INSERT INTO user_profile (user_id, user_name, email, gender, last_meal_plan_date, height, age, weight, activity_level, selected_unit, health_goal)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
-        values_user_profile = (user_id, user_name, email, last_meal_plan_date, gender, height, age, weight, activity_level, selected_unit, health_goal)
+        values_user_profile = (user_id, user_name, email, gender, last_meal_plan_date, height, age, weight, activity_level, selected_unit, health_goal)
         sql_subscription = """
         INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, subscription_expiry_date)
         VALUES (%s, 3, NULL, NULL);
         """
-        
+        values_subscription = (user_id,)  # Subscription values for the user
+
         try:
             cursor.execute(sql_user_profile, values_user_profile)
-            cursor.execute(sql_subscription, (user_id,))
+            cursor.execute(sql_subscription, values_subscription)
             self.db.commit()
             return {"success": True, "message": "User profile and subscription created successfully."}
         except pymysql.Error as e:
             self.db.rollback()
             return {"success": False, "msg": f"Error inserting user profile and subscription for user_id {user_id}: {str(e)}"}
+
 
     # def insert_user_profile(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
     #     cursor = self.db.cursor()
@@ -545,7 +547,7 @@ class DatabaseManager:
         try:
             cursor.execute(sql, values)
             self.db.commit()
-            print("User profile updated successfully.")
+            print("USER PROFILE updated successfully.")
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error updating user profile: {e}")
@@ -695,7 +697,7 @@ class DatabaseManager:
             print(f"Error inserting user disliked food: {e}")
     
     # ------------------- Update data -------------------
-    def update_user_profile(self, user_id, last_meal_plan_date):
+    def update_user_last_date_plan_profile(self, user_id, last_meal_plan_date):
         cursor = self.db.cursor()
         sql = """
         UPDATE user_profile
@@ -854,7 +856,7 @@ def instantiate_database():
 
 
 if __name__ == '__main__':
-    db = DatabaseManager()
-    # db.delete_all_tables()
+    print("Running database manager")
+    db = instantiate_database()
+    db.delete_all_tables()
     # db.insert_user_and_set_default_subscription_signup(100, 'Julie', "test@test.ca")
-
