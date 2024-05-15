@@ -312,22 +312,32 @@ class DatabaseManager:
             subscription_type VARCHAR(255) NOT NULL
         );
         """
-        populate_table_sql = """
-        INSERT INTO subscription_status (subscription_type_id, subscription_type) VALUES
-        (1, 'monthly_subscription'),
-        (2, 'yearly_subscription'),
-        (3, 'free_trial');
-        """
+        subscription_types = [
+            (1, 'monthly_subscription'),
+            (2, 'yearly_subscription'),
+            (3, 'free_trial')
+        ]
         try:
             cursor.execute(create_table_sql)
             self.db.commit()
             print("Table created successfully")
-            cursor.execute(populate_table_sql)
-            self.db.commit()
-            print("Subscription statuses added successfully")
+
+            for subscription_type_id, subscription_type in subscription_types:
+                cursor.execute("SELECT subscription_type_id FROM subscription_status WHERE subscription_type_id = %s", (subscription_type_id,))
+                result = cursor.fetchone()
+                if not result:
+                    cursor.execute("INSERT INTO subscription_status (subscription_type_id, subscription_type) VALUES (%s, %s)", (subscription_type_id, subscription_type))
+                    self.db.commit()
+                    print(f"Subscription status {subscription_type} added successfully.")
+                else:
+                    print(f"Subscription status {subscription_type} already exists.")
+
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error in database operation: {e}")
+        finally:
+            cursor.close()
+
 
 
     def create_user_subscription_table(self):
@@ -354,128 +364,102 @@ class DatabaseManager:
     # ------------------ Initiate dictionary tables ------------------ 
     def populate_dietary_constraints_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO dietary_constraints (name) VALUES
-        ('None'),
-        ('Vegetarian'),
-        ('Vegan'),
-        ('Pescatarian')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Dietary constraints added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding dietary constraints: {e}")
-
+        constraints = ['None', 'Vegetarian', 'Vegan', 'Pescatarian']
+        for constraint in constraints:
+            cursor.execute("SELECT name FROM dietary_constraints WHERE name = %s", (constraint,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    cursor.execute("INSERT INTO dietary_constraints (name) VALUES (%s)", (constraint,))
+                    self.db.commit()
+                    print(f"{constraint} added successfully.")
+                except pymysql.Error as e:
+                    self.db.rollback()
+                    print(f"Error adding dietary constraint {constraint}: {e}")
+        cursor.close()
 
     def populate_religious_constraints_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO religious_constraints (name) VALUES
-        ('None'),
-        ('Halal'),
-        ('Kosher')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Religious constraints added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding religious constraints: {e}")
-
+        constraints = ['None', 'Halal', 'Kosher']
+        for constraint in constraints:
+            cursor.execute("SELECT name FROM religious_constraints WHERE name = %s", (constraint,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    cursor.execute("INSERT INTO religious_constraints (name) VALUES (%s)", (constraint,))
+                    self.db.commit()
+                    print(f"{constraint} added successfully.")
+                except pymysql.Error as e:
+                    self.db.rollback()
+                    print(f"Error adding religious constraint {constraint}: {e}")
+        cursor.close()
 
     def populate_allergies_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO allergies (name) VALUES
-        ('None'),
-        ('Peanut'),
-        ('Gluten'),
-        ('Dairy'),
-        ('Grain'),
-        ('Seafood'),
-        ('Sesame'),
-        ('Shellfish'),
-        ('Soy'),
-        ('Egg'),
-        ('Sulfite'),
-        ('Tree Nut'),
-        ('Wheat')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Allergies added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding allergies: {e}")
+        allergies = ['None', 'Peanut', 'Gluten', 'Dairy', 'Grain', 'Seafood', 'Sesame', 'Shellfish', 'Soy', 'Egg', 'Sulfite', 'Tree Nut', 'Wheat']
+        for allergy in allergies:
+            cursor.execute("SELECT name FROM allergies WHERE name = %s", (allergy,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    cursor.execute("INSERT INTO allergies (name) VALUES (%s)", (allergy,))
+                    self.db.commit()
+                    print(f"{allergy} added successfully.")
+                except pymysql.Error as e:
+                    self.db.rollback()
+                    print(f"Error adding allergy {allergy}: {e}")
+        cursor.close()
 
         
     def populate_favourite_cuisines_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO favourite_cuisines (name) VALUES
-        ('None'),
-        ('American'),
-        ('Italian'),
-        ('Mexican'),
-        ('Japanese'),
-        ('Indian'),
-        ('Greek'),
-        ('Chinese')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Cuisines added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding cuisines: {e}")
+        cuisines = ['None', 'American', 'Italian', 'Mexican', 'Japanese', 'Indian', 'Greek', 'Chinese']
+        for cuisine in cuisines:
+            cursor.execute("SELECT name FROM favourite_cuisines WHERE name = %s", (cuisine,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    cursor.execute("INSERT INTO favourite_cuisines (name) VALUES (%s)", (cuisine,))
+                    self.db.commit()
+                except Exception as e:
+                    print(f"Failed to insert {cuisine}: {e}")
+        cursor.close()
 
 
     def populate_liked_food_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO liked_food (name) VALUES
-        ('None'),
-        ('Pizza'),
-        ('Burger'),
-        ('Pasta'),
-        ('Sushi'),
-        ('Salad'),
-        ('Ice Cream')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Liked food added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding liked food: {e}")
-    
+        liked_foods = ['None', 'Pizza', 'Burger', 'Pasta', 'Sushi', 'Salad', 'Ice Cream']
+        for food in liked_foods:
+            cursor.execute("SELECT name FROM liked_food WHERE name = %s", (food,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    cursor.execute("INSERT INTO liked_food (name) VALUES (%s)", (food,))
+                    self.db.commit()
+                    print(f"{food} added successfully.")
+                except pymysql.Error as e:
+                    self.db.rollback()
+                    print(f"Error adding liked food {food}: {e}")
+        cursor.close()
 
     def populate_disliked_food_table(self):
         cursor = self.db.cursor()
-        sql = """
-        INSERT INTO disliked_food (name) VALUES
-        ('None'),
-        ('Anchovies'),
-        ('Olives'),
-        ('Cilantro'),
-        ('Blue Cheese'),
-        ('Liver'),
-        ('Tofu')
-        """
-        try:
-            cursor.execute(sql)
-            self.db.commit()
-            print("Disliked food added successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error adding disliked food: {e}")
+        disliked_foods = ['None', 'Anchovies', 'Olives', 'Cilantro', 'Blue Cheese', 'Liver', 'Tofu']
+        for food in disliked_foods:
+            # Check if the food already exists
+            cursor.execute("SELECT name FROM disliked_food WHERE name = %s", (food,))
+            result = cursor.fetchone()
+            if not result:
+                try:
+                    # Insert the food if it does not exist
+                    cursor.execute("INSERT INTO disliked_food (name) VALUES (%s)", (food,))
+                    self.db.commit()
+                    print(f"{food} added successfully.")
+                except pymysql.Error as e:
+                    self.db.rollback()
+                    print(f"Error adding disliked food {food}: {e}")
+        cursor.close()
+
 
 
     # ------------------- Insert data with inputs -------------------
