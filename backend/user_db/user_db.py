@@ -97,7 +97,7 @@ class DatabaseManager:
             self.db.commit()
             print("Dietary constraint table created successfully")
         except pymysql.Error as e:
-            db.rollback()
+            self.db.rollback()
             print(f"Error creating table: {e}")
 
     def create_religious_constraints(self):
