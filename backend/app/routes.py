@@ -4,6 +4,7 @@ from app import app
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from user_db.user_db import instantiate_database
+from app.manage_user_data import *
 import stripe
 # from app.send_email import scheduled_email_test
 
@@ -63,64 +64,32 @@ def handle_signup():
 def receive_data():
     print("Received data", request.json)
     data = request.json
-    user_data = _extract_user_profile_data_from_json(data)
-    extract_data = _extract_data_from_json(data)
+  
+    user_data = extract_user_profile_data_from_json(data)
+    extract_data = extract_data_from_json(data)
     db = instantiate_database()
     user_name = 'Diane'
-    user_id = 180
+    user_id = 300
     email = 'diane@test.ca'
+
+    data_for_auto_gen_meal_plan = create_data_input_for_auto_gen_meal_plan(db, user_id)
 
     db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
     db.update_user_profile(**user_data)
-    _process_user_data(db, user_id, extract_data)
+    process_user_data(db, user_id, extract_data)
     print("gen_meal_plan input data", data)
     is_user_id_valid = db.check_user_id_existence(user_id)
     print("is_user_id_valid", is_user_id_valid)
     is_user_subscription_valid = db.check_user_subscription_validity(user_id)
+    response = gen_meal_plan(data_for_auto_gen_meal_plan)
     if is_user_id_valid:
         db.update_user_last_date_plan_profile(user_id, data['maxDate'])
-    response = gen_meal_plan(data)
         
     # scheduled_email_test()
     # print("email content", create_sample_email_content(response))
     # print("Response", response)
     return jsonify(response)
 
-def _extract_user_profile_data_from_json(data):
-    person = data.get('people')[0] if data.get('people') else {}
-    return {
-        'user_id': 180,  # Example static ID, should be dynamically set if needed
-        'gender': person.get('gender'),
-        'height': person.get('height'),
-        'weight': person.get('weight'),
-        'age': person.get('age'),
-        'activity_level': person.get('activityLevel'),
-        'selected_unit': data.get('selectedUnit'),
-        'health_goal': data.get('healthGoal')
-    }
-
-def _extract_data_from_json(data):
-    return {
-        # 'maxDate': data.get('maxDate'),
-        'allergies': data.get('allergies'),
-        'liked_foods': data.get('likedFoods'),
-        'disliked_foods': data.get('dislikedFoods'),
-        'favourite_cuisines': data.get('favouriteCuisines'),
-        'religious_constraint': data.get('religiousConstraint'),
-        'dietary_constraint': data.get('dietaryConstraint')
-    }
-
-def _process_user_data(db, user_id, extract_data):
-    # db.update_user_last_date_plan_profile(user_id, extract_data['maxDate'])
-    db.add_user_allergies(user_id, extract_data['allergies'])
-    db.add_user_liked_foods(user_id, extract_data['liked_foods'])
-    db.add_user_disliked_foods(user_id, extract_data['disliked_foods'])
-    db.add_user_favourite_cuisines(user_id, extract_data['favourite_cuisines'])
-    db.insert_user_religious_constraint(user_id, extract_data['religious_constraint'])
-    db.insert_user_dietary_constraint(user_id, extract_data['dietary_constraint'])
-
-# def _retrieve_user_data(db, user_id):
-    
 
 
 endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
