@@ -33,47 +33,37 @@ def generate_ingredients_and_instructions(dish_type: str, dish_name: str, number
     client = OpenAI(
         api_key=os.getenv("OPENAI_API_KEY"),
     )
-
     chat_completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
                 "content": """
-                The user will provide you 2 things for a cooking recipe: 
-                1. The recipe type (e.g. rice dish, chicken dish, etc), 
-                2. The recipe name (e.g. fried rice, chicken curry, etc), 
-                Please generate the ingredients and instructions for the recipe given. 
-                
-                Please provide the response in a JSON format with the following structure:
-                - The object should start with '{' and end with '}'.
+                Generate a recipe in JSON format based on the provided recipe type and name. Ensure all ingredients use 
+                units directly convertible to grams for consistent nutritional calculations.
+
+                JSON format specifications:
+                - Start and end with '{' and '}'.
                 - Include two keys: "Ingredients" and "Instructions".
-                - For the "Ingredients" key:
-                  - Return a string where each ingredient is separated by a newline character ('\\n').
-                  - Each ingredient should be in the format: "ingredient_name,quantity,unit".
-                  - Ensure that each ingredient has a quantity and a unit separated by a comma ','. For ingredients 
-                    that don't have a measurement unit like ounces, teaspoons, etc, use your best judgement for a 
-                    replacement. If unsure, an empty string "" can be used.
-                - For the "Instructions" key:
-                  - Return a string where each instruction is separated by a newline character ('\\n').
-                  - Each instruction should be in the format: "step_number,instruction".
-                  - Make sure there's a comma between the step number and the instruction and not period.
-                  - Any temperatures should be expressed in Fahrenheit only. 
-                  - If the particular recipe dish is straightforward like toast, the instructions can just be an 
-                    empty string "".
-            
-                For example, the response should follow this structure:
+                - "Ingredients": A string with each ingredient formatted as "ingredient_name,quantity,unit", 
+                separated by '\\n'. Only use these units: gram, ounce, tbsp, tsp, ml, L 
+                (exclude cups to ensure precision).
+                - "Instructions": A string with each step formatted as "step_number,instruction", separated by '\\n', 
+                with temperatures in Fahrenheit. For dishes that don't require instructions, the instructions can 
+                be an empty string.
+
+                Example:
                 {
-                    "Ingredients": "Black olives,1,cup\\nGarlic,2,cloves",
-                    "Instructions": "1,Peel the carrots and dice finely\\n2,In a skillet, melt the butter"
+                    "Ingredients": "Chicken breast,200,gram\\nOlive oil,30,ml",
+                    "Instructions": "1,Preheat the oven to 375°F\\n2,Season the chicken with salt and pepper"
                 }
-            
-                Make sure that the response is accurate, concise, and follows this structure.
+
+                Ensure the response is accurate, concise, and adheres to the structure and unit requirements specified.
                 """
             },
             {
                 "role": "user",
-                "content": f"I have a {dish_type} recipe named {dish_name}."
+                "content": f"I have a {dish_type} recipe named {dish_name}. "
                            f"Please generate the ingredients and instructions for me."
             }
         ],
@@ -81,7 +71,6 @@ def generate_ingredients_and_instructions(dish_type: str, dish_name: str, number
 
     response_content = chat_completion.choices[0].message.content
     parsed_response = json.loads(response_content)
-    # print(parsed_response)
     return parsed_response
 
 
@@ -141,36 +130,22 @@ def extract_instructions_data(instructions: str) -> dict:
 
 
 def create_csv_file(recipe_details: dict, recipe_number: int):
-    # Create ingredients csv file
-    ingredients_data = extract_ingredients_info(recipe_details["Ingredients"])
-    df_ingredients = pd.DataFrame(ingredients_data)
-    df_ingredients.to_csv(f"ingredients_csv/{recipe_number}.csv", index=False)
+    try:
+        # Create ingredients csv file
+        ingredients_data = extract_ingredients_info(recipe_details["Ingredients"])
+        df_ingredients = pd.DataFrame(ingredients_data)
+        df_ingredients.to_csv(f"ingredients_csv/{recipe_number}.csv", index=False)
 
-    # Create instructions csv file
-    instructions_data = extract_instructions_data(recipe_details["Instructions"])
-    df_instructions = pd.DataFrame(instructions_data)
-    df_instructions.to_csv(f"instructions_csv/{recipe_number}.csv", index=False)
+        # Create instructions csv file
+        instructions_data = extract_instructions_data(recipe_details["Instructions"])
+        df_instructions = pd.DataFrame(instructions_data)
+        df_instructions.to_csv(f"instructions_csv/{recipe_number}.csv", index=False)
+    except (ValueError, IndexError):
+        # Create empty ingredients CSV file with "invalid_format" suffix if the response format is incorrect
+        # Skip creating the ingredients csv file
+        # The AI response often contains invalid formats, like missing commas between Quantity and Unit
+        with open("invalid_format_recipes.txt", 'a') as file:
+            file.write(f"Invalid format for recipe {recipe_number}.\nRecipe {recipe_number} details: {recipe_details}")
 
-
-def main():
-    recipe_details = retrieve_recipe_details("recipe_names/new_recipes.xlsx")
-
-    start_number = 200838  # Change this to the recipe number you want to start from
-
-    # Find the index of the start number
-    start_index = recipe_details["Number"].index(start_number)
-
-    # Otherwise, use this for the for loop range
-    rows = len(recipe_details["Number"])
-
-    for i in range(start_index, rows):
-        dish_type = recipe_details["Informal Name"][i]
-        dish_name = recipe_details["Generated Name"][i]
-        number = int(recipe_details["Number"][i])
-
-        recipe_details_dict = generate_ingredients_and_instructions(dish_type, dish_name, number)
-        create_csv_file(recipe_details_dict, number)
-
-
-if __name__ == "__main__":
-    main()
+        df_empty = pd.DataFrame()
+        df_empty.to_csv(f"ingredients_csv/{recipe_number}_invalid_format.csv", index=False)
