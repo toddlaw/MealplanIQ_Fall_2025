@@ -496,35 +496,6 @@
       [ngClass]="{ 'no-top-margin': i === 0 }">
 
       <h2>{{ day.date }}</h2>
-
-      <!-- <div *ngFor="let recipe of day.recipes; index as j" class="recipe-container">
-        <div class="recipe-row">
-          <div class="meal-type">
-            <h3 style="font-size: 18px; margin-bottom: 0px">
-              {{ mealNames[j] }}
-            </h3> -->
-    
-
-    <!-- recipe cards start here  -->
-
-          <!-- <mat-card class="recipe-card" (click)="toggleExpand(i, j)"> -->
-
-<!-- 
-            <div class="grid grid-cols-1 gap-4 md:grild-cols-2">
-              <mat-card>
-              <div class="md:flex mid:items-center" >
-            
-                  <img src="https://picsum.photos/300/200"> 
-                <div class="md:ml-4">
-                  <p>text1</p>
-                  <p>text2</p>
-            
-                </div>
-                </div>
-            </mat-card>
-            </div> -->
-            
-            
             <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <!-- Loop for recipes -->
               <ng-container *ngFor="let recipe of day.recipes; index as j" class="w-full">
@@ -544,10 +515,10 @@
                       <mat-card-footer>
                       <div class="absolute bottom-0 right-10">
                       <mat-card-actions> 
-                        <mat-icon
-                          class="refresh-icon"
-                          (click)="refreshRecipe(recipe.id, i, j)"
-                          >refresh</mat-icon>
+                        <button mat-icon-button 
+                        (click)="refreshRecipe(recipe.id, i, j)">
+                          <mat-icon>refresh</mat-icon>
+                      </button>
                       </mat-card-actions>
                     </div>
                     </mat-card-footer>
@@ -661,9 +632,6 @@
         </div>
       </div>
     </div> -->
-
-
-
     <br />
     <br />
     <div>
