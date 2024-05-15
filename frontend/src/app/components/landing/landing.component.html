@@ -525,13 +525,13 @@
             </div> -->
             
             
-            <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3">
+            <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <!-- Loop for recipes -->
               <ng-container *ngFor="let recipe of day.recipes; index as j" class="w-full">
       
                   <mat-card class="meal-card w-full h-full">
-                    <div class="flex justify-items-center p-2">
-                      <img [src]="getImageUrl(recipe.id)" height="300" width="300" alt="Image" />
+                    <div class="flex justify-items-center">
+                      <img [src]="getImageUrl(recipe.id)" height="300" width="300" alt="Image" class="text-center" />
                     </div>
                     <div class="p-2">
                       <mat-card-title>{{ recipe.title }}</mat-card-title>
@@ -541,7 +541,17 @@
                         <p>Cuisine: {{ recipe.region }}</p>
                         <p>Prep time: {{ recipe.prep_time }}</p>
                       </mat-card-content>
+                      <mat-card-footer>
+                      <div class="absolute bottom-0 right-10">
+                      <mat-card-actions> 
+                        <mat-icon
+                          class="refresh-icon"
+                          (click)="refreshRecipe(recipe.id, i, j)"
+                          >refresh</mat-icon>
+                      </mat-card-actions>
                     </div>
+                    </mat-card-footer>
+                  </div>
                   </mat-card>
               </ng-container>
             
@@ -561,6 +571,16 @@
                         <p>Prep time: {{ snack.prep_time }}</p>
                         <p>Multiples: {{ snack.multiples }}</p>
                       </mat-card-content>
+                      <mat-card-footer>
+                        <div class="absolute bottom-0 right-10">
+                        <mat-card-actions> 
+                          <mat-icon
+                            class="refresh-icon"
+                            (click)="refreshSnack(snack.id, i)"
+                            >refresh</mat-icon>
+                        </mat-card-actions>
+                      </div>
+                      </mat-card-footer>
                     </div>
                   </mat-card>
                 </div>
@@ -568,9 +588,7 @@
             </div>
             
         
-              
-            
-            
+
               <!-- <img
                 src="../../../assets/images/{{
                   expandedStates[i][j] ? 'chevron-up.png' : 'chevron-down.png'
