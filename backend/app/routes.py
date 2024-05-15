@@ -6,7 +6,7 @@ from app.payment_stripe import create_subscription, cancel_subscription, handle_
 from user_db.user_db import instantiate_database
 from app.manage_user_data import *
 import stripe
-# from app.send_email import scheduled_email_test
+from app.send_email import scheduled_email_test, scheduled_email_test_clicked_by_generation_button
 
 
 @app.route('/', defaults={'path': ''}) 
@@ -62,32 +62,32 @@ def handle_signup():
 
 @app.route('/api', methods=['POST'])
 def receive_data():
-    print("Received data", request.json)
     data = request.json
   
     user_data = extract_user_profile_data_from_json(data)
     extract_data = extract_data_from_json(data)
     db = instantiate_database()
-    user_name = 'Diane'
-    user_id = 300
-    email = 'diane@test.ca'
+    user_name = 'Diane' # hard coded user name
+    hard_coded_user_id = 300
+    email = 'diane@test.ca' # hard coded user email
 
-    data_for_auto_gen_meal_plan = create_data_input_for_auto_gen_meal_plan(db, user_id)
-
-    db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
+    db.insert_user_and_set_default_subscription_signup(hard_coded_user_id, user_name, email)
     db.update_user_profile(**user_data)
-    process_user_data(db, user_id, extract_data)
-    print("gen_meal_plan input data", data)
-    is_user_id_valid = db.check_user_id_existence(user_id)
-    print("is_user_id_valid", is_user_id_valid)
-    is_user_subscription_valid = db.check_user_subscription_validity(user_id)
-    response = gen_meal_plan(data_for_auto_gen_meal_plan)
-    if is_user_id_valid:
-        db.update_user_last_date_plan_profile(user_id, data['maxDate'])
+    process_user_data(db, hard_coded_user_id, extract_data)
+
+    is_user_id_valid = db.check_user_id_existence(hard_coded_user_id)
+
+    try:
+        response = gen_meal_plan(data)
+    except Exception as e:
+        response = {'error': str(e)}
+        print(f"Failed to generate meal plan: {str(e)}")
         
-    # scheduled_email_test()
-    # print("email content", create_sample_email_content(response))
-    # print("Response", response)
+    email_sent_time = scheduled_email_test_clicked_by_generation_button(data, db, hard_coded_user_id)
+    if is_user_id_valid:
+        db.update_user_last_date_plan_profile(hard_coded_user_id, data['maxDate'])
+
+    scheduled_email_test(email_sent_time, db, hard_coded_user_id)
     return jsonify(response)
 
 

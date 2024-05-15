@@ -337,8 +337,7 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error in database operation: {e}")
-        finally:
-            cursor.close()
+    
 
 
 
@@ -750,8 +749,7 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error deleting tables: {e}")
-        finally:
-            cursor.close()
+  
 
     # ------------------- retrieve data -------------------
     def get_user_profile(self, user_id):
@@ -915,11 +913,12 @@ class DatabaseManager:
 # ----------------- Retrieve user data -----------------
     def retrieve_user_profile_json(self, user_id):
         cursor = self.db.cursor()
+        print("user_id type:", type(user_id))  # Check the type of user_id
         sql = "SELECT age, weight, height, gender, activity_level FROM user_profile WHERE user_id = %s"
+        print("sql:", sql)  # Print the SQL query for debugging
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
         if result:
-            # Map the tuple to a dictionary with appropriate keys
             profile_dict = {
                 "age": result[0],
                 "weight": result[1],
@@ -929,7 +928,9 @@ class DatabaseManager:
             }
             return profile_dict
         else:
-            return None  
+            return None
+
+
         
     def retrieve_user_selected_unit(self, user_id):
         cursor = self.db.cursor()
@@ -1024,8 +1025,6 @@ class DatabaseManager:
         result = cursor.fetchone()
         return result[0] if result else None
 
-    
-
 # ------------------- Validate User ----------------------
     def check_user_id_existence(self, user_id):
         cursor = self.db.cursor()
@@ -1048,22 +1047,5 @@ def instantiate_database():
     db = DatabaseManager()
     return db
 
-
-
-
 if __name__ == '__main__':
     print("Running database manager")
-    # db = instantiate_database()
-    # print(db.retrieve_user_profile_json(180))
-    # print(db.retrieve_user_dieatary_constraints(180))
-    # print(db.retrieve_user_religious_constraints(180))
-    # print(db.retrieve_user_health_goal(180))
-    # print(db.retrieve_user_liked_food(180))
-    # print(db.retrieve_user_disliked_food(180))
-    # print(db.retrieve_user_favourite_cuisines(180))
-    # print(db.retrieve_user_allergies(180))
-    
-
-    # db.delete_all_tables()
-
-    # db.insert_user_and_set_default_subscription_signup(100, 'Julie', "test@test.ca")

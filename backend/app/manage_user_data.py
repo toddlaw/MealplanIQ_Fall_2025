@@ -5,7 +5,7 @@ import json
 def extract_user_profile_data_from_json(data):
     person = data.get('people')[0] if data.get('people') else {}
     return {
-        'user_id': 300,  # Example static ID, should be dynamically set if needed
+        'user_id': 300,
         'gender': person.get('gender'),
         'height': person.get('height'),
         'weight': person.get('weight'),
