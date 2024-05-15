@@ -322,6 +322,35 @@ export class LandingComponent implements OnInit {
    */
   getFullMealPlan() {}
 
+
+    /**
+   * Refreshes the recipe list
+   * @param id  The id of the recipe
+   * @param i  The index of the recipe
+   * @param j  The index of the recipe
+   */
+    refreshRecipe(id: number, i: number, j: number) {
+      this.recipe = [];
+      for (const day of this.mealPlanResponse.days) {
+        for (const recipe of day.recipes) {
+          this.recipe.push(recipe);
+        }
+      }
+    }
+  
+    /**
+     * Refreshes the snack list
+     * @param id  The id of the snack
+     * @param i  The index of the snack
+     */
+    refreshSnack(id: number, i: number) {
+      this.recipe = [];
+      for (const snack of this.mealPlanResponse.snacks) {
+        this.recipe.push(snack);
+      }
+    }
+  
+
   /**
    * Listener for the "Replace Meal" dropdown
    * @param event The event that triggered the listener
