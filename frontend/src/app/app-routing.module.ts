@@ -19,6 +19,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -72,6 +73,10 @@ const routes: Routes = [
   {
     path: 'opportunity',
     component: OpportunityComponent,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
   }
 ];
 

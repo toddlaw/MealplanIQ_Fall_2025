@@ -58,12 +58,12 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('uid', user.uid);
           // You can also use user.uid to store or handle the user ID as needed
 
-          this.router.navigate(['/']);
+          this.router.navigate(['/dashboard']);
         } else {
           console.error('User is null');
         }
 
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       });
   }
   showPassword = false;

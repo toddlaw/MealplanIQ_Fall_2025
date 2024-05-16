@@ -1,0 +1,91 @@
+
+<div class="flex flex-col min-h-screen">
+    <div class="flex-grow">
+    <section>
+         <mat-card class="mx-10 mt-10">
+            <p class="text-3xl">Welcome [Placeholder-need to be fix]</p>
+            <mat-card-header>
+                <mat-card-title>Dashboard</mat-card-title>
+                <mat-card-subtitle>Here you can view your meal plan, shopping list, and other information.</mat-card-subtitle>
+            </mat-card-header>
+        </mat-card>
+     
+        <div class="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+            <!-- receipe generator -->
+            <!-- profile -->
+            <!-- shopping list -->
+            <!-- nutrition report -->
+            <!-- manage subscription -->
+
+            <mat-card class="ml-10 mt-4">
+                <mat-card-header>
+                    <mat-card-title>Generate Meal Plan</mat-card-title>
+                    <mat-card-subtitle>Generate a meal plan for the week.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Click here to generate a meal plan for the week.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button routerLink="/generate-meal-plan">Generate</button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card class="ml-4 mt-4 mr-10">
+                <mat-card-header>
+                    <mat-card-title>Profile</mat-card-title>
+                    <mat-card-subtitle>View and edit your profile.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Click here to view and edit your profile.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button routerLink="/profile">View Profile</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div class="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+            <mat-card class="ml-10 mt-4">
+                <mat-card-header>
+                    <mat-card-title>Shopping List</mat-card-title>
+                    <mat-card-subtitle>View your shopping list.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Click here to view your shopping list.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button routerLink="/shopping-list">View Shopping List</button>
+                </mat-card-actions>
+            </mat-card>
+        
+            <mat-card class="ml-4 mt-4 mr-10">
+                <mat-card-header>
+                    <mat-card-title>Nutrition Report</mat-card-title>
+                    <mat-card-subtitle>View your nutrition report.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Click here to view your nutrition report.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button routerLink="/nutrition-report">View Nutrition Report</button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card class="ml-10 mt-4">
+                <mat-card-header>
+                    <mat-card-title>Manage Subscription</mat-card-title>
+                    <mat-card-subtitle>Manage your subscription.</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Click here to manage your subscription.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button routerLink="/manage-subscription">Manage Subscription</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+    </section>
+    </div>
+</div>
+<app-footer></app-footer>
