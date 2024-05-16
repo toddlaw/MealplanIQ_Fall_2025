@@ -38,10 +38,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AboutComponent } from './components/static/about/about.component';
-import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
-import { ApproachComponent } from './components/static/approach/approach.component';
-import { TechnologyComponent } from './components/static/technology/technology.component';
-import { TimelineComponent } from './components/static/timeline/timeline.component';
 import { ContactComponent } from './components/static/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
 
@@ -62,10 +58,6 @@ import { TosComponent } from './components/dialogues/tos/tos.component';
     ProfileComponent,
     TermsAndConditionsComponent,
     AboutComponent,
-    PhilosophyComponent,
-    ApproachComponent,
-    TechnologyComponent,
-    TimelineComponent,
     ContactComponent,
     SplashComponent,
     ShoppingListComponent,

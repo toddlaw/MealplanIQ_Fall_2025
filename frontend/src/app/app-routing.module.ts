@@ -5,11 +5,7 @@ import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
 import { AboutComponent } from './components/static/about/about.component';
-import { ApproachComponent } from './components/static/approach/approach.component';
 import { ContactComponent } from './components/static/contact/contact.component';
-import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
-import { TechnologyComponent } from './components/static/technology/technology.component';
-import { TimelineComponent } from './components/static/timeline/timeline.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { Guard } from './services/guard.service'; // Import your guard here
 
@@ -57,24 +53,8 @@ const routes: Routes = [
     component: AboutComponent,
   },
   {
-    path: 'approach',
-    component: ApproachComponent,
-  },
-  {
     path: 'contact',
     component: ContactComponent,
-  },
-  {
-    path: 'philosophy',
-    component: PhilosophyComponent,
-  },
-  {
-    path: 'technology',
-    component: TechnologyComponent,
-  },
-  {
-    path: 'timeline',
-    component: TimelineComponent,
   },
   {
     path: 'splash',
