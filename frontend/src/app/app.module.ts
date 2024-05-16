@@ -18,7 +18,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { LandingComponent } from './components/landing/landing.component';
-import { TermsAndConditionsComponent } from './components/tac-dialog/tac-dialog.component';
+import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProfileComponent } from './components/profile/profile.component';
 // import { getStorage, provideStorage } from '@angular/fire/storage';
@@ -50,6 +50,7 @@ import { DatePipe } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
+import { TosComponent } from './components/dialogues/tos/tos.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { OpportunityComponent } from './components/static/opportunity/opportunit
     FooterComponent,
     PrivacyComponent,
     OpportunityComponent,
+    TosComponent,
   ],
   imports: [
     BrowserModule,

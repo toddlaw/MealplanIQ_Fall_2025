@@ -26,7 +26,7 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { TermsAndConditionsComponent } from '../tac-dialog/tac-dialog.component';
+import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
 
 @Component({
   selector: 'app-landing',
