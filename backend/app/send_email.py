@@ -1,3 +1,5 @@
+import os
+import base64
 import datetime
 from sched import scheduler
 from google.oauth2 import service_account
@@ -5,21 +7,19 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import base64
-import os
 from email.mime.application import MIMEApplication
-
 from app.generate_meal_plan import gen_meal_plan
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 from . import app, scheduler
 from flask_apscheduler import APScheduler
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+SERVICE_ACCOUNT_FILE = os.path.join(dir_path, 'service-key.json')
 
-SERVICE_ACCOUNT_FILE = 'service-key.json path'
 credentials = service_account.Credentials.from_service_account_file(
   filename=SERVICE_ACCOUNT_FILE,
   scopes=['https://mail.google.com/'],
-  subject='Warren email here'
+  subject=os.getenv('EMAIL')
 )
 
 service_gmail = build('gmail', 'v1', credentials=credentials)
@@ -63,9 +63,9 @@ def send_message(service, user_id, message):
     return None
   
 def scheduled_email_by_generation_button(request_data, db):
-    sender_email = 'Warren email here'
+    sender_email = os.getenv('EMAIL')
     receiver_email = 'receiver email here'
-    subject = 'Test Email'
+    subject = 'Test Email for danami'
     message_text = create_sample_email_content(request_data)
     message = create_message(sender_email, receiver_email, subject, message_text)
     try:
@@ -78,7 +78,7 @@ def scheduled_email_by_generation_button(request_data, db):
         db.update_user_last_date_plan_profile(user_id, request_data['maxDate'])
   
 def scheduled_email(db, hard_coded_user_id):
-    sender_email = 'Warren email here'
+    sender_email = os.getenv('EMAIL')
     receiver_email = 'receiver email here'
     subject = 'Meal Plan for the Week'
     request_data = create_data_input_for_auto_gen_meal_plan(db, hard_coded_user_id)
@@ -128,7 +128,7 @@ def create_sample_email_content(request_data):
     response = gen_meal_plan(request_data)
     days = response['days']
     email_content = ""
-    email_content += f"Meal Plan"
+    email_content += f"Meal Plan\n"
     for day in days:
         email_content += f"Date: {day['date']}\n"
         for recipe in day['recipes']:
