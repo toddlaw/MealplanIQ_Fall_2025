@@ -8,7 +8,7 @@ import { AboutComponent } from './components/static/about/about.component';
 import { ApproachComponent } from './components/static/approach/approach.component';
 import { ContactComponent } from './components/static/contact/contact.component';
 import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
-import { TechnologyComponent } from './components/technology/technology.component';
+import { TechnologyComponent } from './components/static/technology/technology.component';
 import { TimelineComponent } from './components/static/timeline/timeline.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { Guard } from './services/guard.service'; // Import your guard here
