@@ -1,8 +1,3 @@
-# pip3 install --upgrade google-auth
-# pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-# pip install Flask-APScheduler
-# pip3 install datetime
-
 import datetime
 from sched import scheduler
 from google.oauth2 import service_account
