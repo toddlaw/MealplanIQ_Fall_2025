@@ -19,7 +19,7 @@ SERVICE_ACCOUNT_FILE = os.path.join(dir_path, 'service-key.json')
 credentials = service_account.Credentials.from_service_account_file(
   filename=SERVICE_ACCOUNT_FILE,
   scopes=['https://mail.google.com/'],
-  subject=os.getenv('EMAIL')
+  subject=os.getenv('SENDER_EMAIL')
 )
 
 service_gmail = build('gmail', 'v1', credentials=credentials)
@@ -63,9 +63,9 @@ def send_message(service, user_id, message):
     return None
   
 def scheduled_email_by_generation_button(request_data, db):
-    sender_email = os.getenv('EMAIL')
+    sender_email = "MealPlanIQ <{}>".format(os.getenv('SENDER_EMAIL'))
     receiver_email = 'receiver email here'
-    subject = 'Test Email for danami'
+    subject = 'Test Email'
     message_text = create_sample_email_content(request_data)
     message = create_message(sender_email, receiver_email, subject, message_text)
     try:
@@ -78,7 +78,7 @@ def scheduled_email_by_generation_button(request_data, db):
         db.update_user_last_date_plan_profile(user_id, request_data['maxDate'])
   
 def scheduled_email(db, hard_coded_user_id):
-    sender_email = os.getenv('EMAIL')
+    sender_email = "MealPlanIQ <{}>".format(os.getenv('SENDER_EMAIL'))
     receiver_email = 'receiver email here'
     subject = 'Meal Plan for the Week'
     request_data = create_data_input_for_auto_gen_meal_plan(db, hard_coded_user_id)
@@ -135,8 +135,6 @@ def create_sample_email_content(request_data):
             email_content += f"title: {recipe['title']}, id: {recipe['id']}\n"
         email_content += "\n"
     return email_content
-
-
 
 # def main():
 #   sender_email = 'warren@mealplaniq.com'
