@@ -93,8 +93,6 @@ def receive_data():
     scheduled_email_test(email_sent_time, db, hard_coded_user_id)
     return jsonify(response)
 
-
-
 endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
 
 @app.route('/webhook', methods=['POST'])
@@ -114,18 +112,12 @@ def webhook():
     except stripe.error.SignatureVerificationError as e:
         print("SignatureVerificationError: ", e)
         return jsonify(error='Invalid signature'), 400
-    
 
     # Handle the event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-
-        # Get the user_id from Firebase
-        # user_id = firebase_auth.current_user.uid
-
-        return handle_checkout_session_completed(session)
-        # return handle_checkout_session_completed(session, user_id)
+        user_id = session['client_reference_id']
+        return handle_checkout_session_completed(session, user_id)
     else:
         print('Unhandled event type {}'.format(event['type']))
         return jsonify(success=True), 200
-    

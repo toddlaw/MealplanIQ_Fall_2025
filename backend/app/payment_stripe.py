@@ -53,9 +53,10 @@ def cancel_subscription(subscription_id):
         return jsonify(success=True), 200
     except stripe.error.StripeError as e:
         return jsonify(error=str(e)), 400
-
-def handle_checkout_session_completed(session):
-    user_id = "100" # test user id. 
+    
+def handle_checkout_session_completed(session, user_id):
+    print("User ID From Firebase:", user_id)
+    user_id = "300" # hard coded user ID for test purpose
     subscription_stripe_id = session['subscription']
     print("Subscription Stripe ID: ", subscription_stripe_id)
 
@@ -78,4 +79,3 @@ def handle_checkout_session_completed(session):
         )
         db.db.commit()
     return jsonify(success=True), 200
-

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -9,11 +10,20 @@ import { environment } from 'src/environments/environment';
 export class PaymentComponent implements OnInit {
   stripePublicKey!: string;
   stripePricingTableId!: string;
+  userId!: string;
+  userEmail!: string;
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
+      this.authService.currentUser$.subscribe((user) => {
+        if (user) {
+          this.userId = user.uid;
+          this.userEmail = user.email ?? '';
+        }
+      });
     this.stripePublicKey = environment.stripePublicKey;
     this.stripePricingTableId = environment.stripePricingTableId;
   }
 }
+
