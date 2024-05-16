@@ -169,6 +169,7 @@ export class LandingComponent implements OnInit {
 
     const data = {
       people: this.people,
+      user_id: 1,
       selectedUnit: this.selectedUnit,
       dietaryConstraint: this.selectedDietaryConstraint,
       healthGoal: this.selectedHealthGoal,
@@ -196,7 +197,7 @@ export class LandingComponent implements OnInit {
     }
 
     this.http
-      .post('http://127.0.0.1:5000/api/endpoint', data, {
+      .post('http://127.0.0.1:5000/api', data, {
         responseType: 'text',
       })
       .subscribe(

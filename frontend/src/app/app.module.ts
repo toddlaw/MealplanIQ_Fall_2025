@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,6 +45,7 @@ import { LeadershipComponent } from './components/leadership/leadership.componen
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
@@ -67,6 +68,7 @@ import { DatePipe } from '@angular/common';
     ContactComponent,
     SplashComponent,
     ShoppingListComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,5 +104,6 @@ import { DatePipe } from '@angular/common';
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

@@ -13,6 +13,7 @@ import { TechnologyComponent } from './components/technology/technology.componen
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { Guard } from './services/guard.service'; // Import your guard here
+import { PaymentComponent } from './components/payment/payment.component';
 
 import {
   canActivate,
@@ -81,6 +82,10 @@ const routes: Routes = [
   {
     path: 'splash',
     component: SplashComponent,
+  },
+  {
+    path: 'payment',
+    component: PaymentComponent,
   },
 ];
 
