@@ -1,73 +1,81 @@
-<div class="form-container mat-elevation-z5">
-  <h1>Sign Up a New User!</h1>
-  <form [formGroup]="signUpForm" (ngSubmit)="submit()">
-    <mat-form-field>
-      <input matInput placeholder="Name" formControlName="name" />
-      <mat-error *ngIf="name?.errors?.['required']">
-        Name is required
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Email address" formControlName="email" />
-      <mat-error *ngIf="email?.errors?.['required']">
-        Email address is required
-      </mat-error>
-      <mat-error *ngIf="email?.errors?.['email']">
-        Please enter a valid email address
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input
-        matInput
-        [type]="showPassword ? 'text' : 'password'"
-        placeholder="Password"
-        formControlName="password"
-      />
-      <button
-        mat-icon-button
-        matSuffix
-        (click)="togglePasswordVisibility($event)"
-      >
-        <mat-icon>{{
-          showPassword ? "visibility_off" : "visibility"
-        }}</mat-icon>
-      </button>
-      <mat-error *ngIf="password?.errors?.['required']">
-        Password is required
-      </mat-error>
-      <mat-error *ngIf="password?.errors?.['pattern']">
-        You need at least 8 characters and at least 1 uppercase Letter
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input
-        matInput
-        [type]="showPassword ? 'text' : 'password'"
-        placeholder="Confirm Password"
-        formControlName="confirmPassword"
-      />
-      <button
-        mat-icon-button
-        matSuffix
-        (click)="togglePasswordVisibility($event)"
-      >
-        <mat-icon>{{
-          showPassword ? "visibility_off" : "visibility"
-        }}</mat-icon>
-      </button>
-      <mat-error *ngIf="confirmPassword?.errors?.['required']">
-        Confirm Password is required
-      </mat-error>
-    </mat-form-field>
-    <mat-error *ngIf="signUpForm.errors?.['passwordsDontMatch']">
-      Passwords should match
-    </mat-error>
-    <div class="center margin-top">
-      <button type="submit" mat-raised-button color="primary">Sign Up!</button>
-    </div>
-    <span class="center margin-top"
-      >Already have an account?
-      <a class="sign-in-link" routerLink="/login">Sign in!</a></span
-    >
-  </form>
-</div>
+<body class="bg-primary-light flex items-center justify-center h-screen">
+  <div class="flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
+      <div class="w-full bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0">
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <p class="text-center text-xl font-bold leading-tight tracking-tight md:text-2xl ">
+                  New User? <br/>Sign Up Here
+              </p>
+              <form class="p-2 space-y-4 md:space-y-6" [formGroup]="signUpForm" (ngSubmit)="submit()">
+  
+                  <mat-form-field class="w-full max-w-lg">
+                    <input matInput placeholder="Name" formControlName="name" />
+                    <mat-error *ngIf="name?.errors?.['required']">
+                      Name is required
+                    </mat-error>
+                  </mat-form-field>
+            
+                <mat-form-field class="w-full max-w-lg">
+                  <input matInput placeholder="Email address" formControlName="email" />
+                  <mat-error *ngIf="email?.errors?.['required']">
+                    Email address is required
+                  </mat-error>
+                  <mat-error *ngIf="email?.errors?.['email']">
+                    Please enter a valid email address
+                  </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field class="w-full max-w-lg">
+                  <input
+                    matInput
+                    [type]="showPassword ? 'text' : 'password'"
+                    placeholder="Password"
+                    formControlName="password"/>
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    (click)="togglePasswordVisibility($event)">
+                    <mat-icon>{{showPassword ? "visibility_off" : "visibility"}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="password?.errors?.['required']">
+                    Password is required
+                  </mat-error>
+                  <mat-error *ngIf="password?.errors?.['pattern']">
+                    You need at least 8 characters and at least 1 uppercase Letter
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="w-full max-w-lg">
+                  <input
+                    matInput
+                    [type]="showPassword ? 'text' : 'password'"
+                    placeholder="Confirm Password"
+                    formControlName="confirmPassword"/>
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    (click)="togglePasswordVisibility($event)">
+                    <mat-icon>{{showPassword ? "visibility_off" : "visibility"}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="confirmPassword?.errors?.['required']">
+                    Confirm Password is required
+                  </mat-error>
+                </mat-form-field>
+                <mat-error *ngIf="signUpForm.errors?.['passwordsDontMatch']">
+                  Passwords should match
+                </mat-error>
+
+              <div class="center">
+                <button type="submit" 
+                class="w-full text-white bg-primary focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Create a new account</button>
+              </div>
+              <p class="text-sm font-light">
+                Already have an account?
+                <a href="login-link" class="font-medium text-primary-600 hover:underline" routerLink="/login"> &nbsp;Login here</a>
+            </p>
+            </form>
+          </div>
+      </div>
+  </div>
+</body>
