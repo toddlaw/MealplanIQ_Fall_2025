@@ -4,7 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { MissionComponent } from './components/mission/mission.component';
+import { AboutComponent } from './components/about/about.component';
 import { ApproachComponent } from './components/approach/approach.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { LeadershipComponent } from './components/leadership/leadership.component';
@@ -51,8 +51,8 @@ const routes: Routes = [
     canActivate: [Guard],
   },
   {
-    path: 'mission',
-    component: MissionComponent,
+    path: 'about',
+    component: AboutComponent,
   },
   {
     path: 'approach',

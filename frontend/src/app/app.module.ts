@@ -37,7 +37,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MissionComponent } from './components/mission/mission.component';
+import { AboutComponent } from './components/about/about.component';
 import { PhilosophyComponent } from './components/philosophy/philosophy.component';
 import { ApproachComponent } from './components/approach/approach.component';
 import { TechnologyComponent } from './components/technology/technology.component';
@@ -58,7 +58,7 @@ import { DatePipe } from '@angular/common';
     HomeComponent,
     ProfileComponent,
     TermsAndConditionsComponent,
-    MissionComponent,
+    AboutComponent,
     PhilosophyComponent,
     ApproachComponent,
     TechnologyComponent,
