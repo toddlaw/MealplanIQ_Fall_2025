@@ -37,17 +37,18 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { AboutComponent } from './components/about/about.component';
-import { PhilosophyComponent } from './components/philosophy/philosophy.component';
-import { ApproachComponent } from './components/approach/approach.component';
+import { AboutComponent } from './components/static/about/about.component';
+import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
+import { ApproachComponent } from './components/static/approach/approach.component';
 import { TechnologyComponent } from './components/technology/technology.component';
-import { LeadershipComponent } from './components/leadership/leadership.component';
-import { TimelineComponent } from './components/timeline/timeline.component';
-import { ContactComponent } from './components/contact/contact.component';
+import { LeadershipComponent } from './components/static/leadership/leadership.component';
+import { TimelineComponent } from './components/static/timeline/timeline.component';
+import { ContactComponent } from './components/static/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { DatePipe } from '@angular/common';
     ContactComponent,
     SplashComponent,
     ShoppingListComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

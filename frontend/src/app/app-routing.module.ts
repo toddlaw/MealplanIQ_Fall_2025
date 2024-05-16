@@ -4,13 +4,13 @@ import { HomeComponent } from './components/home/home.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { AboutComponent } from './components/about/about.component';
-import { ApproachComponent } from './components/approach/approach.component';
-import { ContactComponent } from './components/contact/contact.component';
-import { LeadershipComponent } from './components/leadership/leadership.component';
-import { PhilosophyComponent } from './components/philosophy/philosophy.component';
+import { AboutComponent } from './components/static/about/about.component';
+import { ApproachComponent } from './components/static/approach/approach.component';
+import { ContactComponent } from './components/static/contact/contact.component';
+import { LeadershipComponent } from './components/static/leadership/leadership.component';
+import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
 import { TechnologyComponent } from './components/technology/technology.component';
-import { TimelineComponent } from './components/timeline/timeline.component';
+import { TimelineComponent } from './components/static/timeline/timeline.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { Guard } from './services/guard.service'; // Import your guard here
 
