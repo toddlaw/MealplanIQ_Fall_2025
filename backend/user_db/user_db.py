@@ -763,6 +763,8 @@ class DatabaseManager:
 
     # ------------------- look up table functions -------------------
     def get_allergy_ids(self, allergy_names):
+        if not allergy_names:
+            return []
         cursor = self.db.cursor()
         format_strings = ','.join(['%s'] * len(allergy_names))
         sql = f"SELECT id, name FROM allergies WHERE name IN ({format_strings})"
@@ -841,6 +843,8 @@ class DatabaseManager:
 
 
     def get_disliked_food_ids(self, disliked_food_names):
+        if not disliked_food_names:
+            return []
         cursor = self.db.cursor()
         format_strings = ','.join(['%s'] * len(disliked_food_names))
         sql = f"SELECT id, name FROM disliked_food WHERE name IN ({format_strings})"
@@ -876,6 +880,8 @@ class DatabaseManager:
             print(f"Error adding user disliked foods: {e}")
 
     def get_favourite_cuisine_ids(self, cuisine_names):
+        if not cuisine_names:
+            return []
         cursor = self.db.cursor()
         format_strings = ','.join(['%s'] * len(cuisine_names))
         sql = f"SELECT id, name FROM favourite_cuisines WHERE name IN ({format_strings})"
