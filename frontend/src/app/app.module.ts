@@ -41,7 +41,6 @@ import { AboutComponent } from './components/static/about/about.component';
 import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
 import { ApproachComponent } from './components/static/approach/approach.component';
 import { TechnologyComponent } from './components/technology/technology.component';
-import { LeadershipComponent } from './components/static/leadership/leadership.component';
 import { TimelineComponent } from './components/static/timeline/timeline.component';
 import { ContactComponent } from './components/static/contact/contact.component';
 import { SplashComponent } from './components/splash/splash.component';
@@ -49,6 +48,8 @@ import { SplashComponent } from './components/splash/splash.component';
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
+import { PrivacyComponent } from './components/static/privacy/privacy.component';
+import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 
 @NgModule({
   declarations: [
@@ -63,12 +64,13 @@ import { FooterComponent } from './components/footer/footer.component';
     PhilosophyComponent,
     ApproachComponent,
     TechnologyComponent,
-    LeadershipComponent,
     TimelineComponent,
     ContactComponent,
     SplashComponent,
     ShoppingListComponent,
     FooterComponent,
+    PrivacyComponent,
+    OpportunityComponent,
   ],
   imports: [
     BrowserModule,
