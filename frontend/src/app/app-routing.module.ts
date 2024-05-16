@@ -20,6 +20,8 @@ import {
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
 import { ProfileComponent } from './components/profile/profile.component';
+import { TermsAndConditionsComponent } from './components/tac-dialog/tac-dialog.component';
+import { PrivacyComponent } from './components/static/privacy/privacy.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -82,6 +84,10 @@ const routes: Routes = [
     path: 'splash',
     component: SplashComponent,
   },
+  {
+    path: 'privacy',
+    component: PrivacyComponent,
+  }
 ];
 
 @NgModule({
