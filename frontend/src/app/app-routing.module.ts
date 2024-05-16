@@ -7,7 +7,6 @@ import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
 import { AboutComponent } from './components/static/about/about.component';
 import { ApproachComponent } from './components/static/approach/approach.component';
 import { ContactComponent } from './components/static/contact/contact.component';
-import { LeadershipComponent } from './components/static/leadership/leadership.component';
 import { PhilosophyComponent } from './components/static/philosophy/philosophy.component';
 import { TechnologyComponent } from './components/technology/technology.component';
 import { TimelineComponent } from './components/static/timeline/timeline.component';
@@ -22,6 +21,7 @@ import {
 import { ProfileComponent } from './components/profile/profile.component';
 import { TermsAndConditionsComponent } from './components/tac-dialog/tac-dialog.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
+import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -65,10 +65,6 @@ const routes: Routes = [
     component: ContactComponent,
   },
   {
-    path: 'leadership',
-    component: LeadershipComponent,
-  },
-  {
     path: 'philosophy',
     component: PhilosophyComponent,
   },
@@ -87,6 +83,10 @@ const routes: Routes = [
   {
     path: 'privacy',
     component: PrivacyComponent,
+  },
+  {
+    path: 'opportunity',
+    component: OpportunityComponent,
   }
 ];
 
