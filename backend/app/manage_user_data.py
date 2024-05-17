@@ -2,10 +2,10 @@ import datetime
 import json
 
 
-def extract_user_profile_data_from_json(data):
+def extract_user_profile_data_from_json(data, user_id):
     person = data.get('people')[0] if data.get('people') else {}
     return {
-        'user_id': 300,
+        'user_id': user_id,
         'gender': person.get('gender'),
         'height': person.get('height'),
         'weight': person.get('weight'),
