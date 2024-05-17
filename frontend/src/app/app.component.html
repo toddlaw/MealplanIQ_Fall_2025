@@ -1,69 +1,62 @@
-
-<div class="viewPoint">
-  <mat-toolbar color="primary" class="bg-primary text-white">
-    <img
+<div class="content">
+    <mat-toolbar class="bg-primary text-white">
+      <img
       src="../assets/images/MealPlanIQ_Logo.png"
       alt="MealPlanIQ"
       routerLink=""
       style="cursor: pointer; width: 100px"
     />
-    <ng-container *ngIf="user$ | async as user; else loginButton">
-      <button mat-button [matMenuTriggerFor]="userMenu">
-        <img
-          width="30"
-          height="30"
-          class="profile-image-toolbar"
-          [src]="user.photoURL ?? 'assets/images/image-placeholder.png'"
-        />
-        {{ user.displayName }}
-        <mat-icon>expand_more</mat-icon>
-      </button>
-    </ng-container>
-    <ng-template #loginButton>
-      <div>
-        <button mat-button routerLink="login">
-          <mat-icon>login</mat-icon>
-          Sign in
+      <ng-container *ngIf="user$ | async as user; else loginButton">
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <img
+            width="30"
+            height="30"
+            class="profile-image-toolbar"
+            [src]="user.photoURL ?? 'assets/images/image-placeholder.png'"
+          />
+          {{ user.displayName }}
+          <mat-icon>expand_more</mat-icon>
         </button>
-        <button mat-button class="menu-button" (click)="sidenav.toggle()">
-          <mat-icon>{{ isMenuOpen ? "menu_open" : "menu" }}</mat-icon>
-        </button>
-      </div>
-    </ng-template>
-  </mat-toolbar>
+      </ng-container>
+      <ng-template #loginButton>
+        <div>
+          <button mat-button routerLink="login">
+            <mat-icon>login</mat-icon>
+            Sign in
+          </button>
+          <button mat-button class="menu-button" [matMenuTriggerFor]="menu" >
+            <mat-icon>{{ isMenuOpen ? "menu_open" : "menu" }}</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </mat-toolbar>
+    </div>
+  
 
-  <div class="content">
-    <router-outlet></router-outlet>
-    <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav
-        #sidenav
-        autoFocus="false"
-        mode="over"
-        [(opened)]="isMenuOpen"
-        class="sidenav"
-        position="end"
-        (click)="onSidenavClick()"
-      >
-        <button mat-menu-item routerLink="/">
-          <mat-icon>restaurant_menu</mat-icon>
-          Generate Meal Plan</button>
-        <button mat-menu-item routerLink="/splash">
-          <mat-icon>home</mat-icon>
-          Home</button>
-        <button mat-menu-item routerLink="/about">
-          <mat-icon>info</mat-icon>
-          About</button>
-        <button mat-menu-item routerLink="/contact">
-          <mat-icon>contact_support</mat-icon>
-          Contact</button>
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <main>
-          <router-outlet></router-outlet>
-        </main>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </div>
+    <mat-menu #menu="matMenu" >
+      <button mat-menu-item routerLink="/">
+        <mat-icon>restaurant_menu</mat-icon>
+        Generate Meal Plan
+      </button>
+      <button mat-menu-item routerLink="/splash">
+        <mat-icon>home</mat-icon>
+        Home
+      </button>
+      <button mat-menu-item routerLink="/about">
+        <mat-icon>info</mat-icon>
+        About
+      </button>
+      <button mat-menu-item routerLink="/contact">
+        <mat-icon>contact_support</mat-icon>
+        Contact
+      </button>
+    </mat-menu>
+
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+
+  
 
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item routerLink="/dashboard">
@@ -87,4 +80,3 @@
       Sign out
     </button>
   </mat-menu>
-</div>
