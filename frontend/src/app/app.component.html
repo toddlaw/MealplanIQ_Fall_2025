@@ -7,15 +7,14 @@
       style="cursor: pointer;"/>
       <div class="flex-grow"></div>
       <ng-container *ngIf="user$ | async as user; else loginButton">
-        <button mat-button [matMenuTriggerFor]="userMenu">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="mr-2">
           <img
             width="30"
             height="30"
-            class="profile-image-toolbar"
+            class="profile-image-toolba rounded-full"
             [src]="user.photoURL ?? 'assets/images/image-placeholder.png'"
           />
           {{ user.displayName }}
-          <mat-icon>expand_more</mat-icon>
         </button>
       </ng-container>
       <ng-template #loginButton>
