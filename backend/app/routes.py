@@ -66,19 +66,19 @@ def handle_signup():
 @app.route('/api', methods=['POST'])
 def receive_data():
     data = request.json
+    print(data)
   
-    user_data = extract_user_profile_data_from_json(data)
-    extract_data = extract_data_from_json(data)
+
     db = instantiate_database()
-    user_name = 'Diane' # hard coded user name
-    hard_coded_user_id = 300
-    email = 'diane@test.ca' # hard coded user email
+    # user_name = 'Diane' # hard coded user name
+    # hard_coded_user_id = 300
+    # email = 'diane@test.ca' # hard coded user email
+    user_id = data['user_id']
+    user_data = extract_user_profile_data_from_json(data, user_id)
+    extract_data = extract_data_from_json(data)
 
-    db.insert_user_and_set_default_subscription_signup(hard_coded_user_id, user_name, email)
     db.update_user_profile(**user_data)
-    process_user_data(db, hard_coded_user_id, extract_data)
-
-    is_user_id_valid = db.check_user_id_existence(hard_coded_user_id)
+    process_user_data(db, user_id, extract_data)
 
     try:
         response = gen_meal_plan(data)
@@ -86,11 +86,9 @@ def receive_data():
         response = {'error': str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
         
-    email_sent_time = scheduled_email_test_clicked_by_generation_button(data, db, hard_coded_user_id)
-    if is_user_id_valid:
-        db.update_user_last_date_plan_profile(hard_coded_user_id, data['maxDate'])
+    email_sent_time = scheduled_email_test_clicked_by_generation_button(data, db)
 
-    scheduled_email_test(email_sent_time, db, hard_coded_user_id)
+    scheduled_email_test(email_sent_time, db, user_id)
     return jsonify(response)
 
 endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
