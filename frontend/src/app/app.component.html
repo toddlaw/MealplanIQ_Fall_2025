@@ -3,9 +3,9 @@
       <img
       src="../assets/images/MealPlanIQ_Logo.png"
       alt="MealPlanIQ"
-      routerLink=""
-      style="cursor: pointer; width: 100px"
-    />
+      routerLink="/"
+      style="cursor: pointer;"/>
+      <div class="flex-grow"></div>
       <ng-container *ngIf="user$ | async as user; else loginButton">
         <button mat-button [matMenuTriggerFor]="userMenu">
           <img
@@ -56,7 +56,6 @@
       <router-outlet></router-outlet>
     </main>
 
-  
 
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item routerLink="/dashboard">
