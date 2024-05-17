@@ -3,6 +3,7 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from 'src/app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
 // import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private toast: HotToastService,
     private router: Router,
-    private fb: NonNullableFormBuilder // private usersService: UsersService
+    private fb: NonNullableFormBuilder, // private usersService: UsersService
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {}
@@ -53,10 +55,16 @@ export class LoginComponent implements OnInit {
       .subscribe((userCredential) => {
         const { user } = userCredential; // Extracting user information from UserCredential
         if (user) {
-          console.log('User logged in:', user.uid); // Accessing the user ID (uid)
           localStorage.setItem('email', email);
           localStorage.setItem('uid', user.uid);
-          // You can also use user.uid to store or handle the user ID as needed
+          const data = {
+            user_id: user.uid,
+          };
+          this.http.post('http://127.0.0.1:5000/api/login', data).subscribe({
+            next: (response) => {
+              console.log(response);
+            },
+          });
 
           this.router.navigate(['/']);
         } else {

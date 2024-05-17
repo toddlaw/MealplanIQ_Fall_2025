@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {
   AbstractControl,
   FormControl,
@@ -50,7 +51,7 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toast: HotToastService,
-    // private usersService: UsersService,
+    private http: HttpClient,
     private fb: NonNullableFormBuilder
   ) {}
 
@@ -90,12 +91,25 @@ export class SignUpComponent implements OnInit {
       )
       .subscribe({
         next: (userCredential) => {
-          this.toast.observe({
-            success: 'Congrats! You are all signed up',
-            error: `Error: an error occurs during login`,
-          }); // Show success toast
           console.log(userCredential);
           localStorage.setItem('uid', userCredential.user.uid);
+          const data = {
+            user_id: userCredential.user.uid,
+            user_name: name,
+            email: email,
+          };
+          this.http.post('http://127.0.0.1:5000/api/signup', data).subscribe({
+            next: (response) => {
+              console.log(response);
+              this.toast.observe({
+                success: 'Congrats! You are all signed up',
+                error: `Error: an error occurs during login`,
+              }); // Show success toast
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
           this.router.navigate(['/']);
         },
         error: (Error) => {
