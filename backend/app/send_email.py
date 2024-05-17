@@ -64,7 +64,7 @@ def send_message(service, user_id, message):
   
 def scheduled_email_by_generation_button(request_data, db):
     sender_email = "MealPlanIQ <{}>".format(os.getenv('SENDER_EMAIL'))
-    receiver_email = 'receiver email here'
+    receiver_email = db.retrieve_user_email(request_data['user_id'])
     subject = 'Test Email'
     message_text = create_sample_email_content(request_data)
     message = create_message(sender_email, receiver_email, subject, message_text)
@@ -77,11 +77,11 @@ def scheduled_email_by_generation_button(request_data, db):
         user_id = request_data['user_id']
         db.update_user_last_date_plan_profile(user_id, request_data['maxDate'])
   
-def scheduled_email(db, hard_coded_user_id):
+def scheduled_email(db, user_id):
     sender_email = "MealPlanIQ <{}>".format(os.getenv('SENDER_EMAIL'))
-    receiver_email = 'receiver email here'
+    receiver_email = db.retrieve_user_email(user_id)
     subject = 'Meal Plan for the Week'
-    request_data = create_data_input_for_auto_gen_meal_plan(db, hard_coded_user_id)
+    request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
     message_text = create_sample_email_content(request_data)
     message = create_message(sender_email, receiver_email, subject, message_text)
     try:
@@ -90,9 +90,9 @@ def scheduled_email(db, hard_coded_user_id):
     except Exception as e:
         print(f"Failed to send email: {str(e)}")
     else:
-        db.update_user_last_date_plan_profile(hard_coded_user_id, request_data['maxDate'])
+        db.update_user_last_date_plan_profile(user_id, request_data['maxDate'])
 
-def scheduled_email_test_clicked_by_generation_button(request_data, db, hard_coded_user_id):
+def scheduled_email_test_clicked_by_generation_button(request_data, db):
     initial_run_time = datetime.datetime.now()
  
     job_id = f"email_job_{(initial_run_time).strftime('%Y%m%d%H%M%S')}"
@@ -107,7 +107,7 @@ def scheduled_email_test_clicked_by_generation_button(request_data, db, hard_cod
         print(f"Failed to schedule email for week: {str(e)}")
     return initial_run_time
 
-def scheduled_email_test(email_sent_time, db, hard_coded_user_id):
+def scheduled_email_test(email_sent_time, db, user_id):
     initial_run_time = email_sent_time + datetime.timedelta(minutes=2)
     num_of_emails_to_be_sent = 2
 
@@ -117,7 +117,7 @@ def scheduled_email_test(email_sent_time, db, hard_coded_user_id):
         try:
             scheduler.add_job(func=scheduled_email, 
                               id=job_id,
-                              args=[db, hard_coded_user_id],
+                              args=[db, user_id],
                               trigger='date', 
                               run_date=run_time)
             print(f"Email scheduled to send at {run_time} with job ID {job_id}.")

@@ -935,6 +935,21 @@ class DatabaseManager:
             return profile_dict
         else:
             return None
+        
+    
+    def retrieve_user_name(self, user_id):
+        cursor = self.db.cursor()
+        sql = "SELECT user_name FROM user_profile WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    
+    def retrieve_user_email(self, user_id):
+        cursor = self.db.cursor()
+        sql = "SELECT email FROM user_profile WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result[0] if result else None
 
 
         
