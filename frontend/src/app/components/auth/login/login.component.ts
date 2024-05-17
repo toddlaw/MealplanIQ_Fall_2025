@@ -57,14 +57,24 @@ export class LoginComponent implements OnInit {
         if (user) {
           localStorage.setItem('email', email);
           localStorage.setItem('uid', user.uid);
-          // const data = {
-          //   user_id: user.uid,
-          // };
+          const data = {
+            user_id: user.uid,
+          };
           // this.http.post('http://127.0.0.1:5000/login', data).subscribe({
           //   next: (response) => {
           //     console.log(response);
           //   },
           // });
+
+          this.http
+            .get('http://127.0.0.1:5000/get_subscription_type ', {
+              params: data,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log(response);
+              },
+            });
 
           this.router.navigate(['/dashboard']);
         } else {
