@@ -119,3 +119,18 @@ def webhook():
     else:
         print('Unhandled event type {}'.format(event['type']))
         return jsonify(success=True), 200
+
+@app.route('/get_subscription_type', methods=['POST'])
+def get_subscription_type():
+    data = request.json
+    user_id = data.get('user_id')
+    db = instantiate_database()
+    cursor = db.db.cursor()
+    query = "SELECT subscription_type_id FROM user_subscription WHERE user_id = %s"
+    cursor.execute(query, (user_id,))
+    result = cursor.fetchone()
+    if result:
+        subscription_type_id = result[0]
+        return jsonify({'subscription_type_id': subscription_type_id})
+    else:
+        return jsonify({'error': 'User not found'}), 404
