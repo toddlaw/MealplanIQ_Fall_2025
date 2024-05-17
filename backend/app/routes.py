@@ -2,7 +2,7 @@ from app import app
 from flask import redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan
-from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
+from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed, handle_subscription_deleted, handle_subscription_updated
 from app.manage_user_data import *
 from app.send_email import scheduled_email_test, scheduled_email_test_clicked_by_generation_button
 from user_db.user_db import instantiate_database
@@ -121,3 +121,18 @@ def webhook():
     else:
         print('Unhandled event type {}'.format(event['type']))
         return jsonify(success=True), 200
+
+@app.route('/get_subscription_type', methods=['GET'])
+def get_subscription_type():
+    data = request.json
+    user_id = data.get('user_id')
+    db = instantiate_database()
+    cursor = db.db.cursor()
+    query = "SELECT subscription_type_id FROM user_subscription WHERE user_id = %s"
+    cursor.execute(query, (user_id,))
+    result = cursor.fetchone()
+    if result:
+        subscription_type_id = result[0]
+        return jsonify({'subscription_type_id': subscription_type_id})
+    else:
+        return jsonify({'error': 'User not found'}), 404
