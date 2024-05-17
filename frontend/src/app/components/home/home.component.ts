@@ -161,6 +161,8 @@ export class HomeComponent implements OnInit {
 
     console.log('Sent data:', data);
 
+    
+
     this.http.post('/api/endpoint', data, { responseType: 'text' }).subscribe(
       (response) => {
         console.log('Received data', response);

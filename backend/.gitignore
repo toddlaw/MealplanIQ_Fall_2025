@@ -2,3 +2,13 @@
 
 __pycache__/
 venv
+.env
+.flaskenv
+node_modules/
+build/
+dist/
+*.pyc
+*.pyo
+*.pyd
+service-key.json
+>>>>>>> payment_backend

@@ -1,3 +1,4 @@
+import datetime
 from app.check_privileges import check_registered
 from app.calculate_bmi import bmi_calculator_function
 from app.calculate_energy import energy_calculator_function
@@ -59,8 +60,22 @@ def gen_meal_plan(data):
     # 7. Adjust nutritional requirements
     adjust_nutrients(macros, micros, diet_info['plan'], data['people'])
 
-    MILLISECONDS_IN_DAY = 86400 * 1000
-    days = int((data["maxDate"] - data["minDate"]) / MILLISECONDS_IN_DAY)
+    # Assuming data["minDate"] and data["maxDate"] are in milliseconds since the epoch
+    min_date = datetime.datetime.fromtimestamp(data["minDate"] / 1000.0, datetime.timezone.utc)
+    max_date = datetime.datetime.fromtimestamp(data["maxDate"] / 1000.0, datetime.timezone.utc)
+
+
+    formatted_min_date = min_date.strftime('%Y/%m/%d')
+    formatted_max_date = max_date.strftime('%Y/%m/%d')
+
+    print("Min date:", formatted_min_date)
+    print("Max date:", formatted_max_date)
+
+    # Calculating the difference in days
+    difference = max_date - min_date
+    days = difference.days + 1
+
+    print("Difference in days:", days)
 
     if "nutrient" in diet_info["nutrients"]:
         list_of_excluded_nutrients = list(
@@ -78,6 +93,6 @@ def gen_meal_plan(data):
         include=data["includedRecipes"])
 
     # 9. Post-process response
-    response = post_process_results(recipes_with_scores, optimized_results, days)
+    response = post_process_results(recipes_with_scores, optimized_results, min_date, days)
 
     return response
