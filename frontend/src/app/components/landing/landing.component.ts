@@ -169,7 +169,7 @@ export class LandingComponent implements OnInit {
 
     const data = {
       people: this.people,
-      user_id: 1,
+      user_id: localStorage.getItem('uid') || null,
       selectedUnit: this.selectedUnit,
       dietaryConstraint: this.selectedDietaryConstraint,
       healthGoal: this.selectedHealthGoal,
@@ -189,6 +189,7 @@ export class LandingComponent implements OnInit {
     // if (!data.maxDate && data.minDate) {
     //   data.maxDate = data.minDate;
     // }
+
     console.log(data.maxDate);
     console.log(data.minDate);
 
@@ -323,34 +324,32 @@ export class LandingComponent implements OnInit {
    */
   getFullMealPlan() {}
 
-
-    /**
+  /**
    * Refreshes the recipe list
    * @param id  The id of the recipe
    * @param i  The index of the recipe
    * @param j  The index of the recipe
    */
-    refreshRecipe(id: number, i: number, j: number) {
-      this.recipe = [];
-      for (const day of this.mealPlanResponse.days) {
-        for (const recipe of day.recipes) {
-          this.recipe.push(recipe);
-        }
+  refreshRecipe(id: number, i: number, j: number) {
+    this.recipe = [];
+    for (const day of this.mealPlanResponse.days) {
+      for (const recipe of day.recipes) {
+        this.recipe.push(recipe);
       }
     }
-  
-    /**
-     * Refreshes the snack list
-     * @param id  The id of the snack
-     * @param i  The index of the snack
-     */
-    refreshSnack(id: number, i: number) {
-      this.recipe = [];
-      for (const snack of this.mealPlanResponse.snacks) {
-        this.recipe.push(snack);
-      }
+  }
+
+  /**
+   * Refreshes the snack list
+   * @param id  The id of the snack
+   * @param i  The index of the snack
+   */
+  refreshSnack(id: number, i: number) {
+    this.recipe = [];
+    for (const snack of this.mealPlanResponse.snacks) {
+      this.recipe.push(snack);
     }
-  
+  }
 
   /**
    * Listener for the "Replace Meal" dropdown
