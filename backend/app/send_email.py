@@ -136,19 +136,21 @@ def create_sample_email_content(request_data):
         email_content += "\n"
     return email_content
 
-# def main():
-#   sender_email = 'warren@mealplaniq.com'
-#   to_email = 'ohjeoung5224@gamil.com'
-#   subject = 'Text Email'
-#   message_text = 'text email with image?!!'
-#   # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'
-#   message = create_message(sender_email, to_email, subject, message_text)
-#   # message = create_message_with_attachment(sender_email, to_email, subject, message_text, file_path)
-#   # send_message(service_gmail, 'me', message)
-#   scheduled_email_test(sender_email, to_email, subject, message_text)
+def main():
+  sender_email = 'warren@mealplaniq.com'
 
-# if __name__ == "__main__":
-#     main()
-#     # app.run(debug=True)
+#   to_email = 'ohjeoung5224@gamil.com'
+  to_email = 'globalyy@gmail.com'
+  subject = 'Text Email'
+  message_text = 'text email with image?!!'
+  # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'
+  message = create_message(sender_email, to_email, subject, message_text)
+  # message = create_message_with_attachment(sender_email, to_email, subject, message_text, file_path)
+  # send_message(service_gmail, 'me', message)
+  scheduled_email_test(sender_email, to_email, subject, message_text)
+
+if __name__ == "__main__":
+    main()
+    # app.run(debug=True)
 
     
