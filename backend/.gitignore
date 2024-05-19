@@ -11,4 +11,5 @@ dist/
 *.pyo
 *.pyd
 service-key.json
+idea/
 >>>>>>> payment_backend
