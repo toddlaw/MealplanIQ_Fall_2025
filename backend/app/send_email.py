@@ -11,6 +11,9 @@ from email.mime.application import MIMEApplication
 from app.generate_meal_plan import gen_meal_plan
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 from email.mime.text import MIMEText
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
 
 # import scheduler
 # from flask_apscheduler import APScheduler
@@ -28,8 +31,8 @@ service_gmail = build("gmail", "v1", credentials=credentials)
 
 
 # add is_html parameter to create_message function with html content
-def create_message(sender, to, subject, message_text，is_html=True):
-    subtype = 'html' if is_html else 'plain'
+def create_message(sender, to, subject, message_text, is_html=True):
+    subtype = "html" if is_html else "plain"
     message = MIMEText(message_text, subtype)
     message["to"] = to
     message["from"] = sender
@@ -158,21 +161,39 @@ def create_sample_email_content(request_data):
 
 
 def main():
+    template_data = {
+        "plans": [{"name": "John"}, {"name": "John"}],
+        "date": "2024-07-02",
+    }
     sender_email = "warren@mealplaniq.com"
     #   to_email = 'ohjeoung5224@gamil.com'
     to_email = "globalyy2020@gmail.com"
 
+    root_path = app.root_path
+
     subject = "Text Email"
     message_text = "text email with image?!!"
     # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'
-    message = create_message(sender_email, to_email, subject, message_text)
+
+    with app.app_context():
+        email_template = render_template_string(
+            open(root_path + "/maizzleEmail/build_production/promotional.html").read(),
+            **template_data,
+        )
+
+        message = create_message(
+            sender_email, to_email, subject, email_template, is_html=True
+        )
+        send_message(service_gmail, "me", message)
     # message = create_message_with_attachment(
     #     sender_email, to_email, subject, message_text, file_path
     # )
-    send_message(service_gmail, "me", message)
+
     # scheduled_email_test(sender_email, to_email, subject, message_text)
 
 
 if __name__ == "__main__":
     main()
+    # with app.app_context():
+    #     app.run(debug=True)
     # app.run(debug=True)
