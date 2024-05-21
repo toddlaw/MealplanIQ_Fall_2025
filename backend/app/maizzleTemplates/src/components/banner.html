@@ -1,0 +1,48 @@
+<!-- this is the start of banner -->
+
+<td
+  class="bg-top bg-no-repeat bg-cover rounded text-left"
+  style="
+    background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg');
+  "
+>
+  <x-v-fill image="{{{ page.image }}}">
+    <x-spacer class="leading-16 sm:leading-8" />
+
+    <table class="w-full">
+      <tr>
+        <td class="w-12 sm:w-6"></td>
+        <td>
+          <h1 class="m-0 mb-4 text-4xl sm:text-3xl text-white sm:leading-10">
+            Hi {{ page.data.user.name }}! Here is your weekly meal plan
+          </h1>
+          <p class="m-0 text-white text-lg leading-6">
+            We offer personalized and optimized meal plans that meet
+            <br />
+            government-recommended nutritional requirements.
+          </p>
+
+          <!-- <each loop="plan in page.data.plans">
+                <p class="m-0 text-white text-lg leading-6">
+                  {{ plan.name }}
+                </p>
+              </each> -->
+
+          <x-spacer class="leading-16 sm:leading-8" />
+
+          <x-button
+            href="{{ page.urlAddress }}"
+            className="text-secondary-strong"
+          >
+            Read more &rarr;
+          </x-button>
+        </td>
+        <td class="w-12 sm:w-6"></td>
+      </tr>
+    </table>
+
+    <x-spacer class="leading-16 sm:leading-8" />
+  </x-v-fill>
+</td>
+
+<!-- this is the end of banner -->

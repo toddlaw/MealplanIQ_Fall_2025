@@ -14,13 +14,18 @@
 module.exports = {
   build: {
     templates: {
+      source: "src/templates",
       destination: {
-        path: 'build_production',
+        path: "build_production",
       },
+    },
+    assets: {
+      source: "src/assets", // Source directory for assets
+      destination: "build_production/assets", // Destination directory for assets
     },
   },
   inlineCSS: true,
   removeUnusedCSS: true,
   shorthandCSS: true,
   prettify: true,
-}
+};

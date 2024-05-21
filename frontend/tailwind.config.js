@@ -17,12 +17,12 @@ module.exports = {
         light: "#f9f9f9",
         DEFAULT: "#ffffff",
       },
-      red:{
-        light:"#f6d3d1",
-        DEFAULT:"#F02417",
+      red: {
+        light: "#f6d3d1",
+        DEFAULT: "#F02417",
       },
       background: {
-        light: "#f9f9f9",
+        light: "#fcf8f2",
         DEFAULT: "#ffffff",
         success: "#ecffee",
         info: "#c6e2ff",

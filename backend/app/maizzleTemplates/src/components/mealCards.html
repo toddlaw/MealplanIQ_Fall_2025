@@ -1,0 +1,81 @@
+<each loop="dailyPlan in page.data.plans">
+  <tr>
+    <td class="p-0 text-left text-text-black">
+      <table class="w-full">
+        <tr>
+          <td>
+            <h3 class="text-lg">{{ dailyPlan.date }}</h3>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="w-full">
+              <tr>
+                <!-- Loop through breakfast recipes -->
+                <each loop="recipe in dailyPlan.recipes">
+                  <td
+                    class="pl-8 sm:px-0 pb-4 sm:w-full inline-block align-top"
+                    style="width: 44%"
+                  >
+                    <!-- this is the start of the recipe card -->
+
+                    <table
+                      class="w-full rounded border bg-background"
+                      style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)"
+                    >
+                      <tr>
+                        <td class="text-center p-4 pb-0">
+                          <img
+                            src="{{ page.urlAddress }}/assets/images/meal-plan-images/default_meal_picture.png"
+                            alt="Image"
+                            class="text-center w-full"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-4 pt-0 text-base/2">
+                          <h3
+                            class="text-base/1 font-semibold"
+                            style="
+                              display: -webkit-box;
+                              -webkit-line-clamp: 2;
+                              -webkit-box-orient: vertical;
+                              overflow: hidden;
+                              text-overflow: ellipsis;
+                              line-height: 1rem;
+                            "
+                          >
+                            {{ recipe.title }}
+                          </h3>
+                          <p class="text-sm/0 text-text-light mb-2">
+                            {{ recipe.meal_name }}
+                          </p>
+                          <p class="text-base/3 mt-7">
+                            Energy: {{ recipe.nutrition.calories }} calories
+                          </p>
+                          <p class="text-base/3">
+                            Cuisine: {{ recipe.region }}
+                          </p>
+                          <if condition="recipe.prep_time">
+                            <p class="text-base/3">
+                              Prep time: {{ recipe.prep_time }}
+                            </p>
+                          </if>
+                          <else>
+                            <p class="text-base/3">Prep time: NA</p>
+                          </else>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- this is the start of the recipe card -->
+                  </td>
+                </each>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</each>

@@ -12,8 +12,10 @@ bodyClass: bg-slate-50
         <td class="w-[600px] max-w-full">
           <table class="w-full">
             <tr>
-              <td id="test" class="p-12 sm:py-8 sm:px-6 text-center">
-                <a href="https://maizzle.com"> @{{ date }} </a>
+              <td class="p-12 sm:py-8 sm:px-6 text-center">
+                <a href="https://maizzle.com">
+                  <img src="images/maizzle.png" width="70" alt="Maizzle" />
+                </a>
               </td>
             </tr>
             <tr>
@@ -28,20 +30,17 @@ bodyClass: bg-slate-50
                     <tr>
                       <td class="w-12 sm:w-6"></td>
                       <td>
-                        <each loop="plan in @{{ {plans} }}">
-                          <h1
-                            class="m-0 mb-4 text-4xl sm:text-3xl text-white sm:leading-10"
-                          >
-                            Welcome {{ plan.name }}
-                          </h1>
-                        </each>
+                        <h1
+                          class="m-0 mb-4 text-4xl sm:text-3xl text-white sm:leading-10"
+                        >
+                          111 Lorem ipsum dolor sit amet, consectetur adipiscing
+                        </h1>
 
-                        <p class="m-0 text-white text-lg leading-6">
-                          Consectetur esse cupidatat in aliqua pariatur anim
-                          pariatur dolor nisi. Adipisicing elit labore nisi
-                          ullamco qui sint cillum commodo nisi velit sunt
-                          dolore.
-                        </p>
+                        <each loop="plan in page.data.plans">
+                          <p class="m-0 text-white text-lg leading-6">
+                            {{ plan.name }}
+                          </p>
+                        </each>
 
                         <x-spacer class="leading-16 sm:leading-8" />
 

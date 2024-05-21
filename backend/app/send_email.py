@@ -12,6 +12,10 @@ from app.generate_meal_plan import gen_meal_plan
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 from email.mime.text import MIMEText
 from flask import Flask, render_template_string
+import subprocess
+import json
+import time
+import pdfkit
 
 app = Flask(__name__)
 
@@ -168,23 +172,66 @@ def main():
     sender_email = "warren@mealplaniq.com"
     #   to_email = 'ohjeoung5224@gamil.com'
     to_email = "globalyy2020@gmail.com"
-
     root_path = app.root_path
+
+    json_file_path = os.path.join(root_path, "maizzleTemplates", "data.json")
+
+    # Write the template data to the JSON file
+    # with open(json_file_path, "w+") as f:
+    #     json.dump(template_data, f)
+    #     f.flush()  # Ensure all data is written to the disk
+    #     os.fsync(f.fileno())  # Ensure all internal buffers associated with f are written to disk
+
+    maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
 
     subject = "Text Email"
     message_text = "text email with image?!!"
+
+    # Run the Maizzle build command
+    try:
+        result = subprocess.run(
+            ["npm", "run", "build"],
+            cwd=maizzle_project_path,
+            capture_output=True,
+            text=True,
+            shell=True,  # Add shell=True to ensure the command runs correctly on Windows
+            encoding="utf-8",
+        )
+
+        if result.returncode == 0:
+            time.sleep(5)
+            with app.app_context():
+                email_template = render_template_string(
+                    open(maizzle_project_path + "\\build_production\\index.html").read()
+                    # **template_data,
+                )
+
+                shopping_list_template = render_template_string(
+                    open(
+                        maizzle_project_path + "\\build_production\\shoppingList.html"
+                    ).read()
+                    # **template_data,
+                )
+
+            message = create_message(
+                sender_email, to_email, subject, email_template, is_html=True
+            )
+
+            # Convert the rendered HTML to PDF
+            shopping_list_pdf = pdfkit.from_string(
+                shopping_list_template, False, options={"enable-local-file-access": ""}
+            )
+
+            send_message(service_gmail, "me", message)
+        else:
+            print("build failed")
+            return "build failed"
+    except Exception as e:
+        print("error occur" + str(e))
+        return "error occur" + str(e)
+
     # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'
 
-    with app.app_context():
-        email_template = render_template_string(
-            open(root_path + "/maizzleEmail/build_production/promotional.html").read(),
-            **template_data,
-        )
-
-        message = create_message(
-            sender_email, to_email, subject, email_template, is_html=True
-        )
-        send_message(service_gmail, "me", message)
     # message = create_message_with_attachment(
     #     sender_email, to_email, subject, message_text, file_path
     # )
