@@ -49,6 +49,7 @@ import { PrivacyComponent } from './components/static/privacy/privacy.component'
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     OpportunityComponent,
     TosComponent,
     DashboardComponent,
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,
