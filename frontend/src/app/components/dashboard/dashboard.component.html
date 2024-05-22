@@ -1,14 +1,50 @@
-<div class="flex flex-col min-h-screen">
+<div class="flex flex-col min-h-screen bg-primary-light">
     <div class="flex-grow">
-        <section>
-            <mat-card class="mx-2 mt-2 md:mx-10 md:mt-10">
-                <p class="text-3xl">Welcome [Placeholder-need to be fix]</p>
+        <section class="px-10">
+            <mat-card class="mt-5">
+                <p class="text-3xl p-3">Welcome User,</p>
+                <div class="flex justify-center p-5 ml-5">
+                <!-- placeholder -->
+                    <img src="assets/images/image-placeholder.png" 
+                    height="150px" 
+                    width="150px" 
+                    alt="placeholder user"
+                    class="rounded-full outline outline-2">
+                    <button mat-mini-fab
+                    class="absolute top-28 right-9">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+
                 <mat-card-header>
-                    <mat-card-title>Dashboard</mat-card-title>
-                    <mat-card-subtitle>Here you can view your meal plan, shopping list, and other information.</mat-card-subtitle>
+                    <mat-card-title> Dashboard</mat-card-title>
+                    <mat-card-subtitle>Here you can view your meal plan, change your profile, check out your shopping list and manage subscription.</mat-card-subtitle>
                 </mat-card-header>
             </mat-card>
-         
+
+            <!-- profile info section -->
+            <div class="mt-3">
+                <mat-card class="flex items-center p-2">
+                    <div class="bg-primary p-1 rounded-full mb-5"></div>
+                    <mat-card-header>
+                        <mat-icon mat-card-avatar class="text-center">manage_accounts</mat-icon>
+                        <mat-card-title>Profile Details</mat-card-title>
+                        <mat-card-subtitle>Edit your profile</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-content>
+                        <form action="">
+                            <mat-form-field>
+                                <label for="firstName">First Name</label>
+                            </mat-form-field>
+                        </form>
+                    </mat-content>
+                </mat-card>
+            </div>
+            
+            
+        
+
+            
             <div class="p-10">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-4 md:gap-8 mt-4 md:mt-8">
                 <button routerLink="/">
@@ -21,19 +57,20 @@
                     </mat-card>
                 </button>
 
-                    <button routerLink="/profile">
+                    <!-- <button routerLink="/profile">
                     <mat-card class="mx-2 md:ml-4 md:mr-0  hover:bg-primary-light">
                         <mat-card-header>
-                            <mat-icon mat-card-avatar>person</mat-icon>
+                            <mat-icon mat-card-avatar>manage_accounts</mat-icon>
                             <mat-card-title>Profile</mat-card-title>
                             <mat-card-subtitle>View and edit your profile.</mat-card-subtitle>
                         </mat-card-header>
                     </mat-card>
-                </button>
+                </button> -->
+
                 </div>
 
 
-                <div class="grid md:grid-cols-3 sm:grid-cols-1 gap-2 md:gap-8 mt-4 md:mt-8">
+                <!-- <div class="grid md:grid-cols-3 sm:grid-cols-1 gap-2 md:gap-8 mt-4 md:mt-8">
                     <button>
                     <mat-card class="mx-2 md:ml-0 md:mr-2  hover:bg-primary-light">
                         <mat-card-header>
@@ -52,8 +89,9 @@
                             <mat-card-subtitle>View your nutrition report.</mat-card-subtitle>
                         </mat-card-header>
                     </mat-card>
-                </button>
-
+                </button> -->
+    
+                <div class="py-5">
                 <a href="https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA" class="no-underline" >
                     <mat-card class="mx-2 md:ml-2 md:mr-0  hover:bg-primary-light">
                         <mat-card-header>
@@ -63,8 +101,8 @@
                         </mat-card-header>
                     </mat-card>
                 </a>
-                </div>
             </div>
+                </div>
         </section>
     </div>
 </div>

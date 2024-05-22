@@ -20,7 +20,7 @@ import { HotToastModule } from '@ngneat/hot-toast';
 import { LandingComponent } from './components/landing/landing.component';
 import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent } from './components/profile_delete/profile.component';
 // import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
