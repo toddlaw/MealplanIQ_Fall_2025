@@ -15,7 +15,7 @@ import {
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent } from './components/profile_delete/profile.component';
 import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
@@ -46,11 +46,6 @@ const routes: Routes = [
     // ...canActivate(redirectUnauthorizedToLogin),
   },
   {
-    path: 'profile',
-    component: ProfileComponent,
-    canActivate: [Guard],
-  },
-  {
     path: 'about',
     component: AboutComponent,
   },
@@ -77,7 +72,7 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-  }
+  },
 ];
 
 @NgModule({
