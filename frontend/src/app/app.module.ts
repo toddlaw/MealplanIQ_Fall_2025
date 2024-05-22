@@ -39,7 +39,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AboutComponent } from './components/static/about/about.component';
 import { ContactComponent } from './components/static/contact/contact.component';
-import { SplashComponent } from './components/splash/splash.component';
 import { PaymentComponent } from './components/payment/payment.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
@@ -62,7 +61,6 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     TermsAndConditionsComponent,
     AboutComponent,
     ContactComponent,
-    SplashComponent,
     ShoppingListComponent,
     PaymentComponent,
     FooterComponent,

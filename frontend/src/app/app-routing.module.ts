@@ -6,7 +6,6 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
 import { AboutComponent } from './components/static/about/about.component';
 import { ContactComponent } from './components/static/contact/contact.component';
-import { SplashComponent } from './components/splash/splash.component';
 import { Guard } from './services/guard.service'; // Import your guard here
 import { PaymentComponent } from './components/payment/payment.component';
 
@@ -41,21 +40,12 @@ const routes: Routes = [
     // ...canActivate(redirectLoggedInToLanding),
   },
   {
-    path: 'home',
-    component: HomeComponent,
-    // ...canActivate(redirectUnauthorizedToLogin),
-  },
-  {
     path: 'about',
     component: AboutComponent,
   },
   {
     path: 'contact',
     component: ContactComponent,
-  },
-  {
-    path: 'splash',
-    component: SplashComponent,
   },
   {
     path: 'payment',
