@@ -45,28 +45,49 @@ def create_message(sender, to, subject, message_text, is_html=True):
     return {"raw": raw_message.decode("utf-8")}
 
 
-def create_message_with_attachment(
-    sender_email, receiver_email, subject, message_text, file_path
-):
-    message = MIMEMultipart()
-    message["to"] = receiver_email
-    message["from"] = "MealPlanIQ <{}>".format(sender_email)
-    message["subject"] = subject
 
-    msg = MIMEText(message_text)
+# def create_message_with_attachment(
+#     sender_email, receiver_email, subject, message_text, file_path
+# ):
+#     message = MIMEMultipart()
+#     message["to"] = receiver_email
+#     message["from"] = "MealPlanIQ <{}>".format(sender_email)
+#     message["subject"] = subject
+
+#     msg = MIMEText(message_text)
+#     message.attach(msg)
+
+#     with open(file_path, "rb") as file:
+#         attachment = MIMEApplication(file.read(), _subtype="pdf")
+#         attachment.add_header(
+#             "Content-Disposition", "attachment", filename=os.path.basename(file_path)
+#         )
+#         message.attach(attachment)
+
+#     raw_message = base64.urlsafe_b64encode(message.as_bytes())
+#     raw_message = raw_message.decode()
+#     body = {"raw": raw_message}
+#     return body
+
+def create_message_with_attachment(sender_email, to_email, subject, message_text, attachment):
+    message = MIMEMultipart()
+    message['to'] = to_email
+    message['from'] = sender_email
+    message['subject'] = subject
+
+    msg = MIMEText(message_text, 'html')
     message.attach(msg)
 
-    with open(file_path, "rb") as file:
-        attachment = MIMEApplication(file.read(), _subtype="pdf")
-        attachment.add_header(
-            "Content-Disposition", "attachment", filename=os.path.basename(file_path)
-        )
-        message.attach(attachment)
+    part = MIMEApplication(
+        attachment,
+        Name='ShoppingList.pdf'
+    )
+    part['Content-Disposition'] = 'attachment; filename="ShoppingList.pdf"'
+    message.attach(part)
 
-    raw_message = base64.urlsafe_b64encode(message.as_bytes())
-    raw_message = raw_message.decode()
-    body = {"raw": raw_message}
-    return body
+    # Encode the bytes for sending via Gmail API
+    raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    return {'raw': raw_message}
 
 
 def send_message(service, user_id, message):
@@ -80,8 +101,13 @@ def send_message(service, user_id, message):
         print("An error occurred: %s" % e)
         return None
 
+def send_weekly_email_by_google_scheduler(db):
+    today = datetime.datetime.today().strftime('%A')
+    user_ids_emails = db.retrieve_user_id_and_emails_by_last_meal_plan_date(today)
+    for user_id, email in user_ids_emails:
+        scheduled_email(db, user_id)
 
-def scheduled_email_by_generation_button(request_data, db):
+def email_by_generation_button(request_data, db):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     receiver_email = db.retrieve_user_email(request_data["user_id"])
     subject = "Test Email"
@@ -119,7 +145,7 @@ def scheduled_email_test_clicked_by_generation_button(request_data, db):
     job_id = f"email_job_{(initial_run_time).strftime('%Y%m%d%H%M%S')}"
     try:
         scheduler.add_job(
-            func=scheduled_email_by_generation_button,
+            func=email_by_generation_button,
             id=job_id,
             args=[request_data, db],
             trigger="date",
@@ -170,8 +196,8 @@ def main():
         "date": "2024-07-02",
     }
     sender_email = "warren@mealplaniq.com"
-    #   to_email = 'ohjeoung5224@gamil.com'
-    to_email = "globalyy2020@gmail.com"
+    to_email = 'ohjeoung5224@gmail.com'
+    # to_email = "globalyy2020@gmail.com"
     root_path = app.root_path
 
     json_file_path = os.path.join(root_path, "maizzleTemplates", "data.json")
@@ -183,6 +209,8 @@ def main():
     #     os.fsync(f.fileno())  # Ensure all internal buffers associated with f are written to disk
 
     maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
+    # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
+    # print(maizzle_project_path)
 
     subject = "Text Email"
     message_text = "text email with image?!!"
@@ -194,37 +222,39 @@ def main():
             cwd=maizzle_project_path,
             capture_output=True,
             text=True,
-            shell=True,  # Add shell=True to ensure the command runs correctly on Windows
+            # shell=True,  # Add shell=True to ensure the command runs correctly on Windows
             encoding="utf-8",
         )
-
         if result.returncode == 0:
             time.sleep(5)
             with app.app_context():
                 email_template = render_template_string(
-                    open(maizzle_project_path + "\\build_production\\index.html").read()
+                    open(maizzle_project_path + "/build_production/index.html").read()
+                    # open(maizzle_project_path + "\\build_production\\index.html").read()
                     # **template_data,
                 )
 
                 shopping_list_template = render_template_string(
-                    open(
-                        maizzle_project_path + "\\build_production\\shoppingList.html"
-                    ).read()
+                    open(maizzle_project_path + "/build_production/shoppingList.html").read()
+                    # open(
+                    #     maizzle_project_path + "\\build_production\\shoppingList.html"
+                    # ).read()
                     # **template_data,
                 )
 
-            message = create_message(
-                sender_email, to_email, subject, email_template, is_html=True
-            )
+            # message = create_message_with_attachment(
+            #     sender_email, to_email, subject, email_template, is_html=True
+            # )
 
             # Convert the rendered HTML to PDF
             shopping_list_pdf = pdfkit.from_string(
                 shopping_list_template, False, options={"enable-local-file-access": ""}
             )
 
+            message = create_message_with_attachment(sender_email, to_email, subject, email_template, shopping_list_pdf)
             send_message(service_gmail, "me", message)
         else:
-            print("build failed")
+            print("Build failed with return code:", result.returncode)
             return "build failed"
     except Exception as e:
         print("error occur" + str(e))
