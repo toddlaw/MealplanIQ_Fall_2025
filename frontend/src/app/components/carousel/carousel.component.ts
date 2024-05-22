@@ -27,8 +27,9 @@ export class CarouselComponent implements OnInit {
   setupCarousel(): void {
     const totalItems = this.placeHolders.length;
     setInterval(() => {
-      this.currentItem = (this.currentItem + 1) % totalItems;
-    }, 3000);
+      this.goToNext()
+    }, 3000); // change every 3 seconds
+
   }
 
   updateCarousel(index: number) {
