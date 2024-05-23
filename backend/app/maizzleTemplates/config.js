@@ -1,6 +1,7 @@
 /** @type {import('@maizzle/framework').Config} */
 const jsonData = require("./data.json");
 const tailwindConfig = require("./tailwind.config.js");
+const message = require("./message.json");
 
 /*
 |-------------------------------------------------------------------------------
@@ -33,8 +34,7 @@ module.exports = {
     },
   },
   urlAddress: "https://mealplaniq-may-2024.uw.r.appspot.com",
-  imageUrl:
-    "https://storage.cloud.google.com/mealplaniq-may-2024-recipe-images",
+  imageUrl: "https://storage.googleapis.com/mealplaniq-may-2024-recipe-images",
   data: {
     shoppingList: jsonData.shopping_list,
     plans: jsonData.meal_plan,

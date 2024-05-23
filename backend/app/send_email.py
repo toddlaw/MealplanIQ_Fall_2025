@@ -165,13 +165,16 @@ def create_sample_email_content(request_data):
 
 
 def main():
-    template_data = {
-        "plans": [{"name": "John"}, {"name": "John"}],
-        "date": "2024-07-02",
-    }
-    sender_email = "warren@mealplaniq.com"
-    #   to_email = 'ohjeoung5224@gamil.com'
-    to_email = "globalyy2020@gmail.com"
+    # template_data = {
+    #     "plans": [{"name": "John"}, {"name": "John"}],
+    #     "date": "2024-07-02",
+    # }
+    # sender_email = "warren@mealplaniq.com"
+    sender_email = "globalyy2020@gmail.com"
+    to_email = "ohjeoung5224@gmail.com"
+    # to_email = "globalyy2020@gmail.com"
+    # to_email = "warren@mealplaniq.com"
+
     root_path = app.root_path
 
     json_file_path = os.path.join(root_path, "maizzleTemplates", "data.json")
@@ -180,7 +183,9 @@ def main():
     # with open(json_file_path, "w+") as f:
     #     json.dump(template_data, f)
     #     f.flush()  # Ensure all data is written to the disk
-    #     os.fsync(f.fileno())  # Ensure all internal buffers associated with f are written to disk
+    #     os.fsync(
+    #         f.fileno()
+    #     )  # Ensure all internal buffers associated with f are written to disk
 
     maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
 
@@ -199,7 +204,7 @@ def main():
         )
 
         if result.returncode == 0:
-            time.sleep(5)
+            time.sleep(15)
             with app.app_context():
                 email_template = render_template_string(
                     open(maizzle_project_path + "\\build_production\\index.html").read()
