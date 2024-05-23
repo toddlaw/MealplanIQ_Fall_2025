@@ -48,6 +48,7 @@ import { OpportunityComponent } from './components/static/opportunity/opportunit
 import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
+import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     TosComponent,
     DashboardComponent,
     CarouselComponent,
+    GeneratePopUpComponent,
   ],
   imports: [
     BrowserModule,

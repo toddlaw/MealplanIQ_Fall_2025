@@ -27,6 +27,7 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
+import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
 @Component({
   selector: 'app-landing',
@@ -34,7 +35,11 @@ import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -71,6 +76,7 @@ export class LandingComponent implements OnInit {
   selectedOptions: string[][] = [];
   searchClicked: boolean = false;
   selectedHealthGoalIndex: number = 0;
+  userSubscriptionTypeId: number = 0;
 
   people: {
     age: number | null;
@@ -118,7 +124,43 @@ export class LandingComponent implements OnInit {
   expandedStates: boolean[][] = [];
   snackExpandedStates: boolean[] = [];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const storedData = JSON.parse(localStorage.getItem('data') || '{}');
+    this.people = storedData.people || this.people;
+    this.selectedUnit = storedData.selectedUnit || this.selectedUnit;
+    this.selectedDietaryConstraint = storedData.dietaryConstraint || this.selectedDietaryConstraint;
+    this.selectedReligiousConstraint = storedData.religiousConstraint || this.selectedReligiousConstraint;
+    this.likedFoods.setValue(storedData.likedFoods || []);
+    this.dislikedFoods.setValue(storedData.dislikedFoods || []);
+    this.cuisines.setValue(storedData.favouriteCuisines || []);
+    this.allergies.setValue(storedData.allergies || []);
+    this.snacks.setValue(storedData.snacks || []);
+    this.breakfasts.setValue(storedData.breakfasts || []);
+    this.includedRecipes = storedData.includedRecipes || [];
+    this.excludedRecipes = storedData.excludedRecipes || [];
+
+    this.http
+      .post('http://127.0.0.1:5000/get_subscription_type', {
+        params: { user_id: localStorage.getItem('uid') },
+      })
+      .subscribe(
+        (response: any) => {
+          if (response.subscription_type_id) {
+            localStorage.setItem(
+              'subscription_type_id',
+              response.subscription_type_id
+            );
+            this.userSubscriptionTypeId = response.subscription_type_id;
+            console.log('subscription type ID:' + this.userSubscriptionTypeId);
+            console.log(typeof this.userSubscriptionTypeId);
+          }
+        },
+        (error) => {
+          this.userSubscriptionTypeId = 0;
+          console.log('subscription type ID:' + this.userSubscriptionTypeId);
+        }
+      );
+  }
 
   /**
    * Shows the terms and conditions dialog and sends the data if the terms and conditions are accepted
@@ -186,6 +228,9 @@ export class LandingComponent implements OnInit {
       excludedRecipes: this.excludedRecipes,
     };
 
+    localStorage.setItem('data', JSON.stringify(data));
+    console.log(data);
+
     // if (!data.maxDate && data.minDate) {
     //   data.maxDate = data.minDate;
     // }
@@ -197,40 +242,75 @@ export class LandingComponent implements OnInit {
       data.likedFoods = 'None';
     }
 
-    this.http
-      .post('http://127.0.0.1:5000/api', data, {
-        responseType: 'text',
-      })
-      .subscribe(
-        (response) => {
-          this.element.nativeElement.style.display = 'none';
-          this.errorDiv.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.mealPlanResponse = JSON.parse(response);
+    if (
+      this.userSubscriptionTypeId === 1 ||
+      this.userSubscriptionTypeId === 2 ||
+      (this.userSubscriptionTypeId === 0 &&
+        data.maxDate === data.minDate &&
+        this.selectedHealthGoal === 'lose_weight') ||
+      (this.userSubscriptionTypeId === 3 &&
+        this.selectedHealthGoal === 'lose_weight')
+    ) {
+      this.http
+        .post('http://127.0.0.1:5000/api', data, {
+          responseType: 'text',
+        })
+        .subscribe(
+          (response) => {
+            this.element.nativeElement.style.display = 'none';
+            this.errorDiv.nativeElement.style.display = 'none';
+            this.showSpinner = false;
+            this.mealPlanResponse = JSON.parse(response);
 
-          const numDays = this.getNumDays(this.mealPlanResponse);
-          for (let i = 0; i < numDays; i++) {
-            this.expandedStates.push(
-              new Array(this.mealPlanResponse.days[i].recipes.length).fill(
-                false
-              )
-            );
-            this.selectedOptions.push(new Array(3).fill('keep'));
+            const numDays = this.getNumDays(this.mealPlanResponse);
+            for (let i = 0; i < numDays; i++) {
+              this.expandedStates.push(
+                new Array(this.mealPlanResponse.days[i].recipes.length).fill(
+                  false
+                )
+              );
+              this.selectedOptions.push(new Array(3).fill('keep'));
+            }
+
+            this.snackExpandedStates = new Array(
+              this.mealPlanResponse.snacks.length
+            ).fill(false);
+
+            this.includeAllRecipes(this.mealPlanResponse.days);
+          },
+          (error) => {
+            console.error('Error sending data:', error);
+            this.element.nativeElement.style.display = 'none';
+            this.showSpinner = false;
+            this.errorDiv.nativeElement.style.display = 'block';
           }
-
-          this.snackExpandedStates = new Array(
-            this.mealPlanResponse.snacks.length
-          ).fill(false);
-
-          this.includeAllRecipes(this.mealPlanResponse.days);
-        },
-        (error) => {
-          console.error('Error sending data:', error);
-          this.element.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.errorDiv.nativeElement.style.display = 'block';
+        );
+    } else {
+      this.showSpinner = false;
+      this.errorDiv.nativeElement.style.display = 'block';
+      this.element.nativeElement.style.display = 'none';
+      this.authService.currentUser$.subscribe((user) => {
+        let message;
+        if (user) {
+          // User is logged in
+          message =
+            'You need to subscribe to get the meal plan for health goal ' +
+            this.selectedHealthGoal +
+            '.';
+          this.openDialog(message, '/payment', 'Subscribe');
+        } else {
+          // User is not logged in
+          const selectedHealthGoalObject = healthGoals.find(
+            (goal) => goal.value === this.selectedHealthGoal
+          );
+          message =
+            'You need to log in first to get the meal plan for ' +
+            selectedHealthGoalObject?.viewValue +
+            '.';
+          this.openDialog(message, '/login', 'Login');
         }
-      );
+      });
+    }
   }
 
   /**
@@ -476,6 +556,19 @@ export class LandingComponent implements OnInit {
       behavior: 'smooth',
       block: 'end',
       inline: 'start',
+    });
+  }
+
+  openDialog(message: string, redirectUrl: string, confirmLabel: string) {
+    const dialogRef = this.dialog.open(GeneratePopUpComponent, {
+      width: '500px',
+      data: { message, confirmLabel },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        window.location.href = redirectUrl;
+      }
     });
   }
 }
