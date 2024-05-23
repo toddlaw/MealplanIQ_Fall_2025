@@ -247,6 +247,11 @@ def gen_meal_plan(data):
         recipes_with_scores, optimized_results, min_date, days
     )
 
+    response = process_response_meal_name(response)
+    response = distribute_snacks_to_date(response)
+    response = insert_snacks_between_meals(response)
+    response = process_type_normal(response)
+
     return response
 
 

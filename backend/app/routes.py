@@ -4,7 +4,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from app.manage_user_data import *
-from app.send_email import scheduled_email_test, email_by_generation_button, send_weekly_email_by_google_scheduler
+from app.send_email import create_and_send_maizzle_email, create_and_send_maizzle_email, scheduled_email_test, email_by_generation_button, send_weekly_email_by_google_scheduler
 from user_db.user_db import instantiate_database
 import stripe
 
@@ -43,8 +43,8 @@ def page_not_found(e):
 
 @app.route('/schedule-email', methods=['GET'])
 def schedule_email():
-    if request.headers.get('X-Appengine-Cron') != 'true':
-        return 'Unauthorized', 403
+    # if request.headers.get('X-Appengine-Cron') != 'true':
+    #     return 'Unauthorized', 403
     db = instantiate_database()
     send_weekly_email_by_google_scheduler(db)
 
@@ -104,9 +104,7 @@ def receive_data():
         response = {'error': str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
         
-    email_sent_time = email_by_generation_button(data, db)
-    print(response)
-
+    email_sent_time = create_and_send_maizzle_email(db, user_id, data)
     # scheduled_email_test(email_sent_time, db, user_id)
     return jsonify(response)
 

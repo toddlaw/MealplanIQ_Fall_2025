@@ -107,7 +107,7 @@ def send_weekly_email_by_google_scheduler(db):
     today = datetime.datetime.today().strftime('%A')
     user_ids_emails = db.retrieve_user_id_and_emails_by_last_meal_plan_date(today)
     for user_id, email in user_ids_emails:
-        scheduled_email(db, user_id)
+        create_and_send_maizzle_email(db, user_id)
 
 def email_by_generation_button(request_data, db):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
@@ -191,48 +191,27 @@ def create_sample_email_content(request_data):
         email_content += "\n"
     return email_content
 
-
-def main():
-    # template_data = {
-    #     "plans": [{"name": "John"}, {"name": "John"}],
-    #     "date": "2024-07-02",
-    # }
-    # sender_email = "warren@mealplaniq.com"
-    sender_email = "globalyy2020@gmail.com"
-    to_email = "ohjeoung5224@gmail.com"
-    # to_email = "globalyy2020@gmail.com"
-    # to_email = "warren@mealplaniq.com"
+def create_and_send_maizzle_email(db, user_id, request_data=None):
+    sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
+    to_email = db.retrieve_user_email(user_id)
 
     root_path = app.root_path
-
     json_file_path = os.path.join(root_path, "maizzleTemplates", "output.json")
 
-    db = instantiate_database()
-    user_id = 300
-    request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
+    if request_data is None:
+        request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
     message_text = gen_meal_plan(request_data)
-    # db.update_user_last_date_plan_profile(user_id, request_data["maxDate"])
-
-    # reformat the response data
-    response = process_response_meal_name(message_text)
-    response = distribute_snacks_to_date(response)
-    response = insert_snacks_between_meals(response)
-    response = process_type_normal(response)
-
+    db.update_user_last_date_plan_profile(user_id, request_data["maxDate"])
 
     # Write the template data to the JSON file
     with open(json_file_path, "w+") as f:
-        json.dump(response, f)
+        json.dump(message_text, f)
         f.flush()  # Ensure all data is written to the disk
         os.fsync(
             f.fileno()
         )  # Ensure all internal buffers associated with f are written to disk
 
-
     maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
-    # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
-    # print(maizzle_project_path)
-
     subject = "Text Email"
     message_text = "text email with image?!!"
 
@@ -251,21 +230,17 @@ def main():
             with app.app_context():
                 email_template = render_template_string(
                     open(maizzle_project_path + "/build_production/index.html").read()
+                    # window path
                     # open(maizzle_project_path + "\\build_production\\index.html").read()
-                    # **template_data,
                 )
 
                 shopping_list_template = render_template_string(
                     open(maizzle_project_path + "/build_production/shoppingList.html").read()
+                    # window path
                     # open(
                     #     maizzle_project_path + "\\build_production\\shoppingList.html"
                     # ).read()
-                    # **template_data,
                 )
-
-            # message = create_message_with_attachment(
-            #     sender_email, to_email, subject, email_template, is_html=True
-            # )
 
             # Convert the rendered HTML to PDF
             shopping_list_pdf = pdfkit.from_string(
@@ -282,8 +257,93 @@ def main():
         return "error occur" + str(e)
 
 
-if __name__ == "__main__":
-    main()
+# def main():
+    # template_data = {
+    #     "plans": [{"name": "John"}, {"name": "John"}],
+    #     "date": "2024-07-02",
+    # }
+    # sender_email = "warren@mealplaniq.com"
+    # sender_email = "globalyy2020@gmail.com"
+    # to_email = "ohjeoung5224@gmail.com"
+    # # to_email = "globalyy2020@gmail.com"
+    # # to_email = "warren@mealplaniq.com"
+
+    # root_path = app.root_path
+
+    # json_file_path = os.path.join(root_path, "maizzleTemplates", "output.json")
+
+    # db = instantiate_database()
+    # user_id = 300
+    # request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
+    # message_text = gen_meal_plan(request_data)
+    # # db.update_user_last_date_plan_profile(user_id, request_data["maxDate"])
+
+
+
+    # # Write the template data to the JSON file
+    # with open(json_file_path, "w+") as f:
+    #     json.dump(message_text, f)
+    #     f.flush()  # Ensure all data is written to the disk
+    #     os.fsync(
+    #         f.fileno()
+    #     )  # Ensure all internal buffers associated with f are written to disk
+
+
+    # maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
+    # # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
+    # # print(maizzle_project_path)
+
+    # subject = "Text Email"
+    # message_text = "text email with image?!!"
+
+    # # Run the Maizzle build command
+    # try:
+    #     result = subprocess.run(
+    #         ["npm", "run", "build"],
+    #         cwd=maizzle_project_path,
+    #         capture_output=True,
+    #         text=True,
+    #         # shell=True,  # Add shell=True to ensure the command runs correctly on Windows
+    #         encoding="utf-8",
+    #     )
+    #     if result.returncode == 0:
+    #         time.sleep(15)
+    #         with app.app_context():
+    #             email_template = render_template_string(
+    #                 open(maizzle_project_path + "/build_production/index.html").read()
+    #                 # open(maizzle_project_path + "\\build_production\\index.html").read()
+    #                 # **template_data,
+    #             )
+
+    #             shopping_list_template = render_template_string(
+    #                 open(maizzle_project_path + "/build_production/shoppingList.html").read()
+    #                 # open(
+    #                 #     maizzle_project_path + "\\build_production\\shoppingList.html"
+    #                 # ).read()
+    #                 # **template_data,
+    #             )
+
+    #         # message = create_message_with_attachment(
+    #         #     sender_email, to_email, subject, email_template, is_html=True
+    #         # )
+
+    #         # Convert the rendered HTML to PDF
+    #         shopping_list_pdf = pdfkit.from_string(
+    #             shopping_list_template, False, options={"enable-local-file-access": ""}
+    #         )
+
+    #         message = create_message_with_attachment(sender_email, to_email, subject, email_template, shopping_list_pdf)
+    #         send_message(service_gmail, "me", message)
+    #     else:
+    #         print("Build failed with return code:", result.returncode)
+    #         return "build failed"
+    # except Exception as e:
+    #     print("error occur" + str(e))
+    #     return "error occur" + str(e)
+
+
+# if __name__ == "__main__":
+#     main()
     # with app.app_context():
     #     app.run(debug=True)
     # app.run(debug=True)
