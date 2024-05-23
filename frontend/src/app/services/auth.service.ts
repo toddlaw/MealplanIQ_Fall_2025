@@ -29,6 +29,7 @@ export class AuthService {
   logout(): Observable<any> {
     localStorage.removeItem('uid');
     // localStorage.removeItem('email');
+    localStorage.clear();
     this.toast.success('You have been logged out.');
     return from(this.auth.signOut());
   }
