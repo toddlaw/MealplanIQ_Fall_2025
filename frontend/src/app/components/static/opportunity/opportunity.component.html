@@ -1,32 +1,42 @@
 
+<div class="flex flex-col min-h-screen">
+    <div class="flex-grow">
+    <section>
+      <div class="container p-10 mx-auto">
+        <mat-card class="flex flex-row max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+          <div class="flex-shrink-0 flex justify-center items-center">
+            <img mat-card-image src="assets/images/placeholders/team.jpg" alt="connections" class="w-48 h-auto object-cover">
+          </div>
+          <div class="flex-grow p-4">
+            <mat-card-title class="text-3xl font-bold">Opportunity</mat-card-title>
+            <mat-card-subtitle class="text-gray-700 mt-2">
+                Come join us and help transform lives by promoting healthy eating habits and making nutritious choices accessible to everyone. Together, we can fight disease, improve health, and create a brighter, healthier future for our communities.
+            </mat-card-subtitle>
+          </div>
+        </mat-card>
 
+        <div class="p-10">
+            <mat-card-title class="text-3xl font-bold mb-4">Our Team</mat-card-title>
+            <p>
+                Our team is made up of a diverse group of individuals with a wide range of skills and experience. 
+                We are united by our passion for health and wellness and our desire to make a positive impact on the world.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <mat-card *ngFor="let item of Team" class="flex flex-col items-center p-4">
+                <mat-title class="text-xl center"><b>{{item.department}}</b></mat-title>
+                <div class="flex justify-center items-center w-full h-auto overflow-hidden rounded-full">
+                  <img mat-card-image [src]="item.image" alt="placehodler image" class="object-cover">
+                </div>
+                <div>
+                <mat-card-title>{{ item.name }}</mat-card-title>
+                  <mat-card-subtitle>{{ item.position }}</mat-card-subtitle>
+                  <mat-card-content>{{ item.description }}</mat-card-content>
+                </div>
+              </mat-card>
+            </div>
+          </div> 
+      </div>
+    </section>
 
-<h1 class="text-center">Our Team</h1>
-<p>
-  Our team is made up of a diverse group of individuals with a wide range of skills and experience. 
-  We are united by our passion for health and wellness and our desire to make a positive impact on the world.
-</p>
-
-<h2>Executive</h2>
-<h3>Warren</h3>
-<ul>
-  <li>Founder & CEO</li>
-  <li>30 years in software engineer</li>
-  <li>10 years in Artifical Intelligence field</li>
-  <li>Bachelor in Electrical Engineering</li>
-  <li>PhD in Computer Science</li>
-</ul>
-
-<h2>Domain Expert</h2>
-<h3>Rachelle</h3>
-<ul>
-  <li>Registered Dietitian</li>
-  <li>Certified Personal Trainer</li>
-</ul>
-
-<h2>Development</h2>
-<h3>Jose</h3>
-<ul>
-  <li>25 years in project management</li>
-</ul>
 <app-footer></app-footer>
+</div>
