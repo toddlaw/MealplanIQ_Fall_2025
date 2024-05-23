@@ -8,7 +8,7 @@ from googleapiclient.errors import HttpError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-from app.generate_meal_plan import gen_meal_plan
+from app.generate_meal_plan import distribute_snacks_to_date, gen_meal_plan, insert_snacks_between_meals, process_response_meal_name, process_type_normal
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 from email.mime.text import MIMEText
 from flask import Flask, render_template_string
@@ -16,6 +16,8 @@ import subprocess
 import json
 import time
 import pdfkit
+
+from user_db.user_db import instantiate_database
 
 app = Flask(__name__)
 
@@ -203,15 +205,29 @@ def main():
 
     root_path = app.root_path
 
-    json_file_path = os.path.join(root_path, "maizzleTemplates", "data.json")
+    json_file_path = os.path.join(root_path, "maizzleTemplates", "output.json")
+
+    db = instantiate_database()
+    user_id = 300
+    request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
+    message_text = gen_meal_plan(request_data)
+    # db.update_user_last_date_plan_profile(user_id, request_data["maxDate"])
+
+    # reformat the response data
+    response = process_response_meal_name(message_text)
+    response = distribute_snacks_to_date(response)
+    response = insert_snacks_between_meals(response)
+    response = process_type_normal(response)
+
 
     # Write the template data to the JSON file
-    # with open(json_file_path, "w+") as f:
-    #     json.dump(template_data, f)
-    #     f.flush()  # Ensure all data is written to the disk
-    #     os.fsync(
-    #         f.fileno()
-    #     )  # Ensure all internal buffers associated with f are written to disk
+    with open(json_file_path, "w+") as f:
+        json.dump(response, f)
+        f.flush()  # Ensure all data is written to the disk
+        os.fsync(
+            f.fileno()
+        )  # Ensure all internal buffers associated with f are written to disk
+
 
     maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
     # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
@@ -264,14 +280,6 @@ def main():
     except Exception as e:
         print("error occur" + str(e))
         return "error occur" + str(e)
-
-    # file_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/Activity02-Julie.pdf'
-
-    # message = create_message_with_attachment(
-    #     sender_email, to_email, subject, message_text, file_path
-    # )
-
-    # scheduled_email_test(sender_email, to_email, subject, message_text)
 
 
 if __name__ == "__main__":
