@@ -752,13 +752,46 @@ class DatabaseManager:
   
 
     # ------------------- retrieve data -------------------
+
     def get_user_profile(self, user_id):
         cursor = self.db.cursor()
-        sql = "SELECT * FROM user_profile WHERE user_id = %s"
+        sql = "SELECT user_name, email, age, height, weight FROM user_profile WHERE user_id = %s"
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
-        return result
-    
+        
+        if result:
+            user_profile = {
+                "user_name": result[0],
+                "email": result[1],
+                "age": result[2],
+                "height": result[3],
+                "weight": result[4]
+            }
+            user_profile_json = json.dumps(user_profile)
+            return user_profile_json
+        else:
+            return None
+        
+    def get_user_landing_page_profile(self, user_id):
+        cursor = self.db.cursor()
+        sql = "SELECT user_name, email, age, height, weight, activity_level FROM user_profile WHERE user_id = %s"
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        
+        if result:
+            user_profile = {
+                "user_name": result[0],
+                "email": result[1],
+                "age": result[2],
+                "height": result[3],
+                "weight": result[4],
+                "activity_level": result[5]
+            }
+            user_profile_json = json.dumps(user_profile)
+            return user_profile_json
+        else:
+            return None
+
 
 
     # ------------------- look up table functions -------------------
@@ -1082,6 +1115,6 @@ def instantiate_database():
 
 if __name__ == '__main__':
     print("Running database manager")
-    # db = instantiate_database()
-    # print(db.retrieve_user_id_and_emails_by_last_meal_plan_date(""))
+    db = instantiate_database()
+    print(db.get_user_landing_page_profile("100"))
     

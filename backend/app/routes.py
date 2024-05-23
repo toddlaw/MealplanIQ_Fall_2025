@@ -71,12 +71,22 @@ def handle_signup():
     result = db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
     return result
 
+@app.route('/api/profile/<user_id>')
+def get_user_profile(user_id):
+    db = instantiate_database()
+    result = db.get_user_profile(user_id)
+    return result
+
+@app.route('/api/landing/profile/<user_id>')
+def get_user_profile(user_id):
+    db = instantiate_database()
+    result = db.get_user_landing_page_profile(user_id)
+    return result
+
 @app.route('/api', methods=['POST'])
 def receive_data():
     data = request.json
     print(data)
-  
-
     db = instantiate_database()
     # user_name = 'Diane' # hard coded user name
     # hard_coded_user_id = 300
