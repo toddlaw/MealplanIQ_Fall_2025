@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           // });
 
           this.http
-            .get('http://127.0.0.1:5000/get_subscription_type ', {
+            .post('http://127.0.0.1:5000/get_subscription_type ', {
               params: data,
             })
             .subscribe({
