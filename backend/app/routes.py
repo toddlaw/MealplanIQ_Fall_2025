@@ -78,7 +78,7 @@ def get_user_profile(user_id):
     return result
 
 @app.route('/api/landing/profile/<user_id>')
-def get_user_profile(user_id):
+def get_user_landing_page_profile(user_id):
     db = instantiate_database()
     result = db.get_user_landing_page_profile(user_id)
     return result
