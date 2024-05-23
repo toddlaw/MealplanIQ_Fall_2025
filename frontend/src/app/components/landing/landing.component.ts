@@ -140,7 +140,7 @@ export class LandingComponent implements OnInit {
     this.excludedRecipes = storedData.excludedRecipes || [];
 
     this.http
-      .post('http://127.0.0.1:5000/get_subscription_type', {
+      .post('http://127.0.0.1:5000/get_subscription_type_id', {
         params: { user_id: localStorage.getItem('uid') },
       })
       .subscribe(
@@ -152,7 +152,6 @@ export class LandingComponent implements OnInit {
             );
             this.userSubscriptionTypeId = response.subscription_type_id;
             console.log('subscription type ID:' + this.userSubscriptionTypeId);
-            console.log(typeof this.userSubscriptionTypeId);
           }
         },
         (error) => {
@@ -228,8 +227,10 @@ export class LandingComponent implements OnInit {
       excludedRecipes: this.excludedRecipes,
     };
 
-    localStorage.setItem('data', JSON.stringify(data));
-    console.log(data);
+    // Store data to local storage
+    if (localStorage.getItem('uid')) {
+      localStorage.setItem('data', JSON.stringify(data));
+    }
 
     // if (!data.maxDate && data.minDate) {
     //   data.maxDate = data.minDate;
@@ -290,24 +291,21 @@ export class LandingComponent implements OnInit {
       this.errorDiv.nativeElement.style.display = 'block';
       this.element.nativeElement.style.display = 'none';
       this.authService.currentUser$.subscribe((user) => {
-        let message;
+        const selectedHealthGoalObject = healthGoals.find((goal) => 
+          goal.value === this.selectedHealthGoal
+        );
+        const title = "Sorry, we can't generate the meal plan.";
         if (user) {
           // User is logged in
-          message =
-            'You need to subscribe to get the meal plan for health goal ' +
-            this.selectedHealthGoal +
-            '.';
-          this.openDialog(message, '/payment', 'Subscribe');
+          const message =
+            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
+            selectedHealthGoalObject?.viewValue + '!<br> Without subscription, you can generate meal plan to lose weight only.';
+          this.openDialog(title, message, '/payment', 'Subscribe');
         } else {
           // User is not logged in
-          const selectedHealthGoalObject = healthGoals.find(
-            (goal) => goal.value === this.selectedHealthGoal
-          );
-          message =
-            'You need to log in first to get the meal plan for ' +
-            selectedHealthGoalObject?.viewValue +
-            '.';
-          this.openDialog(message, '/login', 'Login');
+          const message =
+            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.'
+          this.openDialog(title, message, '/login', 'Login');
         }
       });
     }
@@ -559,10 +557,10 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  openDialog(message: string, redirectUrl: string, confirmLabel: string) {
+  openDialog(title: string, message: string, redirectUrl: string, confirmLabel: string) {
     const dialogRef = this.dialog.open(GeneratePopUpComponent, {
       width: '500px',
-      data: { message, confirmLabel },
+      data: { title, message, confirmLabel },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
