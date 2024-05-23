@@ -1,7 +1,7 @@
 /** @type {import('@maizzle/framework').Config} */
 const jsonData = require("./data.json");
 const tailwindConfig = require("./tailwind.config.js");
-const message = require("./message.json");
+const output = require("./output.json");
 
 /*
 |-------------------------------------------------------------------------------
@@ -33,12 +33,13 @@ module.exports = {
       config: tailwindConfig,
     },
   },
+  title: "Weekly Meal Plan - MealPlanIQ",
   urlAddress: "https://mealplaniq-may-2024.uw.r.appspot.com",
   imageUrl: "https://storage.googleapis.com/mealplaniq-may-2024-recipe-images",
   data: {
     shoppingList: jsonData.shopping_list,
-    plans: jsonData.meal_plan,
-    nutrition: jsonData.nutrition,
+    plans: output.days,
+    nutrition: output.tableData,
     user: jsonData.user,
     lastDate: jsonData.meal_plan[jsonData.meal_plan.length - 1].date,
   },

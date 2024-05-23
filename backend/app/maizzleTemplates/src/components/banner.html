@@ -3,7 +3,7 @@
 <td
   class="bg-top bg-no-repeat bg-cover rounded text-left"
   style="
-    background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg');
+    background-image: url('https://images.unsplash.com/photo-1505682750263-f3f9e519c565?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
   "
 >
   <x-v-fill image="{{{ page.image }}}">
@@ -11,15 +11,15 @@
 
     <table class="w-full">
       <tr>
-        <td class="w-12 sm:w-6"></td>
-        <td>
-          <h1 class="m-0 mb-4 text-4xl sm:text-3xl text-white sm:leading-10">
-            Hi {{ page.data.user.name }}! Here is your weekly meal plan
+        <td class="w-2 sm:w-1"></td>
+        <td style="width: 80%">
+          <h1 class="m-0 mb-4 text-4xl sm:text-2xl text-white sm:leading-10">
+            Hi {{ page.data.user.name }}!
           </h1>
-          <p class="m-0 text-white text-lg leading-6">
-            We offer personalized and optimized meal plans that meet
+          <p class="m-0 text-white text-base sm:text-sm leading-6">
+            Checkout your meal plan
             <br />
-            government-recommended nutritional requirements.
+            for the next 7 days!
           </p>
 
           <!-- <each loop="plan in page.data.plans">
@@ -30,14 +30,11 @@
 
           <x-spacer class="leading-16 sm:leading-8" />
 
-          <x-button
-            href="{{ page.urlAddress }}"
-            className="text-secondary-strong"
-          >
+          <x-button href="{{ page.urlAddress }}" className="text-background">
             Read more &rarr;
           </x-button>
         </td>
-        <td class="w-12 sm:w-6"></td>
+        <td class="w-2 sm:w-1"></td>
       </tr>
     </table>
 
