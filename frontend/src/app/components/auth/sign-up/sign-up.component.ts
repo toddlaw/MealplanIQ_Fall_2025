@@ -93,7 +93,7 @@ export class SignUpComponent implements OnInit {
         const data2 = {
           user_id: userCredential.user.uid 
         }
-        this.http.post('http://127.0.0.1:5000/get_subscription_type', { params: data2 }).subscribe({
+        this.http.post('http://127.0.0.1:5000/get_subscription_type_id', { params: data2 }).subscribe({
           next: (response) => {
             console.log(response);
           }
