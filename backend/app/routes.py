@@ -4,7 +4,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan
 from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
 from app.manage_user_data import *
-from app.send_email import scheduled_email_test, scheduled_email_test_clicked_by_generation_button
+from app.send_email import scheduled_email_test, email_by_generation_button, send_weekly_email_by_google_scheduler
 from user_db.user_db import instantiate_database
 import stripe
 
@@ -40,6 +40,14 @@ def static_files():
 def page_not_found(e):
     print(request.path)
     return redirect('/')
+
+@app.route('/schedule-email', methods=['GET'])
+def schedule_email():
+    if request.headers.get('X-Appengine-Cron') != 'true':
+        return 'Unauthorized', 403
+    db = instantiate_database()
+    send_weekly_email_by_google_scheduler(db)
+
 
 @app.route('/create-subscription', methods=['POST'])
 def handle_create_charge():
@@ -86,9 +94,10 @@ def receive_data():
         response = {'error': str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
         
-    email_sent_time = scheduled_email_test_clicked_by_generation_button(data, db)
+    email_sent_time = email_by_generation_button(data, db)
+    print(response)
 
-    scheduled_email_test(email_sent_time, db, user_id)
+    # scheduled_email_test(email_sent_time, db, user_id)
     return jsonify(response)
 
 endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'

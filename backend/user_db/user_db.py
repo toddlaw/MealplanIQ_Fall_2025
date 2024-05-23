@@ -1045,6 +1045,18 @@ class DatabaseManager:
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
         return result[0] if result else None
+    
+    def retrieve_user_id_and_emails_by_last_meal_plan_date(self, email_day):
+        cursor = self.db.cursor()
+        sql = """
+        SELECT u.user_id, u.email
+        FROM user_profile u
+        WHERE DAYNAME(FROM_UNIXTIME(u.last_meal_plan_date / 1000)) = %s;
+        """
+        cursor.execute(sql, (email_day,))
+        result = cursor.fetchall()
+        return result
+        
 
 # ------------------- Validate User ----------------------
     def check_user_id_existence(self, user_id):
@@ -1070,3 +1082,6 @@ def instantiate_database():
 
 if __name__ == '__main__':
     print("Running database manager")
+    # db = instantiate_database()
+    # print(db.retrieve_user_id_and_emails_by_last_meal_plan_date(""))
+    

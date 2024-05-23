@@ -257,7 +257,9 @@ def create_meal_date(recipes, day):
     """
     day_dict = {}
 
+    date_object = datetime.datetime.strptime(day, '%Y-%m-%d')
     day_dict['date'] = day
+    day_dict['date_weekday'] = date_object.strftime('%A %B %d')
     recipe_array = []
 
     for recipe in recipes:

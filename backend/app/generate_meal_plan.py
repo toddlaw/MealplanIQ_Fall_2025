@@ -218,6 +218,7 @@ def gen_meal_plan(data):
     difference = max_date - min_date
     days = difference.days + 1
 
+
     print("Difference in days:", days)
 
     if "nutrient" in diet_info["nutrients"]:
