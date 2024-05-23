@@ -125,40 +125,55 @@ export class LandingComponent implements OnInit {
   snackExpandedStates: boolean[] = [];
 
   ngOnInit(): void {
-    const storedData = JSON.parse(localStorage.getItem('data') || '{}');
-    this.people = storedData.people || this.people;
-    this.selectedUnit = storedData.selectedUnit || this.selectedUnit;
-    this.selectedDietaryConstraint = storedData.dietaryConstraint || this.selectedDietaryConstraint;
-    this.selectedReligiousConstraint = storedData.religiousConstraint || this.selectedReligiousConstraint;
-    this.likedFoods.setValue(storedData.likedFoods || []);
-    this.dislikedFoods.setValue(storedData.dislikedFoods || []);
-    this.cuisines.setValue(storedData.favouriteCuisines || []);
-    this.allergies.setValue(storedData.allergies || []);
-    this.snacks.setValue(storedData.snacks || []);
-    this.breakfasts.setValue(storedData.breakfasts || []);
-    this.includedRecipes = storedData.includedRecipes || [];
-    this.excludedRecipes = storedData.excludedRecipes || [];
+    // Retrieve data from local storage to pre-fill the form
+    // const storedData = JSON.parse(localStorage.getItem('data') || '{}');
+    // if (Object.keys(storedData).length !== 0) {
+    //   this.people = storedData.people || this.people;
+    //   this.selectedUnit = storedData.selectedUnit || this.selectedUnit;
+    //   this.selectedDietaryConstraint =
+    //     storedData.dietaryConstraint || this.selectedDietaryConstraint;
+    //   this.selectedHealthGoal =
+    //     storedData.healthGoal || this.selectedHealthGoal;
+    //   this.selectedReligiousConstraint =
+    //     storedData.religiousConstraint || this.selectedReligiousConstraint;
+    //   this.likedFoods.setValue(storedData.likedFoods || []);
+    //   this.dislikedFoods.setValue(storedData.dislikedFoods || []);
+    //   this.cuisines.setValue(storedData.favouriteCuisines || []);
+    //   this.allergies.setValue(storedData.allergies || []);
+    //   this.snacks.setValue(storedData.snacks || []);
+    //   this.breakfasts.setValue(storedData.breakfasts || []);
+    //   this.includedRecipes = storedData.includedRecipes || [];
+    //   this.excludedRecipes = storedData.excludedRecipes || [];
+    // }
+    //
+    // console.log('stored data:', storedData);
 
-    this.http
-      .post('http://127.0.0.1:5000/get_subscription_type_id', {
-        params: { user_id: localStorage.getItem('uid') },
-      })
-      .subscribe(
-        (response: any) => {
-          if (response.subscription_type_id) {
-            localStorage.setItem(
-              'subscription_type_id',
-              response.subscription_type_id
-            );
-            this.userSubscriptionTypeId = response.subscription_type_id;
-            console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    if (localStorage.getItem('uid')) {
+      this.http
+        .post('http://127.0.0.1:5000/get_subscription_type_id', {
+          params: { user_id: localStorage.getItem('uid') },
+        })
+        .subscribe(
+          (response: any) => {
+            if (response.subscription_type_id) {
+              localStorage.setItem(
+                'subscription_type_id',
+                response.subscription_type_id
+              );
+              this.userSubscriptionTypeId = response.subscription_type_id;
+              console.log(
+                'subscription type ID:' + this.userSubscriptionTypeId
+              );
+            }
+          },
+          (error) => {
+            console.error('Error:', error);
           }
-        },
-        (error) => {
-          this.userSubscriptionTypeId = 0;
-          console.log('subscription type ID:' + this.userSubscriptionTypeId);
-        }
-      );
+        );
+    } else {
+      this.userSubscriptionTypeId = 0;
+      console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    }
   }
 
   /**
@@ -290,24 +305,23 @@ export class LandingComponent implements OnInit {
       this.showSpinner = false;
       this.errorDiv.nativeElement.style.display = 'block';
       this.element.nativeElement.style.display = 'none';
-      this.authService.currentUser$.subscribe((user) => {
-        const selectedHealthGoalObject = healthGoals.find((goal) => 
-          goal.value === this.selectedHealthGoal
-        );
-        const title = "Sorry, we can't generate the meal plan.";
-        if (user) {
-          // User is logged in
-          const message =
-            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
-            selectedHealthGoalObject?.viewValue + '!<br> Without subscription, you can generate meal plan to lose weight only.';
-          this.openDialog(title, message, '/payment', 'Subscribe');
-        } else {
-          // User is not logged in
-          const message =
-            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.'
-          this.openDialog(title, message, '/login', 'Login');
-        }
-      });
+      const selectedHealthGoalObject = healthGoals.find(
+        (goal) => goal.value === this.selectedHealthGoal
+      );
+      const title = "Sorry, we can't generate the meal plan.";
+      if (localStorage.getItem('uid')) {
+        // User is logged in
+        const message =
+          'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
+          selectedHealthGoalObject?.viewValue +
+          '!<br> Without subscription, you can generate meal plan to lose weight only.';
+        this.openDialog(title, message, '/payment', 'Subscribe');
+      } else {
+        // User is not logged in
+        const message =
+          'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
+        this.openDialog(title, message, '/login', 'Login');
+      }
     }
   }
 
