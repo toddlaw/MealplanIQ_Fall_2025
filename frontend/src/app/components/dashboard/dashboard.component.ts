@@ -4,6 +4,7 @@ import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component'; 
 import { Overlay } from '@angular/cdk/overlay';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -88,8 +89,31 @@ export class DashboardComponent implements OnInit {
   }
 
   manageSubscription() {
-  const email = localStorage.getItem('email');
-  const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
-  window.location.href = url;
+    const subscription_type_id = localStorage.getItem('subscription_type_id');
+    if (subscription_type_id === '1' || subscription_type_id === '2') {
+      const email = localStorage.getItem('email');
+      const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+      window.location.href = url;
+    } else if (subscription_type_id === '3') {
+      this.openDialog(
+        "You're currently not subscribed.",
+        "<div class='text-center'>Interested in For-pay feature?<br>Click <strong>'Subscribe'</strong> to get started.</div>",
+        '/payment',
+        'Subscribe'
+      );
+    }
+  }
+
+  openDialog(title: string, message: string, redirectUrl: string, confirmLabel: string) {
+    const dialogRef = this.dialog.open(GeneratePopUpComponent, {
+      width: '500px',
+      data: { title, message, confirmLabel },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        window.location.href = redirectUrl;
+      }
+    });
   }
 }

@@ -7,6 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./generate-pop-up.component.css'],
 })
 export class GeneratePopUpComponent {
+  title: string;
   confirmLabel: string;
 
   constructor(
@@ -14,6 +15,7 @@ export class GeneratePopUpComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     console.log('Dialog data:', data);
+    this.title = data.title;
     this.confirmLabel = data.confirmLabel;
   }
 
