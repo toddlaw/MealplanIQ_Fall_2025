@@ -14,7 +14,6 @@ export class GeneratePopUpComponent {
     public dialogRef: MatDialogRef<GeneratePopUpComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    console.log('Dialog data:', data);
     this.title = data.title;
     this.confirmLabel = data.confirmLabel;
   }
