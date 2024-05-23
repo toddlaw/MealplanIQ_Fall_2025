@@ -58,10 +58,10 @@
                         </mat-card-content>
                         <mat-card-actions>
                             <div class="flex justify-end p-3">
-                                <a mat-raised-button 
-                                href="https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA"
+                                <button mat-raised-button 
+                                (click)="manageSubscription()"
                                 class="bg-secondary text-white hover:bg-primary"
-                                >Change Subscription</a>
+                                >Change Subscription</button>
                             </div>
                         </mat-card-actions>
 

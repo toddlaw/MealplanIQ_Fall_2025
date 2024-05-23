@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private overlay: Overlay) {}
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   openShoppingListDialog(): void {
@@ -85,5 +85,11 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
+  }
+
+  manageSubscription() {
+  const email = localStorage.getItem('email');
+  const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+  window.location.href = url;
   }
 }
