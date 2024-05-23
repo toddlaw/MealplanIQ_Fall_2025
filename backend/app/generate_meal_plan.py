@@ -10,6 +10,10 @@ from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
 from app.post_process import post_process_results
 
+# # test code
+# from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
+# from user_db.user_db import DatabaseManager
+
 
 def gen_meal_plan(data):
     """
@@ -75,6 +79,7 @@ def gen_meal_plan(data):
     difference = max_date - min_date
     days = difference.days + 1
 
+
     print("Difference in days:", days)
 
     if "nutrient" in diet_info["nutrients"]:
@@ -96,3 +101,9 @@ def gen_meal_plan(data):
     response = post_process_results(recipes_with_scores, optimized_results, min_date, days)
 
     return response
+
+
+# if __name__ == '__main__':
+#     db = DatabaseManager()
+#     test_input_data = create_data_input_for_auto_gen_meal_plan(db, 300)
+#     print(gen_meal_plan(test_input_data))
