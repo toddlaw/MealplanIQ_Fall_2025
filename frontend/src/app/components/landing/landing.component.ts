@@ -4,6 +4,7 @@ import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Router } from '@angular/router';
 import {
   units,
   activityLevels,
@@ -38,7 +39,7 @@ export class LandingComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   readonly MIN_PEOPLE = 1;
@@ -579,7 +580,7 @@ export class LandingComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        window.location.href = redirectUrl;
+        this.router.navigate([redirectUrl]);
       }
     });
   }
