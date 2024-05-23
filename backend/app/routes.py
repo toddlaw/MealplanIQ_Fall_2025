@@ -43,8 +43,8 @@ def page_not_found(e):
 
 @app.route('/schedule-email', methods=['GET'])
 def schedule_email():
-    # if request.headers.get('X-Appengine-Cron') != 'true':
-    #     return 'Unauthorized', 403
+    if request.headers.get('X-Appengine-Cron') != 'true':
+        return 'Unauthorized', 403
     db = instantiate_database()
     send_weekly_email_by_google_scheduler(db)
 
