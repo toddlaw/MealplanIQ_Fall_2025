@@ -2,7 +2,7 @@ from app import app
 from flask import redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan
-from app.payment_stripe import create_subscription, cancel_subscription, handle_checkout_session_completed
+from app.payment_stripe import handle_checkout_session_completed, handle_subscription_deleted, handle_subscription_updated
 from app.manage_user_data import *
 from app.send_email import create_and_send_maizzle_email, create_and_send_maizzle_email, scheduled_email_test, email_by_generation_button, send_weekly_email_by_google_scheduler
 from user_db.user_db import instantiate_database
@@ -47,19 +47,6 @@ def schedule_email():
         return 'Unauthorized', 403
     db = instantiate_database()
     send_weekly_email_by_google_scheduler(db)
-
-
-@app.route('/create-subscription', methods=['POST'])
-def handle_create_charge():
-    email = request.json.get('email')
-    token = request.json.get('token')
-    plan_type = request.json.get('plan_type')
-    return create_subscription(email, token, plan_type)
-
-@app.route('/cancel-subscription', methods=['POST'])
-def handle_cancel_subscription():
-    subscription_id = request.json.get('subscription_id')
-    return cancel_subscription(subscription_id)
 
 @app.route('/signup', methods=['POST'])
 def handle_signup():
@@ -133,14 +120,22 @@ def webhook():
         session = event['data']['object']
         user_id = session['client_reference_id']
         return handle_checkout_session_completed(session, user_id)
+    elif event['type'] == 'customer.subscription.updated': 
+        subscription = event['data']['object']
+        return handle_subscription_updated(subscription)
+    elif event['type'] == 'customer.subscription.deleted': 
+        subscription = event['data']['object']
+        return handle_subscription_deleted(subscription)
     else:
         print('Unhandled event type {}'.format(event['type']))
         return jsonify(success=True), 200
-
-@app.route('/get_subscription_type', methods=['POST'])
-def get_subscription_type():
+    
+@app.route('/get_subscription_type_id', methods=['POST'])
+def get_subscription_type_id():
     data = request.json
-    user_id = data.get('user_id')
+    params = data.get('params')
+    user_id = params.get('user_id')
+    
     db = instantiate_database()
     cursor = db.db.cursor()
     query = "SELECT subscription_type_id FROM user_subscription WHERE user_id = %s"
@@ -151,3 +146,4 @@ def get_subscription_type():
         return jsonify({'subscription_type_id': subscription_type_id})
     else:
         return jsonify({'error': 'User not found'}), 404
+    
