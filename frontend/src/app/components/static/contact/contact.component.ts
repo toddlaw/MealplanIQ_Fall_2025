@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validator, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { ContactService } from './contact.service'
 
 @Component({
   selector: 'app-contact',
@@ -18,7 +18,7 @@ export class ContactComponent implements OnInit {
     {'value': 'other', 'subject': 'Other'},
   ]
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private contactService: ContactService) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required], 
       email: ['', [Validators.required, Validators.email]], 
@@ -27,13 +27,16 @@ export class ContactComponent implements OnInit {
     })
    }
 
-   onSubmit() {
+   onSubmit(): void {
     if (this.contactForm.valid){
-      console.log('Form submitted', this.contactForm.value);
-      //
-    } else {
-    console.log('unsucessful');
-   }
+      this.contactService.sendEmail(this.contactForm.value).subscribe(
+        response => {
+          alert('Form submitted')
+        }, error => {
+          console.error('Error Sending email', error)
+        }
+      );
+    }
   }
   
   ngOnInit(): void {
