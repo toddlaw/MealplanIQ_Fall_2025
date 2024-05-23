@@ -20,7 +20,7 @@ import { HotToastModule } from '@ngneat/hot-toast';
 import { LandingComponent } from './components/landing/landing.component';
 import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent } from './components/profile_delete/profile.component';
 // import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
@@ -39,7 +39,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AboutComponent } from './components/static/about/about.component';
 import { ContactComponent } from './components/static/contact/contact.component';
-import { SplashComponent } from './components/splash/splash.component';
 import { PaymentComponent } from './components/payment/payment.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
@@ -49,6 +48,7 @@ import { PrivacyComponent } from './components/static/privacy/privacy.component'
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +61,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     TermsAndConditionsComponent,
     AboutComponent,
     ContactComponent,
-    SplashComponent,
     ShoppingListComponent,
     PaymentComponent,
     FooterComponent,
@@ -69,6 +68,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     OpportunityComponent,
     TosComponent,
     DashboardComponent,
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,
