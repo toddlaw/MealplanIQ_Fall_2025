@@ -14,7 +14,6 @@ import {
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
-import { ProfileComponent } from './components/profile_delete/profile.component';
 import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
