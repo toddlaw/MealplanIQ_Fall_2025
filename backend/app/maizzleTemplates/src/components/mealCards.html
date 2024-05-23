@@ -15,7 +15,7 @@
                 <each loop="recipe in dailyPlan.recipes">
                   <td
                     class="pl-8 sm:px-0 pb-4 sm:w-full inline-block align-top"
-                    style="width: 44%"
+                    style="width: 44%; vertical-align: top"
                   >
                     <!-- this is the start of the recipe card -->
 
@@ -47,16 +47,19 @@
                               -webkit-box-orient: vertical;
                               overflow: hidden;
                               text-overflow: ellipsis;
-                              line-height: 1rem;
+                              line-height: 1.5rem;
                             "
                           >
                             {{ recipe.title }}
                           </h3>
-                          <p class="text-sm/0 text-text-light mb-2">
+                          <p
+                            class="text-sm/0 text-text-light mb-2"
+                            style="margin-top: -5px"
+                          >
                             {{ recipe.meal_name }}
                           </p>
                           <p class="text-base/3 mt-7">
-                            Energy: {{ recipe.nutrition.calories }} calories
+                            Energy: {{ recipe.calories }} calories
                           </p>
                           <p class="text-base/3">
                             Cuisine: {{ recipe.region }}
