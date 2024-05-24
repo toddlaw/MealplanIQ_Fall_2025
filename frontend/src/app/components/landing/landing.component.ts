@@ -149,32 +149,34 @@ export class LandingComponent implements OnInit {
     //
     // console.log('stored data:', storedData);
 
-    if (localStorage.getItem('uid')) {
-      this.http
-        .post('http://127.0.0.1:5000/get_subscription_type_id', {
-          params: { user_id: localStorage.getItem('uid') },
-        })
-        .subscribe(
-          (response: any) => {
-            if (response.subscription_type_id) {
-              localStorage.setItem(
-                'subscription_type_id',
-                response.subscription_type_id
-              );
-              this.userSubscriptionTypeId = response.subscription_type_id;
-              console.log(
-                'subscription type ID:' + this.userSubscriptionTypeId
-              );
-            }
-          },
-          (error) => {
-            console.error('Error:', error);
-          }
-        );
-    } else {
-      this.userSubscriptionTypeId = 0;
-      console.log('subscription type ID:' + this.userSubscriptionTypeId);
-    }
+    this.userSubscriptionTypeId = 3;
+
+    // if (localStorage.getItem('uid')) {
+    //   this.http
+    //     .post('http://127.0.0.1:5000/get_subscription_type_id', {
+    //       params: { user_id: localStorage.getItem('uid') },
+    //     })
+    //     .subscribe(
+    //       (response: any) => {
+    //         if (response.subscription_type_id) {
+    //           localStorage.setItem(
+    //             'subscription_type_id',
+    //             response.subscription_type_id
+    //           );
+    //           this.userSubscriptionTypeId = response.subscription_type_id;
+    //           console.log(
+    //             'subscription type ID:' + this.userSubscriptionTypeId
+    //           );
+    //         }
+    //       },
+    //       (error) => {
+    //         console.error('Error:', error);
+    //       }
+    //     );
+    // } else {
+    //   this.userSubscriptionTypeId = 0;
+    //   console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    // }
   }
 
   /**
@@ -274,6 +276,7 @@ export class LandingComponent implements OnInit {
         })
         .subscribe(
           (response) => {
+            console.log(response);
             this.element.nativeElement.style.display = 'none';
             this.errorDiv.nativeElement.style.display = 'none';
             this.showSpinner = false;
@@ -572,7 +575,12 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  openDialog(title: string, message: string, redirectUrl: string, confirmLabel: string) {
+  openDialog(
+    title: string,
+    message: string,
+    redirectUrl: string,
+    confirmLabel: string
+  ) {
     const dialogRef = this.dialog.open(GeneratePopUpComponent, {
       width: '500px',
       data: { title, message, confirmLabel },

@@ -69,12 +69,13 @@ def distribute_snacks_to_date(response):
             snack_index += 1
 
     # Distribute the remainder in a way that minimizes consecutive days without snacks
-    interval = days_len // remainder
-    for i in range(remainder):
-        response["days"][i * interval]["recipes"].append(
-            response["snacks"][snack_index]
-        )
-        snack_index += 1
+    if remainder > 0:
+        interval = days_len // remainder
+        for i in range(remainder):
+            response["days"][i * interval]["recipes"].append(
+                response["snacks"][snack_index]
+            )
+            snack_index += 1
 
     return response
 
@@ -217,7 +218,6 @@ def gen_meal_plan(data):
     # Calculating the difference in days
     difference = max_date - min_date
     days = difference.days + 1
-
 
     print("Difference in days:", days)
 
