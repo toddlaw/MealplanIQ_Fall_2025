@@ -84,6 +84,7 @@ export class SignUpComponent implements OnInit {
       next: (userCredential) => {
         console.log(userCredential);
         localStorage.setItem('uid', userCredential.user.uid);
+        localStorage.setItem('email', email);
         const data = {
           user_id: userCredential.user.uid,
           user_name: name,

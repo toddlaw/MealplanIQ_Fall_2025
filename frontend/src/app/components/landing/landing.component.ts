@@ -126,6 +126,8 @@ export class LandingComponent implements OnInit {
   snackExpandedStates: boolean[] = [];
 
   ngOnInit(): void {
+    console.log('user ID: ' + localStorage.getItem('uid'));
+    console.log('email: ' + localStorage.getItem('email'));
     // Retrieve data from local storage to pre-fill the form
     // const storedData = JSON.parse(localStorage.getItem('data') || '{}');
     // if (Object.keys(storedData).length !== 0) {

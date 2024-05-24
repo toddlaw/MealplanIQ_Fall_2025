@@ -91,8 +91,9 @@ export class DashboardComponent implements OnInit {
 
   manageSubscription() {
     const subscription_type_id = localStorage.getItem('subscription_type_id');
+    const email = localStorage.getItem('email');
+    
     if (subscription_type_id === '1' || subscription_type_id === '2') {
-      const email = localStorage.getItem('email');
       const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
       window.location.href = url;
     } else if (subscription_type_id === '3') {

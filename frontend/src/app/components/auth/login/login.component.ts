@@ -55,10 +55,11 @@ export class LoginComponent implements OnInit {
       .subscribe((userCredential) => {
         const { user } = userCredential; // Extracting user information from UserCredential
         if (user) {
-          localStorage.setItem('email', email);
+          localStorage.setItem('email', user.email);
           localStorage.setItem('uid', user.uid);
           const data = {
             user_id: user.uid,
+            user_email: user.email,
           };
           // this.http.post('http://127.0.0.1:5000/login', data).subscribe({
           //   next: (response) => {
