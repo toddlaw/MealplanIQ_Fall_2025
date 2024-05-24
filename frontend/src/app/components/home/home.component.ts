@@ -72,9 +72,9 @@ export class HomeComponent implements OnInit {
   selectedActivityLevel: string = '';
   activityLevels: activityLevel[] = [
     { value: 'Sedentary', viewValue: 'Sedentary' },
-    { value: 'Low_Active', viewValue: 'Lightly Active' },
-    { value: 'Active', viewValue: 'Moderately Active' },
-    { value: 'Very_Active', viewValue: 'Very Active' },
+    { value: 'Low_Active', viewValue: 'Light' },
+    { value: 'Active', viewValue: 'Moderate' },
+    { value: 'Very_Active', viewValue: 'Heavy' },
   ];
   selectedGender: string = '';
   genders: gender[] = [

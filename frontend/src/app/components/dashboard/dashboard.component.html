@@ -33,7 +33,16 @@
                             <ng-container *ngFor="let info of Profile_info">
                                 <mat-form-field appearance="fill" class="w-full">
                                     <mat-label>{{ info.name }}</mat-label>
-                                    <input matInput [placeholder]="info.placeholder" name="{{ info.type }}">
+                                    <input *ngIf="!info.options; else select" matInput [placeholder]="info.placeholder" name="{{ info.type }}"
+                                        [(ngModel)]="info.value" [readonly]="info.readonly">
+                                    <span *ngIf="info.type === 'weight' || info.type === 'height'" matSuffix>{{ getSuffix(info.type) }}</span>
+                                    <ng-template #select>
+                                        <mat-select [placeholder]="info.placeholder" name="{{ info.type }}" [(ngModel)]="info.value">
+                                            <mat-option *ngFor="let option of info.options" [value]="option.value">
+                                                {{ option.viewValue }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </ng-template>
                                 </mat-form-field>
                             </ng-container>
                             <div class="flex justify-end mt-5">

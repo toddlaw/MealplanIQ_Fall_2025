@@ -4,28 +4,74 @@ import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component'; 
 import { Overlay } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
+import { activityLevels, genders } from '../landing/form-values';
+import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-
 export class DashboardComponent implements OnInit {
   user: any;
+  selected_unit: string = '';
 
   Profile_info = [
-    {'name': 'First Name', 'placeholder': 'Enter your first name', 'type': 'firstName', 'error': ''},
-    {'name': 'Last Name', 'placeholder': 'Enter your last name', 'type': 'lastName', 'error': ''},
-    {'name': 'Email', 'placeholder': 'Enter your email', 'type': 'email', 'error': ''},
-    {'name': 'Phone', 'placeholder': 'Enter your phone', 'type': 'phone', 'error': ''},
-    {'name': 'Address', 'placeholder': 'Enter your address', 'type': 'address', 'error': ''},
-    {'name': 'Age', 'placeholder': 'Enter your age', 'type': 'age', 'error': ''},
-    {'name': 'Height', 'placeholder': 'Enter your height', 'type': 'height', 'error': ''},
-    {'name': 'Weight', 'placeholder': 'Enter your weight', 'type': 'weight', 'error': ''},
-  ]
+    {
+      name: 'Name',
+      placeholder: 'Enter your name',
+      type: 'user_name',
+      error: '',
+      value: '',
+    },
+    {
+      name: 'Email',
+      placeholder: 'Enter your email',
+      type: 'email',
+      error: '',
+      value: '',
+      readonly: true,
+    },
+    {
+      name: 'Age',
+      placeholder: 'Enter your age',
+      type: 'age',
+      error: '',
+      value: '',
+    },
+    {
+      name: 'Gender',
+      placeholder: 'Select your gender',
+      type: 'gender',
+      error: '',
+      value: '',
+      options: genders,
+    },
+    {
+      name: 'Height',
+      placeholder: 'Enter your height',
+      type: 'height',
+      error: '',
+      value: '',
+    },
+    {
+      name: 'Weight',
+      placeholder: 'Enter your weight',
+      type: 'weight',
+      error: '',
+      value: '',
+    },
+    {
+      name: 'Activity Level',
+      placeholder: 'Select your activity level',
+      type: 'activity_level',
+      error: '',
+      value: '',
+      options: activityLevels,
+    },
+  ];
 
   shoppingListData: ShoppingList[] = [
     {
@@ -63,9 +109,46 @@ export class DashboardComponent implements OnInit {
     // Add more shopping list data items as needed
   ];
 
-  constructor(public dialog: MatDialog, private overlay: Overlay, private router: Router) {}
+  constructor(
+    public dialog: MatDialog,
+    private overlay: Overlay,
+    private router: Router,
+    private http: HttpClient
+  ) {}
+
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+    this.http
+      .get(
+        'http://127.0.0.1:5000/api/landing/profile/' +
+          localStorage.getItem('uid')
+      )
+      .subscribe((data: any) => {
+        console.log(data);
+        this.prefillProfileInfo(data);
+        this.user = data;
+        this.selected_unit = this.user.selected_unit;
+        console.log('Selected unit:', this.selected_unit);
+        console.log('This.users unit: ', this.user.selected_unit);
+      });
+  }
+
+  prefillProfileInfo(data: any) {
+    this.Profile_info = this.Profile_info.map((info) => {
+      if (data[info.type]) {
+        return { ...info, value: data[info.type] };
+      }
+      return info;
+    });
+    console.log('Profile_info', this.Profile_info);
+  }
+
+  getSuffix(type: string): string {
+    if (type === 'weight') {
+      return this.selected_unit === 'metric' ? 'kg' : 'lbs';
+    } else if (type === 'height') {
+      return this.selected_unit === 'metric' ? 'cm' : 'in';
+    }
+    return '';
   }
 
   openShoppingListDialog(): void {
@@ -92,9 +175,11 @@ export class DashboardComponent implements OnInit {
   manageSubscription() {
     const subscription_type_id = localStorage.getItem('subscription_type_id');
     const email = localStorage.getItem('email');
-    
+
     if (subscription_type_id === '1' || subscription_type_id === '2') {
-      const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+      const url =
+        'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
+        email;
       window.location.href = url;
     } else if (subscription_type_id === '3') {
       this.openDialog(
@@ -106,7 +191,12 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  openDialog(title: string, message: string, redirectUrl: string, confirmLabel: string) {
+  openDialog(
+    title: string,
+    message: string,
+    redirectUrl: string,
+    confirmLabel: string
+  ) {
     const dialogRef = this.dialog.open(GeneratePopUpComponent, {
       width: '500px',
       data: { title, message, confirmLabel },

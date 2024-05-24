@@ -774,7 +774,7 @@ class DatabaseManager:
         
     def get_user_landing_page_profile(self, user_id):
         cursor = self.db.cursor()
-        sql = "SELECT user_name, email, age, height, weight, activity_level FROM user_profile WHERE user_id = %s"
+        sql = "SELECT user_name, email, age, height, weight, activity_level, gender, selected_unit FROM user_profile WHERE user_id = %s"
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
         
@@ -785,7 +785,9 @@ class DatabaseManager:
                 "age": result[2],
                 "height": result[3],
                 "weight": result[4],
-                "activity_level": result[5]
+                "activity_level": result[5],
+                "gender": result[6],
+                "selected_unit": result[7]
             }
             user_profile_json = json.dumps(user_profile)
             return user_profile_json
