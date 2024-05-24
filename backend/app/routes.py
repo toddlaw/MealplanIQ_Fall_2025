@@ -96,6 +96,7 @@ def receive_data():
     except Exception as e:
         response = {'error': str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
+    print(response)
         
     email_sent_time = create_and_send_maizzle_email(db, user_id, data)
     # scheduled_email_test(email_sent_time, db, user_id)
