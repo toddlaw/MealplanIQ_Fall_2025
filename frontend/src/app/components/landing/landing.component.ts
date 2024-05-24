@@ -128,36 +128,13 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
     console.log('user ID: ' + localStorage.getItem('uid'));
     console.log('email: ' + localStorage.getItem('email'));
-    // Retrieve data from local storage to pre-fill the form
-    // const storedData = JSON.parse(localStorage.getItem('data') || '{}');
-    // if (Object.keys(storedData).length !== 0) {
-    //   this.people = storedData.people || this.people;
-    //   this.selectedUnit = storedData.selectedUnit || this.selectedUnit;
-    //   this.selectedDietaryConstraint =
-    //     storedData.dietaryConstraint || this.selectedDietaryConstraint;
-    //   this.selectedHealthGoal =
-    //     storedData.healthGoal || this.selectedHealthGoal;
-    //   this.selectedReligiousConstraint =
-    //     storedData.religiousConstraint || this.selectedReligiousConstraint;
-    //   this.likedFoods.setValue(storedData.likedFoods || []);
-    //   this.dislikedFoods.setValue(storedData.dislikedFoods || []);
-    //   this.cuisines.setValue(storedData.favouriteCuisines || []);
-    //   this.allergies.setValue(storedData.allergies || []);
-    //   this.snacks.setValue(storedData.snacks || []);
-    //   this.breakfasts.setValue(storedData.breakfasts || []);
-    //   this.includedRecipes = storedData.includedRecipes || [];
-    //   this.excludedRecipes = storedData.excludedRecipes || [];
-    // }
-    //
-    // console.log('stored data:', storedData);
-
-    // this.userSubscriptionTypeId = 3;
 
     if (localStorage.getItem('uid')) {
       this.http
-        .post('http://127.0.0.1:5000/get_subscription_type_id', {
-          params: { user_id: localStorage.getItem('uid') },
-        })
+        .get(
+          'http://127.0.0.1:5000/api/subscription_type_id/' +
+            localStorage.getItem('uid')
+        )
         .subscribe(
           (response: any) => {
             if (response.subscription_type_id) {
@@ -178,6 +155,23 @@ export class LandingComponent implements OnInit {
     } else {
       this.userSubscriptionTypeId = 0;
       console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    }
+
+    // prefill the profile info for logged in user
+    if (localStorage.getItem('uid')) {
+      this.http
+        .get(
+          'http://127.0.0.1:5000/api/landing/profile/' +
+            localStorage.getItem('uid')
+        )
+        .subscribe((data: any) => {
+          this.people[0].age = data.age;
+          this.people[0].weight = data.weight;
+          this.people[0].height = data.height;
+          this.people[0].gender = data.gender;
+          this.people[0].activityLevel = data.activity_level;
+          this.selectedUnit = data.selected_unit;
+        });
     }
   }
 
@@ -246,11 +240,6 @@ export class LandingComponent implements OnInit {
       includedRecipes: this.includedRecipes,
       excludedRecipes: this.excludedRecipes,
     };
-
-    // Store data to local storage
-    if (localStorage.getItem('uid')) {
-      localStorage.setItem('data', JSON.stringify(data));
-    }
 
     // if (!data.maxDate && data.minDate) {
     //   data.maxDate = data.minDate;

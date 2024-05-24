@@ -2,7 +2,7 @@
     <div class="flex-grow">
         <section class="px-5 md:px-10"> 
             <mat-card class="mt-5">
-                <p class="text-3xl p-3">Welcome <b>[User]</b>,</p>
+                <p class="text-3xl p-3">Welcome <b>{{ userName }}</b>,</p>
                 <div class="flex justify-center p-5 ml-5">
                     <img src="assets/images/image-placeholder.png" 
                         height="150px" 
@@ -59,18 +59,22 @@
                             <mat-card-title>Subscription</mat-card-title>
                             <mat-card-subtitle>Manage your subscription.</mat-card-subtitle>
                         </mat-card-header>
-                        <mat-card-content>
-                            <p>You are currently subscribing: <b>[subscription Tier]</b></p>
+                        <ng-container *ngIf="hasSubscription; else noSubscription">
+                            <p>You are currently subscribing <b>{{ subscriptionType }}</b></p>
                             <p>Your benefits includes:</p>
-                                <li>[benefit 1]</li>
-                                <li>[benefit 2]</li>
-                        </mat-card-content>
+                            <li>[benefit 1]</li>
+                            <li>[benefit 2]</li>
+                        </ng-container>
+                        <ng-template #noSubscription>
+                            <p>By subscribing, personalize your plan to combat cancer, heart disease, or diabetes with meal plans crafted by a registered dietitian.
+                            <p>Enjoy delicious recipes tailored to your needs, delivered straight to your inbox.</p>
+                        </ng-template>
                         <mat-card-actions>
                             <div class="flex justify-end p-3">
                                 <button mat-raised-button 
                                 (click)="manageSubscription()"
                                 class="bg-secondary text-white hover:bg-primary"
-                                >Change Subscription</button>
+                                >Manage Subscription</button>
                             </div>
                         </mat-card-actions>
 

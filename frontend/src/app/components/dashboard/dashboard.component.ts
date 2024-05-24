@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
-import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component'; 
+import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { activityLevels, genders } from '../landing/form-values';
@@ -16,7 +16,10 @@ import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-po
 })
 export class DashboardComponent implements OnInit {
   user: any;
+  userName: string = '';
   selected_unit: string = '';
+  subscriptionType: string = '';
+  hasSubscription: boolean = false;
 
   Profile_info = [
     {
@@ -116,20 +119,24 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient
   ) {}
 
-  ngOnInit(): void {
-    this.http
-      .get(
-        'http://127.0.0.1:5000/api/landing/profile/' +
-          localStorage.getItem('uid')
-      )
-      .subscribe((data: any) => {
-        console.log(data);
-        this.prefillProfileInfo(data);
-        this.user = data;
-        this.selected_unit = this.user.selected_unit;
-        console.log('Selected unit:', this.selected_unit);
-        console.log('This.users unit: ', this.user.selected_unit);
-      });
+  async ngOnInit(): Promise<void> {
+    this.showSubscriptionStatus();
+    try {
+      const data: any = await this.http
+        .get(
+          'http://127.0.0.1:5000/api/landing/profile/' +
+            localStorage.getItem('uid')
+        )
+        .toPromise();
+
+      console.log(data);
+      this.user = data;
+      this.prefillProfileInfo(this.user);
+      this.userName = this.user.user_name;
+      this.selected_unit = this.user.selected_unit;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   prefillProfileInfo(data: any) {
@@ -139,7 +146,6 @@ export class DashboardComponent implements OnInit {
       }
       return info;
     });
-    console.log('Profile_info', this.Profile_info);
   }
 
   getSuffix(type: string): string {
@@ -173,9 +179,8 @@ export class DashboardComponent implements OnInit {
   }
 
   manageSubscription() {
-    const subscription_type_id = localStorage.getItem('subscription_type_id');
     const email = localStorage.getItem('email');
-
+    const subscription_type_id = localStorage.getItem('subscription_type_id');
     if (subscription_type_id === '1' || subscription_type_id === '2') {
       const url =
         'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
@@ -207,5 +212,15 @@ export class DashboardComponent implements OnInit {
         this.router.navigate([redirectUrl]);
       }
     });
+  }
+
+  showSubscriptionStatus(): void {
+    const subscriptionTypeId = localStorage.getItem('subscription_type_id');
+    if (subscriptionTypeId === '1' || subscriptionTypeId === '2') {
+      this.subscriptionType = subscriptionTypeId === '1' ? 'monthly' : 'yearly';
+      this.hasSubscription = true;
+    } else if (subscriptionTypeId === '3') {
+      this.hasSubscription = false;
+    }
   }
 }

@@ -73,47 +73,50 @@ export class SignUpComponent implements OnInit {
     return this.signUpForm.get('name');
   }
 
-  submit() {
+  async submit() {
     const { name, email, password } = this.signUpForm.value;
 
     if (!this.signUpForm.valid || !name || !password || !email) {
       return;
     }
 
-    this.authService.signUp(email, password).subscribe({
-      next: (userCredential) => {
-        console.log(userCredential);
+    try {
+      const userCredential = await this.authService
+        .signUp(email, password)
+        .toPromise();
+      console.log(userCredential);
+      if (userCredential && userCredential.user) {
         localStorage.setItem('uid', userCredential.user.uid);
         localStorage.setItem('email', email);
-        const data = {
-          user_id: userCredential.user.uid,
-          user_name: name,
-          email: email,
-        };
+      }
 
-        // const data2 = {
-        //   user_id: userCredential.user.uid 
-        // }
-        this.http.post('http://127.0.0.1:5000/signup', data).subscribe({
-          next: (response) => {
-            console.log(response);
-            this.toast.observe({
-              success: 'Congrats! You are all signed up',
-              error: `Error: an error occurs during login`,
-            }); // Show success toast
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-        this.router.navigate(['/dashboard']);
-      },
-      error: (Error) => {
-        this.toast.error(`Error: ${Error.message}`); // Show error toast
-        console.error(Error);
-      },
-    });
+      const data = {
+        user_id: userCredential?.user?.uid,
+        user_name: name,
+        email: email,
+      };
+
+      try {
+        const response = await this.http
+          .post('http://127.0.0.1:5000/signup', data)
+          .toPromise();
+        console.log(response);
+        this.toast.observe({
+          success: 'Congrats! You are all signed up',
+          error: `Error: an error occurs during login`,
+        }); // Show success toast
+      } catch (error) {
+        console.error(error);
+      }
+
+      this.router.navigate(['/']);
+    } catch (Error) {
+      const error = Error as Error;
+      this.toast.error(`Error: ${error.message}`); // Show error toast
+      console.error(error);
+    }
   }
+
   showPassword = false;
 
   togglePasswordVisibility(event: Event) {
