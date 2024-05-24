@@ -90,14 +90,9 @@ export class SignUpComponent implements OnInit {
           email: email,
         };
 
-        const data2 = {
-          user_id: userCredential.user.uid 
-        }
-        this.http.post('http://127.0.0.1:5000/get_subscription_type_id', { params: data2 }).subscribe({
-          next: (response) => {
-            console.log(response);
-          }
-        });
+        // const data2 = {
+        //   user_id: userCredential.user.uid 
+        // }
         this.http.post('http://127.0.0.1:5000/signup', data).subscribe({
           next: (response) => {
             console.log(response);
@@ -110,7 +105,7 @@ export class SignUpComponent implements OnInit {
             console.error(error);
           },
         });
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       },
       error: (Error) => {
         this.toast.error(`Error: ${Error.message}`); // Show error toast

@@ -65,17 +65,7 @@ export class LoginComponent implements OnInit {
           //     console.log(response);
           //   },
           // });
-
-          this.http
-            .post('http://127.0.0.1:5000/get_subscription_type_id ', {
-              params: data,
-            })
-            .subscribe({
-              next: (response) => {
-                console.log(response);
-              },
-            });
-
+          
           this.router.navigate(['/dashboard']);
         } else {
           console.error('User is null');

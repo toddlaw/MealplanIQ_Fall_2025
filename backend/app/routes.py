@@ -55,8 +55,13 @@ def handle_signup():
     user_name = data.get('user_name')
     email = data.get('email')
     db = instantiate_database()
-    result = db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
-    return result
+    try:
+        result = db.insert_user_and_set_default_subscription_signup(user_id, user_name, email)
+        return result
+    except Exception as e:
+        print(f"Failed to insert user: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/profile/<user_id>')
 def get_user_profile(user_id):
@@ -143,7 +148,9 @@ def get_subscription_type_id():
     result = cursor.fetchone()
     if result:
         subscription_type_id = result[0]
+        print(f"Found subscription_type_id: {subscription_type_id} for user_id: {user_id}")
         return jsonify({'subscription_type_id': subscription_type_id})
     else:
+        print(f"No subscription_type_id found for user_id: {user_id}")
         return jsonify({'error': 'User not found'}), 404
     
