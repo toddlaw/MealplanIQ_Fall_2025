@@ -3,6 +3,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component'; 
 import { Overlay } from '@angular/cdk/overlay';
+import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
@@ -62,7 +63,7 @@ export class DashboardComponent implements OnInit {
     // Add more shopping list data items as needed
   ];
 
-  constructor(public dialog: MatDialog, private overlay: Overlay) {}
+  constructor(public dialog: MatDialog, private overlay: Overlay, private router: Router) {}
   ngOnInit(): void {
     // throw new Error('Method not implemented.');
   }
@@ -112,7 +113,7 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        window.location.href = redirectUrl;
+        this.router.navigate([redirectUrl]);
       }
     });
   }
