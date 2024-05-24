@@ -465,7 +465,7 @@
   </div>
 
   <!-- response ui starts here -->
-  <div class="container py-5 px-20">
+  <div class="container py-5 px-10">
     <div *ngIf="!this.isEmpty(mealPlanResponse)">
       <p class="text-2xl text-center" *ngIf="searchClicked">
         ④ Want to change this plan? <br />
@@ -641,10 +641,25 @@
         <br />
         <br />
         <div>
-          <table mat-table [dataSource]="mealPlanResponse.tableData">
+          <table
+            mat-table
+            [dataSource]="mealPlanResponse.tableData"
+            class="w-full text-sm shadow-sm rounded text-center"
+            align="center"
+          >
             <ng-container matColumnDef="nutrientName">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="bg-primary-light text-left"
+                style="padding-left: 12px"
+              ></th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                class="text-left"
+                style="padding-left: 12px"
+              >
                 <!-- Turn "Vitamin a" "Vitamin A" -->
                 {{
                   element.nutrientName.includes("vitamin")
@@ -656,13 +671,46 @@
             </ng-container>
 
             <ng-container matColumnDef="target">
-              <th mat-header-cell *matHeaderCellDef>Target</th>
-              <td mat-cell *matCellDef="let element">{{ element.target }}</td>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="bg-primary-light text-center"
+                style="text-align: center"
+              >
+                Target
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <p
+                  class="inline-block text-text-info font-semibold rounded text-sm"
+                  style="margin: 0; display: inline-block"
+                >
+                  {{ element.target }}
+                </p>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="actual">
-              <th mat-header-cell *matHeaderCellDef>Your Meal Plan</th>
-              <td mat-cell *matCellDef="let element">{{ element.actual }}</td>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="bg-primary-light text-center"
+                style="text-align: center"
+                style="padding-right: 12px"
+              >
+                Your Meal Plan
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                style="padding-right: 12px"
+              >
+                <p
+                  class="inline-block text-text-success font-semibold rounded text-sm"
+                  style="margin: 0; display: inline-block"
+                >
+                  {{ element.actual }}
+                </p>
+              </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
