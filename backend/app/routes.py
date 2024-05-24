@@ -7,6 +7,7 @@ from app.manage_user_data import *
 from app.send_email import create_and_send_maizzle_email, create_and_send_maizzle_email, scheduled_email_test, email_by_generation_button, send_weekly_email_by_google_scheduler
 from user_db.user_db import instantiate_database
 import stripe
+import os
 
 # Enable CORS for all domains on all routes
 CORS(app)
@@ -100,41 +101,6 @@ def receive_data():
     # scheduled_email_test(email_sent_time, db, user_id)
     return jsonify(response)
 
-endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
-
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    event = None
-    payload = request.data
-    sig_header = request.headers['STRIPE_SIGNATURE']
-
-    try:
-        event = stripe.Webhook.construct_event(
-            # change endpoint_secret to os.getenv('STRIPE_WEBHOOK_SECRET') when live mode
-            payload, sig_header, endpoint_secret
-        )
-    except ValueError as e:
-        print("ValueError: ", e)
-        return jsonify(error='Invalid payload'), 400
-    except stripe.error.SignatureVerificationError as e:
-        print("SignatureVerificationError: ", e)
-        return jsonify(error='Invalid signature'), 400
-
-    # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        user_id = session['client_reference_id']
-        return handle_checkout_session_completed(session, user_id)
-    elif event['type'] == 'customer.subscription.updated': 
-        subscription = event['data']['object']
-        return handle_subscription_updated(subscription)
-    elif event['type'] == 'customer.subscription.deleted': 
-        subscription = event['data']['object']
-        return handle_subscription_deleted(subscription)
-    else:
-        print('Unhandled event type {}'.format(event['type']))
-        return jsonify(success=True), 200
-    
 @app.route('/api/subscription_type_id/<user_id>')
 def get_subscription_type_id(user_id):
     db = instantiate_database()
@@ -150,3 +116,43 @@ def get_subscription_type_id(user_id):
         print(f"No subscription_type_id found for user_id: {user_id}")
         return jsonify({'error': 'User not found'}), 404
     
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    print("In webhook")
+    endpoint_secret = 'whsec_d50a558aab0b7d6b048b21ec26aaf7aceeb99959c40d60d08d5973b76d6db560'
+    # webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+    
+    event = None
+    payload = request.data
+    sig_header = request.headers.get('STRIPE_SIGNATURE')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            # Use webhook_secret instead of endpoint_secret for deployment
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        print("ValueError: ", e)
+        return jsonify(error='Invalid payload'), 400
+    except stripe.error.SignatureVerificationError as e:
+        print("SignatureVerificationError: ", e)
+        return jsonify(error='Invalid signature'), 400
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        user_id = session.get('client_reference_id')
+        print("checkout.session.completed event received")
+        return handle_checkout_session_completed(session, user_id)
+    elif event['type'] == 'customer.subscription.updated': 
+        subscription = event['data']['object']
+        print("customer.subscription.updated event received")
+        return handle_subscription_updated(subscription)
+    elif event['type'] == 'customer.subscription.deleted': 
+        subscription = event['data']['object']
+        print("customer.subscription.deleted event received")
+        return handle_subscription_deleted(subscription)
+    else:
+        print('Unhandled event type {}'.format(event['type']))
+        return jsonify(success=True), 200
