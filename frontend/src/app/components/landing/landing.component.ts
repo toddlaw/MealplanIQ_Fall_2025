@@ -129,29 +129,31 @@ export class LandingComponent implements OnInit {
     console.log('user ID: ' + localStorage.getItem('uid'));
     console.log('email: ' + localStorage.getItem('email'));
 
-    if (localStorage.getItem('uid')) {
-      try {
-        const response: any = await this.http
-          .get(
-            'http://127.0.0.1:5000/api/subscription_type_id/' +
-              localStorage.getItem('uid')
-          )
-          .toPromise();
-        if (response.subscription_type_id) {
-          localStorage.setItem(
-            'subscription_type_id',
-            response.subscription_type_id
-          );
-          this.userSubscriptionTypeId = response.subscription_type_id;
-          console.log('subscription type ID:' + this.userSubscriptionTypeId);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    } else {
-      this.userSubscriptionTypeId = 0;
-      console.log('subscription type ID:' + this.userSubscriptionTypeId);
-    }
+    this.userSubscriptionTypeId = 3;
+
+    // if (localStorage.getItem('uid')) {
+    //   try {
+    //     const response: any = await this.http
+    //       .get(
+    //         'http://127.0.0.1:5000/api/subscription_type_id/' +
+    //           localStorage.getItem('uid')
+    //       )
+    //       .toPromise();
+    //     if (response.subscription_type_id) {
+    //       localStorage.setItem(
+    //         'subscription_type_id',
+    //         response.subscription_type_id
+    //       );
+    //       this.userSubscriptionTypeId = response.subscription_type_id;
+    //       console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //   }
+    // } else {
+    //   this.userSubscriptionTypeId = 0;
+    //   console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    // }
 
     // prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
@@ -209,7 +211,7 @@ export class LandingComponent implements OnInit {
     this.searchClicked = true;
     this.mealPlanResponse = {};
     this.expandedStates = [];
-    this.snackExpandedStates = [];
+    // this.snackExpandedStates = [];
     this.selectedOptions = [];
     this.element.nativeElement.style.display = 'block';
     this.element.nativeElement.scrollIntoView({
@@ -279,9 +281,9 @@ export class LandingComponent implements OnInit {
               this.selectedOptions.push(new Array(3).fill('keep'));
             }
 
-            this.snackExpandedStates = new Array(
-              this.mealPlanResponse.snacks.length
-            ).fill(false);
+            // this.snackExpandedStates = new Array(
+            //   this.mealPlanResponse.snacks.length
+            // ).fill(false);
 
             this.includeAllRecipes(this.mealPlanResponse.days);
           },
@@ -361,13 +363,13 @@ export class LandingComponent implements OnInit {
     this.expandedStates[i][j] = !this.expandedStates[i][j];
   }
 
-  /**
-   * Toggles the expanded state of the snack card at the given index
-   * @param index The index of the snack card to toggle
-   */
-  toggleSnackExpand(i: number) {
-    this.snackExpandedStates[i] = !this.snackExpandedStates[i];
-  }
+  // /**
+  //  * Toggles the expanded state of the snack card at the given index
+  //  * @param index The index of the snack card to toggle
+  //  */
+  // toggleSnackExpand(i: number) {
+  //   this.snackExpandedStates[i] = !this.snackExpandedStates[i];
+  // }
 
   /**
    * Closes the people panel

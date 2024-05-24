@@ -129,7 +129,7 @@ def insert_snacks_between_meals(response):
         ) // 2  # Ensure the first part has one more element if odd
 
         snacks1 = snacks[:mid]
-        snacks2 = snacks[mid:]
+        snacks2 = snacks[mid:]   
 
         # Insert snacks into the right positions
         for snack in reversed(snacks1):
