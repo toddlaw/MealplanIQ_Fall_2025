@@ -150,9 +150,9 @@ export class DashboardComponent implements OnInit {
 
   getSuffix(type: string): string {
     if (type === 'weight') {
-      return this.selected_unit === 'metric' ? 'kg' : 'lbs';
+      return this.selected_unit === 'imperial' ? 'lbs' : 'kg';
     } else if (type === 'height') {
-      return this.selected_unit === 'metric' ? 'cm' : 'in';
+      return this.selected_unit === 'imperial' ? 'in' : 'cm';
     }
     return '';
   }

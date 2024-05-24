@@ -125,33 +125,29 @@ export class LandingComponent implements OnInit {
   expandedStates: boolean[][] = [];
   snackExpandedStates: boolean[] = [];
 
-  ngOnInit(): void {
+  async ngOnInit() {
     console.log('user ID: ' + localStorage.getItem('uid'));
     console.log('email: ' + localStorage.getItem('email'));
 
     if (localStorage.getItem('uid')) {
-      this.http
-        .get(
-          'http://127.0.0.1:5000/api/subscription_type_id/' +
-            localStorage.getItem('uid')
-        )
-        .subscribe(
-          (response: any) => {
-            if (response.subscription_type_id) {
-              localStorage.setItem(
-                'subscription_type_id',
-                response.subscription_type_id
-              );
-              this.userSubscriptionTypeId = response.subscription_type_id;
-              console.log(
-                'subscription type ID:' + this.userSubscriptionTypeId
-              );
-            }
-          },
-          (error) => {
-            console.error('Error:', error);
-          }
-        );
+      try {
+        const response: any = await this.http
+          .get(
+            'http://127.0.0.1:5000/api/subscription_type_id/' +
+              localStorage.getItem('uid')
+          )
+          .toPromise();
+        if (response.subscription_type_id) {
+          localStorage.setItem(
+            'subscription_type_id',
+            response.subscription_type_id
+          );
+          this.userSubscriptionTypeId = response.subscription_type_id;
+          console.log('subscription type ID:' + this.userSubscriptionTypeId);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     } else {
       this.userSubscriptionTypeId = 0;
       console.log('subscription type ID:' + this.userSubscriptionTypeId);
@@ -170,7 +166,7 @@ export class LandingComponent implements OnInit {
           this.people[0].height = data.height;
           this.people[0].gender = data.gender;
           this.people[0].activityLevel = data.activity_level;
-          this.selectedUnit = data.selected_unit;
+          this.selectedUnit = data.selected_unit || 'metric';
         });
     }
   }
