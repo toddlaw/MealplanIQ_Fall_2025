@@ -1,3 +1,5 @@
+import csv
+import json
 import os
 
 import pandas as pd
@@ -130,16 +132,55 @@ def delete_recipes_with_ingredients(ingredient_list_path, ingredients_dir, instr
                 print(f"Error processing {file_name}: {e}")
 
 
+def inspect_ingredients_and_units():
+    with open("grams_general_unit_conversions.json", encoding='utf-8') as json_file:
+        general_units = json.load(json_file)
+
+    # These units cannot be directly converted to grams
+    allowed_units = {"cup", "cups", "ounce", "ounces"}
+
+    directory_path = "ingredients_csv"
+    output_file = "ingredients_with_sensitive_units.csv"
+
+    with open(output_file, 'w', newline='', encoding='utf-8') as csv_file:
+        writer = csv.writer(csv_file)
+
+        # Loop over each file in the ingredients_csv directory
+        for file_name in os.listdir(directory_path):
+            if not file_name.endswith('.csv'):  # Skip non-CSV files (had issue with .DS_Store file on macOS)
+                continue
+
+            file_path = os.path.join(directory_path, file_name)
+            with open(file_path, 'r', newline='', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                headers = next(reader)  # Assume the first row is the header
+
+                # Identify indices for 'Ingredient' and 'Unit' columns
+                if 'Ingredient' in headers and 'Unit' in headers:
+                    ingredient_idx = headers.index('Ingredient')
+                    unit_idx = headers.index('Unit')
+
+                    # Read each data row in the CSV file
+                    for row in reader:
+                        if len(row) > unit_idx and len(row) > ingredient_idx:  # Check if row has enough columns
+                            ingredient = row[ingredient_idx]
+                            unit = row[unit_idx]
+
+                            # Write row to output file if unit is one of the allowed units
+                            if unit in allowed_units:
+                                writer.writerow([ingredient, unit])
+                else:
+                    # Log error if headers are missing
+                    print(f"Missing 'Ingredient' or 'Unit' column in {file_name}")
+
+
 def main():
     get_all_unique_units()
-    get_all_unique_ingredients()
-    find_recipe_number_by_unit("beaten (for egg wash)")
-    find_recipe_number_by_ingredient("Beef brisket")
-
-    # Delete all recipes containing certain ingredients
-    delete_recipes_with_ingredients('to_delete.txt', 'ingredients_csv',
-                                                     'instructions_csv')
-
-
-if __name__ == "__main__":
-    main()
+    # get_all_unique_ingredients()
+    # find_recipe_number_by_unit("cup")
+    # find_recipe_number_by_ingredient("Chicken breast")
+    #
+    # # Delete all recipes containing certain ingredients
+    # delete_recipes_with_ingredients('to_delete.txt', 'ingredients_csv',
+    #                                                  'instructions_csv')
+    # inspect_ingredients_and_units()
