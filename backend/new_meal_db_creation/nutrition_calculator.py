@@ -333,8 +333,9 @@ def main():
     nutrition_file = '2019-2020 FNDDS At A Glance - FNDDS Nutrient Values.xlsx'
     ingredients_directory = 'ingredients_csv'
 
+    new_db_file = 'new_meal_database.csv'
+
     # Uncomment if the file does not exist, otherwise it will overwrite the existing file
-    # new_db_file = 'new_meal_database.csv'
     # add_header_to_csv(new_db_file)
 
     ingredients_files = os.listdir(ingredients_directory)
