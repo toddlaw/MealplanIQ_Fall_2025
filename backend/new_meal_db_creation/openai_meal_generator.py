@@ -44,18 +44,17 @@ def generate_ingredients_and_instructions(dish_type: str, dish_name: str, number
 
                 JSON format specifications:
                 - Start and end with '{' and '}'.
-                - Include two keys: "Ingredients" and "Instructions".
-                - "Ingredients": A string with each ingredient formatted as "ingredient_name,quantity,unit", 
-                separated by '\\n'. Only use these units: gram, ounce, tbsp, tsp, ml, L 
-                (exclude cups to ensure precision).
-                - "Instructions": A string with each step formatted as "step_number,instruction", separated by '\\n', 
+                - Include two keys: "Ingredient" and "Instruction".
+                - "Ingredient": A string with each ingredient formatted as "ingredient_name,quantity,unit", 
+                separated by '\\n'. Only use these units: gram, ounces, tablespoon, teaspoon.
+                - "Instruction": A string with each step formatted as "step_number,instruction", separated by '\\n', 
                 with temperatures in Fahrenheit. For dishes that don't require instructions, the instructions can 
                 be an empty string.
 
                 Example:
                 {
-                    "Ingredients": "Chicken breast,200,gram\\nOlive oil,30,ml",
-                    "Instructions": "1,Preheat the oven to 375°F\\n2,Season the chicken with salt and pepper"
+                    "Ingredient": "Chicken breast,200,gram\\nOlive oil,30,ml",
+                    "Instruction": "1,Preheat the oven to 375°F\\n2,Season the chicken with salt and pepper"
                 }
 
                 Ensure the response is accurate, concise, and adheres to the structure and unit requirements specified.
@@ -76,7 +75,7 @@ def generate_ingredients_and_instructions(dish_type: str, dish_name: str, number
 
 def extract_ingredients_info(ingredients: str) -> dict:
     ingredients_data = {
-        "Ingredients": [],
+        "Ingredient": [],
         "Quantity": [],
         "Unit": []
     }
@@ -101,7 +100,7 @@ def extract_ingredients_info(ingredients: str) -> dict:
             else:
                 ingredient_quantity = float(Fraction(ingredient_quantity))
 
-        ingredients_data["Ingredients"].append(ingredient_name)
+        ingredients_data["Ingredient"].append(ingredient_name)
         ingredients_data["Quantity"].append(ingredient_quantity)
         ingredients_data["Unit"].append(ingredient_unit)
 
@@ -132,12 +131,12 @@ def extract_instructions_data(instructions: str) -> dict:
 def create_csv_file(recipe_details: dict, recipe_number: int):
     try:
         # Create ingredients csv file
-        ingredients_data = extract_ingredients_info(recipe_details["Ingredients"])
+        ingredients_data = extract_ingredients_info(recipe_details["Ingredient"])
         df_ingredients = pd.DataFrame(ingredients_data)
         df_ingredients.to_csv(f"ingredients_csv/{recipe_number}.csv", index=False)
 
         # Create instructions csv file
-        instructions_data = extract_instructions_data(recipe_details["Instructions"])
+        instructions_data = extract_instructions_data(recipe_details["Instruction"])
         df_instructions = pd.DataFrame(instructions_data)
         df_instructions.to_csv(f"instructions_csv/{recipe_number}.csv", index=False)
     except (ValueError, IndexError):
@@ -149,3 +148,28 @@ def create_csv_file(recipe_details: dict, recipe_number: int):
 
         df_empty = pd.DataFrame()
         df_empty.to_csv(f"ingredients_csv/{recipe_number}_invalid_format.csv", index=False)
+
+
+def main():
+    recipe_details = retrieve_recipe_details("new_recipes.xlsx")
+    # print(recipe_details)
+    #
+    # start_number = 200378  # Change this to the recipe number you want to start from
+    #
+    # # Find the index of the start number
+    # start_index = recipe_details["Number"].index(start_number)
+    #
+    # # Otherwise, use this for the for loop range
+    # rows = len(recipe_details["Number"])
+    #
+    # for i in range(start_index, rows):
+    #     dish_type = recipe_details["Informal Name"][i]
+    #     dish_name = recipe_details["Generated Name"][i]
+    #     number = int(recipe_details["Number"][i])
+    #
+    #     recipe_details_dict = generate_ingredients_and_instructions(dish_type, dish_name, number)
+    #     create_csv_file(recipe_details_dict, number)
+
+
+if __name__ == "__main__":
+    main()
