@@ -96,7 +96,7 @@ def add_number_tag_title(json_file_path, recipe_row, ingredient_file_path):
         recipe_row['title'] = recipe_map[recipe_number]['generated name']
 
 
-def add_nutrient_columns_from_json(json_file_path: str, nutrient_map: str):
+def add_nutrient_columns_from_json(json_file_path: str, nutrient_map: dict):
     """
     Add nutrient columns to the nutrient_map dictionary based on a JSON file.
 
@@ -333,16 +333,15 @@ def main():
     nutrition_file = '2019-2020 FNDDS At A Glance - FNDDS Nutrient Values.xlsx'
     ingredients_directory = 'ingredients_csv'
 
-    new_db_file = 'new_meal_database.csv'
-
     # Uncomment if the file does not exist, otherwise it will overwrite the existing file
+    # new_db_file = 'new_meal_database.csv'
     # add_header_to_csv(new_db_file)
 
     ingredients_files = os.listdir(ingredients_directory)
     ingredients_files.sort()
 
     # Creates a dictionary with the keys as the columns in the database. This will represent a row in the database
-    db_row = create_row('columns_map.json')
+    db_row = create_row()
 
     # You can start from a specific nth file in the directory
     # E.g. ingredients_files[450:] will start from the 450th file in the ingredients_csv directory
