@@ -57,6 +57,7 @@
   "meal_plan": [
     {
       "date": "2024-05-11",
+      "date_weekday": "Monday May 11",
       "recipes": [
         {
           "type": "simple",
@@ -209,6 +210,7 @@
     },
     {
       "date": "2024-05-12",
+      "date_weekday": "Monday May 12",
       "recipes": [
         {
           "type": "simple",

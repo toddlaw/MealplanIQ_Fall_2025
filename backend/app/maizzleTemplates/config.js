@@ -41,6 +41,6 @@ module.exports = {
     plans: output.days,
     nutrition: output.tableData,
     user: jsonData.user,
-    lastDate: jsonData.meal_plan[jsonData.meal_plan.length - 1].date,
+    lastDate: jsonData.meal_plan[jsonData.meal_plan.length - 1].date_weekday,
   },
 };

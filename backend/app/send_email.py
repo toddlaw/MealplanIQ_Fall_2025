@@ -267,6 +267,75 @@ def create_and_send_maizzle_email(db, user_id, request_data=None):
     except Exception as e:
         print("error occur" + str(e))
         return "error occur" + str(e)
+    
+def create_and_send_maizzle_email_test(response, request_data=None):
+    sender_email = "ohjeoung5224@gmail.com"
+    to_email = "globalyy2020@gmail.com"
+
+    root_path = app.root_path
+
+    json_file_path = os.path.join(root_path, "maizzleTemplates", "output.json")
+
+
+    # Write the template data to the JSON file
+    with open(json_file_path, "w+") as f:
+        json.dump(response, f)
+        f.flush()  # Ensure all data is written to the disk
+        os.fsync(
+            f.fileno()
+        )  # Ensure all internal buffers associated with f are written to disk
+
+    maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
+    # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
+    # print(maizzle_project_path)
+
+    subject = "Text Email"
+    message_text = "text email with image?!!"
+
+    # Run the Maizzle build command
+    try:
+        result = subprocess.run(
+            ["npm", "run", "build"],
+            cwd=maizzle_project_path,
+            capture_output=True,
+            text=True,
+            shell=True,  # Add shell=True to ensure the command runs correctly on Windows
+            encoding="utf-8",
+        )
+        if result.returncode == 0:
+            time.sleep(15)
+            with app.app_context():
+                email_template = render_template_string(
+                    open(maizzle_project_path + "/build_production/index.html").read()
+                )
+
+                shopping_list_template = render_template_string(
+                    open(
+                        maizzle_project_path + "/build_production/shoppingList.html"
+                    ).read()
+                )
+
+            # message = create_message_with_attachment(
+            #     sender_email, to_email, subject, email_template, is_html=True
+            # )
+
+            # Convert the rendered HTML to PDF
+            shopping_list_pdf = pdfkit.from_string(
+                shopping_list_template, False, options={"enable-local-file-access": ""}
+            )
+
+            message = create_message_with_attachment(
+                sender_email, to_email, subject, email_template, shopping_list_pdf
+            )
+            send_message(service_gmail, "me", message)
+        else:
+            print("Build failed with return code:", result.returncode)
+            return "build failed"
+    except Exception as e:
+        print("error occur" + str(e))
+        return "error occur" + str(e)
+
+
 
 
 def main():
@@ -352,6 +421,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # with app.app_context():
-    #     app.run(debug=True)
-    # app.run(debug=True)
