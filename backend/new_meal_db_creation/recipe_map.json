@@ -1,0 +1,3434 @@
+{
+    "200001": {
+        "generated name": "Honey Glazed Carrots",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200002": {
+        "generated name": "Roasted Carrots with Garlic and Herbs",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200003": {
+        "generated name": "Carrot and Ginger Stir-Fry",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200004": {
+        "generated name": "Roasted Garlic Parmesan Cauliflower",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200005": {
+        "generated name": "Creamy Mashed Cauliflower",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200006": {
+        "generated name": "Spicy Roasted Cauliflower",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200007": {
+        "generated name": "Balsamic Roasted Brussels Sprouts",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200008": {
+        "generated name": "Garlic Parmesan Brussels Sprouts",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200009": {
+        "generated name": "Maple Glazed Brussels Sprouts with Bacon",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200010": {
+        "generated name": "Garlic Roasted Broccoli",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200011": {
+        "generated name": "Broccoli with Lemon and Parmesan",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200012": {
+        "generated name": "Sesame Ginger Broccoli Stir-Fry",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200013": {
+        "generated name": "Garlic Parmesan Green Beans",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200014": {
+        "generated name": "Lemon Garlic Green Beans",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200015": {
+        "generated name": "Almond Green Beans",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200016": {
+        "generated name": "Garlic Butter Mushrooms",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200017": {
+        "generated name": "Balsamic Glazed Mushrooms",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200018": {
+        "generated name": "Creamy Garlic Mushrooms",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200019": {
+        "generated name": "Garlic Lemon Fava Beans",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200020": {
+        "generated name": "Fava Bean and Tomato Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200021": {
+        "generated name": "Fava Bean and Herb Pilaf",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200022": {
+        "generated name": "Roasted Beet Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200023": {
+        "generated name": "Beet and Feta Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200024": {
+        "generated name": "Balsamic Glazed Beets",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200025": {
+        "generated name": "Stuffed Bell Peppers",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200026": {
+        "generated name": "Roasted Bell Peppers",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200027": {
+        "generated name": "Bell Pepper Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200028": {
+        "generated name": "Roasted Pumpkin Wedges",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200029": {
+        "generated name": "Pumpkin Mash",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200030": {
+        "generated name": "Pumpkin and Spinach Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200031": {
+        "generated name": "Roasted Radishes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200032": {
+        "generated name": "Radish and Cucumber Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200033": {
+        "generated name": "Pickled Radishes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200034": {
+        "generated name": "Sweet Potato Fries",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200035": {
+        "generated name": "Mashed Sweet Potatoes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200036": {
+        "generated name": "Roasted Sweet Potatoes with Maple Glaze",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200037": {
+        "generated name": "Roasted Butternut Squash",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200038": {
+        "generated name": "Sauteed Acorn Squash",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200039": {
+        "generated name": "Baked Spaghetti Squash",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200040": {
+        "generated name": "Roasted Garlic Chickpeas",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200041": {
+        "generated name": "Chickpea Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200042": {
+        "generated name": "Spicy Chickpea Curry",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200043": {
+        "generated name": "Grilled Corn on the Cob",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200044": {
+        "generated name": "Creamed Corn",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200045": {
+        "generated name": "Corn and Tomato Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200046": {
+        "generated name": "Garlic Roasted Potatoes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200047": {
+        "generated name": "Garlic Butter Green Beans",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200048": {
+        "generated name": "Garlic Bread",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200049": {
+        "generated name": "Roasted Parmesan Parsnips",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200050": {
+        "generated name": "Honey Glazed Parsnips",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200051": {
+        "generated name": "Mashed Parsnips with Garlic and Thyme",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200052": {
+        "generated name": "Garlic Parmesan Roasted Potatoes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200053": {
+        "generated name": "Creamy Mashed Potatoes",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200054": {
+        "generated name": "Potato Wedges",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200055": {
+        "generated name": "Soybean Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200056": {
+        "generated name": "Garlic Roasted Edamame",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200057": {
+        "generated name": "Spicy Soybean Stir-Fry",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200058": {
+        "generated name": "Grilled Artichokes with Lemon Garlic Aioli",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200059": {
+        "generated name": "Roasted Artichoke Hearts with Parmesan",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200060": {
+        "generated name": "Creamy Artichoke Dip",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200061": {
+        "generated name": "Roasted Garlic Parmesan Asparagus",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200062": {
+        "generated name": "Lemon Garlic Asparagus",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200063": {
+        "generated name": "Bacon Wrapped Asparagus",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200064": {
+        "generated name": "Avocado Tomato Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200065": {
+        "generated name": "Avocado Fries",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200066": {
+        "generated name": "Guacamole",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200067": {
+        "generated name": "Sauteed Fava Beans with Garlic and Lemon",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200068": {
+        "generated name": "Fava Bean and Herb Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200069": {
+        "generated name": "Fava Bean Hummus",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200070": {
+        "generated name": "Sauteed Garlic Cabbage",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200071": {
+        "generated name": "Roasted Cabbage Wedges",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200072": {
+        "generated name": "Cabbage Slaw with Honey Mustard Dressing",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200073": {
+        "generated name": "Celery and Peanut Butter Sticks",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200074": {
+        "generated name": "Celery Salad with Apples and Walnuts",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200075": {
+        "generated name": "Braised Celery with Garlic and Parmesan",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200076": {
+        "generated name": "Cucumber Tomato Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200077": {
+        "generated name": "Creamy Cucumber Dill Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200078": {
+        "generated name": "Spicy Asian Cucumber Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200079": {
+        "generated name": "Classic Iceberg Wedge Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200080": {
+        "generated name": "Iceberg Lettuce Cups with Chicken Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200081": {
+        "generated name": "Grilled Chicken and Avocado Salad with Iceberg Lettuce",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200082": {
+        "generated name": "Lentil and Tomato Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200083": {
+        "generated name": "Curried Lentil Soup",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200084": {
+        "generated name": "Lentil and Spinach Salad with Balsamic Vinaigrette",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200085": {
+        "generated name": "Pea and Mint Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200086": {
+        "generated name": "Creamy Pea and Bacon Pasta",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200087": {
+        "generated name": "Pea and Potato Curry",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200088": {
+        "generated name": "Arugula and Parmesan Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200089": {
+        "generated name": "Arugula and Strawberry Salad with Balsamic Glaze",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200090": {
+        "generated name": "Arugula Pesto",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200091": {
+        "generated name": "Garlic Sauteed Spinach",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200092": {
+        "generated name": "Creamed Spinach",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200093": {
+        "generated name": "Spinach and Feta Stuffed Mushrooms",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200094": {
+        "generated name": "Eggplant Parmesan",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200095": {
+        "generated name": "Grilled Eggplant with Balsamic Glaze",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200096": {
+        "generated name": "Roasted Eggplant with Garlic and Lemon",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200097": {
+        "generated name": "Sauteed Garlic Kale",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200098": {
+        "generated name": "Kale and Quinoa Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200099": {
+        "generated name": "Baked Kale Chips",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200100": {
+        "generated name": "Grilled Radicchio with Balsamic Glaze",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200101": {
+        "generated name": "Radicchio and Pear Salad with Gorgonzola",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200102": {
+        "generated name": "Sauteed Radicchio with Pancetta",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200103": {
+        "generated name": "Braised Red Cabbage",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200104": {
+        "generated name": "Red Cabbage Slaw with Apple Cider Vinaigrette",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200105": {
+        "generated name": "Sweet and Sour Red Cabbage",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200106": {
+        "generated name": "Black Bean and Corn Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200107": {
+        "generated name": "Spicy Black Bean Dip",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200108": {
+        "generated name": "Black Bean and Avocado Salad",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200109": {
+        "generated name": "Caramelized Onions",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200110": {
+        "generated name": "Onion Rings",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200111": {
+        "generated name": "Baked Onion Casserole",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200112": {
+        "generated name": "Spicy Peanut Noodles",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200113": {
+        "generated name": "Thai Peanut Slaw",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200114": {
+        "generated name": "Peanut Butter Roasted Brussels Sprouts",
+        "tags": "Vegetable Side Dishes"
+    },
+    "200115": {
+        "generated name": "Classic Acai Bowl",
+        "tags": "Fruit Side Dishes"
+    },
+    "200116": {
+        "generated name": "Tropical Acai Bowl",
+        "tags": "Fruit Side Dishes"
+    },
+    "200117": {
+        "generated name": "Berry Blast Acai Bowl",
+        "tags": "Fruit Side Dishes"
+    },
+    "200118": {
+        "generated name": "Cinnamon Baked Apples",
+        "tags": "Fruit Side Dishes"
+    },
+    "200119": {
+        "generated name": "Apple Cranberry Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200120": {
+        "generated name": "Apple and Onion Stuffing",
+        "tags": "Fruit Side Dishes"
+    },
+    "200121": {
+        "generated name": "Apricot Glazed Carrots",
+        "tags": "Fruit Side Dishes"
+    },
+    "200122": {
+        "generated name": "Spinach and Apricot Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200123": {
+        "generated name": "Apricot and Rosemary Roasted Chicken",
+        "tags": "Fruit Side Dishes"
+    },
+    "200124": {
+        "generated name": "Grilled Cinnamon Bananas",
+        "tags": "Fruit Side Dishes"
+    },
+    "200125": {
+        "generated name": "Banana Pancakes",
+        "tags": "Fruit Side Dishes"
+    },
+    "200126": {
+        "generated name": "Banana Coconut Rice",
+        "tags": "Fruit Side Dishes"
+    },
+    "200127": {
+        "generated name": "Blackberry Spinach Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200128": {
+        "generated name": "Blackberry Couscous Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200129": {
+        "generated name": "Blackberry Brie Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200130": {
+        "generated name": "Black Grape and Goat Cheese Costini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200131": {
+        "generated name": "Black Grape and Arugula Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200132": {
+        "generated name": "Black Grape and Chicken Skewers",
+        "tags": "Fruit Side Dishes"
+    },
+    "200133": {
+        "generated name": "Black Olive Tapenade",
+        "tags": "Fruit Side Dishes"
+    },
+    "200134": {
+        "generated name": "Black Olive and Feta Cheese Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200135": {
+        "generated name": "Mediterranean Black Olive Pasta",
+        "tags": "Fruit Side Dishes"
+    },
+    "200136": {
+        "generated name": "Black Raspberry and Spinach Salad with Goat Cheese",
+        "tags": "Fruit Side Dishes"
+    },
+    "200137": {
+        "generated name": "Black Raspberry and Brie Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200138": {
+        "generated name": "Black Raspberry and Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200139": {
+        "generated name": "Blueberry Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200140": {
+        "generated name": "Blueberry Avocado Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200141": {
+        "generated name": "Blueberry and Goat Cheese Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200142": {
+        "generated name": "Cantaloupe and Prosciutto Skewers",
+        "tags": "Fruit Side Dishes"
+    },
+    "200143": {
+        "generated name": "Cantaloupe and Cucumber Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200144": {
+        "generated name": "Cantaloupe and Feta Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200145": {
+        "generated name": "Cranberry Orange Relish",
+        "tags": "Fruit Side Dishes"
+    },
+    "200146": {
+        "generated name": "Cranberry Pecan Brussels Sprouts",
+        "tags": "Fruit Side Dishes"
+    },
+    "200147": {
+        "generated name": "Cranberry Walnut Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200148": {
+        "generated name": "Balsamic Glazed Figs with Goat Cheese",
+        "tags": "Fruit Side Dishes"
+    },
+    "200149": {
+        "generated name": "Fig and Arugula Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200150": {
+        "generated name": "Honey Roasted Figs with Rosemary",
+        "tags": "Fruit Side Dishes"
+    },
+    "200151": {
+        "generated name": "Goji Berry Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200152": {
+        "generated name": "Goji Berry Spinach Salad with Almonds",
+        "tags": "Fruit Side Dishes"
+    },
+    "200153": {
+        "generated name": "Goji Berry and Wild Rice Pilaf",
+        "tags": "Fruit Side Dishes"
+    },
+    "200154": {
+        "generated name": "Gooseberry Chutney",
+        "tags": "Fruit Side Dishes"
+    },
+    "200155": {
+        "generated name": "Gooseberry and Goat Cheese Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200156": {
+        "generated name": "Gooseberry Salad with Spinach and Almonds",
+        "tags": "Fruit Side Dishes"
+    },
+    "200157": {
+        "generated name": "Grapefruit Avocado Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200158": {
+        "generated name": "Broiled Grapefruit with Honey and Cinnamon",
+        "tags": "Fruit Side Dishes"
+    },
+    "200159": {
+        "generated name": "Grapefruit and Mint Sorbet",
+        "tags": "Fruit Side Dishes"
+    },
+    "200160": {
+        "generated name": "Marinated Green Olive Tapenade",
+        "tags": "Fruit Side Dishes"
+    },
+    "200161": {
+        "generated name": "Green Olive and Feta Cheese Bruschetta",
+        "tags": "Fruit Side Dishes"
+    },
+    "200162": {
+        "generated name": "Green Olive and Herb Couscous",
+        "tags": "Fruit Side Dishes"
+    },
+    "200163": {
+        "generated name": "Guava Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200164": {
+        "generated name": "Grilled Guava Skewers",
+        "tags": "Fruit Side Dishes"
+    },
+    "200165": {
+        "generated name": "Guava and Goat Cheese Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200166": {
+        "generated name": "Honeydew Melon Salad with Mint and Feta",
+        "tags": "Fruit Side Dishes"
+    },
+    "200167": {
+        "generated name": "Honeydew Melon and Prosciutto Skewers",
+        "tags": "Fruit Side Dishes"
+    },
+    "200168": {
+        "generated name": "Honeydew Melon Sorbet",
+        "tags": "Fruit Side Dishes"
+    },
+    "200169": {
+        "generated name": "Kiwi Avocado Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200170": {
+        "generated name": "Kiwi Spinach Salad with Honey Lime Dressing",
+        "tags": "Fruit Side Dishes"
+    },
+    "200171": {
+        "generated name": "Kiwi Sorbet",
+        "tags": "Fruit Side Dishes"
+    },
+    "200172": {
+        "generated name": "Lemon Roasted Potatoes",
+        "tags": "Fruit Side Dishes"
+    },
+    "200173": {
+        "generated name": "Lemon Garlic Green Beans",
+        "tags": "Fruit Side Dishes"
+    },
+    "200174": {
+        "generated name": "Lemon Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200175": {
+        "generated name": "Lychee and Shrimp Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200176": {
+        "generated name": "Lychee Coconut Rice",
+        "tags": "Fruit Side Dishes"
+    },
+    "200177": {
+        "generated name": "Lychee Mint Sorbet",
+        "tags": "Fruit Side Dishes"
+    },
+    "200178": {
+        "generated name": "Mango Avocado Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200179": {
+        "generated name": "Mango Cucumber Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200180": {
+        "generated name": "Mango Coconut Rice",
+        "tags": "Fruit Side Dishes"
+    },
+    "200181": {
+        "generated name": "Grilled Nectarine Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200182": {
+        "generated name": "Nectarine Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200183": {
+        "generated name": "Honey Glazed Nectarines",
+        "tags": "Fruit Side Dishes"
+    },
+    "200184": {
+        "generated name": "Orange Glazed Carrots",
+        "tags": "Fruit Side Dishes"
+    },
+    "200185": {
+        "generated name": "Orange Cranberry Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200186": {
+        "generated name": "Orange Ginger Glazed Green Beans",
+        "tags": "Fruit Side Dishes"
+    },
+    "200187": {
+        "generated name": "Papaya Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200188": {
+        "generated name": "Papaya Salad with Lime Dressing",
+        "tags": "Fruit Side Dishes"
+    },
+    "200189": {
+        "generated name": "Grilled Papaya with Chili Lime Sauce",
+        "tags": "Fruit Side Dishes"
+    },
+    "200190": {
+        "generated name": "Passion Fruit Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200191": {
+        "generated name": "Passion Fruit Glazed Shrimp",
+        "tags": "Fruit Side Dishes"
+    },
+    "200192": {
+        "generated name": "Passion Fruit Rice",
+        "tags": "Fruit Side Dishes"
+    },
+    "200193": {
+        "generated name": "Grilled Peach Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200194": {
+        "generated name": "Peach and Prosciutto Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200195": {
+        "generated name": "Peach and Basil Caprese Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200196": {
+        "generated name": "Pear and Goat Cheese Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200197": {
+        "generated name": "Pear and Arugula Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200198": {
+        "generated name": "Roasted Pear with Cinnamon and Honey",
+        "tags": "Fruit Side Dishes"
+    },
+    "200199": {
+        "generated name": "Grilled Pineapple Skewers",
+        "tags": "Fruit Side Dishes"
+    },
+    "200200": {
+        "generated name": "Pineapple Coleslaw",
+        "tags": "Fruit Side Dishes"
+    },
+    "200201": {
+        "generated name": "Pineapple Fried Rice",
+        "tags": "Fruit Side Dishes"
+    },
+    "200202": {
+        "generated name": "Plum and Goat Cheese Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200203": {
+        "generated name": "Grilled Plum Halves",
+        "tags": "Fruit Side Dishes"
+    },
+    "200204": {
+        "generated name": "Plum and Mint Couscous",
+        "tags": "Fruit Side Dishes"
+    },
+    "200205": {
+        "generated name": "Redcurrant Sauce",
+        "tags": "Fruit Side Dishes"
+    },
+    "200206": {
+        "generated name": "Redcurrant Jam",
+        "tags": "Fruit Side Dishes"
+    },
+    "200207": {
+        "generated name": "Redcurrant Salad Dressing",
+        "tags": "Fruit Side Dishes"
+    },
+    "200208": {
+        "generated name": "Raspberry Balsamic Glaze",
+        "tags": "Fruit Side Dishes"
+    },
+    "200209": {
+        "generated name": "Raspberry Spinach Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200210": {
+        "generated name": "Raspberry Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200211": {
+        "generated name": "Sour Cherry Compote",
+        "tags": "Fruit Side Dishes"
+    },
+    "200212": {
+        "generated name": "Sour Cherry Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200213": {
+        "generated name": "Sour Cherry Sauce for Meat",
+        "tags": "Fruit Side Dishes"
+    },
+    "200214": {
+        "generated name": "Star Fruit Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200215": {
+        "generated name": "Star Fruit Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200216": {
+        "generated name": "Star Fruit Sorbet",
+        "tags": "Fruit Side Dishes"
+    },
+    "200217": {
+        "generated name": "Strawberry Spinach Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200218": {
+        "generated name": "Strawberry Salsa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200219": {
+        "generated name": "Strawberry Balsamic Bruschetta",
+        "tags": "Fruit Side Dishes"
+    },
+    "200220": {
+        "generated name": "Cherry Almond Couscous Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200221": {
+        "generated name": "Grilled Balsamic Cherry Tomatoes",
+        "tags": "Fruit Side Dishes"
+    },
+    "200222": {
+        "generated name": "Cherry Walnut Quinoa Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200223": {
+        "generated name": "Tangerine Arugula Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200224": {
+        "generated name": "Tangerine Glazed Carrots",
+        "tags": "Fruit Side Dishes"
+    },
+    "200225": {
+        "generated name": "Tangerine Basil Quinoa",
+        "tags": "Fruit Side Dishes"
+    },
+    "200226": {
+        "generated name": "Watermelon Feta Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200227": {
+        "generated name": "Watermelon Cucumber Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200228": {
+        "generated name": "Spicy Watermelon Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200229": {
+        "generated name": "White Grape and Goat Cheese Crostini",
+        "tags": "Fruit Side Dishes"
+    },
+    "200230": {
+        "generated name": "White Grape and Chicken Salad",
+        "tags": "Fruit Side Dishes"
+    },
+    "200231": {
+        "generated name": "White Grape and Almond Couscous",
+        "tags": "Fruit Side Dishes"
+    },
+    "200232": {
+        "generated name": "Classic Scrambled Eggs",
+        "tags": "Breakfast Components"
+    },
+    "200233": {
+        "generated name": "Veggie Omelette",
+        "tags": "Breakfast Components"
+    },
+    "200234": {
+        "generated name": "Eggs Benedict",
+        "tags": "Breakfast Components"
+    },
+    "200235": {
+        "generated name": "Spanish Tortilla",
+        "tags": "Breakfast Components"
+    },
+    "200236": {
+        "generated name": "Breakfast Burrito",
+        "tags": "Breakfast Components"
+    },
+    "200237": {
+        "generated name": "Cheerios",
+        "tags": "Breakfast Components"
+    },
+    "200238": {
+        "generated name": "Honey Nut Cheerios",
+        "tags": "Breakfast Components"
+    },
+    "200239": {
+        "generated name": "Special K",
+        "tags": "Breakfast Components"
+    },
+    "200240": {
+        "generated name": "Cheerios Oat Crunch Oats and Honey",
+        "tags": "Breakfast Components"
+    },
+    "200241": {
+        "generated name": "Shreddies",
+        "tags": "Breakfast Components"
+    },
+    "200242": {
+        "generated name": "Classic Oatmeal",
+        "tags": "Breakfast Components"
+    },
+    "200243": {
+        "generated name": "Apple Cinnamon Oatmeal",
+        "tags": "Breakfast Components"
+    },
+    "200244": {
+        "generated name": "Banana Nut Oatmeal",
+        "tags": "Breakfast Components"
+    },
+    "200245": {
+        "generated name": "Classic Bacon, Egg, and Cheese Bagel",
+        "tags": "Breakfast Components"
+    },
+    "200246": {
+        "generated name": "Avocado and Tomato Bagel",
+        "tags": "Breakfast Components"
+    },
+    "200247": {
+        "generated name": "Smoked Salmon and Cream Cheese Bagel",
+        "tags": "Breakfast Components"
+    },
+    "200248": {
+        "generated name": "Ham, Egg, and Swiss Bagel",
+        "tags": "Breakfast Components"
+    },
+    "200249": {
+        "generated name": "Veggie and Hummus Bagel",
+        "tags": "Breakfast Components"
+    },
+    "200250": {
+        "generated name": "Cream of Wheat",
+        "tags": "Breakfast Components"
+    },
+    "200251": {
+        "generated name": "Berry Blast Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200252": {
+        "generated name": "Tropical Paradise Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200253": {
+        "generated name": "Green Goddess Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200254": {
+        "generated name": "Peanut Butter Banana Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200255": {
+        "generated name": "Chocolate Protein Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200256": {
+        "generated name": "Oatmeal Breakfast Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200257": {
+        "generated name": "Peachy Keen Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200258": {
+        "generated name": "Strawberry Banana Protein Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200259": {
+        "generated name": "Coconut Berry Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200260": {
+        "generated name": "Apple Spinach Smoothie",
+        "tags": "Breakfast Components"
+    },
+    "200261": {
+        "generated name": "Classic Buttermilk Pancakes",
+        "tags": "Breakfast Components"
+    },
+    "200262": {
+        "generated name": "Blueberry Pancakes",
+        "tags": "Breakfast Components"
+    },
+    "200263": {
+        "generated name": "Chocolate Chip Pancakes",
+        "tags": "Breakfast Components"
+    },
+    "200264": {
+        "generated name": "Classic Belgian Waffles",
+        "tags": "Breakfast Components"
+    },
+    "200265": {
+        "generated name": "Blueberry Waffles",
+        "tags": "Breakfast Components"
+    },
+    "200266": {
+        "generated name": "Chocolate Chip Waffles",
+        "tags": "Breakfast Components"
+    },
+    "200267": {
+        "generated name": "Classic Hash Browns",
+        "tags": "Breakfast Components"
+    },
+    "200268": {
+        "generated name": "Cheesy Hash Browns",
+        "tags": "Breakfast Components"
+    },
+    "200269": {
+        "generated name": "Veggie Hash Browns",
+        "tags": "Breakfast Components"
+    },
+    "200270": {
+        "generated name": "Classic BLT Sandwich",
+        "tags": "Lunches"
+    },
+    "200271": {
+        "generated name": "Grilled Cheese Sandwich",
+        "tags": "Lunches"
+    },
+    "200272": {
+        "generated name": "Turkey Club Sandwich",
+        "tags": "Lunches"
+    },
+    "200273": {
+        "generated name": "Veggie Delight Sandwich",
+        "tags": "Lunches"
+    },
+    "200274": {
+        "generated name": "Tuna Salad Sandwich",
+        "tags": "Lunches"
+    },
+    "200275": {
+        "generated name": "Chicken Avocado Sandwich",
+        "tags": "Lunches"
+    },
+    "200276": {
+        "generated name": "Chicken Caesar Wrap",
+        "tags": "Lunches"
+    },
+    "200277": {
+        "generated name": "Veggie Hummus Wrap",
+        "tags": "Lunches"
+    },
+    "200278": {
+        "generated name": "Turkey Avocado Wrap",
+        "tags": "Lunches"
+    },
+    "200279": {
+        "generated name": "Greek Salad Wrap",
+        "tags": "Lunches"
+    },
+    "200280": {
+        "generated name": "Buffalo Chicken Wrap",
+        "tags": "Lunches"
+    },
+    "200281": {
+        "generated name": "Caprese Wrap",
+        "tags": "Lunches"
+    },
+    "200282": {
+        "generated name": "Classic Chicken Noodle Soup",
+        "tags": "Lunches"
+    },
+    "200283": {
+        "generated name": "Creamy Tomato Basil Soup",
+        "tags": "Lunches"
+    },
+    "200284": {
+        "generated name": "Butternut Squash Soup",
+        "tags": "Lunches"
+    },
+    "200285": {
+        "generated name": "Minestrone Soup",
+        "tags": "Lunches"
+    },
+    "200286": {
+        "generated name": "Lentil Soup",
+        "tags": "Lunches"
+    },
+    "200287": {
+        "generated name": "Broccoli Cheddar Soup",
+        "tags": "Lunches"
+    },
+    "200288": {
+        "generated name": "New England Clam Chowder Soup",
+        "tags": "Lunches"
+    },
+    "200289": {
+        "generated name": "Cream of Mushroom Soup",
+        "tags": "Lunches"
+    },
+    "200290": {
+        "generated name": "Potato Soup",
+        "tags": "Lunches"
+    },
+    "200291": {
+        "generated name": "Vegetable Soup",
+        "tags": "Lunches"
+    },
+    "200292": {
+        "generated name": "Grilled Chicken Caesar Salad",
+        "tags": "Lunches"
+    },
+    "200293": {
+        "generated name": "Nicoise Salad",
+        "tags": "Lunches"
+    },
+    "200294": {
+        "generated name": "Thai Beef Salad",
+        "tags": "Lunches"
+    },
+    "200295": {
+        "generated name": "Mediterranean Quinoa Salad",
+        "tags": "Lunches"
+    },
+    "200296": {
+        "generated name": "Southwestern Chicken Salad",
+        "tags": "Lunches"
+    },
+    "200297": {
+        "generated name": "Greek Salad with Grilled Shrimp",
+        "tags": "Lunches"
+    },
+    "200298": {
+        "generated name": "Cobb Salad",
+        "tags": "Lunches"
+    },
+    "200299": {
+        "generated name": "Waldorf Salad",
+        "tags": "Lunches"
+    },
+    "200300": {
+        "generated name": "Caesar Salad",
+        "tags": "Lunches"
+    },
+    "200301": {
+        "generated name": "Greek Salad",
+        "tags": "Lunches"
+    },
+    "200302": {
+        "generated name": "Beef Bourguignon",
+        "tags": "Beef Mains"
+    },
+    "200303": {
+        "generated name": "Shepherd's Pie",
+        "tags": "Beef Mains"
+    },
+    "200304": {
+        "generated name": "Beef Wellington",
+        "tags": "Beef Mains"
+    },
+    "200305": {
+        "generated name": "Braised Beef Short Ribs",
+        "tags": "Beef Mains"
+    },
+    "200306": {
+        "generated name": "Pot au Feu",
+        "tags": "Beef Mains"
+    },
+    "200307": {
+        "generated name": "Masala Kheema",
+        "tags": "Beef Mains"
+    },
+    "200308": {
+        "generated name": "Meat Balls",
+        "tags": "Beef Mains"
+    },
+    "200309": {
+        "generated name": "Beef Stew",
+        "tags": "Beef Mains"
+    },
+    "200310": {
+        "generated name": "Steak Tartare",
+        "tags": "Beef Mains"
+    },
+    "200311": {
+        "generated name": "Chicken-Fried Steak",
+        "tags": "Beef Mains"
+    },
+    "200312": {
+        "generated name": "Steak Frites",
+        "tags": "Beef Mains"
+    },
+    "200313": {
+        "generated name": "Beef Stock",
+        "tags": "Beef Mains"
+    },
+    "200314": {
+        "generated name": "Braised Oxtail",
+        "tags": "Beef Mains"
+    },
+    "200315": {
+        "generated name": "Braised Brisket Tacos",
+        "tags": "Beef Mains"
+    },
+    "200316": {
+        "generated name": "Beef Tenderloin",
+        "tags": "Beef Mains"
+    },
+    "200317": {
+        "generated name": "Steak au Poivre",
+        "tags": "Beef Mains"
+    },
+    "200318": {
+        "generated name": "Meatloaf",
+        "tags": "Beef Mains"
+    },
+    "200319": {
+        "generated name": "Oxtail Stew",
+        "tags": "Beef Mains"
+    },
+    "200320": {
+        "generated name": "Reverse Sear Standing Rib Roast",
+        "tags": "Beef Mains"
+    },
+    "200321": {
+        "generated name": "Pot Roast",
+        "tags": "Beef Mains"
+    },
+    "200322": {
+        "generated name": "Prime Rib",
+        "tags": "Beef Mains"
+    },
+    "200323": {
+        "generated name": "Churrasco Steak",
+        "tags": "Beef Mains"
+    },
+    "200324": {
+        "generated name": "Beef Stroganoff",
+        "tags": "Beef Mains"
+    },
+    "200325": {
+        "generated name": "Rib Eye Steak",
+        "tags": "Beef Mains"
+    },
+    "200326": {
+        "generated name": "Pulled Pork Sandwich",
+        "tags": "Pork Mains"
+    },
+    "200327": {
+        "generated name": "Pork Ribs",
+        "tags": "Pork Mains"
+    },
+    "200328": {
+        "generated name": "Pork Chops",
+        "tags": "Pork Mains"
+    },
+    "200329": {
+        "generated name": "Pork Tenderloin",
+        "tags": "Pork Mains"
+    },
+    "200330": {
+        "generated name": "Pork Belly",
+        "tags": "Pork Mains"
+    },
+    "200331": {
+        "generated name": "Pork Stir-Fry",
+        "tags": "Pork Mains"
+    },
+    "200332": {
+        "generated name": "Pork Carnitas",
+        "tags": "Pork Mains"
+    },
+    "200333": {
+        "generated name": "Pork Schitzel",
+        "tags": "Pork Mains"
+    },
+    "200334": {
+        "generated name": "Pork Tacos",
+        "tags": "Pork Mains"
+    },
+    "200335": {
+        "generated name": "Pork Satay",
+        "tags": "Pork Mains"
+    },
+    "200336": {
+        "generated name": "Pork Katsu",
+        "tags": "Pork Mains"
+    },
+    "200337": {
+        "generated name": "Pork Ramen",
+        "tags": "Pork Mains"
+    },
+    "200338": {
+        "generated name": "Pork Dumplings (Potstickers)",
+        "tags": "Pork Mains"
+    },
+    "200339": {
+        "generated name": "Pork Loin Roast",
+        "tags": "Pork Mains"
+    },
+    "200340": {
+        "generated name": "Pork Curry",
+        "tags": "Pork Mains"
+    },
+    "200341": {
+        "generated name": "Pork and Beans",
+        "tags": "Pork Mains"
+    },
+    "200342": {
+        "generated name": "Pork Gyoza",
+        "tags": "Pork Mains"
+    },
+    "200343": {
+        "generated name": "Pork Enchiladas",
+        "tags": "Pork Mains"
+    },
+    "200344": {
+        "generated name": "Pork Stew",
+        "tags": "Pork Mains"
+    },
+    "200345": {
+        "generated name": "Pork and Apple Pie",
+        "tags": "Pork Mains"
+    },
+    "200346": {
+        "generated name": "Honey Glazed Ham",
+        "tags": "Pork Mains"
+    },
+    "200347": {
+        "generated name": "Ham and Cheese Sandwich",
+        "tags": "Pork Mains"
+    },
+    "200348": {
+        "generated name": "Ham and Pineapple Pizza",
+        "tags": "Pork Mains"
+    },
+    "200349": {
+        "generated name": "Ham and Bean Soup",
+        "tags": "Pork Mains"
+    },
+    "200350": {
+        "generated name": "Ham and Swiss Quiche",
+        "tags": "Pork Mains"
+    },
+    "200351": {
+        "generated name": "Chicken Tikka Masala",
+        "tags": "Chicken Mains"
+    },
+    "200352": {
+        "generated name": "Chicken Alfredo",
+        "tags": "Chicken Mains"
+    },
+    "200353": {
+        "generated name": "Chicken Parmesan",
+        "tags": "Chicken Mains"
+    },
+    "200354": {
+        "generated name": "Chicken Teriyaki",
+        "tags": "Chicken Mains"
+    },
+    "200355": {
+        "generated name": "Chicken Stir-Fry",
+        "tags": "Chicken Mains"
+    },
+    "200356": {
+        "generated name": "Chicken Curry",
+        "tags": "Chicken Mains"
+    },
+    "200357": {
+        "generated name": "Chicken Shawarma",
+        "tags": "Chicken Mains"
+    },
+    "200358": {
+        "generated name": "Chicken Pot Pie",
+        "tags": "Chicken Mains"
+    },
+    "200359": {
+        "generated name": "Chicken Fajitas",
+        "tags": "Chicken Mains"
+    },
+    "200360": {
+        "generated name": "Chicken Cacciatore",
+        "tags": "Chicken Mains"
+    },
+    "200361": {
+        "generated name": "Chicken Piccata",
+        "tags": "Chicken Mains"
+    },
+    "200362": {
+        "generated name": "Chicken Satay",
+        "tags": "Chicken Mains"
+    },
+    "200363": {
+        "generated name": "Chicken Katsu",
+        "tags": "Chicken Mains"
+    },
+    "200364": {
+        "generated name": "Chicken Enchiladas",
+        "tags": "Chicken Mains"
+    },
+    "200365": {
+        "generated name": "Chicken Adobo",
+        "tags": "Chicken Mains"
+    },
+    "200366": {
+        "generated name": "Chicken Salad",
+        "tags": "Chicken Mains"
+    },
+    "200367": {
+        "generated name": "Chicken Tandoori",
+        "tags": "Chicken Mains"
+    },
+    "200368": {
+        "generated name": "Chicken and Rice Casserole",
+        "tags": "Chicken Mains"
+    },
+    "200369": {
+        "generated name": "Chicken Pad Thai",
+        "tags": "Chicken Mains"
+    },
+    "200370": {
+        "generated name": "Chicken Quesadillas",
+        "tags": "Chicken Mains"
+    },
+    "200371": {
+        "generated name": "Chicken Fried Rice",
+        "tags": "Chicken Mains"
+    },
+    "200372": {
+        "generated name": "Chicken Stuffed Peppers",
+        "tags": "Chicken Mains"
+    },
+    "200373": {
+        "generated name": "Rack of Lamb",
+        "tags": "Lamb Mains"
+    },
+    "200374": {
+        "generated name": "Lamb Curry",
+        "tags": "Lamb Mains"
+    },
+    "200375": {
+        "generated name": "Lamb Gyros",
+        "tags": "Lamb Mains"
+    },
+    "200376": {
+        "generated name": "Shepherd's Pie",
+        "tags": "Lamb Mains"
+    },
+    "200377": {
+        "generated name": "Moussaka",
+        "tags": "Lamb Mains"
+    },
+    "200378": {
+        "generated name": "Basic Steamed Rice",
+        "tags": "Basic Starches"
+    },
+    "200379": {
+        "generated name": "Basic Boiled Rice",
+        "tags": "Basic Starches"
+    },
+    "200380": {
+        "generated name": "Basic Pilaf",
+        "tags": "Basic Starches"
+    },
+    "200381": {
+        "generated name": "Basic Risotto",
+        "tags": "Basic Starches"
+    },
+    "200382": {
+        "generated name": "Parboiled Rice",
+        "tags": "Basic Starches"
+    },
+    "200383": {
+        "generated name": "Ricecooker Rice",
+        "tags": "Basic Starches"
+    },
+    "200384": {
+        "generated name": "Basic Boiled Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200385": {
+        "generated name": "Basic Roasted Rotatoes",
+        "tags": "Basic Starches"
+    },
+    "200386": {
+        "generated name": "Mashed Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200387": {
+        "generated name": "Steamed Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200388": {
+        "generated name": "French Fries",
+        "tags": "Basic Starches"
+    },
+    "200389": {
+        "generated name": "Basic Boiled Sweet Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200390": {
+        "generated name": "Basic Baked Sweet Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200391": {
+        "generated name": "Mashed Sweet Potatoes",
+        "tags": "Basic Starches"
+    },
+    "200392": {
+        "generated name": "Sweet Potato Fries",
+        "tags": "Basic Starches"
+    },
+    "200393": {
+        "generated name": "Roasted Butternut Squash (whole)",
+        "tags": "Basic Starches"
+    },
+    "200394": {
+        "generated name": "Roasted Butternut Squash (cubes)",
+        "tags": "Basic Starches"
+    },
+    "200395": {
+        "generated name": "Steamed Butternut Squash",
+        "tags": "Basic Starches"
+    },
+    "200396": {
+        "generated name": "Boiled Butternut Squash",
+        "tags": "Basic Starches"
+    },
+    "200397": {
+        "generated name": "InstantPot Butternut Squash",
+        "tags": "Basic Starches"
+    },
+    "200398": {
+        "generated name": "Basic Quinoa",
+        "tags": "Basic Starches"
+    },
+    "200399": {
+        "generated name": "Basic Spaghetti",
+        "tags": "Basic Starches"
+    },
+    "200400": {
+        "generated name": "Basic Fettuccine",
+        "tags": "Basic Starches"
+    },
+    "200401": {
+        "generated name": "Basic Linguine",
+        "tags": "Basic Starches"
+    },
+    "200402": {
+        "generated name": "Basic Tagliatelle",
+        "tags": "Basic Starches"
+    },
+    "200403": {
+        "generated name": "Basic Macaroni",
+        "tags": "Basic Starches"
+    },
+    "200404": {
+        "generated name": "Basic Ravioli",
+        "tags": "Basic Starches"
+    },
+    "200405": {
+        "generated name": "Basic Rigatoni",
+        "tags": "Basic Starches"
+    },
+    "200406": {
+        "generated name": "Basic Penne",
+        "tags": "Basic Starches"
+    },
+    "200407": {
+        "generated name": "Hamburgers",
+        "tags": "Cuisine Mains"
+    },
+    "200408": {
+        "generated name": "Barbecue Ribs",
+        "tags": "Cuisine Mains"
+    },
+    "200409": {
+        "generated name": "Fried Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200410": {
+        "generated name": "Steak",
+        "tags": "Cuisine Mains"
+    },
+    "200411": {
+        "generated name": "Macaroni and Cheese",
+        "tags": "Cuisine Mains"
+    },
+    "200412": {
+        "generated name": "Meatloaf",
+        "tags": "Cuisine Mains"
+    },
+    "200413": {
+        "generated name": "Chili",
+        "tags": "Cuisine Mains"
+    },
+    "200414": {
+        "generated name": "Spaghetti and Meatballs",
+        "tags": "Cuisine Mains"
+    },
+    "200415": {
+        "generated name": "BBQ Brisket",
+        "tags": "Cuisine Mains"
+    },
+    "200416": {
+        "generated name": "Buffalo Wings",
+        "tags": "Cuisine Mains"
+    },
+    "200417": {
+        "generated name": "Kung Pao Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200418": {
+        "generated name": "Chow Mein",
+        "tags": "Cuisine Mains"
+    },
+    "200419": {
+        "generated name": "Yangzhou Fried Rice",
+        "tags": "Cuisine Mains"
+    },
+    "200420": {
+        "generated name": "Beef with Broccoli",
+        "tags": "Cuisine Mains"
+    },
+    "200421": {
+        "generated name": "Sweet and Sour Pork",
+        "tags": "Cuisine Mains"
+    },
+    "200422": {
+        "generated name": "Mapo Tofu",
+        "tags": "Cuisine Mains"
+    },
+    "200423": {
+        "generated name": "Sichuan Hot Pot",
+        "tags": "Cuisine Mains"
+    },
+    "200424": {
+        "generated name": "Egg Drop Soup",
+        "tags": "Cuisine Mains"
+    },
+    "200425": {
+        "generated name": "Stir-Fried Beef with Oyster Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200426": {
+        "generated name": "Shrimp Stir-Fry with Cashews",
+        "tags": "Cuisine Mains"
+    },
+    "200427": {
+        "generated name": "Orange Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200428": {
+        "generated name": "Sesame Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200429": {
+        "generated name": "Fried Rice",
+        "tags": "Cuisine Mains"
+    },
+    "200430": {
+        "generated name": "Shrimp Fried Rice",
+        "tags": "Cuisine Mains"
+    },
+    "200431": {
+        "generated name": "Hot and Sour Soup",
+        "tags": "Cuisine Mains"
+    },
+    "200432": {
+        "generated name": "Mongolian Beef",
+        "tags": "Cuisine Mains"
+    },
+    "200433": {
+        "generated name": "Szechuan Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200434": {
+        "generated name": "Beef with Garlic Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200435": {
+        "generated name": "Vegetable Chow Main",
+        "tags": "Cuisine Mains"
+    },
+    "200436": {
+        "generated name": "Hunan Beef",
+        "tags": "Cuisine Mains"
+    },
+    "200437": {
+        "generated name": "Shrimp Lo Mein",
+        "tags": "Cuisine Mains"
+    },
+    "200438": {
+        "generated name": "Shrimp with Broccoli",
+        "tags": "Cuisine Mains"
+    },
+    "200439": {
+        "generated name": "Chicken and Broccoli",
+        "tags": "Cuisine Mains"
+    },
+    "200440": {
+        "generated name": "Sweet and Sour Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200441": {
+        "generated name": "Moo Goo Gai Pan",
+        "tags": "Cuisine Mains"
+    },
+    "200442": {
+        "generated name": "Kung Pao Shrimp",
+        "tags": "Cuisine Mains"
+    },
+    "200443": {
+        "generated name": "Coq au Vin",
+        "tags": "Cuisine Mains"
+    },
+    "200444": {
+        "generated name": "Bouillabaisse",
+        "tags": "Cuisine Mains"
+    },
+    "200445": {
+        "generated name": "Cassoulet",
+        "tags": "Cuisine Mains"
+    },
+    "200446": {
+        "generated name": "Coquilles Saint-Jacques",
+        "tags": "Cuisine Mains"
+    },
+    "200447": {
+        "generated name": "Quiche Lorraine",
+        "tags": "Cuisine Mains"
+    },
+    "200448": {
+        "generated name": "Pot-au-Feu",
+        "tags": "Cuisine Mains"
+    },
+    "200449": {
+        "generated name": "Cote de Boeuf (Prime Rib)",
+        "tags": "Cuisine Mains"
+    },
+    "200450": {
+        "generated name": "Poulet Basquaise",
+        "tags": "Cuisine Mains"
+    },
+    "200451": {
+        "generated name": "Crepes",
+        "tags": "Cuisine Mains"
+    },
+    "200452": {
+        "generated name": "French Onion Soup",
+        "tags": "Cuisine Mains"
+    },
+    "200453": {
+        "generated name": "Steak Frites",
+        "tags": "Cuisine Mains"
+    },
+    "200454": {
+        "generated name": "Steak au Poivre",
+        "tags": "Cuisine Mains"
+    },
+    "200455": {
+        "generated name": "Croque Madame",
+        "tags": "Cuisine Mains"
+    },
+    "200456": {
+        "generated name": "Chicken Provencal",
+        "tags": "Cuisine Mains"
+    },
+    "200457": {
+        "generated name": "Ratatouille",
+        "tags": "Cuisine Mains"
+    },
+    "200458": {
+        "generated name": "Vichyssoise Soup",
+        "tags": "Cuisine Mains"
+    },
+    "200459": {
+        "generated name": "Spaghetti Carbonara",
+        "tags": "Cuisine Mains"
+    },
+    "200460": {
+        "generated name": "Spaghettie Bolognese",
+        "tags": "Cuisine Mains"
+    },
+    "200461": {
+        "generated name": "Spaghetti with Pesto Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200462": {
+        "generated name": "Spaghetti Marinara",
+        "tags": "Cuisine Mains"
+    },
+    "200463": {
+        "generated name": "Spaghetti alle Vongole",
+        "tags": "Cuisine Mains"
+    },
+    "200464": {
+        "generated name": "Penne Arabiata",
+        "tags": "Cuisine Mains"
+    },
+    "200465": {
+        "generated name": "Pizza Margherita",
+        "tags": "Cuisine Mains"
+    },
+    "200466": {
+        "generated name": "Cheese Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200467": {
+        "generated name": "Hawaiian Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200468": {
+        "generated name": "Pepperoni Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200469": {
+        "generated name": "Meat Lovers Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200470": {
+        "generated name": "BBQ Chicken Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200471": {
+        "generated name": "Vegetarian Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200472": {
+        "generated name": "Buffalo Chicken Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200473": {
+        "generated name": "White Pizza",
+        "tags": "Cuisine Mains"
+    },
+    "200474": {
+        "generated name": "Meat Lasagna",
+        "tags": "Cuisine Mains"
+    },
+    "200475": {
+        "generated name": "Vegetarian Lasagna",
+        "tags": "Cuisine Mains"
+    },
+    "200476": {
+        "generated name": "Fettuccine Alfredo",
+        "tags": "Cuisine Mains"
+    },
+    "200477": {
+        "generated name": "Linguine with Clams",
+        "tags": "Cuisine Mains"
+    },
+    "200478": {
+        "generated name": "Ravioli",
+        "tags": "Cuisine Mains"
+    },
+    "200479": {
+        "generated name": "Chicken Parmesan",
+        "tags": "Cuisine Mains"
+    },
+    "200480": {
+        "generated name": "Chicken Piccata",
+        "tags": "Cuisine Mains"
+    },
+    "200481": {
+        "generated name": "Seafood Pasta with Tomato Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200482": {
+        "generated name": "Seafood Pasta with Cream Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200483": {
+        "generated name": "Veal Marsala",
+        "tags": "Cuisine Mains"
+    },
+    "200484": {
+        "generated name": "Penne alla Vodka",
+        "tags": "Cuisine Mains"
+    },
+    "200485": {
+        "generated name": "Calzone",
+        "tags": "Cuisine Mains"
+    },
+    "200486": {
+        "generated name": "Ravioli with Marinara Sauce",
+        "tags": "Cuisine Mains"
+    },
+    "200487": {
+        "generated name": "Teriyaki Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200488": {
+        "generated name": "Tonkatsu",
+        "tags": "Cuisine Mains"
+    },
+    "200489": {
+        "generated name": "Gyudon",
+        "tags": "Cuisine Mains"
+    },
+    "200490": {
+        "generated name": "Yakisoba",
+        "tags": "Cuisine Mains"
+    },
+    "200491": {
+        "generated name": "Oyakodon",
+        "tags": "Cuisine Mains"
+    },
+    "200492": {
+        "generated name": "Okonomiyaki",
+        "tags": "Cuisine Mains"
+    },
+    "200493": {
+        "generated name": "Nikujaga",
+        "tags": "Cuisine Mains"
+    },
+    "200494": {
+        "generated name": "Sukiyaki",
+        "tags": "Cuisine Mains"
+    },
+    "200495": {
+        "generated name": "Tamago Donburi",
+        "tags": "Cuisine Mains"
+    },
+    "200496": {
+        "generated name": "Shoyu Ramen",
+        "tags": "Cuisine Mains"
+    },
+    "200497": {
+        "generated name": "Tonkotsu Ramen",
+        "tags": "Cuisine Mains"
+    },
+    "200498": {
+        "generated name": "Miso Ramen",
+        "tags": "Cuisine Mains"
+    },
+    "200499": {
+        "generated name": "Shio Ramen",
+        "tags": "Cuisine Mains"
+    },
+    "200500": {
+        "generated name": "Vegetarian Ramen",
+        "tags": "Cuisine Mains"
+    },
+    "200501": {
+        "generated name": "California Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200502": {
+        "generated name": "Spicy Tuna Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200503": {
+        "generated name": "Alaska Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200504": {
+        "generated name": "Salmon Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200505": {
+        "generated name": "Avocado Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200506": {
+        "generated name": "Cucumber Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200507": {
+        "generated name": "Crab Roll",
+        "tags": "Cuisine Mains"
+    },
+    "200508": {
+        "generated name": "Bibimbap",
+        "tags": "Cuisine Mains"
+    },
+    "200509": {
+        "generated name": "Bulgogi",
+        "tags": "Cuisine Mains"
+    },
+    "200510": {
+        "generated name": "Galbi (Kalbi)",
+        "tags": "Cuisine Mains"
+    },
+    "200511": {
+        "generated name": "Kimchi Jjigae",
+        "tags": "Cuisine Mains"
+    },
+    "200512": {
+        "generated name": "Japchae",
+        "tags": "Cuisine Mains"
+    },
+    "200513": {
+        "generated name": "Kimchi Bokkeumbap",
+        "tags": "Cuisine Mains"
+    },
+    "200514": {
+        "generated name": "Tteokbokki",
+        "tags": "Cuisine Mains"
+    },
+    "200515": {
+        "generated name": "Samgyeopsal",
+        "tags": "Cuisine Mains"
+    },
+    "200516": {
+        "generated name": "Jjajangmyeon (Korean-style noodles)",
+        "tags": "Cuisine Mains"
+    },
+    "200517": {
+        "generated name": "Korean Fried Chicken",
+        "tags": "Cuisine Mains"
+    },
+    "200518": {
+        "generated name": "Haemul Pajeon",
+        "tags": "Cuisine Mains"
+    },
+    "200519": {
+        "generated name": "Bossam",
+        "tags": "Cuisine Mains"
+    },
+    "200520": {
+        "generated name": "Sundubu Jjigae",
+        "tags": "Cuisine Mains"
+    },
+    "200521": {
+        "generated name": "Beef Tacos",
+        "tags": "Cuisine Mains"
+    },
+    "200522": {
+        "generated name": "Pork Tacos",
+        "tags": "Cuisine Mains"
+    },
+    "200523": {
+        "generated name": "Chicken Tacos",
+        "tags": "Cuisine Mains"
+    },
+    "200524": {
+        "generated name": "Fish Tacos",
+        "tags": "Cuisine Mains"
+    },
+    "200525": {
+        "generated name": "Shrimp Tacos",
+        "tags": "Cuisine Mains"
+    },
+    "200526": {
+        "generated name": "Beef Burrito",
+        "tags": "Cuisine Mains"
+    },
+    "200527": {
+        "generated name": "Chicken Burrito",
+        "tags": "Cuisine Mains"
+    },
+    "200528": {
+        "generated name": "Pork Burrito",
+        "tags": "Cuisine Mains"
+    },
+    "200529": {
+        "generated name": "Vegetable Burrito",
+        "tags": "Cuisine Mains"
+    },
+    "200530": {
+        "generated name": "Cheese Enchilada",
+        "tags": "Cuisine Mains"
+    },
+    "200531": {
+        "generated name": "Chicken Enchilada",
+        "tags": "Cuisine Mains"
+    },
+    "200532": {
+        "generated name": "Beef Enchilada",
+        "tags": "Cuisine Mains"
+    },
+    "200533": {
+        "generated name": "Vegetable Enchilada",
+        "tags": "Cuisine Mains"
+    },
+    "200534": {
+        "generated name": "Pork Tamales",
+        "tags": "Cuisine Mains"
+    },
+    "200535": {
+        "generated name": "Chicken Tamales",
+        "tags": "Cuisine Mains"
+    },
+    "200536": {
+        "generated name": "Cheese Tamales",
+        "tags": "Cuisine Mains"
+    },
+    "200537": {
+        "generated name": "Vegetable Tamales",
+        "tags": "Cuisine Mains"
+    },
+    "200538": {
+        "generated name": "Chiles Rellenos",
+        "tags": "Cuisine Mains"
+    },
+    "200539": {
+        "generated name": "Beef Fajitas",
+        "tags": "Cuisine Mains"
+    },
+    "200540": {
+        "generated name": "Chicken Fajitas",
+        "tags": "Cuisine Mains"
+    },
+    "200541": {
+        "generated name": "Shrimp Fajitas",
+        "tags": "Cuisine Mains"
+    },
+    "200542": {
+        "generated name": "Chicken Quesadillas",
+        "tags": "Cuisine Mains"
+    },
+    "200543": {
+        "generated name": "Beef Quesadillas",
+        "tags": "Cuisine Mains"
+    },
+    "200544": {
+        "generated name": "Vegetable Quesadillas",
+        "tags": "Cuisine Mains"
+    },
+    "200545": {
+        "generated name": "Pozole",
+        "tags": "Cuisine Mains"
+    },
+    "200546": {
+        "generated name": "Mole Poblano",
+        "tags": "Cuisine Mains"
+    },
+    "200547": {
+        "generated name": "Carnitas",
+        "tags": "Cuisine Mains"
+    },
+    "200548": {
+        "generated name": "Menudo",
+        "tags": "Cuisine Mains"
+    },
+    "200549": {
+        "generated name": "Tostadas",
+        "tags": "Cuisine Mains"
+    },
+    "200550": {
+        "generated name": "Chimichangas",
+        "tags": "Cuisine Mains"
+    },
+    "200551": {
+        "generated name": "French Fries",
+        "tags": "Cuisine Sides"
+    },
+    "200552": {
+        "generated name": "Coleslow",
+        "tags": "Cuisine Sides"
+    },
+    "200553": {
+        "generated name": "Macaroni and Cheese",
+        "tags": "Cuisine Sides"
+    },
+    "200554": {
+        "generated name": "Baked Beans",
+        "tags": "Cuisine Sides"
+    },
+    "200555": {
+        "generated name": "Cornbread",
+        "tags": "Cuisine Sides"
+    },
+    "200556": {
+        "generated name": "Potato Salad",
+        "tags": "Cuisine Sides"
+    },
+    "200557": {
+        "generated name": "Mashed Potatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200558": {
+        "generated name": "Sweet Potato Casserole",
+        "tags": "Cuisine Sides"
+    },
+    "200559": {
+        "generated name": "Green Bean Casserole",
+        "tags": "Cuisine Sides"
+    },
+    "200560": {
+        "generated name": "Corn on the Cob",
+        "tags": "Cuisine Sides"
+    },
+    "200561": {
+        "generated name": "Garlic Bread",
+        "tags": "Cuisine Sides"
+    },
+    "200562": {
+        "generated name": "Fried Okra",
+        "tags": "Cuisine Sides"
+    },
+    "200563": {
+        "generated name": "Collard Greens",
+        "tags": "Cuisine Sides"
+    },
+    "200564": {
+        "generated name": "Fried Green Tomatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200565": {
+        "generated name": "Onion Rings",
+        "tags": "Cuisine Sides"
+    },
+    "200566": {
+        "generated name": "Deviled Eggs",
+        "tags": "Cuisine Sides"
+    },
+    "200567": {
+        "generated name": "Biscuits and Gravy",
+        "tags": "Cuisine Sides"
+    },
+    "200568": {
+        "generated name": "Tater Tots",
+        "tags": "Cuisine Sides"
+    },
+    "200569": {
+        "generated name": "Egg Fried Rice",
+        "tags": "Cuisine Sides"
+    },
+    "200570": {
+        "generated name": "Spring Rolls",
+        "tags": "Cuisine Sides"
+    },
+    "200571": {
+        "generated name": "Steamed Dumplings (Dim Sum)",
+        "tags": "Cuisine Sides"
+    },
+    "200572": {
+        "generated name": "Wonton Soup",
+        "tags": "Cuisine Sides"
+    },
+    "200573": {
+        "generated name": "Chinese Hot and Sour Soup",
+        "tags": "Cuisine Sides"
+    },
+    "200574": {
+        "generated name": "Stir-Fried Vegetables",
+        "tags": "Cuisine Sides"
+    },
+    "200575": {
+        "generated name": "Kung Pao Potatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200576": {
+        "generated name": "Sichuan Green Beans",
+        "tags": "Cuisine Sides"
+    },
+    "200577": {
+        "generated name": "Mapo Tofu",
+        "tags": "Cuisine Sides"
+    },
+    "200578": {
+        "generated name": "Garlic Broccoli",
+        "tags": "Cuisine Sides"
+    },
+    "200579": {
+        "generated name": "Sweet and Sour Cucumber Salad",
+        "tags": "Cuisine Sides"
+    },
+    "200580": {
+        "generated name": "Scallion Pancakes",
+        "tags": "Cuisine Sides"
+    },
+    "200581": {
+        "generated name": "Egg Drop Soup",
+        "tags": "Cuisine Sides"
+    },
+    "200582": {
+        "generated name": "Chinese Pickled Vegetables (Suan Cai)",
+        "tags": "Cuisine Sides"
+    },
+    "200583": {
+        "generated name": "Steamed Buns (Baozi)",
+        "tags": "Cuisine Sides"
+    },
+    "200584": {
+        "generated name": "Seaweed Salad",
+        "tags": "Cuisine Sides"
+    },
+    "200585": {
+        "generated name": "Braised Tofu with Mushrooms",
+        "tags": "Cuisine Sides"
+    },
+    "200586": {
+        "generated name": "Five-Spice Roasted Sweet Potatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200587": {
+        "generated name": "Cold Sesame Noodles",
+        "tags": "Cuisine Sides"
+    },
+    "200588": {
+        "generated name": "Vegetable Spring Rolls",
+        "tags": "Cuisine Sides"
+    },
+    "200589": {
+        "generated name": "Ratatouille",
+        "tags": "Cuisine Sides"
+    },
+    "200590": {
+        "generated name": "Gratin Dauphinois (Potato Gratin)",
+        "tags": "Cuisine Sides"
+    },
+    "200591": {
+        "generated name": "Haricots Verts (Green Beans)",
+        "tags": "Cuisine Sides"
+    },
+    "200592": {
+        "generated name": "Salade Ni\u00e7oise",
+        "tags": "Cuisine Sides"
+    },
+    "200593": {
+        "generated name": "Proven\u00e7al Ratatouille",
+        "tags": "Cuisine Sides"
+    },
+    "200594": {
+        "generated name": "Tartiflette (Potato, Bacon, and Cheese Casserole)",
+        "tags": "Cuisine Sides"
+    },
+    "200595": {
+        "generated name": "Lyonnaise Potatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200596": {
+        "generated name": "Croque-Monsieur (Grilled Ham and Cheese Sandwich)",
+        "tags": "Cuisine Sides"
+    },
+    "200597": {
+        "generated name": "Roasted Garlic Aioli",
+        "tags": "Cuisine Sides"
+    },
+    "200598": {
+        "generated name": "Salade Lyonnaise (Lyon-style Salad with Bacon and Poached Egg)",
+        "tags": "Cuisine Sides"
+    },
+    "200599": {
+        "generated name": "Grilled Vegetables with Herbs de Provence",
+        "tags": "Cuisine Sides"
+    },
+    "200600": {
+        "generated name": "Pissaladi\u00e8re (Onion Tart)",
+        "tags": "Cuisine Sides"
+    },
+    "200601": {
+        "generated name": "Pommes Anna (Thinly Sliced, Layered Potatoes)",
+        "tags": "Cuisine Sides"
+    },
+    "200602": {
+        "generated name": "Bruschetta",
+        "tags": "Cuisine Sides"
+    },
+    "200603": {
+        "generated name": "Caprese Salad (Tomato, Mozzarella, and Basil)",
+        "tags": "Cuisine Sides"
+    },
+    "200604": {
+        "generated name": "Garlic Bread",
+        "tags": "Cuisine Sides"
+    },
+    "200605": {
+        "generated name": "Insalata Mista (Mixed Green Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200606": {
+        "generated name": "Arancini (Fried Rice Balls)",
+        "tags": "Cuisine Sides"
+    },
+    "200607": {
+        "generated name": "Roasted Vegetables (e.g., Eggplant, Zucchini, Bell Peppers)",
+        "tags": "Cuisine Sides"
+    },
+    "200608": {
+        "generated name": "Fried Zucchini Flowers (Fiori di Zucca)",
+        "tags": "Cuisine Sides"
+    },
+    "200609": {
+        "generated name": "Polenta",
+        "tags": "Cuisine Sides"
+    },
+    "200610": {
+        "generated name": "Minestrone Soup",
+        "tags": "Cuisine Sides"
+    },
+    "200611": {
+        "generated name": "Fried Calamari",
+        "tags": "Cuisine Sides"
+    },
+    "200612": {
+        "generated name": "Risotto Milanese",
+        "tags": "Cuisine Sides"
+    },
+    "200613": {
+        "generated name": "Focaccia Bread",
+        "tags": "Cuisine Sides"
+    },
+    "200614": {
+        "generated name": "Stuffed Mushrooms (Funghi Ripieni)",
+        "tags": "Cuisine Sides"
+    },
+    "200615": {
+        "generated name": "Grilled Asparagus with Lemon and Parmesan",
+        "tags": "Cuisine Sides"
+    },
+    "200616": {
+        "generated name": "Italian Style Green Beans (Fagiolini all'Italiana)",
+        "tags": "Cuisine Sides"
+    },
+    "200617": {
+        "generated name": "Caponata (Sicilian Eggplant Relish)",
+        "tags": "Cuisine Sides"
+    },
+    "200618": {
+        "generated name": "Spinach and Ricotta Stuffed Mushrooms",
+        "tags": "Cuisine Sides"
+    },
+    "200619": {
+        "generated name": "Roasted Garlic Potatoes",
+        "tags": "Cuisine Sides"
+    },
+    "200620": {
+        "generated name": "Grilled Polenta with Tomato Sauce",
+        "tags": "Cuisine Sides"
+    },
+    "200621": {
+        "generated name": "Miso Soup",
+        "tags": "Cuisine Sides"
+    },
+    "200622": {
+        "generated name": "Edamame (Boiled Soybeans)",
+        "tags": "Cuisine Sides"
+    },
+    "200623": {
+        "generated name": "Gyoza (Pan-Fried Dumplings)",
+        "tags": "Cuisine Sides"
+    },
+    "200624": {
+        "generated name": "Seaweed Salad (Wakame Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200625": {
+        "generated name": "Tempura Vegetables",
+        "tags": "Cuisine Sides"
+    },
+    "200626": {
+        "generated name": "Agedashi Tofu (Deep-Fried Tofu in Dashi Sauce)",
+        "tags": "Cuisine Sides"
+    },
+    "200627": {
+        "generated name": "Takoyaki (Octopus Balls)",
+        "tags": "Cuisine Sides"
+    },
+    "200628": {
+        "generated name": "Sunomono (Cucumber Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200629": {
+        "generated name": "Tamagoyaki (Japanese Rolled Omelette)",
+        "tags": "Cuisine Sides"
+    },
+    "200630": {
+        "generated name": "Hijiki Salad (Seaweed Salad with Soy Sauce and Sesame Seeds)",
+        "tags": "Cuisine Sides"
+    },
+    "200631": {
+        "generated name": "Yakitori (Grilled Chicken Skewers)",
+        "tags": "Cuisine Sides"
+    },
+    "200632": {
+        "generated name": "Nasu Dengaku (Miso-Glazed Eggplant)",
+        "tags": "Cuisine Sides"
+    },
+    "200633": {
+        "generated name": "Chawanmushi (Savory Egg Custard)",
+        "tags": "Cuisine Sides"
+    },
+    "200634": {
+        "generated name": "Ohitashi (Blanched Vegetables with Soy Sauce Dressing)",
+        "tags": "Cuisine Sides"
+    },
+    "200635": {
+        "generated name": "Shishito Peppers with Yuzu Kosho",
+        "tags": "Cuisine Sides"
+    },
+    "200636": {
+        "generated name": "Okonomiyaki (Japanese Savory Pancake)",
+        "tags": "Cuisine Sides"
+    },
+    "200637": {
+        "generated name": "Hiyayakko (Chilled Tofu with Garnishes)",
+        "tags": "Cuisine Sides"
+    },
+    "200638": {
+        "generated name": "Kinpira Gobo (Braised Burdock Root and Carrots)",
+        "tags": "Cuisine Sides"
+    },
+    "200639": {
+        "generated name": "Tsukemono (Japanese Pickles)",
+        "tags": "Cuisine Sides"
+    },
+    "200640": {
+        "generated name": "Rice Balls (Onigiri) with Various Fillings",
+        "tags": "Cuisine Sides"
+    },
+    "200641": {
+        "generated name": "Kimchi (Fermented Spicy Cabbage)",
+        "tags": "Cuisine Sides"
+    },
+    "200642": {
+        "generated name": "Gyeran Jjim (Steamed Egg Custard)",
+        "tags": "Cuisine Sides"
+    },
+    "200643": {
+        "generated name": "Gaji Namul (Seasoned Eggplant)",
+        "tags": "Cuisine Sides"
+    },
+    "200644": {
+        "generated name": "Japchae (Stir-Fried Sweet Potato Noodles)",
+        "tags": "Cuisine Sides"
+    },
+    "200645": {
+        "generated name": "Kongnamul Muchim (Seasoned Soybean Sprouts)",
+        "tags": "Cuisine Sides"
+    },
+    "200646": {
+        "generated name": "Oi Muchim (Spicy Cucumber Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200647": {
+        "generated name": "Gamja Jorim (Braised Potatoes)",
+        "tags": "Cuisine Sides"
+    },
+    "200648": {
+        "generated name": "Dubu Jorim (Braised Tofu)",
+        "tags": "Cuisine Sides"
+    },
+    "200649": {
+        "generated name": "Hobak Namul (Seasoned Zucchini)",
+        "tags": "Cuisine Sides"
+    },
+    "200650": {
+        "generated name": "Mu Saengchae (Spicy Radish Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200651": {
+        "generated name": "Sukju Namul (Seasoned Mung Bean Sprouts)",
+        "tags": "Cuisine Sides"
+    },
+    "200652": {
+        "generated name": "Sigeumchi Namul (Seasoned Spinach)",
+        "tags": "Cuisine Sides"
+    },
+    "200653": {
+        "generated name": "Myulchi Bokkeum (Stir-Fried Anchovies)",
+        "tags": "Cuisine Sides"
+    },
+    "200654": {
+        "generated name": "Bossam Kimchi (Wrapped Cabbage Kimchi)",
+        "tags": "Cuisine Sides"
+    },
+    "200655": {
+        "generated name": "Kongjang (Soy Braised Soybeans)",
+        "tags": "Cuisine Sides"
+    },
+    "200656": {
+        "generated name": "Kkaennip Japchae (Stir-Fried Perilla Leaves)",
+        "tags": "Cuisine Sides"
+    },
+    "200657": {
+        "generated name": "Jangjorim (Soy Braised Beef)",
+        "tags": "Cuisine Sides"
+    },
+    "200658": {
+        "generated name": "Buchu Jangajji (Pickled Garlic Chives)",
+        "tags": "Cuisine Sides"
+    },
+    "200659": {
+        "generated name": "Gyeran Mari (Rolled Omelette)",
+        "tags": "Cuisine Sides"
+    },
+    "200660": {
+        "generated name": "Algamja Jorim (Braised Potatoes with Soy Sauce)",
+        "tags": "Cuisine Sides"
+    },
+    "200661": {
+        "generated name": "Mexican Rice (Arroz Mexicano)",
+        "tags": "Cuisine Sides"
+    },
+    "200662": {
+        "generated name": "Refried Beans (Frijoles Refritos)",
+        "tags": "Cuisine Sides"
+    },
+    "200663": {
+        "generated name": "Guacamole",
+        "tags": "Cuisine Sides"
+    },
+    "200664": {
+        "generated name": "Salsa Fresca (Pico de Gallo)",
+        "tags": "Cuisine Sides"
+    },
+    "200665": {
+        "generated name": "Corn or Flour Tortillas",
+        "tags": "Cuisine Sides"
+    },
+    "200666": {
+        "generated name": "Mexican Street Corn (Elote)",
+        "tags": "Cuisine Sides"
+    },
+    "200667": {
+        "generated name": "Queso Fundido (Melted Cheese Dip)",
+        "tags": "Cuisine Sides"
+    },
+    "200668": {
+        "generated name": "Frijoles de la Olla (Whole Beans)",
+        "tags": "Cuisine Sides"
+    },
+    "200669": {
+        "generated name": "Ensalada de Nopales (Cactus Salad)",
+        "tags": "Cuisine Sides"
+    },
+    "200670": {
+        "generated name": "Tostadas",
+        "tags": "Cuisine Sides"
+    },
+    "200671": {
+        "generated name": "Cilantro Lime Rice",
+        "tags": "Cuisine Sides"
+    },
+    "200672": {
+        "generated name": "Chiles Rellenos (Stuffed Peppers)",
+        "tags": "Cuisine Sides"
+    },
+    "200673": {
+        "generated name": "Mexican Coleslaw (Ensalada de Repollo)",
+        "tags": "Cuisine Sides"
+    },
+    "200674": {
+        "generated name": "Chopped Onion and Cilantro (Cebolla y Cilantro Picado)",
+        "tags": "Cuisine Sides"
+    },
+    "200675": {
+        "generated name": "Mexican Pickled Vegetables (Escabeche)",
+        "tags": "Cuisine Sides"
+    },
+    "200676": {
+        "generated name": "Mexican Cornbread (Pan de Elote)",
+        "tags": "Cuisine Sides"
+    },
+    "200677": {
+        "generated name": "Chilaquiles",
+        "tags": "Cuisine Sides"
+    },
+    "200678": {
+        "generated name": "Mexican Street Tacos",
+        "tags": "Cuisine Sides"
+    },
+    "200679": {
+        "generated name": "Mexican Caesar Salad",
+        "tags": "Cuisine Sides"
+    },
+    "200680": {
+        "generated name": "Charro Beans (Frijoles Charros)",
+        "tags": "Cuisine Sides"
+    },
+    "200681": {
+        "generated name": "Apple",
+        "tags": "Snacks"
+    },
+    "200682": {
+        "generated name": "Banana",
+        "tags": "Snacks"
+    },
+    "200683": {
+        "generated name": "Blueberries",
+        "tags": "Snacks"
+    },
+    "200684": {
+        "generated name": "Cantaloupe",
+        "tags": "Snacks"
+    },
+    "200685": {
+        "generated name": "Cranberries",
+        "tags": "Snacks"
+    },
+    "200686": {
+        "generated name": "Grapes",
+        "tags": "Snacks"
+    },
+    "200687": {
+        "generated name": "Honeydew Melon",
+        "tags": "Snacks"
+    },
+    "200688": {
+        "generated name": "Mango",
+        "tags": "Snacks"
+    },
+    "200689": {
+        "generated name": "Orange",
+        "tags": "Snacks"
+    },
+    "200690": {
+        "generated name": "Pear",
+        "tags": "Snacks"
+    },
+    "200691": {
+        "generated name": "Strawberries",
+        "tags": "Snacks"
+    },
+    "200692": {
+        "generated name": "Watermelon",
+        "tags": "Snacks"
+    },
+    "200693": {
+        "generated name": "Dried Apricots",
+        "tags": "Snacks"
+    },
+    "200694": {
+        "generated name": "Dried Mangoes",
+        "tags": "Snacks"
+    },
+    "200695": {
+        "generated name": "Raisins",
+        "tags": "Snacks"
+    },
+    "200696": {
+        "generated name": "Graham Crackers",
+        "tags": "Snacks"
+    },
+    "200697": {
+        "generated name": "Granola Bar",
+        "tags": "Snacks"
+    },
+    "200698": {
+        "generated name": "Trail Mix",
+        "tags": "Snacks"
+    },
+    "200699": {
+        "generated name": "Greek yoghurt",
+        "tags": "Snacks"
+    },
+    "200700": {
+        "generated name": "Apples and Peanut Butter",
+        "tags": "Snacks"
+    },
+    "200701": {
+        "generated name": "Protein Bar",
+        "tags": "Snacks"
+    },
+    "200702": {
+        "generated name": "Cheese and Crackers",
+        "tags": "Snacks"
+    },
+    "200703": {
+        "generated name": "Almonds",
+        "tags": "Snacks"
+    },
+    "200704": {
+        "generated name": "Peanuts",
+        "tags": "Snacks"
+    },
+    "200705": {
+        "generated name": "Cashews",
+        "tags": "Snacks"
+    },
+    "200706": {
+        "generated name": "Walnuts",
+        "tags": "Snacks"
+    },
+    "200707": {
+        "generated name": "Bell Peppers with Ranch",
+        "tags": "Snacks"
+    },
+    "200708": {
+        "generated name": "Carrot Slices with Ranch",
+        "tags": "Snacks"
+    },
+    "200709": {
+        "generated name": "Celery Sticks with Ranch",
+        "tags": "Snacks"
+    },
+    "200710": {
+        "generated name": "Cucumbers with Ranch",
+        "tags": "Snacks"
+    },
+    "200711": {
+        "generated name": "Bell Peppers with Hummus",
+        "tags": "Snacks"
+    },
+    "200712": {
+        "generated name": "Carrot Slices with Hummus",
+        "tags": "Snacks"
+    },
+    "200713": {
+        "generated name": "Celery Sticks with Hummus",
+        "tags": "Snacks"
+    },
+    "200714": {
+        "generated name": "Cucumbers with Hummus",
+        "tags": "Snacks"
+    },
+    "200715": {
+        "generated name": "Water",
+        "tags": "Drinks"
+    },
+    "200716": {
+        "generated name": "Milk",
+        "tags": "Drinks"
+    },
+    "200717": {
+        "generated name": "Black Coffee",
+        "tags": "Drinks"
+    },
+    "200718": {
+        "generated name": "Coffee with Milk",
+        "tags": "Drinks"
+    },
+    "200719": {
+        "generated name": "Coffee with Cream",
+        "tags": "Drinks"
+    },
+    "200720": {
+        "generated name": "Black Coffee with Sugar",
+        "tags": "Drinks"
+    },
+    "200721": {
+        "generated name": "Coffee with Milk and Sugar",
+        "tags": "Drinks"
+    },
+    "200722": {
+        "generated name": "Coffee with Cream and Sugar",
+        "tags": "Drinks"
+    },
+    "200723": {
+        "generated name": "Black Tea",
+        "tags": "Drinks"
+    },
+    "200724": {
+        "generated name": "Tea with Milk",
+        "tags": "Drinks"
+    },
+    "200725": {
+        "generated name": "Tea with Cream",
+        "tags": "Drinks"
+    },
+    "200726": {
+        "generated name": "Tea with Sugar",
+        "tags": "Drinks"
+    },
+    "200727": {
+        "generated name": "Tea with Milk and Sugar",
+        "tags": "Drinks"
+    },
+    "200728": {
+        "generated name": "Tea with Cream and Sugar",
+        "tags": "Drinks"
+    },
+    "200729": {
+        "generated name": "Apple Juice",
+        "tags": "Drinks"
+    },
+    "200730": {
+        "generated name": "Orange Juice",
+        "tags": "Drinks"
+    },
+    "200731": {
+        "generated name": "Coca-cola",
+        "tags": "Drinks"
+    },
+    "200732": {
+        "generated name": "Sprite",
+        "tags": "Drinks"
+    },
+    "200733": {
+        "generated name": "Vegan Chili",
+        "tags": "Vegan Mains"
+    },
+    "200734": {
+        "generated name": "Lentil Soup",
+        "tags": "Vegan Mains"
+    },
+    "200735": {
+        "generated name": "Tofu Stir-Fry",
+        "tags": "Vegan Mains"
+    },
+    "200736": {
+        "generated name": "Vegan Pasta Primavera",
+        "tags": "Vegan Mains"
+    },
+    "200737": {
+        "generated name": "Vegan Pizza with Vegetable Toppings",
+        "tags": "Vegan Mains"
+    },
+    "200738": {
+        "generated name": "Chickpea Curry",
+        "tags": "Vegan Mains"
+    },
+    "200739": {
+        "generated name": "Vegan Buddha Bowl",
+        "tags": "Vegan Mains"
+    },
+    "200740": {
+        "generated name": "Vegan Stuffed Bell Peppers with Rice and Beans",
+        "tags": "Vegan Mains"
+    },
+    "200741": {
+        "generated name": "Vegan Shepherd's Pie",
+        "tags": "Vegan Mains"
+    },
+    "200742": {
+        "generated name": "Eggplant Parmesan",
+        "tags": "Vegan Mains"
+    },
+    "200743": {
+        "generated name": "Vegan Sushi Rolls with Avocados and Vegetables",
+        "tags": "Vegan Mains"
+    },
+    "200744": {
+        "generated name": "Black Bean Tacos with Guacamole",
+        "tags": "Vegan Mains"
+    },
+    "200745": {
+        "generated name": "Vegan Pad Thai",
+        "tags": "Vegan Mains"
+    },
+    "200746": {
+        "generated name": "Falafal Wraps with Hummus",
+        "tags": "Vegan Mains"
+    },
+    "200747": {
+        "generated name": "Sweet Potato and Black Bean Enchiladas",
+        "tags": "Vegan Mains"
+    },
+    "200748": {
+        "generated name": "Vegan Mushroom Risotto",
+        "tags": "Vegan Mains"
+    },
+    "200749": {
+        "generated name": "Vegan Lasagna with Cashew Cheese",
+        "tags": "Vegan Mains"
+    },
+    "200750": {
+        "generated name": "Quinoa Salad",
+        "tags": "Vegan Mains"
+    },
+    "200751": {
+        "generated name": "Vegan Tikka Masala with Tofu",
+        "tags": "Vegan Mains"
+    },
+    "200752": {
+        "generated name": "Vegetable Stir-Fry",
+        "tags": "Vegetarian Mains"
+    },
+    "200753": {
+        "generated name": "Caprese Salad with Fresh Mozzarella, Tomatoes, and Basil",
+        "tags": "Vegetarian Mains"
+    },
+    "200754": {
+        "generated name": "Margherita Pizza with Tomato, Basil, and Mozzarella",
+        "tags": "Vegetarian Mains"
+    },
+    "200755": {
+        "generated name": "Grilled Portobello Mushrooms",
+        "tags": "Vegetarian Mains"
+    },
+    "200756": {
+        "generated name": "Spinach and Ricotta Stuffed Shells",
+        "tags": "Vegetarian Mains"
+    },
+    "200757": {
+        "generated name": "Vegetarian Burritos with Rice, Beans, and Grilled Vegetables",
+        "tags": "Vegetarian Mains"
+    },
+    "200758": {
+        "generated name": "Cheese Quesadillas with Salsa and Guacamole",
+        "tags": "Vegetarian Mains"
+    },
+    "200759": {
+        "generated name": "Spinach and Feta Spanakopita",
+        "tags": "Vegetarian Mains"
+    },
+    "200760": {
+        "generated name": "Mushroom Risotto",
+        "tags": "Vegetarian Mains"
+    },
+    "200761": {
+        "generated name": "Vegetarian Chili",
+        "tags": "Vegetarian Mains"
+    },
+    "200762": {
+        "generated name": "Vegetarian Bibimbap",
+        "tags": "Vegetarian Mains"
+    },
+    "200763": {
+        "generated name": "Vegetable Curry with Rice",
+        "tags": "Vegetarian Mains"
+    },
+    "200764": {
+        "generated name": "Vegetable Pot Pie",
+        "tags": "Vegetarian Mains"
+    },
+    "200765": {
+        "generated name": "Three Cheese Baked Ziti",
+        "tags": "Vegetarian Mains"
+    },
+    "200766": {
+        "generated name": "Margherita Panini with Fresh Mozzarella, Tomato, and Basil",
+        "tags": "Vegetarian Mains"
+    },
+    "200767": {
+        "generated name": "Veggie Burger with Avocado and Sweet Potato Fries",
+        "tags": "Vegetarian Mains"
+    },
+    "200768": {
+        "generated name": "Vegetarian Lasagna with Ricotta and Spinach",
+        "tags": "Vegetarian Mains"
+    },
+    "200769": {
+        "generated name": "Mushroom Stroganoff",
+        "tags": "Vegetarian Mains"
+    },
+    "200770": {
+        "generated name": "Grilled Halloumi Skewers with Vegetables",
+        "tags": "Vegetarian Mains"
+    },
+    "200771": {
+        "generated name": "Spinach and Goat Cheese Stuffed Portobello Mushrooms",
+        "tags": "Vegetarian Mains"
+    },
+    "200772": {
+        "generated name": "Vegetarian Sushi Rolls with Avocado and Cucumber",
+        "tags": "Vegetarian Mains"
+    },
+    "200773": {
+        "generated name": "Veggie Stir-Fried Noodles",
+        "tags": "Vegetarian Mains"
+    },
+    "200774": {
+        "generated name": "Ratatouille",
+        "tags": "Vegetarian Mains"
+    },
+    "200775": {
+        "generated name": "Paneer Tikka Masala",
+        "tags": "Vegetarian Mains"
+    },
+    "200776": {
+        "generated name": "Greek Salad with Feta Cheese, Olives, and Cucumbers",
+        "tags": "Vegetarian Mains"
+    },
+    "200777": {
+        "generated name": "Vegetarian Paella",
+        "tags": "Vegetarian Mains"
+    },
+    "200778": {
+        "generated name": "Grilled Salmon with Lemon and Dill",
+        "tags": "Fish Mains"
+    },
+    "200779": {
+        "generated name": "Baked Cod with Herbs and Butter",
+        "tags": "Fish Mains"
+    },
+    "200780": {
+        "generated name": "Pan-Seared Tuna Steak",
+        "tags": "Fish Mains"
+    },
+    "200781": {
+        "generated name": "Fish Tacos with Fresh Salsa and Avocado",
+        "tags": "Fish Mains"
+    },
+    "200782": {
+        "generated name": "Lemon Garlic Shrimp Scampi",
+        "tags": "Fish Mains"
+    },
+    "200783": {
+        "generated name": "Blackened Catfish",
+        "tags": "Fish Mains"
+    },
+    "200784": {
+        "generated name": "Fish and Chips",
+        "tags": "Fish Mains"
+    },
+    "200785": {
+        "generated name": "Miso Glazed Cod",
+        "tags": "Fish Mains"
+    },
+    "200786": {
+        "generated name": "Baked Halibut with Tomato and Basil",
+        "tags": "Fish Mains"
+    },
+    "200787": {
+        "generated name": "Coconut Crusted Tilapia",
+        "tags": "Fish Mains"
+    },
+    "200788": {
+        "generated name": "Pan-Fried Trout with Almonds",
+        "tags": "Fish Mains"
+    },
+    "200789": {
+        "generated name": "Tuna Nicoise Salad",
+        "tags": "Fish Mains"
+    },
+    "200790": {
+        "generated name": "Cedar Plank Salmon with Maple Glaze",
+        "tags": "Fish Mains"
+    },
+    "200791": {
+        "generated name": "Grilled Sea Bass with Mediterranean Salsa",
+        "tags": "Fish Mains"
+    },
+    "200792": {
+        "generated name": "Shrimp Stir-Fry with Vegetables",
+        "tags": "Fish Mains"
+    },
+    "200793": {
+        "generated name": "Fish Curry with Coconut Milk",
+        "tags": "Fish Mains"
+    },
+    "200794": {
+        "generated name": "Fisherman's Stew with Clams, Mussels, and White Fish",
+        "tags": "Fish Mains"
+    },
+    "200795": {
+        "generated name": "Spicy Tuna Sushi Rolls",
+        "tags": "Fish Mains"
+    },
+    "200796": {
+        "generated name": "Grilled Sardines with Lemon and Olive Oil",
+        "tags": "Fish Mains"
+    },
+    "200797": {
+        "generated name": "Smoked Salmon Pasta with Cream Sauce",
+        "tags": "Fish Mains"
+    },
+    "200798": {
+        "generated name": "Seared Scallops with Garlic Butter",
+        "tags": "Fish Mains"
+    },
+    "200799": {
+        "generated name": "Tuna Poke Bowl with Rice and Vegetables",
+        "tags": "Fish Mains"
+    },
+    "200800": {
+        "generated name": "Fisherman's Pie with Mashed Potato Topping",
+        "tags": "Fish Mains"
+    },
+    "200801": {
+        "generated name": "Shrimp and Vegetable Stir-Fry with Noodles",
+        "tags": "Fish Mains"
+    },
+    "200802": {
+        "generated name": "Baked Haddock with Parmesan Crust",
+        "tags": "Fish Mains"
+    },
+    "200803": {
+        "generated name": "Tofu Stir-Fry with Vegetables",
+        "tags": "Tofu Mains"
+    },
+    "200804": {
+        "generated name": "Tofu Scramble with Spinach and Tomatoes",
+        "tags": "Tofu Mains"
+    },
+    "200805": {
+        "generated name": "Tofu Pad Thai",
+        "tags": "Tofu Mains"
+    },
+    "200806": {
+        "generated name": "Crispy Baked Tofu with Teriyaki Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200807": {
+        "generated name": "Tofu and Vegetable Curry",
+        "tags": "Tofu Mains"
+    },
+    "200808": {
+        "generated name": "Tofu Buddha Bowl with Quinoa and Roasted Vegetables",
+        "tags": "Tofu Mains"
+    },
+    "200809": {
+        "generated name": "Tofu Tacos with Avocado and Salsa",
+        "tags": "Tofu Mains"
+    },
+    "200810": {
+        "generated name": "Tofu Fried Rice",
+        "tags": "Tofu Mains"
+    },
+    "200811": {
+        "generated name": "Tofu and Broccoli Stir-Fry in Garlic Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200812": {
+        "generated name": "Tofu Lettuce Wraps with Hoisin Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200813": {
+        "generated name": "Tofu Noodle Soup",
+        "tags": "Tofu Mains"
+    },
+    "200814": {
+        "generated name": "Tofu Tikka Masala",
+        "tags": "Tofu Mains"
+    },
+    "200815": {
+        "generated name": "Grilled Tofu Skewers with Peanut Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200816": {
+        "generated name": "Tofu and Mushroom Stroganoff",
+        "tags": "Tofu Mains"
+    },
+    "200817": {
+        "generated name": "BBQ Tofu Sandwiches with Coleslaw",
+        "tags": "Tofu Mains"
+    },
+    "200818": {
+        "generated name": "Tofu and Black Bean Enchiladas",
+        "tags": "Tofu Mains"
+    },
+    "200819": {
+        "generated name": "Tofu and Vegetable Kebabs",
+        "tags": "Tofu Mains"
+    },
+    "200820": {
+        "generated name": "Tofu and Spinach Lasagna",
+        "tags": "Tofu Mains"
+    },
+    "200821": {
+        "generated name": "Spicy Korean Tofu Stir-Fry (Dubu Jorim)",
+        "tags": "Tofu Mains"
+    },
+    "200822": {
+        "generated name": "Tofu and Sweet Potato Hash",
+        "tags": "Tofu Mains"
+    },
+    "200823": {
+        "generated name": "Tofu Lettuce Cups with Spicy Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200824": {
+        "generated name": "Tofu and Vegetable Spring Rolls",
+        "tags": "Tofu Mains"
+    },
+    "200825": {
+        "generated name": "Tofu and Kimchi Fried Rice",
+        "tags": "Tofu Mains"
+    },
+    "200826": {
+        "generated name": "Tofu and Chickpea Curry",
+        "tags": "Tofu Mains"
+    },
+    "200827": {
+        "generated name": "Tofu and Avocado Sushi Rolls",
+        "tags": "Tofu Mains"
+    },
+    "200828": {
+        "generated name": "Tofu Satay with Peanut Sauce",
+        "tags": "Tofu Mains"
+    },
+    "200829": {
+        "generated name": "Tofu and Vegetable Paella",
+        "tags": "Tofu Mains"
+    },
+    "200830": {
+        "generated name": "Tofu Caesar Salad with Croutons",
+        "tags": "Tofu Mains"
+    },
+    "200831": {
+        "generated name": "Tofu and Broccoli Quiche",
+        "tags": "Tofu Mains"
+    },
+    "200832": {
+        "generated name": "Tofu Banh Mi Sandwiches",
+        "tags": "Tofu Mains"
+    },
+    "200833": {
+        "generated name": "Chocolate Cake",
+        "tags": "Desserts"
+    },
+    "200834": {
+        "generated name": "Apple Pie",
+        "tags": "Desserts"
+    },
+    "200835": {
+        "generated name": "Cheesecake",
+        "tags": "Desserts"
+    },
+    "200836": {
+        "generated name": "Ice Cream (various flavors)",
+        "tags": "Desserts"
+    },
+    "200837": {
+        "generated name": "Brownies",
+        "tags": "Desserts"
+    },
+    "200838": {
+        "generated name": "Tiramisu",
+        "tags": "Desserts"
+    },
+    "200839": {
+        "generated name": "Chocolate Chip Cookies",
+        "tags": "Desserts"
+    },
+    "200840": {
+        "generated name": "Cr\u00e8me Br\u00fbl\u00e9e",
+        "tags": "Desserts"
+    },
+    "200841": {
+        "generated name": "Lemon Meringue Pie",
+        "tags": "Desserts"
+    },
+    "200842": {
+        "generated name": "Carrot Cake",
+        "tags": "Desserts"
+    },
+    "200843": {
+        "generated name": "Red Velvet Cake",
+        "tags": "Desserts"
+    },
+    "200844": {
+        "generated name": "Pecan Pie",
+        "tags": "Desserts"
+    },
+    "200845": {
+        "generated name": "Fruit Tart",
+        "tags": "Desserts"
+    },
+    "200846": {
+        "generated name": "Key Lime Pie",
+        "tags": "Desserts"
+    },
+    "200847": {
+        "generated name": "Chocolate Mousse",
+        "tags": "Desserts"
+    },
+    "200848": {
+        "generated name": "Bread Pudding",
+        "tags": "Desserts"
+    },
+    "200849": {
+        "generated name": "Banana Bread",
+        "tags": "Desserts"
+    },
+    "200850": {
+        "generated name": "Strawberry Shortcake",
+        "tags": "Desserts"
+    },
+    "200851": {
+        "generated name": "Panna Cotta",
+        "tags": "Desserts"
+    },
+    "200852": {
+        "generated name": "Cinnamon Rolls",
+        "tags": "Desserts"
+    },
+    "200853": {
+        "generated name": "Toast with Butter - Whole Wheat Bread",
+        "tags": "Additional breakfast items"
+    },
+    "200854": {
+        "generated name": "Toast with Margerine - Whole Wheat Bread",
+        "tags": "Additional breakfast items"
+    },
+    "200855": {
+        "generated name": "Toast with Butter - White Bread",
+        "tags": "Additional breakfast items"
+    },
+    "200856": {
+        "generated name": "Toast with Margerine - White Bread",
+        "tags": "Additional breakfast items"
+    },
+    "200857": {
+        "generated name": "Toast with Butter - Sour Dough Bread",
+        "tags": "Additional breakfast items"
+    },
+    "200858": {
+        "generated name": "Toast with Margerine - Sour Dough Bread",
+        "tags": "Additional breakfast items"
+    }
+}
