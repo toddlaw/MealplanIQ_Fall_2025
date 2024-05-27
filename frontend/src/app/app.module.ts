@@ -49,6 +49,7 @@ import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
+import { PopupComponent } from './components/popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/g
     DashboardComponent,
     CarouselComponent,
     GeneratePopUpComponent,
+    PopupComponent,
   ],
   imports: [
     BrowserModule,
