@@ -131,31 +131,31 @@ export class LandingComponent implements OnInit {
     console.log('user ID: ' + localStorage.getItem('uid'));
     console.log('email: ' + localStorage.getItem('email'));
 
-    this.userSubscriptionTypeId = 3;
+    // this.userSubscriptionTypeId = 3;
 
-    // if (localStorage.getItem('uid')) {
-    //   try {
-    //     const response: any = await this.http
-    //       .get(
-    //         'http://127.0.0.1:5000/api/subscription_type_id/' +
-    //           localStorage.getItem('uid')
-    //       )
-    //       .toPromise();
-    //     if (response.subscription_type_id) {
-    //       localStorage.setItem(
-    //         'subscription_type_id',
-    //         response.subscription_type_id
-    //       );
-    //       this.userSubscriptionTypeId = response.subscription_type_id;
-    //       console.log('subscription type ID:' + this.userSubscriptionTypeId);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error:', error);
-    //   }
-    // } else {
-    //   this.userSubscriptionTypeId = 0;
-    //   console.log('subscription type ID:' + this.userSubscriptionTypeId);
-    // }
+    if (localStorage.getItem('uid')) {
+      try {
+        const response: any = await this.http
+          .get(
+            'http://127.0.0.1:5000/api/subscription_type_id/' +
+              localStorage.getItem('uid')
+          )
+          .toPromise();
+        if (response.subscription_type_id) {
+          localStorage.setItem(
+            'subscription_type_id',
+            response.subscription_type_id
+          );
+          this.userSubscriptionTypeId = response.subscription_type_id;
+          console.log('subscription type ID:' + this.userSubscriptionTypeId);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      this.userSubscriptionTypeId = 0;
+      console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    }
 
     // prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
