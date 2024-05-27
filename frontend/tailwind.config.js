@@ -28,6 +28,7 @@ module.exports = {
         info: "#c6e2ff",
         warning: "#fff3b3",
         error: "#f6d3d1",
+        grey:"#787177"
       },
       text: {
         DEFAULT: "#88a56f",
