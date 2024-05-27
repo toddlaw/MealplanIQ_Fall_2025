@@ -2,8 +2,8 @@
   "constraints_loosened": true,
   "days": [
     {
-      "date": "2024-05-30",
-      "date_weekday": "Thursday May 30",
+      "date": "2024-05-28",
+      "date_weekday": "Tuesday May 28",
       "recipes": [
         {
           "calories": "162.063",
@@ -213,8 +213,8 @@
       ]
     },
     {
-      "date": "2024-05-29",
-      "date_weekday": "Wednesday May 29",
+      "date": "2024-05-27",
+      "date_weekday": "Monday May 27",
       "recipes": [
         {
           "calories": "162.063",
@@ -706,46 +706,170 @@
     {
       "actual": 2117,
       "nutrientName": "energy (calories)",
+      "status": "success",
       "target": "1917 - 2119"
     },
-    { "actual": 12, "nutrientName": "fiber (g)", "target": "42 - " },
+    {
+      "actual": 12,
+      "nutrientName": "fiber (g)",
+      "status": "warning",
+      "target": "42 - "
+    },
     {
       "actual": 198,
       "nutrientName": "carbohydrates (g)",
+      "status": "warning",
       "target": "339 - 490"
     },
-    { "actual": 81, "nutrientName": "protein (g)", "target": "75 - 264" },
-    { "actual": 114, "nutrientName": "fats (g)", "target": "83 - 117" },
-    { "actual": 863, "nutrientName": "calcium (mg)", "target": "2600 - 5000" },
-    { "actual": 3972, "nutrientName": "sodium (mg)", "target": "3000 - 4600" },
-    { "actual": 1, "nutrientName": "copper (mg)", "target": "1 - 16" },
-    { "actual": 3, "nutrientName": "fluoride (mg)", "target": "6 - 20" },
-    { "actual": 13, "nutrientName": "iron (mg)", "target": "30 - 90" },
-    { "actual": 270, "nutrientName": "magnesium (mg)", "target": "720 - " },
-    { "actual": 2, "nutrientName": "manganese (mg)", "target": "3 - 18" },
-    { "actual": 2719, "nutrientName": "potassium (mg)", "target": "9400 - " },
-    { "actual": 155, "nutrientName": "selenium (ug)", "target": "110 - 800" },
-    { "actual": 9, "nutrientName": "zinc (mg)", "target": "18 - 68" },
+    {
+      "actual": 81,
+      "nutrientName": "protein (g)",
+      "status": "success",
+      "target": "75 - 264"
+    },
+    {
+      "actual": 114,
+      "nutrientName": "fats (g)",
+      "status": "success",
+      "target": "83 - 117"
+    },
+    {
+      "actual": 863,
+      "nutrientName": "calcium (mg)",
+      "status": "warning",
+      "target": "2600 - 5000"
+    },
+    {
+      "actual": 3972,
+      "nutrientName": "sodium (mg)",
+      "status": "success",
+      "target": "3000 - 4600"
+    },
+    {
+      "actual": 1,
+      "nutrientName": "copper (mg)",
+      "status": "success",
+      "target": "1 - 16"
+    },
+    {
+      "actual": 3,
+      "nutrientName": "fluoride (mg)",
+      "status": "warning",
+      "target": "6 - 20"
+    },
+    {
+      "actual": 13,
+      "nutrientName": "iron (mg)",
+      "status": "warning",
+      "target": "30 - 90"
+    },
+    {
+      "actual": 270,
+      "nutrientName": "magnesium (mg)",
+      "status": "warning",
+      "target": "720 - "
+    },
+    {
+      "actual": 2,
+      "nutrientName": "manganese (mg)",
+      "status": "warning",
+      "target": "3 - 18"
+    },
+    {
+      "actual": 2719,
+      "nutrientName": "potassium (mg)",
+      "status": "warning",
+      "target": "9400 - "
+    },
+    {
+      "actual": 155,
+      "nutrientName": "selenium (ug)",
+      "status": "success",
+      "target": "110 - 800"
+    },
+    {
+      "actual": 9,
+      "nutrientName": "zinc (mg)",
+      "status": "warning",
+      "target": "18 - 68"
+    },
     {
       "actual": 3499,
       "nutrientName": "vitamin_a (iu)",
+      "status": "warning",
       "target": "420 - 1680"
     },
-    { "actual": 13, "nutrientName": "thiamin (mg)", "target": "2 - " },
-    { "actual": 11, "nutrientName": "riboflavin (mg)", "target": "2 - " },
-    { "actual": 73, "nutrientName": "niacin (mg)", "target": "28 - 60" },
-    { "actual": 9, "nutrientName": "vitamin_b5 (mg)", "target": "10 - " },
-    { "actual": 1, "nutrientName": "vitamin_b6 (mg)", "target": "2 - 160" },
-    { "actual": 3, "nutrientName": "vitamin_b12 (ug)", "target": "4 - " },
-    { "actual": 2343, "nutrientName": "folate (ug)", "target": "800 - 1600" },
-    { "actual": 87, "nutrientName": "vitamin_c (mg)", "target": "130 - 3600" },
+    {
+      "actual": 13,
+      "nutrientName": "thiamin (mg)",
+      "status": "success",
+      "target": "2 - "
+    },
+    {
+      "actual": 11,
+      "nutrientName": "riboflavin (mg)",
+      "status": "success",
+      "target": "2 - "
+    },
+    {
+      "actual": 73,
+      "nutrientName": "niacin (mg)",
+      "status": "warning",
+      "target": "28 - 60"
+    },
+    {
+      "actual": 9,
+      "nutrientName": "vitamin_b5 (mg)",
+      "status": "warning",
+      "target": "10 - "
+    },
+    {
+      "actual": 1,
+      "nutrientName": "vitamin_b6 (mg)",
+      "status": "warning",
+      "target": "2 - 160"
+    },
+    {
+      "actual": 3,
+      "nutrientName": "vitamin_b12 (ug)",
+      "status": "warning",
+      "target": "4 - "
+    },
+    {
+      "actual": 2343,
+      "nutrientName": "folate (ug)",
+      "status": "warning",
+      "target": "800 - 1600"
+    },
+    {
+      "actual": 87,
+      "nutrientName": "vitamin_c (mg)",
+      "status": "warning",
+      "target": "130 - 3600"
+    },
     {
       "actual": 316,
       "nutrientName": "vitamin_d (iu)",
+      "status": "warning",
       "target": "1200 - 4000"
     },
-    { "actual": 11, "nutrientName": "vitamin_e (mg)", "target": "30 - 1600" },
-    { "actual": 1218, "nutrientName": "choline (mg)", "target": "800 - 6000" },
-    { "actual": 37, "nutrientName": "vitamin_k (ug)", "target": "150 - " }
+    {
+      "actual": 11,
+      "nutrientName": "vitamin_e (mg)",
+      "status": "warning",
+      "target": "30 - 1600"
+    },
+    {
+      "actual": 1218,
+      "nutrientName": "choline (mg)",
+      "status": "success",
+      "target": "800 - 6000"
+    },
+    {
+      "actual": 37,
+      "nutrientName": "vitamin_k (ug)",
+      "status": "warning",
+      "target": "150 - "
+    }
   ]
 }

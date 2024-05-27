@@ -458,10 +458,10 @@
                     <tbody style="font-size: 14px">
                       {% for item in tableData %}
                       <tr>
-                        <td style="padding: 8px 12px">
+                        <td style="padding: 4px 12px">
                           <p>{{ item.nutrientName }}</p>
                         </td>
-                        <td style="padding: 8px 12px">
+                        <td style="padding: 4px 12px">
                           <p
                             style="
                               display: inline-block;
@@ -472,16 +472,16 @@
                               color: #48a2ff;
                             "
                           >
-                            {{ item.target }}
+                            {{ item.display_target }}
                           </p>
                         </td>
-                        <td style="padding: 8px 20px 8px 12px">
+                        <td style="padding: 4px 20px 4px 12px">
                           {% if item.status == 'success' %}
                           <p
                             style="
                               display: inline-block;
                               border-radius: 4px;
-                              padding: 4px;
+                              padding: 0 4px;
                               font-size: 14px;
                               font-weight: 600;
                               color: #00b120;
@@ -494,7 +494,7 @@
                             style="
                               display: inline-block;
                               border-radius: 4px;
-                              padding: 4px;
+                              padding: 0 4px;
                               font-size: 14px;
                               font-weight: 600;
                               color: #f0754f;
