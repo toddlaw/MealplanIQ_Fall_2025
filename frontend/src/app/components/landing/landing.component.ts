@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
 import {
   units,
   activityLevels,
@@ -39,7 +40,8 @@ export class LandingComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private toast: HotToastService
   ) {}
 
   readonly MIN_PEOPLE = 1;
@@ -76,7 +78,7 @@ export class LandingComponent implements OnInit {
   excludedRecipes: number[] = [];
   selectedOptions: string[][] = [];
   searchClicked: boolean = false;
-  selectedHealthGoalIndex: number = 0;
+  selectedHealthGoalIndex: number = 3;
   userSubscriptionTypeId: number = 0;
 
   people: {
@@ -114,7 +116,7 @@ export class LandingComponent implements OnInit {
 
   selectedUnit: string = 'metric';
   selectedDietaryConstraint: string = vegetarians[0].value;
-  selectedHealthGoal: string = healthGoals[0].value;
+  selectedHealthGoal: string = healthGoals[3].value; // Initialize to make the fourth item active by default
   selectedReligiousConstraint: string = religiousConstraints[0].value;
   likedFoods = new FormControl('');
   dislikedFoods = new FormControl('');
@@ -207,18 +209,10 @@ export class LandingComponent implements OnInit {
    * Sends the data from the form to the backend
    */
   sendData() {
-    this.showSpinner = true;
-    this.searchClicked = true;
     this.mealPlanResponse = {};
     this.expandedStates = [];
     // this.snackExpandedStates = [];
     this.selectedOptions = [];
-    this.element.nativeElement.style.display = 'block';
-    this.element.nativeElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'start',
-    });
 
     const data = {
       people: this.people,
@@ -250,70 +244,84 @@ export class LandingComponent implements OnInit {
       data.likedFoods = 'None';
     }
 
-    if (
-      this.userSubscriptionTypeId === 1 ||
-      this.userSubscriptionTypeId === 2 ||
-      (this.userSubscriptionTypeId === 0 &&
-        data.maxDate === data.minDate &&
-        this.selectedHealthGoal === 'lose_weight') ||
-      (this.userSubscriptionTypeId === 3 &&
-        this.selectedHealthGoal === 'lose_weight')
-    ) {
-      this.http
-        .post('http://127.0.0.1:5000/api', data, {
-          responseType: 'text',
-        })
-        .subscribe(
-          (response) => {
-            console.log(response);
-            this.element.nativeElement.style.display = 'none';
-            this.errorDiv.nativeElement.style.display = 'none';
-            this.showSpinner = false;
-            this.mealPlanResponse = JSON.parse(response);
-
-            const numDays = this.getNumDays(this.mealPlanResponse);
-            for (let i = 0; i < numDays; i++) {
-              this.expandedStates.push(
-                new Array(this.mealPlanResponse.days[i].recipes.length).fill(
-                  false
-                )
-              );
-              this.selectedOptions.push(new Array(3).fill('keep'));
-            }
-
-            // this.snackExpandedStates = new Array(
-            //   this.mealPlanResponse.snacks.length
-            // ).fill(false);
-
-            this.includeAllRecipes(this.mealPlanResponse.days);
-          },
-          (error) => {
-            console.error('Error sending data:', error);
-            this.element.nativeElement.style.display = 'none';
-            this.showSpinner = false;
-            this.errorDiv.nativeElement.style.display = 'block';
-          }
-        );
+    if (!data.minDate || !data.maxDate) {
+      this.toast.error('Please select both start date and end date!');
+    } else if (!this.people) {
+      this.toast.error('Please enter the details!');
     } else {
-      this.showSpinner = false;
-      this.errorDiv.nativeElement.style.display = 'block';
-      this.element.nativeElement.style.display = 'none';
-      const selectedHealthGoalObject = healthGoals.find(
-        (goal) => goal.value === this.selectedHealthGoal
-      );
-      const title = "Sorry, we can't generate the meal plan.";
-      if (localStorage.getItem('uid')) {
-        // User is logged in
-        const message =
-          'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
-          selectedHealthGoalObject?.viewValue +
-          '!<br> Without subscription, you can generate meal plan to lose weight only.';
-        this.openDialog(title, message, '/payment', 'Subscribe');
+      if (
+        this.userSubscriptionTypeId === 1 ||
+        this.userSubscriptionTypeId === 2 ||
+        (this.userSubscriptionTypeId === 0 &&
+          data.maxDate === data.minDate &&
+          this.selectedHealthGoal === 'lose_weight') ||
+        (this.userSubscriptionTypeId === 3 &&
+          this.selectedHealthGoal === 'lose_weight')
+      ) {
+        this.element.nativeElement.style.display = 'block';
+        this.element.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'start',
+        });
+        this.showSpinner = true;
+        this.searchClicked = true;
+        this.http
+          .post('http://127.0.0.1:5000/api', data, {
+            responseType: 'text',
+          })
+          .subscribe(
+            (response) => {
+              console.log(response);
+              this.element.nativeElement.style.display = 'none';
+              this.errorDiv.nativeElement.style.display = 'none';
+              this.showSpinner = false;
+              this.mealPlanResponse = JSON.parse(response);
+
+              const numDays = this.getNumDays(this.mealPlanResponse);
+              for (let i = 0; i < numDays; i++) {
+                this.expandedStates.push(
+                  new Array(this.mealPlanResponse.days[i].recipes.length).fill(
+                    false
+                  )
+                );
+                this.selectedOptions.push(new Array(3).fill('keep'));
+              }
+
+              // this.snackExpandedStates = new Array(
+              //   this.mealPlanResponse.snacks.length
+              // ).fill(false);
+
+              this.includeAllRecipes(this.mealPlanResponse.days);
+            },
+            (error) => {
+              console.error('Error sending data:', error);
+              this.element.nativeElement.style.display = 'none';
+              this.showSpinner = false;
+              this.errorDiv.nativeElement.style.display = 'block';
+            }
+          );
       } else {
-        // User is not logged in
-        const message =
-          'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
-        this.openDialog(title, message, '/login', 'Login');
+        this.showSpinner = false;
+        this.errorDiv.nativeElement.style.display = 'block';
+        this.element.nativeElement.style.display = 'none';
+        const selectedHealthGoalObject = healthGoals.find(
+          (goal) => goal.value === this.selectedHealthGoal
+        );
+        const title = "Sorry, we can't generate the meal plan.";
+        if (localStorage.getItem('uid')) {
+          // User is logged in
+          const message =
+            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
+            selectedHealthGoalObject?.viewValue +
+            '!<br> Without subscription, you can generate meal plan to lose weight only.';
+          this.openDialog(title, message, '/payment', 'Subscribe');
+        } else {
+          // User is not logged in
+          const message =
+            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
+          this.openDialog(title, message, '/login', 'Login');
+        }
       }
     }
   }
