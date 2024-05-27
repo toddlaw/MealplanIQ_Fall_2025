@@ -125,8 +125,8 @@ const day = today.getDate() + 1;
 const weekLaterDay = today.getDate() + 7;
 
 export const startDate = new FormGroup({
-  start: new FormControl(new Date(year, month, today.getDate())),
-  end: new FormControl(new Date(year, month, today.getDate())),
+  start: new FormControl(new Date(year, month, tomorrow)),
+  end: new FormControl(new Date(year, month, tomorrow)),
 });
 export const endDate = new FormGroup({
   start: new FormControl(new Date(year, month, 15)),
