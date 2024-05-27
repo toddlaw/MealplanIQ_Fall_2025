@@ -34,7 +34,7 @@
             <button
               *ngFor="let item of healthGoals; let i = index"
               type="button"
-              class="health-goal-button text-white bg-secondary hover:bg-primary outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm text-center me-2 mb-2"
+              class="health-goal-button text-white bg-secondary hover:bg-secondary outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm text-center me-2 mb-2"
               [ngClass]="{
                 'bg-primary-strong': selectedHealthGoalIndex === i,
                 'bg-primary': selectedHealthGoalIndex !== i
