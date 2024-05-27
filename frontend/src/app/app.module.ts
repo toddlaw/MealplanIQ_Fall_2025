@@ -42,7 +42,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
-import { FooterComponent } from './components/footer/footer.component';
+import { FooterComponent } from './components/essentials/footer/footer.component';
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { TosComponent } from './components/dialogues/tos/tos.component';
@@ -50,6 +50,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
 import { PopupComponent } from './components/popup/popup.component';
+import { NavbarComponent } from './components/essentials/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { PopupComponent } from './components/popup/popup.component';
     CarouselComponent,
     GeneratePopUpComponent,
     PopupComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

@@ -62,10 +62,6 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-  },
-  {
-    path: 'popup',
-    component: PopupComponent,
   }
 ];
 
