@@ -272,7 +272,7 @@ def gen_meal_plan(data):
     response = distribute_snacks_to_date(response)
     response = insert_snacks_between_meals(response)
     response = process_type_normal(response)
-    # response = insert_status_nutrient_info(response)
+    response = insert_status_nutrient_info(response)
 
     return response
 
