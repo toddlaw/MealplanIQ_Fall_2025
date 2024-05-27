@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-popup',
@@ -8,14 +8,21 @@ import { Component, OnInit } from '@angular/core';
 export class PopupComponent implements OnInit {
   showPopup: boolean = true;
 
-  constructor() { }
+
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // Show the popup when the component initializes
-    this.showPopup = true;
+    const hasVisited = localStorage.getItem('hasVisited');
+    
+    if (!hasVisited) {
+      this.showPopup = true;
+      localStorage.setItem('hasVisited', 'true');
+    }
+    console.log('hasVisited: ', this.showPopup);
+    this.cdr.detectChanges();
   }
 
-  closePopup() {
+  closePopup(): void {
     this.showPopup = false;
   }
 }
