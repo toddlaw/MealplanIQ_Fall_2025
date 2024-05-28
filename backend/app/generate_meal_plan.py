@@ -12,6 +12,7 @@ import json
 import os
 import pandas as pd
 
+
 def process_type_normal(response):
     """
     This method is a test phase to give all recipes a hard coded type of "normal".
@@ -45,6 +46,22 @@ def process_response_meal_name(response):
     # Don't delete this!!!
     for snack in response["snacks"]:
         snack["meal_name"] = "Snack"
+
+    return response
+
+
+def gen_shopping_list(response):
+    """
+    This method return the meal plan with the shopping list data generated based on each recipe ingredient names.
+    """
+    shopping_list = []
+    for day in response["days"]:
+        for recipe in day["recipes"]:
+            for ingredient in recipe["ingredients"]:
+                shopping_list.append(ingredient)
+
+    shopping_list = list(tuple(shopping_list))
+    response["shopping_list"] = shopping_list
 
     return response
 
@@ -219,7 +236,7 @@ def gen_meal_plan(data):
         data["likedFoods"],
         data["dislikedFoods"],
         data["allergies"],
-        pd.read_csv('./meal_db/meal_database.csv')
+        pd.read_csv("./meal_db/meal_database.csv"),
     )
 
     # 6. Retrieve diet
@@ -279,6 +296,7 @@ def gen_meal_plan(data):
     response = insert_snacks_between_meals(response)
     response = process_type_normal(response)
     response = insert_status_nutrient_info(response)
+    response = gen_shopping_list(response)
 
     return response
 
