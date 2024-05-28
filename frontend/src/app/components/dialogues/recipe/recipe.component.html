@@ -1,70 +1,47 @@
-<!-- <div class="recipe-dialog">
-    <h2 mat-dialog-title>{{ data.recipe.title }}</h2>
-    <mat-dialog-content>
-      <img [src]="data.imageUrl" alt="Image" class="dialog-image" />
-      <p>Energy: {{ data.recipe.calories }} calories</p>
-      <p>Cuisine: {{ data.recipe.region }}</p>
-      <p>Prep time: {{ data.recipe.prep_time }}</p>
-      <p>Cook time: {{ data.recipe.cook_time }}</p>
-      <p>Ingredients:</p>
+<div class="recipe-dialog bg-white bg-opacity-100 p-2">
+    <div class="flex justify-end mb-2">
+      <button (click)="closeRecipeDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <h1 mat-dialog-title><b>{{ data.recipe.title }}</b></h1>
+  
+    <div class="flex flex-col md:flex-row items-start">
+      <div class="w-full md:w-1/2 h-auto object-cover mb-4 md:mb-0">
+        <img [src]="data.imageUrl" alt="Image" class="rounded-lg w-full h-auto" />
+      </div>
+      <div class="flex flex-col justify-between pt-5 px-5 md:pl-8 w-full md:w-1/2">
+        <p class="mb-4">
+          <b>Energy:</b> {{ data.recipe.calories }} calories
+        </p>
+        <p class="mb-4">
+          <b>Cuisine:</b> {{ data.recipe.region }}
+        </p>
+        <p class="mb-4">
+          <b>Prep time:</b> {{ data.recipe.prep_time }}
+        </p>
+        <p class="mb-4">
+          <b>Cook time:</b> {{ data.recipe.cook_time }}
+        </p>
+      </div>
+    </div>
+  
+    <div class="flex flex-col pt-5 px-5">
+      <h2 class="mb-2"><b>Ingredients</b></h2>
       <ul>
         <li *ngFor="let ingredient of data.recipe.ingredients">{{ ingredient }}</li>
       </ul>
-      <p>Instructions:</p>
+      <h2 class="pt-4 mb-4"><b>Instructions:</b></h2>
       <ol>
         <li *ngFor="let instruction of data.recipe.instructions">{{ instruction }}</li>
       </ol>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button (click)="closeRecipeDialog()">Close</button>
-    </mat-dialog-actions>
-  </div>
-   -->
-
-   <div class="recipe-dialog bg-white bg-opacity-100 p-2">
-    <div class="flex justify-end mb-2">
-        <button (click)="closeRecipeDialog()">
-            <mat-icon>close</mat-icon>
-        </button>
     </div>
-
-    <h1 mat-dialog-title><b>{{ data.recipe.title }} </b></h1>
-   
-    <div class="flex flex-col md:flex-row items-start">
-        <div class="w-full h-auto object-cover">
-            <img [src]="data.imageUrl" alt="Image" class="rounded-lg" />
-        </div>
-        <div class="flex flex-col justify-between pt-5 px-5 md:pl-8">
-            <p class="mb-4">
-                <b>Energy:</b> {{ data.recipe.calories }} calories
-            </p>
-            <p class="mb-4">
-                <b>Cuisine:</b> {{ data.recipe.region }}
-            </p>
-            <p class="mb-4">
-                <b>Prep time:</b> {{ data.recipe.prep_time }}
-            </p>
-            <p class="mb-4">
-                <b>Cook time:</b> {{ data.recipe.cook_time }}
-            </p>
-            </div>
-        </div>
-        <div class="flex flex-col pt-5 px-5">
-            <h2 class="mb-2">
-              <b>Ingredients</b>
-            </h2>
-                <li *ngFor="let ingredient of data.recipe.ingredients">{{ ingredient }}</li>
-            <h2 class="pt-4 mb-4">
-                <b>Instructions:</b>
-            </h2>
-            <ol>
-                <li *ngFor="let instruction of data.recipe.instructions">{{ instruction }}</li>
-            </ol>
-    </div>
+  
     <div class="flex justify-center mt-4">
-        <button (click)="closeRecipeDialog()" class="px-auto w-full py-1 text-white">
-            Close
-        </button>
+      <button (click)="closeRecipeDialog()" class="px-auto w-full py-1 text-white">
+        Close
+      </button>
     </div>
   </div>
   
