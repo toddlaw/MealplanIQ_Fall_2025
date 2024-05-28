@@ -51,7 +51,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
 import { PopupComponent } from './components/popup/popup.component';
 import { NavbarComponent } from './components/essentials/navbar/navbar.component';
-import { RecipeComponent } from './components/dialogues/recipe/recipe.component';
+import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +74,7 @@ import { RecipeComponent } from './components/dialogues/recipe/recipe.component'
     GeneratePopUpComponent,
     PopupComponent,
     NavbarComponent,
-    RecipeComponent,
+    RecipeDialogComponent,
   ],
   imports: [
     BrowserModule,

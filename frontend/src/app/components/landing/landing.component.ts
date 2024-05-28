@@ -6,6 +6,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
+import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import {
   units,
   activityLevels,
@@ -41,7 +42,7 @@ export class LandingComponent implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog,
     private router: Router,
-    private toast: HotToastService
+    private toast: HotToastService,
   ) {}
 
   readonly MIN_PEOPLE = 1;
@@ -326,6 +327,7 @@ export class LandingComponent implements OnInit {
     }
   }
 
+
   /**
    * Gets the total price of the recipe
    * @returns The total price of the recipe
@@ -589,4 +591,15 @@ export class LandingComponent implements OnInit {
       }
     });
   }
+
+  openRecipeDialog(recipe: any): void {
+    this.dialog.open(RecipeDialogComponent, {
+      data: {
+        recipe: recipe, 
+        imageUrl: this.getImageUrl(recipe.id),
+      },
+      width: '800px',
+    });
+  }
+
 }

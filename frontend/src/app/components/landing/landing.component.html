@@ -494,7 +494,7 @@
             *ngFor="let recipe of day.recipes; index as j"
             class="w-full"
           >
-            <mat-card class="meal-card w-full h-full">
+            <mat-card class="meal-card w-full h-full hover:bg-primary-light" (click)="openRecipeDialog(recipe)">
               <div class="flex justify-items-center">
                 <img
                   [src]="getImageUrl(recipe.id)"
