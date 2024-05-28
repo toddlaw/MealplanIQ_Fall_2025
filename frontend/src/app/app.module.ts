@@ -51,6 +51,7 @@ import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/g
 import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { NavbarComponent } from './components/essentials/navbar/navbar.component';
 import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
+import { RefreshComponent } from './services/refresh/refresh.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.comp
     PopupComponent,
     NavbarComponent,
     RecipeDialogComponent,
+    RefreshComponent,
   ],
   imports: [
     BrowserModule,
