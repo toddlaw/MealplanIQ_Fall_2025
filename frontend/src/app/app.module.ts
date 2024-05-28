@@ -38,7 +38,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AboutComponent } from './components/static/about/about.component';
 import { ContactComponent } from './components/static/contact/contact.component';
 import { PaymentComponent } from './components/payment/payment.component';
-
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
 import { FooterComponent } from './components/essentials/footer/footer.component';
