@@ -6,20 +6,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./popup.component.css']
 })
 export class PopupComponent implements OnInit {
-  showPopup: boolean = true;
+  showPopup: boolean = false;
 
-
-  constructor(private cdr: ChangeDetectorRef) { }
-
-  ngOnInit(): void {
-    const hasVisited = localStorage.getItem('hasVisited');
-    
-    if (!hasVisited) {
+  ngOnInit(): void {  
+    if (!localStorage.getItem('adShown')){
       this.showPopup = true;
-      localStorage.setItem('hasVisited', 'true');
+      localStorage.setItem('adShown', 'true');
     }
-    console.log('hasVisited: ', this.showPopup);
-    this.cdr.detectChanges();
   } 
 
   closePopup(): void {
