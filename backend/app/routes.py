@@ -147,20 +147,23 @@ def get_meal_plan_refresh():
         recipe_to_replace = template_data["recipe"]
 
         # Replace the recipe in the meal plan
-        for day in meal_plan_data['days']:
+        for day in meal_plan_data["days"]:
             for i, recipe in enumerate(day["recipes"]):
                 if recipe["recipe_id"] == recipe_id:
                     # Replace the recipe in place
                     day["recipes"][i] = recipe_to_replace
                     break
 
-        output_data = {
-            "meal_plan": meal_plan_data,
-            "id_to_replace": id_to_replace
-        }
+        output_data = {"meal_plan": meal_plan_data, "id_to_replace": id_to_replace}
 
         # Return the modified template data as JSON response
         return jsonify(output_data)
+
+    except Exception as e:
+        # Log the error
+        print("An error occurred:", e)
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route("/api/subscription_type_id/<user_id>")
 def get_subscription_type_id(user_id):
