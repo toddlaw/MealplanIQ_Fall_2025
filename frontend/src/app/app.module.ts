@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
-import { HomeComponent } from './components/home/home.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -59,7 +58,6 @@ import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.comp
     LoginComponent,
     SignUpComponent,
     LandingComponent,
-    HomeComponent,
     TermsAndConditionsComponent,
     AboutComponent,
     ContactComponent,
