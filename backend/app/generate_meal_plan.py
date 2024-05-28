@@ -60,8 +60,8 @@ def gen_shopping_list(response):
         for recipe in day["recipes"]:
             for ingredient in recipe["ingredients"]:
                 shopping_list.add(
-                    ingredient["name"]
-                )  # Assuming you want unique ingredient names
+                    ingredient
+                )
 
     response["shopping_list"] = list(shopping_list)
 
