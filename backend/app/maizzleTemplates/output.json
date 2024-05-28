@@ -2,25 +2,31 @@
   "constraints_loosened": true,
   "days": [
     {
-      "date": "2024-05-27",
-      "date_weekday": "Monday May 27",
+      "date": "2024-05-29",
+      "date_weekday": "Wednesday May 29",
       "recipes": [
         {
-          "calories": "162.063",
-          "carbohydrates": "5.1805",
-          "cook_time": "5 minutes",
-          "country": "Japanese",
-          "fat": "9.5402",
-          "id": "5122",
-          "ingredients": ["egg", "water", "soy sauce", "white sugar"],
+          "calories": "108.3",
+          "carbohydrates": "9.8139",
+          "cook_time": "20 minutes",
+          "country": "US",
+          "fat": "7.2",
+          "id": "15912",
+          "ingredients": [
+            "potato",
+            "butter",
+            "salt",
+            "brown sugar",
+            "cinnamon"
+          ],
           "meal_name": "Breakfast",
           "meal_slot": "['lunch', 'dinner']",
-          "prep_time": "5 minutes",
+          "prep_time": "15 minutes",
           "price": "N/A",
-          "protein": "12.9914",
-          "region": "Asian ",
-          "sub_region": "Japanese ",
-          "title": "Japanese Sweet Omelet",
+          "protein": "2.6787",
+          "region": "North American ",
+          "sub_region": "US ",
+          "title": "Cinnamon Sweet Potato Chips",
           "type": "normal"
         },
         {
@@ -40,35 +46,6 @@
           "region": "African ",
           "sub_region": "Northern Africa ",
           "title": "Citrons Confits Express (Quick Preserved Lemons)",
-          "type": "normal"
-        },
-        {
-          "calories": "7.6115",
-          "carbohydrates": "1.4611",
-          "cook_time": "15 minutes",
-          "country": "Indian",
-          "fat": "0.2424",
-          "id": "4104",
-          "ingredients": [
-            "curry powder",
-            "red pepper flake",
-            "kosher salt",
-            "ginger",
-            "paprika",
-            "cinnamon",
-            "turmeric",
-            "water",
-            "chicken breast half"
-          ],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "15 minutes",
-          "price": "N/A",
-          "protein": "0.3059",
-          "region": "Asian ",
-          "sub_region": "Indian Subcontinent ",
-          "title": "Tandoori Chicken II",
           "type": "normal"
         },
         {
@@ -110,27 +87,21 @@
           "type": "normal"
         },
         {
-          "calories": "229.971",
-          "carbohydrates": "56.2279",
-          "cook_time": "240 minutes",
-          "country": "US",
-          "fat": "0.0226",
-          "id": "16232",
-          "ingredients": [
-            "chicken breast half",
-            "white vinegar",
-            "brown sugar",
-            "garlic powder",
-            "red pepper flake"
-          ],
+          "calories": "162.063",
+          "carbohydrates": "5.1805",
+          "cook_time": "5 minutes",
+          "country": "Japanese",
+          "fat": "9.5402",
+          "id": "5122",
+          "ingredients": ["egg", "water", "soy sauce", "white sugar"],
           "meal_name": "Lunch",
           "meal_slot": "['lunch', 'dinner']",
-          "prep_time": "10 minutes",
+          "prep_time": "5 minutes",
           "price": "N/A",
-          "protein": "0.5791",
-          "region": "North American ",
-          "sub_region": "US ",
-          "title": "Slow Cooker Barbeque Chicken",
+          "protein": "12.9914",
+          "region": "Asian ",
+          "sub_region": "Japanese ",
+          "title": "Japanese Sweet Omelet",
           "type": "normal"
         },
         {
@@ -185,47 +156,29 @@
           "type": "normal"
         },
         {
-          "calories": "108.3",
-          "carbohydrates": "9.8139",
-          "cook_time": "20 minutes",
-          "country": "US",
-          "fat": "7.2",
-          "id": "15912",
+          "calories": "103.502",
+          "carbohydrates": "13.2078",
+          "cook_time": "3 minutes",
+          "country": "Italian",
+          "fat": "4.5118",
+          "id": "11039",
           "ingredients": [
-            "potato",
-            "butter",
-            "salt",
-            "brown sugar",
-            "cinnamon"
+            "purpose flour",
+            "white sugar",
+            "cinnamon",
+            "white wine",
+            "egg yolk",
+            "oil"
           ],
           "meal_name": "Snack",
           "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "15 minutes",
+          "multiples": 3,
+          "prep_time": "120 minutes",
           "price": "N/A",
-          "protein": "2.6787",
-          "region": "North American ",
-          "sub_region": "US ",
-          "title": "Cinnamon Sweet Potato Chips",
-          "type": "normal"
-        },
-        {
-          "calories": "162.063",
-          "carbohydrates": "5.1805",
-          "cook_time": "5 minutes",
-          "country": "Japanese",
-          "fat": "9.5402",
-          "id": "5122",
-          "ingredients": ["egg", "water", "soy sauce", "white sugar"],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "5 minutes",
-          "price": "N/A",
-          "protein": "12.9914",
-          "region": "Asian ",
-          "sub_region": "Japanese ",
-          "title": "Japanese Sweet Omelet",
+          "protein": "2.6962",
+          "region": "European ",
+          "sub_region": "Italian ",
+          "title": "Cannoli Shells",
           "type": "normal"
         },
         {
@@ -258,6 +211,54 @@
       ]
     }
   ],
+  "shopping_list": [
+    "potato",
+    "butter",
+    "salt",
+    "brown sugar",
+    "cinnamon",
+    "lemon",
+    "water",
+    "water",
+    "lemon",
+    "salt",
+    "chicken breast half",
+    "onion",
+    "green bell pepper",
+    "chicken",
+    "garlic",
+    "garam masala",
+    "lime",
+    "egg",
+    "water",
+    "soy sauce",
+    "white sugar",
+    "orange juice",
+    "lime",
+    "honey",
+    "red pepper flake",
+    "chicken breast half",
+    "cilantro",
+    "yeast",
+    "water",
+    "purpose flour",
+    "white sugar",
+    "baking soda",
+    "purpose flour",
+    "white sugar",
+    "cinnamon",
+    "white wine",
+    "egg yolk",
+    "oil",
+    "italian seasoning",
+    "seasoning salt",
+    "mustard powder",
+    "garlic powder",
+    "black pepper",
+    "chicken",
+    "lemon",
+    "olive oil"
+  ],
   "snacks": [
     {
       "calories": "3.68",
@@ -276,35 +277,6 @@
       "region": "African ",
       "sub_region": "Northern Africa ",
       "title": "Citrons Confits Express (Quick Preserved Lemons)",
-      "type": "normal"
-    },
-    {
-      "calories": "7.6115",
-      "carbohydrates": "1.4611",
-      "cook_time": "15 minutes",
-      "country": "Indian",
-      "fat": "0.2424",
-      "id": "4104",
-      "ingredients": [
-        "curry powder",
-        "red pepper flake",
-        "kosher salt",
-        "ginger",
-        "paprika",
-        "cinnamon",
-        "turmeric",
-        "water",
-        "chicken breast half"
-      ],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "15 minutes",
-      "price": "N/A",
-      "protein": "0.3059",
-      "region": "Asian ",
-      "sub_region": "Indian Subcontinent ",
-      "title": "Tandoori Chicken II",
       "type": "normal"
     },
     {
@@ -397,89 +369,77 @@
       "type": "normal"
     },
     {
-      "calories": "108.3",
-      "carbohydrates": "9.8139",
-      "cook_time": "20 minutes",
-      "country": "US",
-      "fat": "7.2",
-      "id": "15912",
-      "ingredients": ["potato", "butter", "salt", "brown sugar", "cinnamon"],
+      "calories": "103.502",
+      "carbohydrates": "13.2078",
+      "cook_time": "3 minutes",
+      "country": "Italian",
+      "fat": "4.5118",
+      "id": "11039",
+      "ingredients": [
+        "purpose flour",
+        "white sugar",
+        "cinnamon",
+        "white wine",
+        "egg yolk",
+        "oil"
+      ],
       "meal_name": "Snack",
       "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "15 minutes",
+      "multiples": 3,
+      "prep_time": "120 minutes",
       "price": "N/A",
-      "protein": "2.6787",
-      "region": "North American ",
-      "sub_region": "US ",
-      "title": "Cinnamon Sweet Potato Chips",
-      "type": "normal"
-    },
-    {
-      "calories": "162.063",
-      "carbohydrates": "5.1805",
-      "cook_time": "5 minutes",
-      "country": "Japanese",
-      "fat": "9.5402",
-      "id": "5122",
-      "ingredients": ["egg", "water", "soy sauce", "white sugar"],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "5 minutes",
-      "price": "N/A",
-      "protein": "12.9914",
-      "region": "Asian ",
-      "sub_region": "Japanese ",
-      "title": "Japanese Sweet Omelet",
+      "protein": "2.6962",
+      "region": "European ",
+      "sub_region": "Italian ",
+      "title": "Cannoli Shells",
       "type": "normal"
     }
   ],
   "tableData": [
     {
-      "actual": 1127,
-      "display_target": "1090 - 1205",
+      "actual": 1038,
+      "display_target": "958 - 1059",
       "nutrientName": "energy (calories)",
       "status": "success",
-      "target": "1090 - 1205"
+      "target": "958 - 1059"
     },
     {
-      "actual": 6,
-      "display_target": "23 ",
+      "actual": 5,
+      "display_target": "21 ",
       "nutrientName": "fiber (g)",
       "status": "warning",
-      "target": "23 - "
+      "target": "21 - "
     },
     {
-      "actual": 125,
-      "display_target": "185 - 267",
+      "actual": 102,
+      "display_target": "169 - 245",
       "nutrientName": "carbohydrates (g)",
       "status": "warning",
-      "target": "185 - 267"
+      "target": "169 - 245"
     },
     {
-      "actual": 37,
-      "display_target": "41 - 144",
+      "actual": 32,
+      "display_target": "37 - 132",
       "nutrientName": "protein (g)",
       "status": "warning",
-      "target": "41 - 144"
+      "target": "37 - 132"
     },
     {
-      "actual": 54,
-      "display_target": "45 - 64",
+      "actual": 58,
+      "display_target": "41 - 58",
       "nutrientName": "fats (g)",
       "status": "success",
-      "target": "45 - 64"
+      "target": "41 - 58"
     },
     {
-      "actual": 381,
+      "actual": 326,
       "display_target": "1300 - 2500",
       "nutrientName": "calcium (mg)",
       "status": "warning",
       "target": "1300 - 2500"
     },
     {
-      "actual": 2155,
+      "actual": 1726,
       "display_target": "1500 - 2300",
       "nutrientName": "sodium (mg)",
       "status": "success",
@@ -493,21 +453,21 @@
       "target": "0 - 8"
     },
     {
-      "actual": 3,
+      "actual": 1,
       "display_target": "3 - 10",
       "nutrientName": "fluoride (mg)",
-      "status": "success",
+      "status": "warning",
       "target": "3 - 10"
     },
     {
-      "actual": 7,
+      "actual": 5,
       "display_target": "15 - 45",
       "nutrientName": "iron (mg)",
       "status": "warning",
       "target": "15 - 45"
     },
     {
-      "actual": 131,
+      "actual": 103,
       "display_target": "360 ",
       "nutrientName": "magnesium (mg)",
       "status": "warning",
@@ -521,14 +481,14 @@
       "target": "1 - 9"
     },
     {
-      "actual": 1441,
+      "actual": 1182,
       "display_target": "4700 ",
       "nutrientName": "potassium (mg)",
       "status": "warning",
       "target": "4700 - "
     },
     {
-      "actual": 74,
+      "actual": 70,
       "display_target": "55 - 400",
       "nutrientName": "selenium (ug)",
       "status": "success",
@@ -542,7 +502,7 @@
       "target": "9 - 34"
     },
     {
-      "actual": 1704,
+      "actual": 1616,
       "display_target": "210 - 840",
       "nutrientName": "vitamin_a (iu)",
       "status": "warning",
@@ -563,7 +523,7 @@
       "target": "1 - "
     },
     {
-      "actual": 25,
+      "actual": 24,
       "display_target": "14 - 30",
       "nutrientName": "niacin (mg)",
       "status": "success",
@@ -577,10 +537,10 @@
       "target": "5 - "
     },
     {
-      "actual": 1,
+      "actual": 0,
       "display_target": "1 - 80",
       "nutrientName": "vitamin_b6 (mg)",
-      "status": "success",
+      "status": "warning",
       "target": "1 - 80"
     },
     {
@@ -591,7 +551,7 @@
       "target": "2 - "
     },
     {
-      "actual": 845,
+      "actual": 869,
       "display_target": "400 - 800",
       "nutrientName": "folate (ug)",
       "status": "warning",
@@ -605,7 +565,7 @@
       "target": "65 - 1800"
     },
     {
-      "actual": 164,
+      "actual": 193,
       "display_target": "600 - 2000",
       "nutrientName": "vitamin_d (iu)",
       "status": "warning",
@@ -619,14 +579,14 @@
       "target": "15 - 800"
     },
     {
-      "actual": 627,
+      "actual": 745,
       "display_target": "400 - 3000",
       "nutrientName": "choline (mg)",
       "status": "success",
       "target": "400 - 3000"
     },
     {
-      "actual": 24,
+      "actual": 22,
       "display_target": "75 ",
       "nutrientName": "vitamin_k (ug)",
       "status": "warning",

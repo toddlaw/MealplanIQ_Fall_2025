@@ -30,12 +30,6 @@ class MealPlan:
         self.__calculate_energy()
         self.__get_distributed_micro_and_macro_nutrients()
 
-        self.min_date = datetime.datetime.fromtimestamp(
-            data["minDate"] / 1000.0, datetime.timezone.utc
-        )
-        self.max_date = datetime.datetime.fromtimestamp(
-            data["maxDate"] / 1000.0, datetime.timezone.utc
-        )
         self.__generate_recipes_in_categories()
 
     def __calculate_bmi(self):
@@ -117,12 +111,26 @@ class MealPlan:
 
         self.__snack_recipes_with_scores = self.__mainmeal_recipes_with_scores
 
-
+    def __calculate_days(self):
+        """
+        Calculates the number of days for the meal plan.
+        """
+        min_date = datetime.datetime.fromtimestamp(
+            self.data["minDate"] / 1000.0, datetime.timezone.utc
+        )
+        max_date = datetime.datetime.fromtimestamp(
+            self.data["maxDate"] / 1000.0, datetime.timezone.utc
+        )
+        # Calculating the difference in days
+        difference = max_date - min_date
+        self.__days = difference.days + 1
 
 
 def main():
-    f = pd.read_csv("./meal_db/new_meal_database.csv")
-    print(f)
+    df = pd.read_csv("./meal_db/new_meal_database.csv")
+
+    snack_data = df[df["meal_slot"] == "['snack']"]
+    print(snack_data.head(5))
 
 
 if __name__ == "__main__":
