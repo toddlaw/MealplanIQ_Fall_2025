@@ -132,11 +132,6 @@ def get_meal_plan_refresh():
         meal_plan_data = data.get("meal_plan")
         recipe_id = data.get("recipe_id")
 
-        # Debugging information
-        print("Received data:", data)
-        print("Meal plan data:", meal_plan_data)
-        print("Recipe ID:", recipe_id)
-
         root_path = app.root_path
         json_file_path = os.path.join(root_path, "output.json")
 
