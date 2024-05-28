@@ -125,6 +125,43 @@ def receive_data():
     return jsonify(response)
 
 
+@app.route("/api/refresh-meal-plan", methods=["POST"])
+def get_meal_plan_refresh():
+    try:
+        data = request.json
+        meal_plan_data = data.get("meal_plan")
+        recipe_id = data.get("recipe_id")
+
+        # Debugging information
+        print("Received data:", data)
+        print("Meal plan data:", meal_plan_data)
+        print("Recipe ID:", recipe_id)
+
+        root_path = app.root_path
+        json_file_path = os.path.join(root_path, "output.json")
+
+        # Read the template data from the JSON file
+        with open(json_file_path, "r") as f:
+            template_data = json.load(f)
+            print("Template data before modification:", template_data)
+
+        # Modify the template data
+        if "recipe" not in template_data:
+            return jsonify({"error": str(e)}), 500
+        template_data["recipe"]["id"] = recipe_id
+
+        # Debugging information
+        print("Template data after modification:", template_data)
+
+        # Return the modified template data as JSON response
+        return jsonify(template_data)
+
+    except Exception as e:
+        # Log the error
+        print("An error occurred:", e)
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/subscription_type_id/<user_id>")
 def get_subscription_type_id(user_id):
     db = instantiate_database()
