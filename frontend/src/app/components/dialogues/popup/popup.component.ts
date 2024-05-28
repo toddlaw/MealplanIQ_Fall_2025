@@ -20,7 +20,7 @@ export class PopupComponent implements OnInit {
     }
     console.log('hasVisited: ', this.showPopup);
     this.cdr.detectChanges();
-  }
+  } 
 
   closePopup(): void {
     this.showPopup = false;
