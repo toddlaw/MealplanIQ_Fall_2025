@@ -49,7 +49,7 @@ import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
-import { PopupComponent } from './components/popup/popup.component';
+import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { NavbarComponent } from './components/essentials/navbar/navbar.component';
 import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
 

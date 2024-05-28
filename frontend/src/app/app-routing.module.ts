@@ -18,7 +18,7 @@ import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/t
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PopupComponent } from './components/popup/popup.component';
+import { PopupComponent } from './components/dialogues/popup/popup.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);

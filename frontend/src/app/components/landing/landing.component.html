@@ -494,7 +494,7 @@
             *ngFor="let recipe of day.recipes; index as j"
             class="w-full"
           >
-            <mat-card class="meal-card w-full h-full hover:bg-primary-light" (click)="openRecipeDialog(recipe)">
+            <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between">
               <div class="flex justify-items-center">
                 <img
                   [src]="getImageUrl(recipe.id)"
@@ -502,134 +502,24 @@
                   class="text-center"
                 />
               </div>
-              <div class="p-2">
+              <div class="p-6 flex flex-col flex-grow ">
                 <mat-card-title>{{ recipe.title }}</mat-card-title>
                 <mat-card-subtitle>{{ recipe.meal_name }}</mat-card-subtitle>
-                <mat-card-content>
+                <mat-card-content class="p-4">
                   <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
                   <p>Cuisine: {{ recipe.region }}</p>
                   <p>Prep time: {{ recipe.prep_time }}</p>
                 </mat-card-content>
-                <mat-card-footer>
-                  <div class="absolute bottom-0 right-10">
-                    <mat-card-actions>
-                      <button
-                        mat-icon-button
-                        (click)="refreshRecipe(recipe.id, i, j)"
-                      >
-                        <mat-icon>refresh</mat-icon>
-                      </button>
-                    </mat-card-actions>
-                  </div>
+                <mat-card-footer class="absolute bottom-10 right-6 w-full pt-5">
+                  <div class="flex justify-between items-center px-6">
+                  <button class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1" (click)="openRecipeDialog(recipe)">Recipe</button>
+                  <button class="button hover:bg-primary hover:text-white p-1 rounded-full" (click)="refreshRecipe(recipe.id, i, j)"><mat-icon>refresh</mat-icon></button>
+                </div>
                 </mat-card-footer>
               </div>
             </mat-card>
           </ng-container>
-
-          <!-- Loop for snacks -->
-          <!-- <ng-container *ngIf="mealPlanResponse.snacks.length > 0">
-                <div *ngFor="let snack of mealPlanResponse.snacks; index as i" class="w-full">
-                  <mat-card class="meal-card w-full w-full">
-                    <div class="flex justify-items-center p-2">
-                      <img [src]="getImageUrl(snack.id)" height="300" width="300" alt="Image" />
-                    </div>
-                    <div class="p-2">
-                      <mat-card-title>{{ snack.title }}</mat-card-title>
-                      <mat-card-subtitle>Snack</mat-card-subtitle>
-                      <mat-card-content>
-                        <p>Energy: {{ this.floor(snack.calories) }} calories</p>
-                        <p>Cuisine: {{ snack.region }}</p>
-                        <p>Prep time: {{ snack.prep_time }}</p>
-                        <p>Multiples: {{ snack.multiples }}</p>
-                      </mat-card-content>
-                      <mat-card-footer>
-                        <div class="absolute bottom-0 right-10">
-                        <mat-card-actions> 
-                          <mat-icon
-                            class="refresh-icon"
-                            (click)="refreshSnack(snack.id, i)"
-                            >refresh</mat-icon>
-                        </mat-card-actions>
-                      </div>
-                      </mat-card-footer>
-                    </div>
-                  </mat-card>
-                </div>
-              </ng-container> -->
         </div>
-
-        <!-- <img
-                src="../../../assets/images/{{
-                  expandedStates[i][j] ? 'chevron-up.png' : 'chevron-down.png'
-                }}"
-                height="25"
-                width="25"
-                alt="Image"
-              /> -->
-        <!-- <div *ngIf="expandedStates[i][j]" class="recipe-card-info">
-              <div>
-                <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
-                <p>Cuisine: {{ recipe.region }}</p>
-                <p>Prep time: {{ recipe.prep_time }}</p> -->
-        <!-- <p>Estimated Price: ${{ recipe.price }}</p> -->
-        <!-- </div>
-              <div class="replace-meal-container">
-                <mat-form-field>
-                  <mat-select
-                    [(value)]="selectedOptions[i][j]"
-                    (selectionChange)="
-                      onReplaceMealChange($event, recipe.id, i, j)
-                    "
-                    (click)="$event.stopPropagation()"
-                  >
-                    <mat-option selected value="keep">Keep meal</mat-option>
-                    <mat-option value="replace">Replace meal</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-          </mat-card>
-        </div>
-      </div>
-    </div> -->
-
-        <!-- <div *ngIf="mealPlanResponse.snacks.length > 0">
-      <h2 class="text-center text-l">Side dishes</h2>
-      <div class="snack-container">
-        <div *ngFor="let snack of mealPlanResponse.snacks; index as i">
-          <mat-card class="recipe-card" (click)="toggleSnackExpand(i)">
-            <div class="recipe-card-flex">
-              <img
-                [src]="getImageUrl(snack.id)"
-                height="50"
-                width="50"
-                alt="Image"
-              />
-              <mat-card-title
-                style="margin: 0px; text-align: center; line-height: 25px"
-                >{{ snack.title }}</mat-card-title
-              >
-              <img
-                src="../../../assets/images/{{
-                  snackExpandedStates[i] ? 'chevron-up.png' : 'chevron-down.png'
-                }}"
-                height="25"
-                width="25"
-                alt="Image"
-              />
-            </div>
-            <div *ngIf="snackExpandedStates[i]" class="recipe-card-info">
-              <div>
-                <p>Energy: {{ this.floor(snack.calories) }} calories</p>
-                <p>Cuisine: {{ snack.region }}</p>
-                <p>Prep time: {{ snack.prep_time }}</p>
-                <p>Multiples: {{ snack.multiples }}</p>
-              </div>
-            </div>
-          </mat-card>
-        </div>
-      </div>
-    </div> -->
         <br />
         <br />
       </div>
