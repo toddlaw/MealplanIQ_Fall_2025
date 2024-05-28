@@ -278,7 +278,7 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              console.log(response);
+              //console.log(response);
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
@@ -431,6 +431,7 @@ export class LandingComponent implements OnInit {
     this.refresh.refreshRecipe(id, mealPlan).subscribe((response) => {
       //Handles the response, update ui
       console.log('recipe refresh', response);
+      this.updateMealPlan(response.meal_plan);
     }, (error) => {
       //Handles the error
       console.log('error', error);
@@ -440,6 +441,10 @@ export class LandingComponent implements OnInit {
 
   getMealPlan(i: number, j: number) {
     return this.mealPlanResponse.days[i].recipes[j];
+  }
+
+  updateMealPlan(mealPlan: any) {
+    this.mealPlanResponse = mealPlan;
   }
 
 
