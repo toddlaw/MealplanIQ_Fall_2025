@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
-import { HomeComponent } from './components/home/home.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,7 +38,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AboutComponent } from './components/static/about/about.component';
 import { ContactComponent } from './components/static/contact/contact.component';
 import { PaymentComponent } from './components/payment/payment.component';
-
 import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
 import { DatePipe } from '@angular/common';
 import { FooterComponent } from './components/essentials/footer/footer.component';
@@ -49,9 +47,10 @@ import { TosComponent } from './components/dialogues/tos/tos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
-import { PopupComponent } from './components/popup/popup.component';
+import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { NavbarComponent } from './components/essentials/navbar/navbar.component';
 import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
+import { RefreshComponent } from './services/refresh/refresh.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +58,6 @@ import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.comp
     LoginComponent,
     SignUpComponent,
     LandingComponent,
-    HomeComponent,
     TermsAndConditionsComponent,
     AboutComponent,
     ContactComponent,
@@ -75,6 +73,7 @@ import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.comp
     PopupComponent,
     NavbarComponent,
     RecipeDialogComponent,
+    RefreshComponent,
   ],
   imports: [
     BrowserModule,

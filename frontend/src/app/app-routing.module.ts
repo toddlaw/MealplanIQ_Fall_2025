@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
@@ -18,7 +17,7 @@ import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/t
 import { PrivacyComponent } from './components/static/privacy/privacy.component';
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PopupComponent } from './components/popup/popup.component';
+import { PopupComponent } from './components/dialogues/popup/popup.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);

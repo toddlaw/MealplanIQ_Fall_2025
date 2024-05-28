@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 
  @Component({
@@ -9,11 +9,12 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 
 export class RecipeDialogComponent {
-    popup: boolean = true;
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
-    closeRecipeDialog() {
-        this.popup = false;
-    }
+    constructor(
+        public dialogRef: MatDialogRef<RecipeDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any) {}
 
+    close(): void {
+        this.dialogRef.close();
+      }
 }

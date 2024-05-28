@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
+import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
+
 import {
   units,
   activityLevels,
@@ -32,6 +34,7 @@ import {
 import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
+
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -43,7 +46,9 @@ export class LandingComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
-  ) {}
+    private refresh: RefreshComponent,
+  ) {
+  }
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -419,20 +424,28 @@ export class LandingComponent implements OnInit {
    */
   getFullMealPlan() {}
 
-  /**
-   * Refreshes the recipe list
-   * @param id  The id of the recipe
-   * @param i  The index of the recipe
-   * @param j  The index of the recipe
-   */
-  refreshRecipe(id: number, i: number, j: number) {
-    this.recipe = [];
-    for (const day of this.mealPlanResponse.days) {
-      for (const recipe of day.recipes) {
-        this.recipe.push(recipe);
-      }
+
+ 
+  refreshRecipe(id: string, i: number, j:number) {
+    const mealPlan = this.getMealPlan(i,j);
+    this.refresh.refreshRecipe(id, mealPlan).subscribe((response) => {
+      //Handles the response, update ui
+      console.log('recipe refresh', response);
+    }, (error) => {
+      //Handles the error
+      console.log('error', error);
     }
+    );
   }
+
+  getMealPlan(i: number, j: number) {
+    return this.mealPlanResponse.days[i].recipes[j];
+  }
+
+
+
+
+
 
   /**
    * Refreshes the snack list
@@ -601,5 +614,7 @@ export class LandingComponent implements OnInit {
       width: '800px',
     });
   }
+
+
 
 }
