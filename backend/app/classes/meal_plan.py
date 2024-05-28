@@ -17,6 +17,8 @@ class MealPlan:
     A class to represent and process a meal plan.
     """
 
+    constraint_relaxation = 0.5
+
     def __init__(self, data):
         """
         Initializes the MealPlan with data from the frontend.
@@ -29,8 +31,10 @@ class MealPlan:
         self.__calculate_bmi()
         self.__calculate_energy()
         self.__get_distributed_micro_and_macro_nutrients()
+        self.__calculate_days()
 
         self.__generate_recipes_in_categories()
+        
 
     def __calculate_bmi(self):
         """
@@ -106,10 +110,31 @@ class MealPlan:
             pd.read_csv("./meal_db/meal_database.csv"),
         )
 
-        # replace these 2 with real database, need to modify the preference data
-        self.__breakfast_recipes_with_scores = self.__mainmeal_recipes_with_scores
+        df = pd.read_csv("./meal_db/new_meal_database.csv")
 
-        self.__snack_recipes_with_scores = self.__mainmeal_recipes_with_scores
+        snack_data = df[df["meal_slot"] == "['snack']"]
+        breakfast_data = df[df["meal_slot"] == "['breakfast']"]
+
+        # replace these 2 with real database, need to modify the preference data
+        self.__breakfast_recipes_with_scores = apply_user_prefs(
+            self.data["favouriteCuisines"],
+            self.data["dietaryConstraint"],
+            self.data["religiousConstraint"],
+            self.data["likedFoods"],
+            self.data["dislikedFoods"],
+            self.data["allergies"],
+            breakfast_data,
+        )
+
+        self.__snack_recipes_with_scores = apply_user_prefs(
+            self.data["favouriteCuisines"],
+            self.data["dietaryConstraint"],
+            self.data["religiousConstraint"],
+            self.data["likedFoods"],
+            self.data["dislikedFoods"],
+            self.data["allergies"],
+            snack_data,
+        )
 
     def __calculate_days(self):
         """

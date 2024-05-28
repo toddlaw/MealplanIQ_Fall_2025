@@ -52,16 +52,18 @@ def process_response_meal_name(response):
 
 def gen_shopping_list(response):
     """
-    This method return the meal plan with the shopping list data generated based on each recipe ingredient names.
+    This method returns the meal plan with the shopping list data generated based on each recipe ingredient names.
+    Ensures the shopping list contains only unique elements.
     """
-    shopping_list = []
+    shopping_list = set()
     for day in response["days"]:
         for recipe in day["recipes"]:
             for ingredient in recipe["ingredients"]:
-                shopping_list.append(ingredient)
+                shopping_list.add(
+                    ingredient["name"]
+                )  # Assuming you want unique ingredient names
 
-    shopping_list = list(tuple(shopping_list))
-    response["shopping_list"] = shopping_list
+    response["shopping_list"] = list(shopping_list)
 
     return response
 
