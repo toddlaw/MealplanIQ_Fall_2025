@@ -1,6 +1,6 @@
 import pandas as pd
 
-def apply_user_prefs(fav_cuisines, diet_contraint, religious_constraint, liked_foods, disliked_foods, allergies):
+def apply_user_prefs(fav_cuisines, diet_contraint, religious_constraint, liked_foods, disliked_foods, allergies, recipes):
     """
     Called in ./backend/app/generate_meal_plan.py.
     Applies the user preferences to the meal database and calculates a score for each recipe.
@@ -12,7 +12,7 @@ def apply_user_prefs(fav_cuisines, diet_contraint, religious_constraint, liked_f
     :param allergies: string list of allergies
     :return: dataframe of recipes with scores
     """
-    recipes = pd.read_csv('./meal_db/meal_database.csv')
+    # recipes = pd.read_csv('./meal_db/meal_database.csv')
     diet_restrictions = get_diet_restrictions(diet_contraint)
     religious_restrictions = get_religious_restrictions(religious_constraint)
     restrictions_for_allergies = get_restrictions_for_allergies(allergies)
