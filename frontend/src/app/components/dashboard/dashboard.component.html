@@ -1,6 +1,6 @@
 <div class="flex flex-col min-h-screen bg-primary-light">
     <div class="flex-grow">
-        <section class="px-5 md:px-10"> 
+        <section class="px-5 md:px-10 pb-20 lg:mx-72 md:mx-36"> 
             <mat-card class="mt-5">
                 <p class="text-3xl p-3">Welcome <b>{{ userName }}</b>,</p>
                 <div class="flex justify-center p-5 ml-5">
@@ -99,7 +99,7 @@
                             </div>
                         </mat-card-actions>
                     </mat-card>
-                    <div class=" grid grid-cols-1 md:grid-cols-2 gap-5"> 
+                    <div class=" grid grid-cols-1 gap-5"> 
                         <mat-card class="relative">
                             <mat-card-header class="flex items-center p-5">
                                 <mat-icon mat-card-avatar>list</mat-icon>
@@ -123,6 +123,9 @@
                         </mat-card>
                     </div>
                 </div>
+            </div>
+            <div class="flex justify-center mt-5">
+                <button mat-raised-button class="bg-secondary text-white hover:bg-primary w-full" (click)="logout()">Logout</button>
             </div>
         </section>
     </div>
