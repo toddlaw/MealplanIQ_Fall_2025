@@ -9,6 +9,7 @@ import { activityLevels, genders } from '../landing/form-values';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
+import { NutritionChartComponent } from '../dialogues/nutrition-chart/nutrition-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -231,6 +232,30 @@ export class DashboardComponent implements OnInit {
       localStorage.removeItem('email');
       localStorage.removeItem('uid');
       this.router.navigate(['/']);
+    });
+  }
+
+
+
+
+
+  openNutrition() {
+    console.log(this.shoppingListData);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px'; // Set the width of the dialog
+    dialogConfig.data = this.shoppingListData; // Pass your shopping list data to the dialog --change with nutition chart
+    dialogConfig.autoFocus = false; // Disable auto-focus
+    const dialogRef = this.dialog.open(NutritionChartComponent, dialogConfig);
+
+    dialogRef.afterOpened().subscribe(() => {
+      const dialogContent = document.querySelector('.popup-max-height');
+      if (dialogContent) {
+        dialogContent.scrollTop = 0;
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
     });
   }
 }
