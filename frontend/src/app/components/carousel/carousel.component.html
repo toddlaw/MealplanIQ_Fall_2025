@@ -1,5 +1,5 @@
 
-<div id="default-carousel" class="relative w-full h-screen" data-carousel="slide">
+<div id="default-carousel" class="w-full mx-auto max-w-screen-xl relative h-1/2" data-carousel="slide">
   <div class="relative h-full overflow-hidden">
     <div *ngFor="let item of placeHolders; let i = index" 
          [ngClass]="{'hidden': currentItem !== i, 'block': currentItem === i, 'duration-700': true, 'ease-in-out': true}" 
