@@ -1,0 +1,75 @@
+<div class="popup-max-height hide_scroll p-4">
+    <h2 mat-dialog-title class="text-xl text-primary text-center font-bold mb-10">
+      Nutrition Chart
+    </h2>
+    <div class="flex justify-center overflow-auto">
+      <table
+        mat-table
+        [dataSource]= mealPlanResponse.tableData
+        class="w-full text-sm shadow-sm rounded text-center"
+      >
+        <ng-container matColumnDef="nutrientName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-primary-light text-left pl-3"
+          ></th>
+          <td mat-cell *matCellDef="let element" class="text-left pl-3">
+            <!-- Turn "Vitamin a" "Vitamin A" -->
+            {{
+              element.nutrientName.includes("vitamin")
+                ? displayVitamin(element.nutrientName)
+                : element.nutrientName.charAt(0).toUpperCase() +
+                  element.nutrientName.slice(1)
+            }}
+          </td>
+        </ng-container>
+        <!-- [dataSource]="mealPlanResponse.tableData" -->
+  
+        <ng-container matColumnDef="target">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-primary-light text-center"
+          >
+            Target
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <p class="inline-block font-semibold rounded text-sm m-0">
+              {{ element.display_target }}
+            </p>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="actual">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-primary-light text-center pr-3"
+          >
+            Your Meal Plan
+          </th>
+          <td mat-cell *matCellDef="let element" class="pr-3">
+            <p
+              class="inline-block font-semibold rounded text-sm m-0"
+              [ngClass]="{
+                'text-success': element.status === 'success',
+                'text-warning': element.status !== 'success'
+              }"
+            >
+              {{ element.actual }}
+            </p>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close class="text-secondary-strong">
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  </div>
+  

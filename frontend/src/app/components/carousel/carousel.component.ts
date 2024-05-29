@@ -12,10 +12,10 @@ export class CarouselComponent implements OnInit {
   totalItems: number = 4; 
 
   placeHolders = [
-    {image:'feta salad', file_name: 'assets/images/placeholders/placeholder_1.jpg'},
-    {image: 'chicken pizza', file_name: 'assets/images/placeholders/placeholder_2.jpg'},
-    {image:'berries', file_name: 'assets/images/placeholders/placeholder_3.jpg'},
-    {image: 'spinach toast', file_name: 'assets/images/placeholders/placeholder_4.jpg'},
+    {image:'1', file_name: 'assets/images/placeholders/placeholder_1.jpg'},
+    {image: '2', file_name: 'assets/images/placeholders/placeholder_2.jpg'},
+    {image:'3', file_name: 'assets/images/placeholders/placeholder_3.jpg'},
+    {image: '4', file_name: 'assets/images/placeholders/placeholder_4.jpg'},
   ]
 
   constructor() { }

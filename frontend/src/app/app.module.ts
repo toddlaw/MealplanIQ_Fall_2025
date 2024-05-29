@@ -51,6 +51,7 @@ import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { NavbarComponent } from './components/essentials/navbar/navbar.component';
 import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
 import { RefreshComponent } from './services/refresh/refresh.component';
+import { NutritionChartComponent } from './components/dialogues/nutrition-chart/nutrition-chart.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { RefreshComponent } from './services/refresh/refresh.component';
     NavbarComponent,
     RecipeDialogComponent,
     RefreshComponent,
+    NutritionChartComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 <div class="flex flex-col min-h-screen bg-primary-light">
     <div class="flex-grow">
-        <section class="px-5 md:px-10"> 
+        <section class="px-5 md:px-10 pb-20 lg:mx-72 md:mx-36"> 
             <mat-card class="mt-5">
                 <p class="text-3xl p-3">Welcome <b>{{ userName }}</b>,</p>
                 <div class="flex justify-center p-5 ml-5">
@@ -77,19 +77,14 @@
                                 >Manage Subscription</button>
                             </div>
                         </mat-card-actions>
-
                     </mat-card>
-
                     <mat-card class="relative">
                         <mat-card-header class="flex items-center p-5">
                             <mat-icon mat-card-avatar>restaurant_menu</mat-icon>
                             <mat-card-title>Generate Meal Plan</mat-card-title>
-                            <mat-card-subtitle>Generate a meal plan for the week.</mat-card-subtitle>
+                            <mat-card-subtitle>Generate a meal plan for the week. Personalize your meal plan with our smart IQ generator. 
+                                Optimize your choices by your diet restrictions and needs. </mat-card-subtitle>
                         </mat-card-header>
-                            <mat-card-content>
-                                <p class="text-med p-2">Personalize your meal plan with our smart IQ generator. 
-                                    Optimize your choices by your diet restrictions and needs.</p>
-                            </mat-card-content>
                         <mat-card-actions class="absolute bottom-5 right-4">
                             <div class="flex justify-end p-3">
                                 <a mat-raised-button 
@@ -99,12 +94,12 @@
                             </div>
                         </mat-card-actions>
                     </mat-card>
-                    <div class=" grid grid-cols-1 md:grid-cols-2 gap-5"> 
+                    <div class=" grid grid-cols-1 gap-5"> 
                         <mat-card class="relative">
-                            <mat-card-header class="flex items-center p-5">
+                            <mat-card-header class="flex items-center p-5 pb-10">
                                 <mat-icon mat-card-avatar>list</mat-icon>
                                 <mat-card-title>Shopping List</mat-card-title>
-                                <mat-card-subtitle>Check out your shopping list here.</mat-card-subtitle>
+                                <mat-card-subtitle>Last generated shopping list.</mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-actions class="absolute bottom-7 right-7">
                                 <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>Open Shopping List</button>
@@ -112,17 +107,20 @@
                         </mat-card>
 
                         <mat-card class="relative">
-                            <mat-card-header class="flex items-center p-5">
+                            <mat-card-header class="flex items-center p-5 pb-10">
                                 <mat-icon mat-card-avatar>bar_chart</mat-icon>
                                 <mat-card-title>Nutrition Chart</mat-card-title>
-                                <mat-card-subtitle>Check out your nutrition chart here.</mat-card-subtitle>
+                                <mat-card-subtitle>These results are based on your last generated meal plan.</mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-actions class="absolute bottom-7 right-7">
-                                <button mat-button class="bg-secondary text-white hover:bg-primary">Open Nutrition Chart</button>
+                                <button mat-button class="bg-secondary text-white hover:bg-primary" (click)="openNutrition()">Open Nutrition Chart</button>
                             </mat-card-actions>
                         </mat-card>
                     </div>
                 </div>
+            </div>
+            <div class="flex justify-center mt-5">
+                <button mat-raised-button class="bg-secondary text-white hover:bg-primary w-full" (click)="logout()">Logout</button>
             </div>
         </section>
     </div>
