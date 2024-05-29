@@ -421,13 +421,17 @@ export class LandingComponent implements OnInit {
    */
   getFullMealPlan() {}
 
-  refreshRecipe(id: string, i: number, j: number) {
-    const mealPlan = this.getMealPlan(i, j);
-    this.refresh.refreshRecipe(id, mealPlan).subscribe(
+  /**
+   * Replace a recipe in the meal plan
+   * @param id The id of the recipe to be replaced
+   */
+  refreshRecipe(id: string) {
+    this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
         //Handles the response, update ui
-        console.log('recipe refresh', response);
-        this.updateMealPlan(response.meal_plan);
+        console.log('recipe replaced', response);
+        const updated_plan = this.updateMealPlan(response.meal_plan);
+        console.log('updated meal plan', updated_plan);
       },
       (error) => {
         //Handles the error
@@ -436,12 +440,14 @@ export class LandingComponent implements OnInit {
     );
   }
 
-  getMealPlan(i: number, j: number) {
-    return this.mealPlanResponse.days[i].recipes[j];
-  }
-
+  /**
+   * Update the meal plan data with the new meal plan
+   * @param mealPlan The new meal plan with a replaced recipe
+   * @returns The updated meal plan data
+   */
   updateMealPlan(mealPlan: any) {
     this.mealPlanResponse = mealPlan;
+    return this.mealPlanResponse;
   }
 
   /**

@@ -1,4 +1,4 @@
-
+<app-carousel></app-carousel>
 <div
   class="container mx-auto flex flex-col items-center justify-center min-h-screen"
   #start
@@ -430,7 +430,6 @@
       </form>
     </div>
   </div>
-
   <br />
 
   <!-- start of response ui -->
@@ -482,6 +481,8 @@
         Get full meal plan
       </button>
 
+      <app-popup></app-popup>
+
       <div
         *ngFor="let day of mealPlanResponse.days; index as i"
         class="recipe-day"
@@ -513,7 +514,7 @@
                 <mat-card-footer class="absolute bottom-10 right-6 w-full pt-5">
                   <div class="flex justify-between items-center px-6">
                   <button class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1" (click)="openRecipeDialog(recipe)">Recipe</button>
-                  <button class="button hover:bg-primary hover:text-white p-1 rounded-full" (click)="refreshRecipe(recipe.id, i, j)"><mat-icon>refresh</mat-icon></button>
+                  <button class="button hover:bg-primary hover:text-white p-1 rounded-full" (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
                 </div>
                 </mat-card-footer>
               </div>
