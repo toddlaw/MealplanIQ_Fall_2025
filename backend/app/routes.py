@@ -149,7 +149,7 @@ def get_meal_plan_refresh():
         # Replace the recipe in the meal plan
         for day in meal_plan_data["days"]:
             for i, recipe in enumerate(day["recipes"]):
-                if recipe["recipe_id"] == recipe_id:
+                if recipe["id"] == recipe_id:
                     # Replace the recipe in place
                     day["recipes"][i] = recipe_to_replace
                     break

@@ -87,24 +87,6 @@
           "type": "normal"
         },
         {
-          "calories": "162.063",
-          "carbohydrates": "5.1805",
-          "cook_time": "5 minutes",
-          "country": "Japanese",
-          "fat": "9.5402",
-          "id": "5122",
-          "ingredients": ["egg", "water", "soy sauce", "white sugar"],
-          "meal_name": "Lunch",
-          "meal_slot": "['lunch', 'dinner']",
-          "prep_time": "5 minutes",
-          "price": "N/A",
-          "protein": "12.9914",
-          "region": "Asian ",
-          "sub_region": "Japanese ",
-          "title": "Japanese Sweet Omelet",
-          "type": "normal"
-        },
-        {
           "calories": "56.6602",
           "carbohydrates": "13.145",
           "cook_time": "12 minutes",
@@ -128,6 +110,24 @@
           "region": "North American ",
           "sub_region": "US ",
           "title": "Tropical Grilled Chicken Breast",
+          "type": "normal"
+        },
+        {
+          "calories": "162.063",
+          "carbohydrates": "5.1805",
+          "cook_time": "5 minutes",
+          "country": "Japanese",
+          "fat": "9.5402",
+          "id": "5122",
+          "ingredients": ["egg", "water", "soy sauce", "white sugar"],
+          "meal_name": "Lunch",
+          "meal_slot": "['lunch', 'dinner']",
+          "prep_time": "5 minutes",
+          "price": "N/A",
+          "protein": "12.9914",
+          "region": "Asian ",
+          "sub_region": "Japanese ",
+          "title": "Japanese Sweet Omelet",
           "type": "normal"
         },
         {
@@ -172,13 +172,38 @@
           ],
           "meal_name": "Snack",
           "meal_slot": "['lunch', 'dinner']",
-          "multiples": 3,
+          "multiples": 2,
           "prep_time": "120 minutes",
           "price": "N/A",
           "protein": "2.6962",
           "region": "European ",
           "sub_region": "Italian ",
           "title": "Cannoli Shells",
+          "type": "normal"
+        },
+        {
+          "calories": "108.3",
+          "carbohydrates": "9.8139",
+          "cook_time": "20 minutes",
+          "country": "US",
+          "fat": "7.2",
+          "id": "15912",
+          "ingredients": [
+            "potato",
+            "butter",
+            "salt",
+            "brown sugar",
+            "cinnamon"
+          ],
+          "meal_name": "Snack",
+          "meal_slot": "['lunch', 'dinner']",
+          "multiples": 1,
+          "prep_time": "15 minutes",
+          "price": "N/A",
+          "protein": "2.6787",
+          "region": "North American ",
+          "sub_region": "US ",
+          "title": "Cinnamon Sweet Potato Chips",
           "type": "normal"
         },
         {
@@ -212,39 +237,39 @@
     }
   ],
   "shopping_list": [
-    "lemon",
-    "oil",
-    "green bell pepper",
-    "egg",
-    "chicken",
-    "lime",
     "baking soda",
-    "mustard powder",
-    "honey",
-    "garlic powder",
-    "italian seasoning",
-    "cilantro",
-    "orange juice",
-    "cinnamon",
-    "garlic",
-    "chicken breast half",
-    "white sugar",
-    "seasoning salt",
     "brown sugar",
-    "egg yolk",
+    "butter",
+    "garam masala",
     "purpose flour",
     "olive oil",
-    "butter",
-    "soy sauce",
-    "red pepper flake",
-    "water",
+    "potato",
+    "cinnamon",
+    "chicken",
     "onion",
-    "salt",
-    "black pepper",
-    "garam masala",
-    "yeast",
     "white wine",
-    "potato"
+    "lime",
+    "black pepper",
+    "white sugar",
+    "honey",
+    "orange juice",
+    "lemon",
+    "red pepper flake",
+    "yeast",
+    "salt",
+    "cilantro",
+    "garlic",
+    "mustard powder",
+    "egg yolk",
+    "green bell pepper",
+    "oil",
+    "chicken breast half",
+    "italian seasoning",
+    "egg",
+    "seasoning salt",
+    "water",
+    "garlic powder",
+    "soy sauce"
   ],
   "snacks": [
     {
@@ -372,7 +397,7 @@
       ],
       "meal_name": "Snack",
       "meal_slot": "['lunch', 'dinner']",
-      "multiples": 3,
+      "multiples": 2,
       "prep_time": "120 minutes",
       "price": "N/A",
       "protein": "2.6962",
@@ -380,53 +405,72 @@
       "sub_region": "Italian ",
       "title": "Cannoli Shells",
       "type": "normal"
+    },
+    {
+      "calories": "108.3",
+      "carbohydrates": "9.8139",
+      "cook_time": "20 minutes",
+      "country": "US",
+      "fat": "7.2",
+      "id": "15912",
+      "ingredients": ["potato", "butter", "salt", "brown sugar", "cinnamon"],
+      "meal_name": "Snack",
+      "meal_slot": "['lunch', 'dinner']",
+      "multiples": 1,
+      "prep_time": "15 minutes",
+      "price": "N/A",
+      "protein": "2.6787",
+      "region": "North American ",
+      "sub_region": "US ",
+      "title": "Cinnamon Sweet Potato Chips",
+      "type": "normal"
     }
   ],
   "tableData": [
     {
-      "actual": 1038,
-      "display_target": "958 - 1059",
+      "actual": 1043,
+      "display_target": "1017 - 1124",
       "nutrientName": "energy (calories)",
       "status": "success",
-      "target": "958 - 1059"
+      "target": "1017 - 1124"
     },
     {
-      "actual": 5,
+      "actual": 6,
       "display_target": "21 ",
       "nutrientName": "fiber (g)",
       "status": "warning",
       "target": "21 - "
     },
     {
-      "actual": 102,
-      "display_target": "169 - 245",
+      "actual": 99,
+      "display_target": "176 - 255",
       "nutrientName": "carbohydrates (g)",
       "status": "warning",
-      "target": "169 - 245"
+      "target": "176 - 255"
     },
     {
       "actual": 32,
-      "display_target": "37 - 132",
+      "display_target": "39 - 137",
       "nutrientName": "protein (g)",
       "status": "warning",
-      "target": "37 - 132"
+      "target": "39 - 137"
     },
     {
-      "actual": 58,
-      "display_target": "41 - 58",
+      "actual": 60,
+      "display_target": "43 - 61",
       "nutrientName": "fats (g)",
       "status": "success",
-      "target": "41 - 58"
+      "target": "43 - 61"
     },
     {
-      "actual": 326,
+      "actual": 372,
       "display_target": "1300 - 2500",
       "nutrientName": "calcium (mg)",
       "status": "warning",
       "target": "1300 - 2500"
     },
     {
-      "actual": 1726,
+      "actual": 1730,
       "display_target": "1500 - 2300",
       "nutrientName": "sodium (mg)",
       "status": "success",
@@ -454,7 +498,7 @@
       "target": "15 - 45"
     },
     {
-      "actual": 103,
+      "actual": 117,
       "display_target": "360 ",
       "nutrientName": "magnesium (mg)",
       "status": "warning",
@@ -468,14 +512,14 @@
       "target": "1 - 9"
     },
     {
-      "actual": 1182,
+      "actual": 1234,
       "display_target": "4700 ",
       "nutrientName": "potassium (mg)",
       "status": "warning",
       "target": "4700 - "
     },
     {
-      "actual": 70,
+      "actual": 60,
       "display_target": "55 - 400",
       "nutrientName": "selenium (ug)",
       "status": "success",
@@ -489,7 +533,7 @@
       "target": "9 - 34"
     },
     {
-      "actual": 1616,
+      "actual": 1381,
       "display_target": "210 - 840",
       "nutrientName": "vitamin_a (iu)",
       "status": "warning",
@@ -510,7 +554,7 @@
       "target": "1 - "
     },
     {
-      "actual": 24,
+      "actual": 25,
       "display_target": "14 - 30",
       "nutrientName": "niacin (mg)",
       "status": "success",
@@ -538,7 +582,7 @@
       "target": "2 - "
     },
     {
-      "actual": 869,
+      "actual": 859,
       "display_target": "400 - 800",
       "nutrientName": "folate (ug)",
       "status": "warning",
@@ -552,21 +596,21 @@
       "target": "65 - 1800"
     },
     {
-      "actual": 193,
+      "actual": 156,
       "display_target": "600 - 2000",
       "nutrientName": "vitamin_d (iu)",
       "status": "warning",
       "target": "600 - 2000"
     },
     {
-      "actual": 6,
+      "actual": 5,
       "display_target": "15 - 800",
       "nutrientName": "vitamin_e (mg)",
       "status": "warning",
       "target": "15 - 800"
     },
     {
-      "actual": 745,
+      "actual": 606,
       "display_target": "400 - 3000",
       "nutrientName": "choline (mg)",
       "status": "success",

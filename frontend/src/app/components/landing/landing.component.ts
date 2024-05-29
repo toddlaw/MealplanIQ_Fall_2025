@@ -34,7 +34,6 @@ import {
 import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 
-
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -46,9 +45,8 @@ export class LandingComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
-    private refresh: RefreshComponent,
-  ) {
-  }
+    private refresh: RefreshComponent
+  ) {}
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -278,7 +276,7 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              //console.log(response);
+              console.log(response);
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
@@ -331,7 +329,6 @@ export class LandingComponent implements OnInit {
       }
     }
   }
-
 
   /**
    * Gets the total price of the recipe
@@ -424,18 +421,18 @@ export class LandingComponent implements OnInit {
    */
   getFullMealPlan() {}
 
-
- 
-  refreshRecipe(id: string, i: number, j:number) {
-    const mealPlan = this.getMealPlan(i,j);
-    this.refresh.refreshRecipe(id, mealPlan).subscribe((response) => {
-      //Handles the response, update ui
-      console.log('recipe refresh', response);
-      this.updateMealPlan(response.meal_plan);
-    }, (error) => {
-      //Handles the error
-      console.log('error', error);
-    }
+  refreshRecipe(id: string, i: number, j: number) {
+    const mealPlan = this.getMealPlan(i, j);
+    this.refresh.refreshRecipe(id, mealPlan).subscribe(
+      (response) => {
+        //Handles the response, update ui
+        console.log('recipe refresh', response);
+        this.updateMealPlan(response.meal_plan);
+      },
+      (error) => {
+        //Handles the error
+        console.log('error', error);
+      }
     );
   }
 
@@ -446,11 +443,6 @@ export class LandingComponent implements OnInit {
   updateMealPlan(mealPlan: any) {
     this.mealPlanResponse = mealPlan;
   }
-
-
-
-
-
 
   /**
    * Refreshes the snack list
@@ -613,13 +605,10 @@ export class LandingComponent implements OnInit {
   openRecipeDialog(recipe: any): void {
     this.dialog.open(RecipeDialogComponent, {
       data: {
-        recipe: recipe, 
+        recipe: recipe,
         imageUrl: this.getImageUrl(recipe.id),
       },
       width: '800px',
     });
   }
-
-
-
 }
