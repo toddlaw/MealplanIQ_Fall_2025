@@ -1,18 +1,16 @@
-
-<div id="default-carousel" class="w-full mx-auto max-w-screen-xl relative h-1/2" data-carousel="slide">
-  <div class="relative h-full overflow-hidden">
+<div id="default-carousel" class="w-full mx-auto max-w-xl relative" data-carousel="slide">
+  <div class="relative h-56 overflow-hidden md:h-96">
     <div *ngFor="let item of placeHolders; let i = index" 
          [ngClass]="{'hidden': currentItem !== i, 'block': currentItem === i, 'duration-700': true, 'ease-in-out': true}" 
          data-carousel-item>
       <img [src]="item.file_name" 
            class="absolute block w-full h-full object-cover top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
-           [alt]="item.image" 
-           style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+           [alt]="item.image">
     </div>
   </div>
 
   <!-- Carousel Indicators -->
-  <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+  <div class="hidden absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
     <button *ngFor="let item of placeHolders; let i = index" 
             type="button" 
             class="w-3 h-3 rounded-full"
@@ -42,3 +40,13 @@
     </span>
   </button>
 </div>
+
+
+
+
+
+
+
+
+
+
