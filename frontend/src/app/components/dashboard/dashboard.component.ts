@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
 import { Overlay } from '@angular/cdk/overlay';
@@ -116,7 +117,8 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog,
     private overlay: Overlay,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -222,5 +224,13 @@ export class DashboardComponent implements OnInit {
     } else if (subscriptionTypeId === '3') {
       this.hasSubscription = false;
     }
+  }
+
+  logout() {
+    this.authService.logout().subscribe(() => {
+      localStorage.removeItem('email');
+      localStorage.removeItem('uid');
+      this.router.navigate(['/']);
+    });
   }
 }
