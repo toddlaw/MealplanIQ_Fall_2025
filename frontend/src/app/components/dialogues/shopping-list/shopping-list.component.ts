@@ -9,14 +9,12 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./shopping-list.component.css'],
 })
 export class ShoppingListComponent implements OnInit {
-  data: ShoppingList[] = []; // Initialize the "data" property with an empty object
-  constructor(
-    @Inject(MAT_DIALOG_DATA) private dialogData: any,
-    private datePipe: DatePipe
-  ) {} // Inject the MAT_DIALOG_DATA token to receive the data from the parent component
+  data: string[] = []; // Initialize the "data" property with an empty array
+
+  constructor(@Inject(MAT_DIALOG_DATA) private dialogData: any) {} // Inject the MAT_DIALOG_DATA token to receive the data from the parent component
 
   ngOnInit(): void {
     this.data = this.dialogData; // Assign the received data to the local variable
-    console.log('Received data:', this.data);
+    console.log('The number of items in shopping list: ', this.data.length);
   }
 }

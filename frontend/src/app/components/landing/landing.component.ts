@@ -4,10 +4,13 @@ import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
+import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
+import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
 
 import {
   units,
@@ -30,6 +33,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogModule,
+  MatDialogConfig,
 } from '@angular/material/dialog';
 import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
@@ -84,6 +88,8 @@ export class LandingComponent implements OnInit {
   searchClicked: boolean = false;
   selectedHealthGoalIndex: number = 3;
   userSubscriptionTypeId: number = 0;
+  updatedMealPlan: any;
+  shoppingListData: ShoppingList[] = [];
 
   people: {
     age: number | null;
@@ -281,6 +287,15 @@ export class LandingComponent implements OnInit {
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
+              this.getShoppingListFromBackend().subscribe(
+                (secondResponse) => {
+                  console.log('Fetched Shopping List: ', secondResponse);
+                  this.shoppingListData = secondResponse;
+                },
+                (error) => {
+                  console.error(error);
+                }
+              );
 
               const numDays = this.getNumDays(this.mealPlanResponse);
               for (let i = 0; i < numDays; i++) {
@@ -428,16 +443,39 @@ export class LandingComponent implements OnInit {
   refreshRecipe(id: string) {
     this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
-        //Handles the response, update ui
         console.log('recipe replaced', response);
-        const updated_plan = this.updateMealPlan(response.meal_plan);
-        console.log('updated meal plan', updated_plan);
+        this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
+        console.log('updated meal plan', this.mealPlanResponse);
+
+        // After the meal plan is updated, get the updated shopping list
+        this.getShoppingListFromBackend().subscribe(
+          (updatedShoppingList) => {
+            this.shoppingListData = updatedShoppingList;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
       },
       (error) => {
-        //Handles the error
         console.log('error', error);
       }
     );
+  }
+
+  openShoppingListDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px'; // Set the width of the dialog
+    dialogConfig.data = this.shoppingListData; // Pass your shopping list data to the dialog
+    dialogConfig.autoFocus = false; // Disable auto-focus
+    const dialogRef = this.dialog.open(ShoppingListComponent, dialogConfig);
+
+    dialogRef.afterOpened().subscribe(() => {
+      const dialogContent = document.querySelector('.popup-max-height');
+      if (dialogContent) {
+        dialogContent.scrollTop = 0;
+      }
+    });
   }
 
   /**
@@ -616,5 +654,17 @@ export class LandingComponent implements OnInit {
       },
       width: '800px',
     });
+  }
+
+  getShoppingListFromBackend(): Observable<ShoppingList[]> {
+    return this.http.post<ShoppingList[]>(
+      'http://127.0.0.1:5000/api/get-shopping-list',
+      this.mealPlanResponse,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
   }
 }
