@@ -19,6 +19,7 @@ from app.send_email import (
 from user_db.user_db import instantiate_database
 import stripe
 import os
+from app.find_matched_recipe_and_update import find_matched_recipe_and_update
 
 # Enable CORS for all domains on all routes
 CORS(app)
@@ -127,42 +128,18 @@ def receive_data():
 
 @app.route("/api/refresh-meal-plan", methods=["POST"])
 def get_meal_plan_refresh():
+
+    data = request.json
+    meal_plan_data = data.get("meal_plan")
+    recipe_id = data.get("recipe_id")
     try:
-        data = request.json
-        meal_plan_data = data.get("meal_plan")
-        recipe_id = data.get("recipe_id")
+        output_data = find_matched_recipe_and_update(meal_plan_data, recipe_id)
+    except ValueError as e:
+        output_data = {"error": str(e)}
+        print(f"Failed to generate meal plan: {str(e)}")
 
-        root_path = app.root_path
-        json_file_path = os.path.join(root_path, "output.json")
-
-        # Read the template data from the JSON file
-        with open(json_file_path, "r") as f:
-            template_data = json.load(f)
-
-        # Check if template_data contains "recipe"
-        if "recipe" not in template_data:
-            return jsonify({"error": "Template data does not contain 'recipe'"}), 500
-
-        id_to_replace = template_data["recipe"]["id"]
-        recipe_to_replace = template_data["recipe"]
-
-        # Replace the recipe in the meal plan
-        for day in meal_plan_data["days"]:
-            for i, recipe in enumerate(day["recipes"]):
-                if recipe["id"] == recipe_id:
-                    # Replace the recipe in place
-                    day["recipes"][i] = recipe_to_replace
-                    break
-
-        output_data = {"meal_plan": meal_plan_data, "id_to_replace": id_to_replace}
-
-        # Return the modified template data as JSON response
-        return jsonify(output_data)
-
-    except Exception as e:
-        # Log the error
-        print("An error occurred:", e)
-        return jsonify({"error": str(e)}), 500
+    # Return the modified template data as JSON response
+    return jsonify(output_data)
 
 
 @app.route("/api/subscription_type_id/<user_id>")

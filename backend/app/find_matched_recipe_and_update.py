@@ -12,26 +12,54 @@ def find_matched_recipe_and_update(response, recipe_id):
     :param recipe_id: string of the recipe ID
     :return: updated JSON object containing the meal plan
     """
-    recipe_to_replce = {}
     clicked_recipe = {}
     date_counter = 0
+    recipe_counter = 0
+
+    # Traverse the response to find and remove the clicked recipe
     for day in response["days"]:
-        date_counter += 1
         for i, recipe in enumerate(day["recipes"]):
             if recipe["id"] == recipe_id:
-                # Replace the recipe in place
-                clicked_recipe = day["recipes"][i]
+                clicked_recipe = day["recipes"].pop(i)
+                recipe_counter = i
                 break
-    recipe_to_replce = find_matched_recipe(clicked_recipe)
-    response["days"][date_counter]["recipes"].append(recipe_to_replce)
-    response = update_nutrition_values(response, recipe_id, "subtract")
-    response = update_nutrition_values(response, recipe_to_replce["id"], "add")
-    response = gen_shopping_list(response)
-    response = insert_status_nutrient_info(response)
+        if clicked_recipe:
+            break
+        date_counter += 1
 
+    # Check if clicked_recipe has been found
+    if not clicked_recipe:
+        raise ValueError("No recipe found with the specified ID.")
 
-    return response
+    # Ensure 'id' is an integer
+    clicked_recipe["id"] = int(clicked_recipe["id"])
 
+    # Print clicked_recipe before passing it to find_matched_recipe
+    print("Clicked recipe before passing to find_matched_recipe:", clicked_recipe)
+
+    # Call find_matched_recipe with the clicked_recipe
+    recipe_to_replace = find_matched_recipe(clicked_recipe)
+
+    # Ensure that a matched recipe is found before proceeding
+    if recipe_to_replace:
+        recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
+        print("FOUND recipe to replace: ", recipe_to_replace)
+
+        # Update the recipe at the same position
+        response["days"][date_counter]["recipes"].insert(
+            recipe_counter, recipe_to_replace
+        )
+
+        # Update nutrition values and other related data
+        response = update_nutrition_values(response, clicked_recipe, "subtract")
+        response = update_nutrition_values(response, recipe_to_replace, "add")
+        response = gen_shopping_list(response)
+        response = insert_status_nutrient_info(response)
+
+        output_data = {"meal_plan": response, "id_to_replace": recipe_to_replace["id"]}
+        return output_data
+    else:
+        raise ValueError("No matched recipe found")
 
 
 def find_matched_recipe(recipe):
@@ -42,22 +70,44 @@ def find_matched_recipe(recipe):
     :param recipe: Dictionary with recipe details including the 'id' key
     :return: Dictionary with matched recipe details in the expected format
     """
+    print("find_matched_recipe called with recipe:", recipe)
+
     # Load the recipes pool from the CSV file
     recipe_df = pd.read_csv("./meal_db/meal_database.csv")
-    # Find the calories of the original recipe
-    original_recipe_row = recipe_df.loc[recipe_df["number"] == int(recipe["id"])]
 
+    # Ensure the recipe has an 'id' key
+    if "id" not in recipe:
+        print("Debug: Recipe dictionary keys are:", recipe.keys())
+        raise KeyError("The recipe does not contain an 'id' key.")
+
+    # Additional debug print to ensure id is being correctly accessed
+    print(f"Recipe ID being used for lookup: {recipe['id']}")
+
+    # Ensure 'id' is an integer
+    recipe_id = int(recipe["id"])
+
+    # Find the calories of the original recipe
+    original_recipe_row = recipe_df.loc[recipe_df["number"] == recipe_id]
     print("Original Recipe Row:\n", original_recipe_row)
 
     if original_recipe_row.empty:
-        return None  # or handle the case where the recipe is not found
+        print("No recipe found with the given id:", recipe["id"])
+        return None  # Handle the case where the recipe is not found
 
     original_calories = original_recipe_row["energy_kcal"].values[0]
-    print(original_calories)
+    print("Original calories:", original_calories)
 
-    # Find the recipe with calories closest to the original recipe's calories
+    # Calculate the absolute difference between the original recipe's calories and each recipe's calories
     recipe_df["calories_diff"] = (recipe_df["energy_kcal"] - original_calories).abs()
-    matched_recipe_row = recipe_df.loc[recipe_df["calories_diff"].idxmin()]
+
+    # Filter out the rows where the number equals the original recipe's number
+    filtered_recipe_df = recipe_df[recipe_df["number"] != recipe_id]
+
+    # Find the row with the minimum calories difference from the remaining rows
+    matched_recipe_row = filtered_recipe_df.loc[
+        filtered_recipe_df["calories_diff"].idxmin()
+    ]
+    print("Matched Recipe Row:\n", matched_recipe_row)
 
     # Convert the matched recipe row to the expected dictionary format
     matched_recipe = {
@@ -80,37 +130,15 @@ def find_matched_recipe(recipe):
     for key, value in matched_recipe.items():
         matched_recipe[key] = f"{value}"
 
+    print("New id found is", matched_recipe["id"])
+
     # Convert ingredients from a string to a list
     matched_recipe["ingredients"] = ast.literal_eval(matched_recipe["ingredients"])
 
     return matched_recipe
 
 
-def main():
-    recipe = {
-        "calories": "108.3",
-        "carbohydrates": "9.8139",
-        "cook_time": "20 minutes",
-        "country": "US",
-        "fat": "7.2",
-        "id": "15912",
-        "ingredients": ["potato", "butter", "salt", "brown sugar", "cinnamon"],
-        "meal_name": "Breakfast",
-        "meal_slot": "['lunch', 'dinner']",
-        "prep_time": "15 minutes",
-        "price": "N/A",
-        "protein": "2.6787",
-        "region": "North American ",
-        "sub_region": "US ",
-        "title": "Cinnamon Sweet Potato Chips",
-        "type": "normal",
-    }
-
-    recipe = find_matched_recipe(recipe)
-    print(f"Matched Recipe:\n{recipe}")
-
-
-def update_nutrition_values(response, recipe_id, operation):
+def update_nutrition_values(response, recipe, operation):
     """
     Updates the nutrition values in response['tableData'] based on the matched recipe from the CSV file.
     :param response: JSON object containing the meal plan
@@ -118,17 +146,6 @@ def update_nutrition_values(response, recipe_id, operation):
     :param operation: string of the operation to perform (add or subtract)
     :return: updated JSON object containing the meal plan
     """
-    # Find the matched recipe
-    clicked_recipe = {}
-    for day in response["days"]:
-        for recipe in day["recipes"]:
-            if recipe["id"] == recipe_id:
-                clicked_recipe = recipe
-                break
-
-    matched_recipe = find_matched_recipe(clicked_recipe)
-    if not matched_recipe:
-        return response  # handle case where no matched recipe is found
 
     # Define the nutrients to update
     nutrients = {
@@ -163,17 +180,41 @@ def update_nutrition_values(response, recipe_id, operation):
     }
 
     # Update the tableData values
-    for item in response['tableData']:
-        nutrient_name = item['nutrientName']
+    for item in response["tableData"]:
+        nutrient_name = item["nutrientName"]
         if nutrient_name in nutrients:
             csv_key = nutrients[nutrient_name]
-            if csv_key in matched_recipe:
+            if csv_key in recipe:
                 if operation == "add":
-                    item['actual'] += float(matched_recipe[csv_key])
+                    item["actual"] += float(recipe[csv_key])
                 elif operation == "subtract":
-                    item['actual'] -= float(matched_recipe[csv_key])
+                    item["actual"] -= float(recipe[csv_key])
 
     return response
+
+
+def main():
+    recipe = {
+        "calories": "108.3",
+        "carbohydrates": "9.8139",
+        "cook_time": "20 minutes",
+        "country": "US",
+        "fat": "7.2",
+        "id": "15912",
+        "ingredients": ["potato", "butter", "salt", "brown sugar", "cinnamon"],
+        "meal_name": "Breakfast",
+        "meal_slot": "['lunch', 'dinner']",
+        "prep_time": "15 minutes",
+        "price": "N/A",
+        "protein": "2.6787",
+        "region": "North American ",
+        "sub_region": "US ",
+        "title": "Cinnamon Sweet Potato Chips",
+        "type": "normal",
+    }
+
+    recipe = find_matched_recipe(recipe)
+    print(f"Matched Recipe:\n{recipe}")
 
 
 if __name__ == "__main__":
