@@ -416,7 +416,8 @@ export class LandingComponent implements OnInit {
    * @returns The url of the image
    */
   getImageUrl(id: number): string {
-    const path = `../../../assets/images/meal-plan-images/default_meal_picture.png`;
+    const path = `https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/${id}.jpg`;
+    //const path = `../../../assets/images/meal-plan-images/default_meal_picture.png`;
 
     // check if the image exists
     const img = new Image();

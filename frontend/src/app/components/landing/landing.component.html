@@ -504,11 +504,20 @@
           >
             <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between">
               <div class="flex justify-items-center">
+                <ng-container *ngIf="recipe.id !== null; else defaultMeanImg">
                 <img
                   [src]="getImageUrl(recipe.id)"
                   alt="Image"
                   class="text-center"
                 />
+                </ng-container>
+                <ng-template #defaultMeanImg>
+                  <img
+                    src="assets/images/meal-placeholder.png"
+                    alt="Image"
+                    class="text-center"
+                  />
+                </ng-template>
               </div>
               <div class="p-6 flex flex-col flex-grow ">
                 <mat-card-title>{{ recipe.title }}</mat-card-title>
