@@ -9,9 +9,6 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
-import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
-import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
-
 import {
   units,
   activityLevels,
@@ -37,6 +34,8 @@ import {
 } from '@angular/material/dialog';
 import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
+import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
+import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
 
 @Component({
   selector: 'app-landing',
@@ -474,7 +473,10 @@ export class LandingComponent implements OnInit {
       maxDate: localStorage.getItem('maxDate'),
     };
     dialogConfig.autoFocus = false; // Disable auto-focus
-    const dialogRef = this.dialog.open(ShoppingListComponent, dialogConfig);
+    const dialogRef = this.dialog.open(
+      ShoppingListLandingPageComponent,
+      dialogConfig
+    );
 
     dialogRef.afterOpened().subscribe(() => {
       const dialogContent = document.querySelector('.popup-max-height');

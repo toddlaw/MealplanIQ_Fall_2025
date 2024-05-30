@@ -52,6 +52,7 @@ import { NavbarComponent } from './components/essentials/navbar/navbar.component
 import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
 import { RefreshComponent } from './services/refresh/refresh.component';
 import { NutritionChartComponent } from './components/dialogues/nutrition-chart/nutrition-chart.component';
+import { ShoppingListLandingPageComponent } from './components/dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { NutritionChartComponent } from './components/dialogues/nutrition-chart/
     RecipeDialogComponent,
     RefreshComponent,
     NutritionChartComponent,
+    ShoppingListLandingPageComponent,
   ],
   imports: [
     BrowserModule,
