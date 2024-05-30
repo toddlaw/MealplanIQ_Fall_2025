@@ -179,13 +179,12 @@ def insert_status_nutrient_info(response):
 def is_within_target(actual, target):
     parts = target.split("-")
 
-    if parts[1].strip():
-        lower_bound = int(parts[0].strip())
-        upper_bound = int(parts[1].strip())
-        return lower_bound <= actual <= upper_bound
-    else:
-        lower_bound = int(parts[0].strip())
-        return actual >= lower_bound
+    lower_bound = int(parts[0].strip())
+    upper_bound = float("inf") if not parts[1].strip() else int(parts[1].strip())
+
+    if actual != 0 and lower_bound == 0 and not parts[1].strip():
+        return False
+    return lower_bound <= actual <= upper_bound
 
 
 def update_meals_with_snacks(response):
