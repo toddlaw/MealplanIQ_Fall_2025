@@ -1,31 +1,28 @@
 <div class="popup-max-height hide_scroll">
   <div class="flex justify-center pt-3 pb-4">
-    <img
-      src="./../../../../assets/images/lamp-icon.png"
-      alt="lamp"
-      class="popup-icon"
-    />
+    <img src="./../../../../assets/images/lamp-icon.png" alt="lamp" class="popup-icon" />
   </div>
   <h2 mat-dialog-title class="text-xl text-primary text-center font-bold mb-10">
     Shopping List
   </h2>
 
-  <!-- <div *ngFor="let item of data" class="mb-4 mt-8">
-    <h3 class="font-semibold text-primary text-date flex items-center">
-      <mat-icon class="mr-2" fontIcon="restaurant" color="default"> </mat-icon>
-      {{ item.date | date : "MMM-dd" }}
-    </h3> -->
+  <h3 class="font-semibold text-primary text-date flex items-center">
+    <mat-icon class="mr-2" fontIcon="restaurant" color="default"> </mat-icon>
+    {{ data.minDate | date : "MMM dd" }}
+    <ng-container *ngIf="data.minDate !== data.maxDate"> to {{ data.maxDate | date : "MMM dd" }}</ng-container>
+  </h3>
 
   <ul>
     <div class="container mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-        <li *ngFor="let listItem of data" class="border-l-4 border-primary pl-2 pr-4 flex justify-between mr-2">
+        <li *ngFor="let listItem of data.shoppingListData"
+          class="border-l-4 border-primary pl-2 pr-4 flex justify-between mr-2">
           <p class="text-item">{{ listItem }}</p>
         </li>
       </div>
     </div>
   </ul>
-  </div>
+</div>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close class="text-secondary-strong">
     Cancel
