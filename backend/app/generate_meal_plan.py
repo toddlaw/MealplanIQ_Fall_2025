@@ -217,11 +217,18 @@ def update_meals_with_snacks(data):
             recipes = (
                 recipes[: breakfast_index + 1]
                 + new_morning_snacks
-                + recipes[lunch_index:]
+                + [r for r in recipes[lunch_index:] if r not in morning_snacks]
+            )
+
+            # Update the lunch index after modifying the recipes list
+            lunch_index = (
+                breakfast_index
+                + 1
+                + len(new_morning_snacks)
+                + (lunch_index - breakfast_index - 1 - len(morning_snacks))
             )
 
         if lunch_index is not None and dinner_index is not None:
-            print("dinner index", dinner_index)
             afternoon_snacks = [
                 r
                 for r in recipes[lunch_index + 1 : dinner_index]
@@ -233,7 +240,14 @@ def update_meals_with_snacks(data):
             recipes = (
                 recipes[: lunch_index + 1]
                 + new_afternoon_snacks
-                + recipes[dinner_index:]
+                + [r for r in recipes[dinner_index:] if r not in afternoon_snacks]
+            )
+
+            # Update the dinner index after modifying the recipes list
+            dinner_index = (
+                lunch_index
+                + len(new_afternoon_snacks)
+                + (dinner_index - lunch_index - 1 - len(afternoon_snacks))
             )
 
         # Update the day's recipes
