@@ -63,7 +63,8 @@ def gen_shopping_list(response):
                 recipe["ingredients"] = ["N/A"]
                 continue  # Skip this recipe if ingredients is not a list
             for ingredient in recipe["ingredients"]:
-                shopping_list.add(ingredient)
+                if ingredient != "N/A":
+                    shopping_list.add(ingredient)
 
     response["shopping_list"] = list(shopping_list)
 
