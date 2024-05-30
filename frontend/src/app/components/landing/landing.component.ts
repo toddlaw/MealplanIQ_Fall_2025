@@ -438,8 +438,10 @@ export class LandingComponent implements OnInit {
    * @param id The id of the recipe to be replaced
    */
   refreshRecipe(id: string) {
+    console.log(this.mealPlanResponse);
     this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
+        this.toast.success('Recipe refreshed successfully!');
         console.log('recipe replaced', response);
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
         console.log('updated meal plan', this.mealPlanResponse);
@@ -455,6 +457,9 @@ export class LandingComponent implements OnInit {
         );
       },
       (error) => {
+        this.toast.error(
+          'Opps look like the server is too busy, try again later!'
+        );
         console.log('error', error);
       }
     );

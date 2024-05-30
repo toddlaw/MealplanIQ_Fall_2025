@@ -8,6 +8,7 @@ from app.retrieve_diet import get_diet_plan
 from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
 from app.post_process import post_process_results
+from app.post_process_with_real_snack import process_the_recipes_with_snacks
 import json
 import os
 import pandas as pd
@@ -58,10 +59,11 @@ def gen_shopping_list(response):
     shopping_list = set()
     for day in response["days"]:
         for recipe in day["recipes"]:
+            if not isinstance(recipe["ingredients"], list):
+                recipe["ingredients"] = ["N/A"]
+                continue  # Skip this recipe if ingredients is not a list
             for ingredient in recipe["ingredients"]:
-                shopping_list.add(
-                    ingredient
-                )
+                shopping_list.add(ingredient)
 
     response["shopping_list"] = list(shopping_list)
 
@@ -109,23 +111,23 @@ def insert_snacks_between_meals(response):
         breakfast_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Breakfast"
+            if recipe["meal_name"].lower() == "breakfast"
         ]
         lunch_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Lunch"
+            if recipe["meal_name"].lower() == "lunch"
         ]
         dinner_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Dinner"
+            if recipe["meal_name"].lower() == "dinner"
         ]
 
         snack_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Snack"
+            if recipe["meal_name"].lower() == "snack"
         ]
         snacks = [day["recipes"][i] for i in snack_indices]
 
@@ -180,13 +182,21 @@ def insert_status_nutrient_info(response):
 def is_within_target(actual, target):
     parts = target.split("-")
 
-    if parts[1].strip():
-        lower_bound = int(parts[0].strip())
-        upper_bound = int(parts[1].strip())
-        return lower_bound <= actual <= upper_bound
-    else:
-        lower_bound = int(parts[0].strip())
-        return actual >= lower_bound
+    lower_bound = int(parts[0].strip())
+    upper_bound = float("inf") if not parts[1].strip() else int(parts[1].strip())
+
+    if actual != 0 and lower_bound == 0 and not parts[1].strip():
+        return False
+    return lower_bound <= actual <= upper_bound
+
+
+def update_meals_with_snacks(response, snack_recipes_df):
+    snacks = response["snacks"]
+    new_snacks = process_the_recipes_with_snacks(snacks, snack_recipes_df)
+    response["snacks"] = new_snacks
+    print(response["snacks"])
+
+    return response
 
 
 def gen_meal_plan(data):
@@ -229,6 +239,10 @@ def gen_meal_plan(data):
     macros = calculate_macros(energy, data["people"])
 
     micros = calculate_micros(data["people"])
+
+    all_recipes_df = pd.read_csv("./meal_db/meal_database_V2.csv")
+
+    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"] == "['snack']"]
 
     # 5. Apply user prefs to meal database
     recipes_with_scores = apply_user_prefs(
@@ -293,6 +307,7 @@ def gen_meal_plan(data):
         recipes_with_scores, optimized_results, min_date, days
     )
 
+    response = update_meals_with_snacks(response, snack_recipes_df.copy())
     response = process_response_meal_name(response)
     response = distribute_snacks_to_date(response)
     response = insert_snacks_between_meals(response)

@@ -19,6 +19,7 @@ from app.send_email import (
 from user_db.user_db import instantiate_database
 import stripe
 import os
+import asyncio
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update
 
 # Enable CORS for all domains on all routes
@@ -118,8 +119,6 @@ def receive_data():
         response = {"error": str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
 
-    print(response)
-
     # email_sent_time = create_and_send_maizzle_email(db, user_id, data)
     # create_and_send_maizzle_email_test(response)
     # scheduled_email_test(email_sent_time, db, user_id)
@@ -132,8 +131,10 @@ def get_meal_plan_refresh():
     data = request.json
     meal_plan_data = data.get("meal_plan")
     recipe_id = data.get("recipe_id")
+
     try:
         output_data = find_matched_recipe_and_update(meal_plan_data, recipe_id)
+
     except ValueError as e:
         output_data = {"error": str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
@@ -141,7 +142,8 @@ def get_meal_plan_refresh():
     # Return the modified template data as JSON response
     return jsonify(output_data)
 
-@app.route('/api/get-shopping-list', methods=["POST"])
+
+@app.route("/api/get-shopping-list", methods=["POST"])
 def get_meal_plan():
     response = request.json
     response_with_shopping_list = gen_shopping_list(response)
