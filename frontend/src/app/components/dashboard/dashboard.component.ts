@@ -184,6 +184,7 @@ export class DashboardComponent implements OnInit {
   manageSubscription() {
     const email = localStorage.getItem('email');
     const subscription_type_id = localStorage.getItem('subscription_type_id');
+    // 1: monthly, 2: yearly, 3: free-trial for signed up user
     if (subscription_type_id === '1' || subscription_type_id === '2') {
       // for stripe test mode
       const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
@@ -237,10 +238,6 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/']);
     });
   }
-
-
-
-
 
   openNutrition() {
     console.log(this.shoppingListData);
