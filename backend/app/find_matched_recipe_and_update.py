@@ -1,6 +1,6 @@
 import pandas as pd
 import ast
-
+import time
 from app.generate_meal_plan import gen_shopping_list, insert_status_nutrient_info
 
 
@@ -34,16 +34,12 @@ def find_matched_recipe_and_update(response, recipe_id):
     # Ensure 'id' is an integer
     clicked_recipe["id"] = int(clicked_recipe["id"])
 
-    # Print clicked_recipe before passing it to find_matched_recipe
-    print("Clicked recipe before passing to find_matched_recipe:", clicked_recipe)
-
     # Call find_matched_recipe with the clicked_recipe
     recipe_to_replace = find_matched_recipe(clicked_recipe)
 
     # Ensure that a matched recipe is found before proceeding
     if recipe_to_replace:
         recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
-        print("FOUND recipe to replace: ", recipe_to_replace)
 
         # Update the recipe at the same position
         response["days"][date_counter]["recipes"].insert(
@@ -53,6 +49,7 @@ def find_matched_recipe_and_update(response, recipe_id):
         # Update nutrition values and other related data
         response = update_nutrition_values(response, clicked_recipe, "subtract")
         response = update_nutrition_values(response, recipe_to_replace, "add")
+        time.sleep(0.1)
         response = gen_shopping_list(response)
         response = insert_status_nutrient_info(response)
 
@@ -142,18 +139,30 @@ def update_nutrition_values(response, recipe, operation):
     """
     Updates the nutrition values in response['tableData'] based on the matched recipe from the CSV file.
     :param response: JSON object containing the meal plan
-    :param recipe_id: string of the recipe ID
+    :param recipe: dict containing the recipe information
     :param operation: string of the operation to perform (add or subtract)
     :return: updated JSON object containing the meal plan
     """
 
-    # Define the nutrients to update
+    # Convert recipe ID to integer
+    recipe["id"] = int(recipe["id"])
+
+    # Load the recipes pool from the CSV file
+    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
+
+    # Find the original recipe row in the DataFrame
+    original_recipe_row = recipe_df.loc[recipe_df["number"] == recipe["id"]]
+
+    if original_recipe_row.empty:
+        raise ValueError(f"Recipe with ID {recipe['id']} not found in the database")
+
+    # Define the nutrients to update based on the provided CSV columns
     nutrients = {
-        "energy (calories)": "calories",
+        "energy (calories)": "energy_kcal",
         "fiber (g)": "fibre_g",
         "carbohydrates (g)": "carbohydrates_g",
         "protein (g)": "protein_g",
-        "fats (g)": "fat",
+        "fats (g)": "fats_total_g",
         "calcium (mg)": "calcium_mg",
         "sodium (mg)": "sodium_mg",
         "copper (mg)": "copper_mg",
@@ -173,7 +182,7 @@ def update_nutrition_values(response, recipe, operation):
         "vitamin_b12 (ug)": "vitamin_B12_ug",
         "folate (ug)": "folate_DFE_ug",
         "vitamin_c (mg)": "vitamin_C_total_ascorbic_acid_mg",
-        "vitamin_d (iu)": "vitamin_D_IU",
+        "vitamin_d (iu)": "vitiamin_D_IU",
         "vitamin_e (mg)": "vitamin_E_alphatocopherol_mg",
         "choline (mg)": "choline_mg",
         "vitamin_k (ug)": "vitamin_K_phylloquinone_ug",
@@ -181,14 +190,17 @@ def update_nutrition_values(response, recipe, operation):
 
     # Update the tableData values
     for item in response["tableData"]:
-        nutrient_name = item["nutrientName"]
+        nutrient_name = item["nutrientName"].lower()
         if nutrient_name in nutrients:
             csv_key = nutrients[nutrient_name]
-            if csv_key in recipe:
+            if csv_key in original_recipe_row.columns:
+                value = float(original_recipe_row[csv_key].values[0])
                 if operation == "add":
-                    item["actual"] += float(recipe[csv_key])
+                    item["actual"] += value
+                    item["actual"] = int(round(item["actual"]))
                 elif operation == "subtract":
-                    item["actual"] -= float(recipe[csv_key])
+                    item["actual"] -= value
+                    item["actual"] = int(round(item["actual"]))
 
     return response
 
@@ -213,7 +225,7 @@ def main():
         "type": "normal",
     }
 
-    recipe = find_matched_recipe(recipe)
+    response = update_nutrition_values(recipe)
     print(f"Matched Recipe:\n{recipe}")
 
 
