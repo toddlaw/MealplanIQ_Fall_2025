@@ -12,4 +12,5 @@ dist/
 *.pyd
 service-key.json
 idea/
+meal_db/
 >>>>>>> payment_backend
