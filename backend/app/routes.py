@@ -113,11 +113,11 @@ def receive_data():
     db.update_user_profile(**user_data)
     process_user_data(db, user_id, extract_data)
 
-    try:
-        response = gen_meal_plan(data)
-    except Exception as e:
-        response = {"error": str(e)}
-        print(f"Failed to generate meal plan: {str(e)}")
+    # try:
+    response = gen_meal_plan(data)
+    # except Exception as e:
+    #     response = {"error": str(e)}
+    #     print(f"Failed to generate meal plan: {str(e)}")
 
     print(response)
 

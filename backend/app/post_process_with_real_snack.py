@@ -21,7 +21,7 @@ def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
         if abs(remaining_nutrition) < 100:
             break
 
-    return selected_snacks
+    return selected_snacks, remaining_nutrition
 
 
 def process_the_recipes_with_snacks(snack_recipes):
@@ -31,7 +31,7 @@ def process_the_recipes_with_snacks(snack_recipes):
     nutrition_key = "energy_kcal"
     cumulative_nutrition = sum(float(recipe["calories"]) for recipe in snack_recipes)
 
-    selected_snacks_df = find_best_snack_match(
+    selected_snacks_df, remaining_nutrition = find_best_snack_match(
         snack_recipe_df, cumulative_nutrition, nutrition_key
     )
 
@@ -39,7 +39,7 @@ def process_the_recipes_with_snacks(snack_recipes):
 
     final_differences = cumulative_nutrition - selected_snacks_df[nutrition_key].sum()
 
-    return best_snack_match, final_differences
+    return best_snack_match
 
 
 def process_recipe(recipe_row):
@@ -54,7 +54,6 @@ def process_recipe(recipe_row):
         "ingredients": recipe_row["ingredients"],
         "calories": recipe_row["energy_kcal"],
         "meal_slot": recipe_row["meal_slot"],
-        "meal_name": "Snack",
         "id": recipe_row["number"],
         "cook_time": "N/A",
         "prep_time": "N/A",
@@ -103,7 +102,7 @@ def main():
             "type": "normal",
         },
         {
-            "calories": "444.7",
+            "calories": "84.7",
             "carbohydrates": "9.918",
             "cook_time": "65 minutes",
             "country": "Indian",

@@ -16,6 +16,9 @@ def find_matched_recipe_and_update(response, recipe_id):
     date_counter = 0
     recipe_counter = 0
 
+    # Load the recipes pool from the CSV file
+    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
+
     # Traverse the response to find and remove the clicked recipe
     for day in response["days"]:
         for i, recipe in enumerate(day["recipes"]):
@@ -35,7 +38,7 @@ def find_matched_recipe_and_update(response, recipe_id):
     clicked_recipe["id"] = int(clicked_recipe["id"])
 
     # Call find_matched_recipe with the clicked_recipe
-    recipe_to_replace = find_matched_recipe(clicked_recipe)
+    recipe_to_replace = find_matched_recipe(clicked_recipe, recipe_df)
 
     # Ensure that a matched recipe is found before proceeding
     if recipe_to_replace:
@@ -47,8 +50,12 @@ def find_matched_recipe_and_update(response, recipe_id):
         )
 
         # Update nutrition values and other related data
-        response = update_nutrition_values(response, clicked_recipe, "subtract")
-        response = update_nutrition_values(response, recipe_to_replace, "add")
+        response = update_nutrition_values(
+            response, clicked_recipe, "subtract", recipe_df
+        )
+        response = update_nutrition_values(
+            response, recipe_to_replace, "add", recipe_df
+        )
         time.sleep(0.1)
         response = gen_shopping_list(response)
         response = insert_status_nutrient_info(response)
@@ -59,7 +66,7 @@ def find_matched_recipe_and_update(response, recipe_id):
         raise ValueError("No matched recipe found")
 
 
-def find_matched_recipe(recipe):
+def find_matched_recipe(recipe, recipe_df):
     """
     Finds a recipe in the recipes_pool with calories number closest to the original one,
     and returns it in the format expected by the frontend.
@@ -68,9 +75,6 @@ def find_matched_recipe(recipe):
     :return: Dictionary with matched recipe details in the expected format
     """
     print("find_matched_recipe called with recipe:", recipe)
-
-    # Load the recipes pool from the CSV file
-    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
 
     # Ensure the recipe has an 'id' key
     if "id" not in recipe:
@@ -135,7 +139,7 @@ def find_matched_recipe(recipe):
     return matched_recipe
 
 
-def update_nutrition_values(response, recipe, operation):
+def update_nutrition_values(response, recipe, operation, recipe_df):
     """
     Updates the nutrition values in response['tableData'] based on the matched recipe from the CSV file.
     :param response: JSON object containing the meal plan
@@ -146,9 +150,6 @@ def update_nutrition_values(response, recipe, operation):
 
     # Convert recipe ID to integer
     recipe["id"] = int(recipe["id"])
-
-    # Load the recipes pool from the CSV file
-    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
 
     # Find the original recipe row in the DataFrame
     original_recipe_row = recipe_df.loc[recipe_df["number"] == recipe["id"]]

@@ -426,10 +426,12 @@ export class LandingComponent implements OnInit {
    * @param id The id of the recipe to be replaced
    */
   refreshRecipe(id: string) {
+    console.log(this.mealPlanResponse);
     this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
         //Handles the response, update ui
         console.log('recipe replaced', response);
+        console.log(response.meal_plan);
         const updated_plan = this.updateMealPlan(response.meal_plan);
         console.log('updated meal plan', updated_plan);
       },

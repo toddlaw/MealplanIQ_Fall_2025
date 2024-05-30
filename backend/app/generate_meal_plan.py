@@ -108,23 +108,23 @@ def insert_snacks_between_meals(response):
         breakfast_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Breakfast"
+            if recipe["meal_name"].lower() == "breakfast"
         ]
         lunch_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Lunch"
+            if recipe["meal_name"].lower() == "lunch"
         ]
         dinner_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Dinner"
+            if recipe["meal_name"].lower() == "dinner"
         ]
 
         snack_indices = [
             i
             for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"] == "Snack"
+            if recipe["meal_name"].lower() == "snack"
         ]
         snacks = [day["recipes"][i] for i in snack_indices]
 
@@ -188,72 +188,13 @@ def is_within_target(actual, target):
         return actual >= lower_bound
 
 
-def update_meals_with_snacks(data):
-    for day in data["days"]:
-        recipes = day["recipes"]
+def update_meals_with_snacks(response):
+    snacks = response["snacks"]
+    new_snacks = process_the_recipes_with_snacks(snacks)
+    response["snacks"] = new_snacks
+    print(response["snacks"])
 
-        breakfast_index = next(
-            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "breakfast"),
-            None,
-        )
-        lunch_index = next(
-            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "lunch"),
-            None,
-        )
-        dinner_index = next(
-            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "dinner"),
-            None,
-        )
-
-        if breakfast_index is not None and lunch_index is not None:
-            morning_snacks = [
-                r
-                for r in recipes[breakfast_index + 1 : lunch_index]
-                if r["meal_name"].lower() == "snack"
-            ]
-            new_morning_snacks, _ = process_the_recipes_with_snacks(morning_snacks)
-
-            # Insert new morning snacks back to the original position
-            recipes = (
-                recipes[: breakfast_index + 1]
-                + new_morning_snacks
-                + [r for r in recipes[lunch_index:] if r not in morning_snacks]
-            )
-
-            # Update the lunch index after modifying the recipes list
-            lunch_index = (
-                breakfast_index
-                + 1
-                + len(new_morning_snacks)
-                + (lunch_index - breakfast_index - 1 - len(morning_snacks))
-            )
-
-        if lunch_index is not None and dinner_index is not None:
-            afternoon_snacks = [
-                r
-                for r in recipes[lunch_index + 1 : dinner_index]
-                if r["meal_name"].lower() == "snack"
-            ]
-            new_afternoon_snacks, _ = process_the_recipes_with_snacks(afternoon_snacks)
-
-            # Insert new afternoon snacks back to the original position
-            recipes = (
-                recipes[: lunch_index + 1]
-                + new_afternoon_snacks
-                + [r for r in recipes[dinner_index:] if r not in afternoon_snacks]
-            )
-
-            # Update the dinner index after modifying the recipes list
-            dinner_index = (
-                lunch_index
-                + len(new_afternoon_snacks)
-                + (dinner_index - lunch_index - 1 - len(afternoon_snacks))
-            )
-
-        # Update the day's recipes
-        day["recipes"] = recipes
-
-    return data
+    return response
 
 
 def gen_meal_plan(data):
@@ -297,6 +238,13 @@ def gen_meal_plan(data):
 
     micros = calculate_micros(data["people"])
 
+    all_recipes_df = pd.read_csv("./meal_db/meal_database.csv")
+    meal_recipes_df = all_recipes_df[
+        all_recipes_df["meal_slot"] == "['lunch', 'dinner']"
+    ]
+
+    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"] == "['snack']"]
+
     # 5. Apply user prefs to meal database
     recipes_with_scores = apply_user_prefs(
         data["favouriteCuisines"],
@@ -305,7 +253,7 @@ def gen_meal_plan(data):
         data["likedFoods"],
         data["dislikedFoods"],
         data["allergies"],
-        pd.read_csv("./meal_db/meal_database.csv"),
+        meal_recipes_df,
     )
 
     # 6. Retrieve diet
@@ -360,13 +308,13 @@ def gen_meal_plan(data):
         recipes_with_scores, optimized_results, min_date, days
     )
 
+    # response = update_meals_with_snacks(response)
     response = process_response_meal_name(response)
     response = distribute_snacks_to_date(response)
     response = insert_snacks_between_meals(response)
     response = process_type_normal(response)
     response = insert_status_nutrient_info(response)
     response = gen_shopping_list(response)
-    response = update_meals_with_snacks(response)
 
     return response
 
