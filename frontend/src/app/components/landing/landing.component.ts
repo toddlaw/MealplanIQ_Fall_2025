@@ -249,6 +249,8 @@ export class LandingComponent implements OnInit {
 
     console.log(data.maxDate);
     console.log(data.minDate);
+    localStorage.setItem('minDate', String(data.minDate));
+    localStorage.setItem('maxDate', String(data.maxDate));
 
     if (!data.likedFoods) {
       data.likedFoods = 'None';
@@ -466,7 +468,11 @@ export class LandingComponent implements OnInit {
   openShoppingListDialog(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px'; // Set the width of the dialog
-    dialogConfig.data = this.shoppingListData; // Pass your shopping list data to the dialog
+    dialogConfig.data = {
+      shoppingListData: this.shoppingListData,
+      minDate: localStorage.getItem('minDate'),
+      maxDate: localStorage.getItem('maxDate'),
+    };
     dialogConfig.autoFocus = false; // Disable auto-focus
     const dialogRef = this.dialog.open(ShoppingListComponent, dialogConfig);
 
