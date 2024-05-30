@@ -221,6 +221,7 @@ def update_meals_with_snacks(data):
             )
 
         if lunch_index is not None and dinner_index is not None:
+            print("dinner index", dinner_index)
             afternoon_snacks = [
                 r
                 for r in recipes[lunch_index + 1 : dinner_index]
@@ -351,7 +352,7 @@ def gen_meal_plan(data):
     response = process_type_normal(response)
     response = insert_status_nutrient_info(response)
     response = gen_shopping_list(response)
-    # response = update_meals_with_snacks(response)
+    response = update_meals_with_snacks(response)
 
     return response
 
