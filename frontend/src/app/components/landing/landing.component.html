@@ -472,21 +472,24 @@
       </div>
 
       <!-- recipe change option -->
-      <button
+      <!-- <button
         mat-raised-button
         color="primary"
         class="get-full-meal-plan-button"
         (click)="getFullMealPlan()"
       >
         Get full meal plan
-      </button>
+      </button> -->
 
+
+      <app-popup></app-popup>
+      
+      <div class="text-center">
       <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>
         Open Shopping List
       </button>
-
-      <app-popup></app-popup>
-
+    </div>
+    <br />
       <div
         *ngFor="let day of mealPlanResponse.days; index as i"
         class="recipe-day"
