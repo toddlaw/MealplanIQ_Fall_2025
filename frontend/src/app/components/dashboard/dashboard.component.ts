@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface';
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
 import { Overlay } from '@angular/cdk/overlay';
@@ -8,6 +9,7 @@ import { activityLevels, genders } from '../landing/form-values';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
+import { NutritionChartComponent } from '../dialogues/nutrition-chart/nutrition-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -116,7 +118,8 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog,
     private overlay: Overlay,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -182,9 +185,12 @@ export class DashboardComponent implements OnInit {
     const email = localStorage.getItem('email');
     const subscription_type_id = localStorage.getItem('subscription_type_id');
     if (subscription_type_id === '1' || subscription_type_id === '2') {
-      const url =
-        'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
-        email;
+      // for stripe test mode
+      const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+
+      // for stripe live mode
+      // const url = 'https://billing.stripe.com/p/login/bIY7sxbu7c14g7eeUU?prefilled_email=' + email;
+
       window.location.href = url;
     } else if (subscription_type_id === '3') {
       this.openDialog(
@@ -222,5 +228,37 @@ export class DashboardComponent implements OnInit {
     } else if (subscriptionTypeId === '3') {
       this.hasSubscription = false;
     }
+  }
+
+  logout() {
+    this.authService.logout().subscribe(() => {
+      localStorage.removeItem('email');
+      localStorage.removeItem('uid');
+      this.router.navigate(['/']);
+    });
+  }
+
+
+
+
+
+  openNutrition() {
+    console.log(this.shoppingListData);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px'; // Set the width of the dialog
+    dialogConfig.data = this.shoppingListData; // Pass your shopping list data to the dialog --change with nutition chart
+    dialogConfig.autoFocus = false; // Disable auto-focus
+    const dialogRef = this.dialog.open(NutritionChartComponent, dialogConfig);
+
+    dialogRef.afterOpened().subscribe(() => {
+      const dialogContent = document.querySelector('.popup-max-height');
+      if (dialogContent) {
+        dialogContent.scrollTop = 0;
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
   }
 }

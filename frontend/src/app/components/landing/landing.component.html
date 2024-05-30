@@ -481,6 +481,10 @@
         Get full meal plan
       </button>
 
+      <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>
+        Open Shopping List
+      </button>
+
       <app-popup></app-popup>
 
       <div
@@ -513,7 +517,16 @@
                 </mat-card-content>
                 <mat-card-footer class="absolute bottom-10 right-6 w-full pt-5">
                   <div class="flex justify-between items-center px-6">
-                  <button class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1" (click)="openRecipeDialog(recipe)">Recipe</button>
+                  <ng-container  *ngIf="recipe.meal_name !== 'Snack'; else noSnack">
+                    <button 
+                    class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1" 
+                    (click)="openRecipeDialog(recipe)">Recipe</button>
+                  </ng-container>
+                  <ng-template #noSnack>
+                    <div 
+                    class="bg-white white-text px-5 py-2 rounded-lg ml-1" 
+                  ></div>
+                  </ng-template>
                   <button class="button hover:bg-primary hover:text-white p-1 rounded-full" (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
                 </div>
                 </mat-card-footer>

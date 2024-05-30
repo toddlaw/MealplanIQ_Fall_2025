@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
-from app.generate_meal_plan import gen_meal_plan
+from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.send_email import create_and_send_maizzle_email_test
 from app.payment_stripe import (
     handle_checkout_session_completed,
@@ -140,6 +140,12 @@ def get_meal_plan_refresh():
 
     # Return the modified template data as JSON response
     return jsonify(output_data)
+
+@app.route('/api/get-shopping-list', methods=["POST"])
+def get_meal_plan():
+    response = request.json
+    response_with_shopping_list = gen_shopping_list(response)
+    return jsonify(response_with_shopping_list["shopping_list"])
 
 
 @app.route("/api/subscription_type_id/<user_id>")
