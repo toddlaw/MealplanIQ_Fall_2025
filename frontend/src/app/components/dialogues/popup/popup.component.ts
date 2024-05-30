@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-popup',
@@ -6,16 +8,68 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./popup.component.css']
 })
 export class PopupComponent implements OnInit {
+  userSubscriptionTypeId: number = 0;
   showPopup: boolean = false;
 
-  ngOnInit(): void {  
-    if (!localStorage.getItem('adShown')){
-      this.showPopup = true;
-      localStorage.setItem('adShown', 'true');
+  textValues = [
+    {
+      title: 'Join Today!',
+      description: 'Join our community today to access exclusive functions and features.',
+      button: 'Sign Up Now!'
+    },
+    {
+      title: 'Subscribe Now!',
+      description: 'Subscribe to our subscription plan to access exclusive functions and features.',
+      button: 'Check out our plans!'
     }
-  } 
+  ];
 
-  closePopup(): void {
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.checkUserSubscriptionType();
+  }
+
+  async checkUserSubscriptionType() {
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      try {
+        const response: any = await this.http.get(`http://127.0.0.1:5000/api/subscription_type_id/${uid}`).toPromise();
+        if (response.subscription_type_id) {
+          this.userSubscriptionTypeId = response.subscription_type_id;
+          localStorage.setItem('subscription_type_id', response.subscription_type_id.toString());
+        } else {
+          this.userSubscriptionTypeId = 0;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        this.userSubscriptionTypeId = 0;
+      }
+    } else {
+      this.userSubscriptionTypeId = 0;
+    }
+    this.checkPopupStatus();
+    console.log('subscription type ID:', this.userSubscriptionTypeId);
+  }
+
+  checkPopupStatus() {
+    if (this.userSubscriptionTypeId === 0 || this.userSubscriptionTypeId === 3) {
+      this.showPopup = true;
+    } else {
+      this.showPopup = false;
+    }
+  }
+
+  closePopup() {
     this.showPopup = false;
+  }
+
+  getPopupContent() {
+    if (this.userSubscriptionTypeId === 0) {
+      return this.textValues[0];
+    } else if (this.userSubscriptionTypeId === 3) {
+      return this.textValues[1];
+    }
+    return null;
   }
 }
