@@ -59,6 +59,9 @@ def gen_shopping_list(response):
     shopping_list = set()
     for day in response["days"]:
         for recipe in day["recipes"]:
+            if not isinstance(recipe["ingredients"], list):
+                recipe["ingredients"] = ["N/A"]
+                continue  # Skip this recipe if ingredients is not a list
             for ingredient in recipe["ingredients"]:
                 shopping_list.add(ingredient)
 
@@ -187,9 +190,9 @@ def is_within_target(actual, target):
     return lower_bound <= actual <= upper_bound
 
 
-def update_meals_with_snacks(response):
+def update_meals_with_snacks(response, snack_recipes_df):
     snacks = response["snacks"]
-    new_snacks = process_the_recipes_with_snacks(snacks)
+    new_snacks = process_the_recipes_with_snacks(snacks, snack_recipes_df)
     response["snacks"] = new_snacks
     print(response["snacks"])
 
@@ -237,10 +240,7 @@ def gen_meal_plan(data):
 
     micros = calculate_micros(data["people"])
 
-    all_recipes_df = pd.read_csv("./meal_db/meal_database.csv")
-    meal_recipes_df = all_recipes_df[
-        all_recipes_df["meal_slot"] == "['lunch', 'dinner']"
-    ]
+    all_recipes_df = pd.read_csv("./meal_db/meal_database_V2.csv")
 
     snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"] == "['snack']"]
 
@@ -252,7 +252,7 @@ def gen_meal_plan(data):
         data["likedFoods"],
         data["dislikedFoods"],
         data["allergies"],
-        meal_recipes_df,
+        pd.read_csv("./meal_db/meal_database.csv"),
     )
 
     # 6. Retrieve diet
@@ -307,7 +307,7 @@ def gen_meal_plan(data):
         recipes_with_scores, optimized_results, min_date, days
     )
 
-    # response = update_meals_with_snacks(response)
+    response = update_meals_with_snacks(response, snack_recipes_df.copy())
     response = process_response_meal_name(response)
     response = distribute_snacks_to_date(response)
     response = insert_snacks_between_meals(response)

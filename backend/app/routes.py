@@ -133,12 +133,13 @@ def get_meal_plan_refresh():
     data = request.json
     meal_plan_data = data.get("meal_plan")
     recipe_id = data.get("recipe_id")
-    try:
-        output_data = find_matched_recipe_and_update(meal_plan_data, recipe_id)
 
-    except ValueError as e:
-        output_data = {"error": str(e)}
-        print(f"Failed to generate meal plan: {str(e)}")
+    # try:
+    output_data = find_matched_recipe_and_update(meal_plan_data, recipe_id)
+
+    # except ValueError as e:
+    #     output_data = {"error": str(e)}
+    #     print(f"Failed to generate meal plan: {str(e)}")
 
     # Return the modified template data as JSON response
     return jsonify(output_data)

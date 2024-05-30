@@ -9,7 +9,7 @@ def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
     remaining_nutrition = cumulative_nutrition
 
     while not snack_recipe_df.empty:
-        snack_recipe_df["difference"] = snack_recipe_df.apply(
+        snack_recipe_df.loc[:, "difference"] = snack_recipe_df.apply(
             calculate_difference, axis=1
         )
         best_match = snack_recipe_df.nsmallest(1, "difference")
@@ -24,9 +24,7 @@ def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
     return selected_snacks, remaining_nutrition
 
 
-def process_the_recipes_with_snacks(snack_recipes):
-    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
-    snack_recipe_df = pd.read_csv("./meal_db/snacks.csv")
+def process_the_recipes_with_snacks(snack_recipes, snack_recipe_df):
 
     nutrition_key = "energy_kcal"
     cumulative_nutrition = sum(float(recipe["calories"]) for recipe in snack_recipes)

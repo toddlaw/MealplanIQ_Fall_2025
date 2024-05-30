@@ -2,8 +2,8 @@
   "constraints_loosened": true,
   "days": [
     {
-      "date": "2024-05-30",
-      "date_weekday": "Thursday May 30",
+      "date": "2024-05-31",
+      "date_weekday": "Friday May 31",
       "recipes": [
         {
           "calories": "108.3",
@@ -30,86 +30,21 @@
           "type": "normal"
         },
         {
-          "calories": "3.68",
-          "carbohydrates": "1.1741",
-          "cook_time": "10 minutes",
-          "country": "Moroccan",
-          "fat": "0.0387",
-          "id": "2685",
-          "ingredients": ["lemon", "water", "water", "lemon", "salt"],
+          "calories": 190.0,
+          "carbohydrates": 40.8,
+          "cook_time": "N/A",
+          "country": "N/A",
+          "fat": 0.9,
+          "id": 200684,
+          "ingredients": NaN,
           "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "10 minutes",
+          "meal_slot": "['snack']",
+          "prep_time": "N/A",
           "price": "N/A",
-          "protein": "0.115",
-          "region": "African ",
-          "sub_region": "Northern Africa ",
-          "title": "Citrons Confits Express (Quick Preserved Lemons)",
-          "type": "normal"
-        },
-        {
-          "calories": "16.0",
-          "carbohydrates": "3.736",
-          "cook_time": "20 minutes",
-          "country": "Mexican",
-          "fat": "0.04",
-          "id": "6833",
-          "ingredients": ["chicken breast half", "onion", "green bell pepper"],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "10 minutes",
-          "price": "N/A",
-          "protein": "0.44",
-          "region": "Latin American ",
-          "sub_region": "Mexican ",
-          "title": "Easy Chicken Taco Filling",
-          "type": "normal"
-        },
-        {
-          "calories": "44.7",
-          "carbohydrates": "9.918",
-          "cook_time": "65 minutes",
-          "country": "Indian",
-          "fat": "0.15",
-          "id": "4053",
-          "ingredients": ["chicken", "garlic", "garam masala", "lime"],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "5 minutes",
-          "price": "N/A",
-          "protein": "1.908",
-          "region": "Asian ",
-          "sub_region": "Indian Subcontinent ",
-          "title": "Masala-Spiced Roast Chicken",
-          "type": "normal"
-        },
-        {
-          "calories": "56.6602",
-          "carbohydrates": "13.145",
-          "cook_time": "12 minutes",
-          "country": "US",
-          "fat": "0.255",
-          "id": "18512",
-          "ingredients": [
-            "orange juice",
-            "lime",
-            "honey",
-            "red pepper flake",
-            "chicken breast half",
-            "cilantro"
-          ],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "5 minutes",
-          "price": "N/A",
-          "protein": "0.8999",
-          "region": "North American ",
-          "sub_region": "US ",
-          "title": "Tropical Grilled Chicken Breast",
+          "protein": 4.1,
+          "region": "N/A",
+          "sub_region": "N/A",
+          "title": "Cantaloupe",
           "type": "normal"
         },
         {
@@ -131,79 +66,21 @@
           "type": "normal"
         },
         {
-          "calories": "82.062",
-          "carbohydrates": "16.2731",
-          "cook_time": "20 minutes",
-          "country": "Chinese",
-          "fat": "0.162",
-          "id": "3033",
-          "ingredients": [
-            "yeast",
-            "water",
-            "purpose flour",
-            "white sugar",
-            "baking soda"
-          ],
+          "calories": 171.0,
+          "carbohydrates": 43.47,
+          "cook_time": "N/A",
+          "country": "N/A",
+          "fat": 0.99,
+          "id": 200683,
+          "ingredients": NaN,
           "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "35 minutes",
+          "meal_slot": "['snack']",
+          "prep_time": "N/A",
           "price": "N/A",
-          "protein": "4.2984",
-          "region": "Asian ",
-          "sub_region": "Chinese and Mongolian ",
-          "title": "Simple and Tasty Chinese Steamed Buns",
-          "type": "normal"
-        },
-        {
-          "calories": "103.502",
-          "carbohydrates": "13.2078",
-          "cook_time": "3 minutes",
-          "country": "Italian",
-          "fat": "4.5118",
-          "id": "11039",
-          "ingredients": [
-            "purpose flour",
-            "white sugar",
-            "cinnamon",
-            "white wine",
-            "egg yolk",
-            "oil"
-          ],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 2,
-          "prep_time": "120 minutes",
-          "price": "N/A",
-          "protein": "2.6962",
-          "region": "European ",
-          "sub_region": "Italian ",
-          "title": "Cannoli Shells",
-          "type": "normal"
-        },
-        {
-          "calories": "108.3",
-          "carbohydrates": "9.8139",
-          "cook_time": "20 minutes",
-          "country": "US",
-          "fat": "7.2",
-          "id": "15912",
-          "ingredients": [
-            "potato",
-            "butter",
-            "salt",
-            "brown sugar",
-            "cinnamon"
-          ],
-          "meal_name": "Snack",
-          "meal_slot": "['lunch', 'dinner']",
-          "multiples": 1,
-          "prep_time": "15 minutes",
-          "price": "N/A",
-          "protein": "2.6787",
-          "region": "North American ",
-          "sub_region": "US ",
-          "title": "Cinnamon Sweet Potato Chips",
+          "protein": 2.22,
+          "region": "N/A",
+          "sub_region": "N/A",
+          "title": "Blueberries",
           "type": "normal"
         },
         {
@@ -237,240 +114,107 @@
     }
   ],
   "shopping_list": [
-    "red pepper flake",
     "olive oil",
-    "egg",
-    "cilantro",
-    "chicken",
-    "garam masala",
-    "orange juice",
-    "onion",
-    "seasoning salt",
-    "cinnamon",
-    "potato",
+    "lemon",
+    "soy sauce",
+    "white sugar",
     "mustard powder",
-    "lime",
-    "butter",
-    "water",
-    "garlic",
     "salt",
     "garlic powder",
-    "baking soda",
     "black pepper",
-    "purpose flour",
-    "white sugar",
-    "brown sugar",
-    "white wine",
+    "chicken",
+    "cinnamon",
+    "potato",
     "italian seasoning",
-    "honey",
-    "chicken breast half",
-    "yeast",
-    "egg yolk",
-    "soy sauce",
-    "oil",
-    "lemon",
-    "green bell pepper"
+    "seasoning salt",
+    "egg",
+    "brown sugar",
+    "water",
+    "butter"
   ],
   "snacks": [
     {
-      "calories": "3.68",
-      "carbohydrates": "1.1741",
-      "cook_time": "10 minutes",
-      "country": "Moroccan",
-      "fat": "0.0387",
-      "id": "2685",
-      "ingredients": ["lemon", "water", "water", "lemon", "salt"],
+      "calories": 190.0,
+      "carbohydrates": 40.8,
+      "cook_time": "N/A",
+      "country": "N/A",
+      "fat": 0.9,
+      "id": 200684,
+      "ingredients": NaN,
       "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "10 minutes",
+      "meal_slot": "['snack']",
+      "prep_time": "N/A",
       "price": "N/A",
-      "protein": "0.115",
-      "region": "African ",
-      "sub_region": "Northern Africa ",
-      "title": "Citrons Confits Express (Quick Preserved Lemons)",
+      "protein": 4.1,
+      "region": "N/A",
+      "sub_region": "N/A",
+      "title": "Cantaloupe",
       "type": "normal"
     },
     {
-      "calories": "16.0",
-      "carbohydrates": "3.736",
-      "cook_time": "20 minutes",
-      "country": "Mexican",
-      "fat": "0.04",
-      "id": "6833",
-      "ingredients": ["chicken breast half", "onion", "green bell pepper"],
+      "calories": 171.0,
+      "carbohydrates": 43.47,
+      "cook_time": "N/A",
+      "country": "N/A",
+      "fat": 0.99,
+      "id": 200683,
+      "ingredients": NaN,
       "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "10 minutes",
+      "meal_slot": "['snack']",
+      "prep_time": "N/A",
       "price": "N/A",
-      "protein": "0.44",
-      "region": "Latin American ",
-      "sub_region": "Mexican ",
-      "title": "Easy Chicken Taco Filling",
-      "type": "normal"
-    },
-    {
-      "calories": "44.7",
-      "carbohydrates": "9.918",
-      "cook_time": "65 minutes",
-      "country": "Indian",
-      "fat": "0.15",
-      "id": "4053",
-      "ingredients": ["chicken", "garlic", "garam masala", "lime"],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "5 minutes",
-      "price": "N/A",
-      "protein": "1.908",
-      "region": "Asian ",
-      "sub_region": "Indian Subcontinent ",
-      "title": "Masala-Spiced Roast Chicken",
-      "type": "normal"
-    },
-    {
-      "calories": "56.6602",
-      "carbohydrates": "13.145",
-      "cook_time": "12 minutes",
-      "country": "US",
-      "fat": "0.255",
-      "id": "18512",
-      "ingredients": [
-        "orange juice",
-        "lime",
-        "honey",
-        "red pepper flake",
-        "chicken breast half",
-        "cilantro"
-      ],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "5 minutes",
-      "price": "N/A",
-      "protein": "0.8999",
-      "region": "North American ",
-      "sub_region": "US ",
-      "title": "Tropical Grilled Chicken Breast",
-      "type": "normal"
-    },
-    {
-      "calories": "82.062",
-      "carbohydrates": "16.2731",
-      "cook_time": "20 minutes",
-      "country": "Chinese",
-      "fat": "0.162",
-      "id": "3033",
-      "ingredients": [
-        "yeast",
-        "water",
-        "purpose flour",
-        "white sugar",
-        "baking soda"
-      ],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "35 minutes",
-      "price": "N/A",
-      "protein": "4.2984",
-      "region": "Asian ",
-      "sub_region": "Chinese and Mongolian ",
-      "title": "Simple and Tasty Chinese Steamed Buns",
-      "type": "normal"
-    },
-    {
-      "calories": "103.502",
-      "carbohydrates": "13.2078",
-      "cook_time": "3 minutes",
-      "country": "Italian",
-      "fat": "4.5118",
-      "id": "11039",
-      "ingredients": [
-        "purpose flour",
-        "white sugar",
-        "cinnamon",
-        "white wine",
-        "egg yolk",
-        "oil"
-      ],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 2,
-      "prep_time": "120 minutes",
-      "price": "N/A",
-      "protein": "2.6962",
-      "region": "European ",
-      "sub_region": "Italian ",
-      "title": "Cannoli Shells",
-      "type": "normal"
-    },
-    {
-      "calories": "108.3",
-      "carbohydrates": "9.8139",
-      "cook_time": "20 minutes",
-      "country": "US",
-      "fat": "7.2",
-      "id": "15912",
-      "ingredients": ["potato", "butter", "salt", "brown sugar", "cinnamon"],
-      "meal_name": "Snack",
-      "meal_slot": "['lunch', 'dinner']",
-      "multiples": 1,
-      "prep_time": "15 minutes",
-      "price": "N/A",
-      "protein": "2.6787",
-      "region": "North American ",
-      "sub_region": "US ",
-      "title": "Cinnamon Sweet Potato Chips",
+      "protein": 2.22,
+      "region": "N/A",
+      "sub_region": "N/A",
+      "title": "Blueberries",
       "type": "normal"
     }
   ],
   "tableData": [
     {
-      "actual": 1043,
-      "display_target": "1017 - 1124",
+      "actual": 1055,
+      "display_target": "1046 - 1156",
       "nutrientName": "energy (calories)",
       "status": "success",
-      "target": "1017 - 1124"
+      "target": "1046 - 1156"
     },
     {
       "actual": 6,
-      "display_target": "21 ",
+      "display_target": "22 ",
       "nutrientName": "fiber (g)",
       "status": "warning",
-      "target": "21 - "
+      "target": "22 - "
     },
     {
-      "actual": 99,
-      "display_target": "176 - 255",
+      "actual": 87,
+      "display_target": "180 - 260",
       "nutrientName": "carbohydrates (g)",
       "status": "warning",
-      "target": "176 - 255"
+      "target": "180 - 260"
     },
     {
-      "actual": 32,
-      "display_target": "39 - 137",
+      "actual": 45,
+      "display_target": "40 - 140",
       "nutrientName": "protein (g)",
-      "status": "warning",
-      "target": "39 - 137"
+      "status": "success",
+      "target": "40 - 140"
     },
     {
       "actual": 60,
-      "display_target": "43 - 61",
+      "display_target": "44 - 62",
       "nutrientName": "fats (g)",
       "status": "success",
-      "target": "43 - 61"
+      "target": "44 - 62"
     },
     {
-      "actual": 372,
+      "actual": 366,
       "display_target": "1300 - 2500",
       "nutrientName": "calcium (mg)",
       "status": "warning",
       "target": "1300 - 2500"
     },
     {
-      "actual": 1730,
+      "actual": 1948,
       "display_target": "1500 - 2300",
       "nutrientName": "sodium (mg)",
       "status": "success",
@@ -478,122 +222,122 @@
     },
     {
       "actual": 0,
-      "display_target": "0 - 8",
+      "display_target": "0 - 5",
       "nutrientName": "copper (mg)",
       "status": "success",
-      "target": "0 - 8"
+      "target": "0 - 5"
     },
     {
       "actual": 1,
-      "display_target": "3 - 10",
+      "display_target": "2 - 10",
       "nutrientName": "fluoride (mg)",
       "status": "warning",
-      "target": "3 - 10"
+      "target": "2 - 10"
     },
     {
       "actual": 5,
-      "display_target": "15 - 45",
+      "display_target": "8 - 40",
       "nutrientName": "iron (mg)",
       "status": "warning",
-      "target": "15 - 45"
+      "target": "8 - 40"
     },
     {
-      "actual": 117,
-      "display_target": "360 ",
+      "actual": 118,
+      "display_target": "240 ",
       "nutrientName": "magnesium (mg)",
       "status": "warning",
-      "target": "360 - "
+      "target": "240 - "
     },
     {
       "actual": 1,
-      "display_target": "1 - 9",
+      "display_target": "2 - 6",
       "nutrientName": "manganese (mg)",
-      "status": "success",
-      "target": "1 - 9"
+      "status": "warning",
+      "target": "2 - 6"
     },
     {
-      "actual": 1234,
-      "display_target": "4700 ",
+      "actual": 1193,
+      "display_target": "4500 ",
       "nutrientName": "potassium (mg)",
       "status": "warning",
-      "target": "4700 - "
-    },
-    {
-      "actual": 60,
-      "display_target": "55 - 400",
-      "nutrientName": "selenium (ug)",
-      "status": "success",
-      "target": "55 - 400"
-    },
-    {
-      "actual": 4,
-      "display_target": "9 - 34",
-      "nutrientName": "zinc (mg)",
-      "status": "warning",
-      "target": "9 - 34"
-    },
-    {
-      "actual": 1381,
-      "display_target": "210 - 840",
-      "nutrientName": "vitamin_a (iu)",
-      "status": "warning",
-      "target": "210 - 840"
-    },
-    {
-      "actual": 4,
-      "display_target": "1 ",
-      "nutrientName": "thiamin (mg)",
-      "status": "success",
-      "target": "1 - "
-    },
-    {
-      "actual": 4,
-      "display_target": "1 ",
-      "nutrientName": "riboflavin (mg)",
-      "status": "success",
-      "target": "1 - "
-    },
-    {
-      "actual": 25,
-      "display_target": "14 - 30",
-      "nutrientName": "niacin (mg)",
-      "status": "success",
-      "target": "14 - 30"
-    },
-    {
-      "actual": 4,
-      "display_target": "5 ",
-      "nutrientName": "vitamin_b5 (mg)",
-      "status": "warning",
-      "target": "5 - "
-    },
-    {
-      "actual": 0,
-      "display_target": "1 - 80",
-      "nutrientName": "vitamin_b6 (mg)",
-      "status": "warning",
-      "target": "1 - 80"
-    },
-    {
-      "actual": 1,
-      "display_target": "2 ",
-      "nutrientName": "vitamin_b12 (ug)",
-      "status": "warning",
-      "target": "2 - "
-    },
-    {
-      "actual": 859,
-      "display_target": "400 - 800",
-      "nutrientName": "folate (ug)",
-      "status": "warning",
-      "target": "400 - 800"
+      "target": "4500 - "
     },
     {
       "actual": 86,
-      "display_target": "65 - 1800",
-      "nutrientName": "vitamin_c (mg)",
+      "display_target": "40 - 280",
+      "nutrientName": "selenium (ug)",
       "status": "success",
-      "target": "65 - 1800"
+      "target": "40 - 280"
+    },
+    {
+      "actual": 4,
+      "display_target": "8 - 23",
+      "nutrientName": "zinc (mg)",
+      "status": "warning",
+      "target": "8 - 23"
+    },
+    {
+      "actual": 1064,
+      "display_target": "180 - 510",
+      "nutrientName": "vitamin_a (iu)",
+      "status": "warning",
+      "target": "180 - 510"
+    },
+    {
+      "actual": 4,
+      "display_target": "0 ",
+      "nutrientName": "thiamin (mg)",
+      "status": "warning",
+      "target": "0 - "
+    },
+    {
+      "actual": 4,
+      "display_target": "0 ",
+      "nutrientName": "riboflavin (mg)",
+      "status": "warning",
+      "target": "0 - "
+    },
+    {
+      "actual": 25,
+      "display_target": "12 - 20",
+      "nutrientName": "niacin (mg)",
+      "status": "warning",
+      "target": "12 - 20"
+    },
+    {
+      "actual": 4,
+      "display_target": "4 ",
+      "nutrientName": "vitamin_b5 (mg)",
+      "status": "success",
+      "target": "4 - "
+    },
+    {
+      "actual": 0,
+      "display_target": "1 - 60",
+      "nutrientName": "vitamin_b6 (mg)",
+      "status": "warning",
+      "target": "1 - 60"
+    },
+    {
+      "actual": 1,
+      "display_target": "1 ",
+      "nutrientName": "vitamin_b12 (ug)",
+      "status": "success",
+      "target": "1 - "
+    },
+    {
+      "actual": 826,
+      "display_target": "300 - 600",
+      "nutrientName": "folate (ug)",
+      "status": "warning",
+      "target": "300 - 600"
+    },
+    {
+      "actual": 23,
+      "display_target": "45 - 1200",
+      "nutrientName": "vitamin_c (mg)",
+      "status": "warning",
+      "target": "45 - 1200"
     },
     {
       "actual": 156,
@@ -604,24 +348,24 @@
     },
     {
       "actual": 5,
-      "display_target": "15 - 800",
+      "display_target": "15 - 600",
       "nutrientName": "vitamin_e (mg)",
       "status": "warning",
-      "target": "15 - 800"
+      "target": "15 - 600"
     },
     {
-      "actual": 606,
-      "display_target": "400 - 3000",
+      "actual": 599,
+      "display_target": "375 - 2000",
       "nutrientName": "choline (mg)",
       "status": "success",
-      "target": "400 - 3000"
+      "target": "375 - 2000"
     },
     {
-      "actual": 22,
-      "display_target": "75 ",
+      "actual": 19,
+      "display_target": "60 ",
       "nutrientName": "vitamin_k (ug)",
       "status": "warning",
-      "target": "75 - "
+      "target": "60 - "
     }
   ]
 }
