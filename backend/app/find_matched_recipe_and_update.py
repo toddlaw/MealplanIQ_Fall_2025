@@ -65,6 +65,7 @@ def find_matched_recipe_and_update(response, recipe_id):
         time.sleep(0.1)
         response = gen_shopping_list(response)
         response = insert_status_nutrient_info(response)
+        time.sleep(0.1)
 
         output_data = {"meal_plan": response, "id_to_replace": recipe_to_replace["id"]}
         return output_data
@@ -127,7 +128,6 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
             "protein": matched_recipe_row["protein_g"],
             "region": matched_recipe_row["region"],
             "title": matched_recipe_row["title"],
-            "ingredients": matched_recipe_row["ingredients"],
             "calories": matched_recipe_row["energy_kcal"],
             "meal_slot": matched_recipe_row["meal_slot"],
             "id": matched_recipe_row["number"],
@@ -136,7 +136,14 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
             "sub_region": matched_recipe_row["subregion"],
         }
 
-        matched_recipe["ingredients"] = ast.literal_eval(matched_recipe["ingredients"])
+        for key, value in matched_recipe.items():
+            matched_recipe[key] = f"{value}"
+
+        matched_recipe["ingredients"] = ast.literal_eval(
+            matched_recipe_row["ingredients"]
+        )
+
+        print(matched_recipe["ingredients"])
     else:
         print("debug message")
         original_recipe_row = snack_df.loc[snack_df["number"] == recipe_id]
@@ -154,8 +161,8 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
 
         matched_recipe = process_recipe(matched_recipe_row)
 
-    for key, value in matched_recipe.items():
-        matched_recipe[key] = f"{value}"
+        for key, value in matched_recipe.items():
+            matched_recipe[key] = f"{value}"
 
     print("New id found is", matched_recipe["id"])
 
