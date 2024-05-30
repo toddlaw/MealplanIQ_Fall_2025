@@ -185,9 +185,12 @@ export class DashboardComponent implements OnInit {
     const email = localStorage.getItem('email');
     const subscription_type_id = localStorage.getItem('subscription_type_id');
     if (subscription_type_id === '1' || subscription_type_id === '2') {
-      const url =
-        'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
-        email;
+      // for stripe test mode
+      const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+
+      // for stripe live mode
+      // const url = 'https://billing.stripe.com/p/login/bIY7sxbu7c14g7eeUU?prefilled_email=' + email;
+
       window.location.href = url;
     } else if (subscription_type_id === '3') {
       this.openDialog(
