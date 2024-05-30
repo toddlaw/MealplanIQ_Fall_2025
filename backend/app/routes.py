@@ -19,6 +19,7 @@ from app.send_email import (
 from user_db.user_db import instantiate_database
 import stripe
 import os
+import asyncio
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update
 
 # Enable CORS for all domains on all routes
@@ -134,6 +135,7 @@ def get_meal_plan_refresh():
     recipe_id = data.get("recipe_id")
     try:
         output_data = find_matched_recipe_and_update(meal_plan_data, recipe_id)
+
     except ValueError as e:
         output_data = {"error": str(e)}
         print(f"Failed to generate meal plan: {str(e)}")

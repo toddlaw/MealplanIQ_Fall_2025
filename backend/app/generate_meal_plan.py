@@ -8,6 +8,7 @@ from app.retrieve_diet import get_diet_plan
 from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
 from app.post_process import post_process_results
+from app.post_process_with_real_snack import process_the_recipes_with_snacks
 import json
 import os
 import pandas as pd
@@ -59,9 +60,7 @@ def gen_shopping_list(response):
     for day in response["days"]:
         for recipe in day["recipes"]:
             for ingredient in recipe["ingredients"]:
-                shopping_list.add(
-                    ingredient
-                )
+                shopping_list.add(ingredient)
 
     response["shopping_list"] = list(shopping_list)
 
@@ -189,6 +188,59 @@ def is_within_target(actual, target):
         return actual >= lower_bound
 
 
+def update_meals_with_snacks(data):
+    for day in data["days"]:
+        recipes = day["recipes"]
+
+        breakfast_index = next(
+            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "breakfast"),
+            None,
+        )
+        lunch_index = next(
+            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "lunch"),
+            None,
+        )
+        dinner_index = next(
+            (i for i, r in enumerate(recipes) if r["meal_name"].lower() == "dinner"),
+            None,
+        )
+
+        if breakfast_index is not None and lunch_index is not None:
+            morning_snacks = [
+                r
+                for r in recipes[breakfast_index + 1 : lunch_index]
+                if r["meal_name"].lower() == "snack"
+            ]
+            new_morning_snacks, _ = process_the_recipes_with_snacks(morning_snacks)
+
+            # Insert new morning snacks back to the original position
+            recipes = (
+                recipes[: breakfast_index + 1]
+                + new_morning_snacks
+                + recipes[lunch_index:]
+            )
+
+        if lunch_index is not None and dinner_index is not None:
+            afternoon_snacks = [
+                r
+                for r in recipes[lunch_index + 1 : dinner_index]
+                if r["meal_name"].lower() == "snack"
+            ]
+            new_afternoon_snacks, _ = process_the_recipes_with_snacks(afternoon_snacks)
+
+            # Insert new afternoon snacks back to the original position
+            recipes = (
+                recipes[: lunch_index + 1]
+                + new_afternoon_snacks
+                + recipes[dinner_index:]
+            )
+
+        # Update the day's recipes
+        day["recipes"] = recipes
+
+    return data
+
+
 def gen_meal_plan(data):
     """
     Called in ./backend/app/routes.py.
@@ -299,6 +351,7 @@ def gen_meal_plan(data):
     response = process_type_normal(response)
     response = insert_status_nutrient_info(response)
     response = gen_shopping_list(response)
+    # response = update_meals_with_snacks(response)
 
     return response
 
