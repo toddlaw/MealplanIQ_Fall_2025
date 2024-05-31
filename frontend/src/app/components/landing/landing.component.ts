@@ -160,8 +160,8 @@ export class LandingComponent implements OnInit {
       }
     } else {
       this.userSubscriptionTypeId = 0;
-      console.log('subscription type ID:' + this.userSubscriptionTypeId);
     }
+    console.log('subscription type ID:' + this.userSubscriptionTypeId);
     // prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
       this.http
