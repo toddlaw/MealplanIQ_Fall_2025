@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './components/login/login.component';
-import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { SignUpComponent } from './components/auth/sign-up/sign-up.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,10 +17,9 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { LandingComponent } from './components/landing/landing.component';
-import { TermsAndConditionsComponent } from './components/tac-dialog/tac-dialog.component';
+import { TermsAndConditionsComponent } from './components/dialogues/tac-dialog/tac-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { ProfileComponent } from './components/profile/profile.component';
-import { getStorage, provideStorage } from '@angular/fire/storage';
+// import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,14 +35,24 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MissionComponent } from './components/mission/mission.component';
-import { PhilosophyComponent } from './components/philosophy/philosophy.component';
-import { ApproachComponent } from './components/approach/approach.component';
-import { TechnologyComponent } from './components/technology/technology.component';
-import { LeadershipComponent } from './components/leadership/leadership.component';
-import { TimelineComponent } from './components/timeline/timeline.component';
-import { ContactComponent } from './components/contact/contact.component';
-import { SplashComponent } from './components/splash/splash.component';
+import { AboutComponent } from './components/static/about/about.component';
+import { ContactComponent } from './components/static/contact/contact.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { ShoppingListComponent } from './components/dialogues/shopping-list/shopping-list.component';
+import { DatePipe } from '@angular/common';
+import { FooterComponent } from './components/essentials/footer/footer.component';
+import { PrivacyComponent } from './components/static/privacy/privacy.component';
+import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
+import { TosComponent } from './components/dialogues/tos/tos.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { GeneratePopUpComponent } from './components/dialogues/generate-pop-up/generate-pop-up.component';
+import { PopupComponent } from './components/dialogues/popup/popup.component';
+import { NavbarComponent } from './components/essentials/navbar/navbar.component';
+import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.component';
+import { RefreshComponent } from './services/refresh/refresh.component';
+import { NutritionChartComponent } from './components/dialogues/nutrition-chart/nutrition-chart.component';
+import { ShoppingListLandingPageComponent } from './components/dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 
 @NgModule({
   declarations: [
@@ -52,17 +60,24 @@ import { SplashComponent } from './components/splash/splash.component';
     LoginComponent,
     SignUpComponent,
     LandingComponent,
-    HomeComponent,
-    ProfileComponent,
     TermsAndConditionsComponent,
-    MissionComponent,
-    PhilosophyComponent,
-    ApproachComponent,
-    TechnologyComponent,
-    LeadershipComponent,
-    TimelineComponent,
+    AboutComponent,
     ContactComponent,
-    SplashComponent,
+    ShoppingListComponent,
+    PaymentComponent,
+    FooterComponent,
+    PrivacyComponent,
+    OpportunityComponent,
+    TosComponent,
+    DashboardComponent,
+    CarouselComponent,
+    GeneratePopUpComponent,
+    PopupComponent,
+    NavbarComponent,
+    RecipeDialogComponent,
+    RefreshComponent,
+    NutritionChartComponent,
+    ShoppingListLandingPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,8 +98,8 @@ import { SplashComponent } from './components/splash/splash.component';
     OverlayModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
+    // provideFirestore(() => getFirestore()),
+    // provideStorage(() => getStorage()),
     HotToastModule.forRoot(),
     MatMenuModule,
     MatRadioModule,
@@ -94,9 +109,10 @@ import { SplashComponent } from './components/splash/splash.component';
     HttpClientModule,
     MatTableModule,
     MatDialogModule,
-    MatSidenavModule
+    MatSidenavModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

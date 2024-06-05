@@ -2,7 +2,7 @@ import datetime
 import ast
 
 
-def post_process_results(recipe_df, optimized_results, days):
+def post_process_results(recipe_df, optimized_results, min_date, days):
     """
     Called to process the results from the optimization function in addition
     to other data so that a JSON response can be sent to the frontend.
@@ -25,7 +25,7 @@ def post_process_results(recipe_df, optimized_results, days):
     response['constraints_loosened'] = optimized_results["constraints_loosened"]
 
     if num_multiples <= days * 3:
-        days = create_days_array(recipe_df, optimized_results, days)
+        days = create_days_array(recipe_df, optimized_results, min_date, days)
         response['days'] = days
         response['snacks'] = optimized_snacks
         response['tableData'] = create_table_data(optimized_results)
@@ -34,7 +34,7 @@ def post_process_results(recipe_df, optimized_results, days):
         meals_by_calories = get_meals_by_calories(recipe_df, optimized_results)
         optimized_results, optimized_snacks = reduce_optimized_results(
             meals_by_calories, num_multiples, optimized_results, days)
-        days = create_days_array(recipe_df, optimized_results,days)
+        days = create_days_array(recipe_df, optimized_results, min_date, days)
         response['days'] = days
         response['snacks'] = create_snacks_array(recipe_df, optimized_snacks)
 
@@ -195,11 +195,12 @@ def extract_recipes(array_of_recipe_dict):
     return recipes
 
 
-def create_days_array(recipe_df, optimized_results, days):
+def create_days_array(recipe_df, optimized_results, min_date, days):
     # this list below only includes the recipe names
+    print("Days: ", days)
     recipes = extract_recipes(optimized_results['recipes'])
     recpies_balanced_by_day = balance_recipe_calories(recipe_df, recipes)
-    base = datetime.datetime.today()
+    base = min_date
     date_list = [base + datetime.timedelta(days=x) for x in range(days)]
     start_slice_index = 0
     start_slice_end = 3
@@ -256,7 +257,9 @@ def create_meal_date(recipes, day):
     """
     day_dict = {}
 
+    date_object = datetime.datetime.strptime(day, '%Y-%m-%d')
     day_dict['date'] = day
+    day_dict['date_weekday'] = date_object.strftime('%A %B %d')
     recipe_array = []
 
     for recipe in recipes:

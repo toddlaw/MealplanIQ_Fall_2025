@@ -1,0 +1,6 @@
+<h1 mat-dialog-title class="text-center">{{ data?.title }}</h1>
+<h3 mat-dialog-content [innerHTML]="data?.message"></h3>
+<div mat-dialog-actions class="flex justify-center">
+  <button mat-button (click)="onCancel()">No Thanks</button>
+  <button mat-button (click)="onLogin()" class="confirm-button">{{data?.confirmLabel}}</button>
+</div>

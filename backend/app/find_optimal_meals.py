@@ -90,7 +90,6 @@ def get_recipe_dict_from_df(recipe_df):
     return nutrient_dict
 
 
-@staticmethod
 def optimize_meals_integration(recipe_df, macros, micros, user_diet,
                                days=1,exclude = [], include = [], excluded_nutrients = [],
                                constraint_relaxation=0.1):

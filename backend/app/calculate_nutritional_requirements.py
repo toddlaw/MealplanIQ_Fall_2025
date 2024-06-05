@@ -3,7 +3,7 @@ import pandas as pd
 def calculate_macros(large_calories, people):
     """
     Called in ./backend/app/generate_meal_plan.py.
-    Calculates the macronutrient requirements for a group of people.
+    Calculates the daily macronutrient requirements for a group of people.
     :param large_calories: numeric list of large calories for each person
     :param people: list of people
     :return: dict of macronutrient requirements 
@@ -47,7 +47,7 @@ def calculate_macros(large_calories, people):
 def calculate_micros(people):
     """
     Called in ./backend/app/generate_meal_plan.py.
-    Calculates the micronutrient requirements for a group of people using the DietUSDA.xlsx file.
+    Calculates the daily micronutrient requirements for a group of people using the DietUSDA.xlsx file.
     :param people: list of people objects
     :return: dict of summed up micronutrient requirements
     """
@@ -107,3 +107,55 @@ def read_micro_nutrients_file():
     
     # Only 16 rows because we don't need pregnant or lactating rows
     return pd.read_csv('./nutri_requirements/DietUSDA.csv', usecols = columns, nrows = 16).to_dict()
+
+
+#2024 NEW FUNCTION
+def distribute_nutrients(macros, micros):
+    """
+    Distributes macronutrient and micronutrient requirements into breakfast, snacks, and main meals.
+
+    :param macros: dict, containing macronutrient requirements
+    :param micros: dict, containing micronutrient requirements
+    :return: dict, containing nutrient requirements distributed into breakfast, snacks, and meals
+    """
+    distribution_ratios = {
+        "breakfast": 0.2,
+        "snacks": 0.1,
+        "meals": 0.7
+    }
+
+    distributed_macros = {
+        "breakfast": {},
+        "snacks": {},
+        "meals": {}
+    }
+
+    distributed_micros = {
+        "breakfast": {},
+        "snacks": {},
+        "meals": {}
+    }
+
+    # Distribute macronutrients
+    for key, value in macros.items():
+        if isinstance(value, list):  # If the value is a range (list)
+            distributed_macros["breakfast"][key] = [v * distribution_ratios["breakfast"] for v in value]
+            distributed_macros["snacks"][key] = [v * distribution_ratios["snacks"] for v in value]
+            distributed_macros["meals"][key] = [v * distribution_ratios["meals"] for v in value]
+        else:  # If the value is a single number (e.g., total calories)
+            distributed_macros["breakfast"][key] = value * distribution_ratios["breakfast"]
+            distributed_macros["snacks"][key] = value * distribution_ratios["snacks"]
+            distributed_macros["meals"][key] = value * distribution_ratios["meals"]
+
+    # Distribute micronutrients
+    for key, value in micros.items():
+        distributed_micros["breakfast"][key] = value * distribution_ratios["breakfast"]
+        distributed_micros["snacks"][key] = value * distribution_ratios["snacks"]
+        distributed_micros["meals"][key] = value * distribution_ratios["meals"]
+
+    distributed_nutrients = {
+        "macros": distributed_macros,
+        "micros": distributed_micros
+    }
+
+    return distributed_nutrients

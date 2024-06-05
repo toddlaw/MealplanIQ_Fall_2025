@@ -1,9 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { UsersService } from 'src/app/services/users.service';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
+import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
+import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
 import {
   units,
   activityLevels,
@@ -17,14 +22,20 @@ import {
   allergiesList,
   startDate,
   endDate,
+  breakfastList,
+  snackList,
 } from './form-values';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogModule,
+  MatDialogConfig,
 } from '@angular/material/dialog';
-import { TermsAndConditionsComponent } from '../tac-dialog/tac-dialog.component';
+import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.component';
+import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
+import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
+import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
 
 @Component({
   selector: 'app-landing',
@@ -32,7 +43,13 @@ import { TermsAndConditionsComponent } from '../tac-dialog/tac-dialog.component'
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private router: Router,
+    private toast: HotToastService,
+    private refresh: RefreshComponent
+  ) {}
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -68,7 +85,10 @@ export class LandingComponent implements OnInit {
   excludedRecipes: number[] = [];
   selectedOptions: string[][] = [];
   searchClicked: boolean = false;
-  selectedHealthGoalIndex: number = 0;
+  selectedHealthGoalIndex: number = 3;
+  userSubscriptionTypeId: number = 0;
+  updatedMealPlan: any;
+  shoppingListData: ShoppingList[] = [];
 
   people: {
     age: number | null;
@@ -100,19 +120,65 @@ export class LandingComponent implements OnInit {
   readonly allergiesList = allergiesList;
   readonly startDate = startDate;
   readonly endDate = endDate;
+  readonly breakfastList = breakfastList;
+  readonly snackList = snackList;
 
   selectedUnit: string = 'metric';
-  selectedDietaryConstraint: string = '';
-  selectedHealthGoal: string = healthGoals[0].value;
-  selectedReligiousConstraint: string = '';
+  selectedDietaryConstraint: string = vegetarians[0].value;
+  selectedHealthGoal: string = healthGoals[3].value; // Initialize to make the fourth item active by default
+  selectedReligiousConstraint: string = religiousConstraints[0].value;
   likedFoods = new FormControl('');
   dislikedFoods = new FormControl('');
   cuisines = new FormControl('');
   allergies = new FormControl('');
+  breakfasts = new FormControl('');
+  snacks = new FormControl('');
   expandedStates: boolean[][] = [];
   snackExpandedStates: boolean[] = [];
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+    console.log('user ID: ' + localStorage.getItem('uid'));
+    console.log('email: ' + localStorage.getItem('email'));
+
+    if (localStorage.getItem('uid')) {
+      try {
+        const response: any = await this.http
+          .get(
+            'http://127.0.0.1:5000/api/subscription_type_id/' +
+              localStorage.getItem('uid')
+          )
+          .toPromise();
+        if (response.subscription_type_id) {
+          localStorage.setItem(
+            'subscription_type_id',
+            response.subscription_type_id
+          ); // 1: monthly, 2: yearly, 3: free-trial for signed up user
+          this.userSubscriptionTypeId = response.subscription_type_id;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      this.userSubscriptionTypeId = 0;
+    }
+    console.log('subscription type ID:' + this.userSubscriptionTypeId);
+    // prefill the profile info for logged in user
+    if (localStorage.getItem('uid')) {
+      this.http
+        .get(
+          'http://127.0.0.1:5000/api/landing/profile/' +
+            localStorage.getItem('uid')
+        )
+        .subscribe((data: any) => {
+          this.people[0].age = data.age;
+          this.people[0].weight = data.weight;
+          this.people[0].height = data.height;
+          this.people[0].gender = data.gender;
+          this.people[0].activityLevel = data.activity_level;
+          this.selectedUnit = data.selected_unit || 'metric';
+        });
+    }
+  }
 
   /**
    * Shows the terms and conditions dialog and sends the data if the terms and conditions are accepted
@@ -148,21 +214,14 @@ export class LandingComponent implements OnInit {
    * Sends the data from the form to the backend
    */
   sendData() {
-    this.showSpinner = true;
-    this.searchClicked = true;
     this.mealPlanResponse = {};
     this.expandedStates = [];
-    this.snackExpandedStates = [];
+    // this.snackExpandedStates = [];
     this.selectedOptions = [];
-    this.element.nativeElement.style.display = 'block';
-    this.element.nativeElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'start',
-    });
 
     const data = {
       people: this.people,
+      user_id: localStorage.getItem('uid') || null,
       selectedUnit: this.selectedUnit,
       dietaryConstraint: this.selectedDietaryConstraint,
       healthGoal: this.selectedHealthGoal,
@@ -171,46 +230,116 @@ export class LandingComponent implements OnInit {
       dislikedFoods: this.dislikedFoods.value,
       favouriteCuisines: this.cuisines.value,
       allergies: this.allergies.value,
+      snacks: this.snacks.value,
+      breakfasts: this.breakfasts.value,
       minDate: this.startDate.get('start')!.value?.getTime(),
       maxDate: this.startDate.get('end')!.value?.getTime(),
       includedRecipes: this.includedRecipes,
       excludedRecipes: this.excludedRecipes,
     };
 
-    this.http
-      .post('http://127.0.0.1:5000/api/endpoint', data, {
-        responseType: 'text',
-      })
-      .subscribe(
-        (response) => {
-          this.element.nativeElement.style.display = 'none';
-          this.errorDiv.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.mealPlanResponse = JSON.parse(response);
+    // if (!data.maxDate && data.minDate) {
+    //   data.maxDate = data.minDate;
+    // }
 
-          const numDays = this.getNumDays(this.mealPlanResponse);
-          for (let i = 0; i < numDays; i++) {
-            this.expandedStates.push(
-              new Array(this.mealPlanResponse.days[i].recipes.length).fill(
-                false
-              )
-            );
-            this.selectedOptions.push(new Array(3).fill('keep'));
-          }
+    console.log(data.maxDate);
+    console.log(data.minDate);
+    localStorage.setItem('minDate', String(data.minDate));
+    localStorage.setItem('maxDate', String(data.maxDate));
 
-          this.snackExpandedStates = new Array(
-            this.mealPlanResponse.snacks.length
-          ).fill(false);
+    if (!data.likedFoods) {
+      data.likedFoods = 'None';
+    }
 
-          this.includeAllRecipes(this.mealPlanResponse.days);
-        },
-        (error) => {
-          console.error('Error sending data:', error);
-          this.element.nativeElement.style.display = 'none';
-          this.showSpinner = false;
-          this.errorDiv.nativeElement.style.display = 'block';
+    if (!data.minDate || !data.maxDate) {
+      this.toast.error('Please select both start date and end date!');
+    } else if (!this.people) {
+      this.toast.error('Please enter the details!');
+    } else {
+      if (
+        this.userSubscriptionTypeId === 1 ||
+        this.userSubscriptionTypeId === 2 ||
+        (this.userSubscriptionTypeId === 0 &&
+          data.maxDate === data.minDate &&
+          this.selectedHealthGoal === 'lose_weight') ||
+        (this.userSubscriptionTypeId === 3 &&
+          this.selectedHealthGoal === 'lose_weight')
+      ) {
+        this.element.nativeElement.style.display = 'block';
+        this.element.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'start',
+        });
+        this.showSpinner = true;
+        this.searchClicked = true;
+        this.http
+          .post('http://127.0.0.1:5000/api', data, {
+            responseType: 'text',
+          })
+          .subscribe(
+            (response) => {
+              console.log(response);
+              this.element.nativeElement.style.display = 'none';
+              this.errorDiv.nativeElement.style.display = 'none';
+              this.showSpinner = false;
+              this.mealPlanResponse = JSON.parse(response);
+              this.getShoppingListFromBackend().subscribe(
+                (secondResponse) => {
+                  console.log('Fetched Shopping List: ', secondResponse);
+                  this.shoppingListData = secondResponse;
+                },
+                (error) => {
+                  console.error(error);
+                }
+              );
+
+              const numDays = this.getNumDays(this.mealPlanResponse);
+              for (let i = 0; i < numDays; i++) {
+                this.expandedStates.push(
+                  new Array(this.mealPlanResponse.days[i].recipes.length).fill(
+                    false
+                  )
+                );
+                this.selectedOptions.push(new Array(3).fill('keep'));
+              }
+
+              // this.snackExpandedStates = new Array(
+              //   this.mealPlanResponse.snacks.length
+              // ).fill(false);
+
+              this.includeAllRecipes(this.mealPlanResponse.days);
+            },
+            (error) => {
+              console.error('Error sending data:', error);
+              this.element.nativeElement.style.display = 'none';
+              this.showSpinner = false;
+              this.errorDiv.nativeElement.style.display = 'block';
+            }
+          );
+      } else {
+        this.showSpinner = false;
+        this.errorDiv.nativeElement.style.display = 'block';
+        this.element.nativeElement.style.display = 'none';
+        const selectedHealthGoalObject = healthGoals.find(
+          (goal) => goal.value === this.selectedHealthGoal
+        );
+        const title = "Sorry, we can't generate the meal plan.";
+        if (localStorage.getItem('uid')) {
+          // User is logged in
+          const message =
+            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
+            selectedHealthGoalObject?.viewValue +
+            '!<br> Without subscription, you can generate meal plan to lose weight only.';
+          this.openDialog(title, message, '/payment', 'Subscribe');
+        } else {
+          // User is not logged in
+          const message =
+            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
+          this.openDialog(title, message, '/login', 'Login');
         }
-      );
+      }
+    }
   }
 
   /**
@@ -258,13 +387,13 @@ export class LandingComponent implements OnInit {
     this.expandedStates[i][j] = !this.expandedStates[i][j];
   }
 
-  /**
-   * Toggles the expanded state of the snack card at the given index
-   * @param index The index of the snack card to toggle
-   */
-  toggleSnackExpand(i: number) {
-    this.snackExpandedStates[i] = !this.snackExpandedStates[i];
-  }
+  // /**
+  //  * Toggles the expanded state of the snack card at the given index
+  //  * @param index The index of the snack card to toggle
+  //  */
+  // toggleSnackExpand(i: number) {
+  //   this.snackExpandedStates[i] = !this.snackExpandedStates[i];
+  // }
 
   /**
    * Closes the people panel
@@ -287,7 +416,8 @@ export class LandingComponent implements OnInit {
    * @returns The url of the image
    */
   getImageUrl(id: number): string {
-    const path = `../../../assets/images/meal-plan-images/${id}.jpg`;
+    const path = `https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/${id}.jpg`;
+    //const path = `../../../assets/images/meal-plan-images/default_meal_picture.png`;
 
     // check if the image exists
     const img = new Image();
@@ -303,6 +433,82 @@ export class LandingComponent implements OnInit {
    * Click handler for the "Get Full Meal Plan" button
    */
   getFullMealPlan() {}
+
+  /**
+   * Replace a recipe in the meal plan
+   * @param id The id of the recipe to be replaced
+   */
+  refreshRecipe(id: string) {
+    console.log(this.mealPlanResponse);
+    this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
+      (response) => {
+        this.toast.success('Recipe refreshed successfully!');
+        console.log('recipe replaced', response);
+        this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
+        console.log('updated meal plan', this.mealPlanResponse);
+
+        // After the meal plan is updated, get the updated shopping list
+        this.getShoppingListFromBackend().subscribe(
+          (updatedShoppingList) => {
+            this.shoppingListData = updatedShoppingList;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      },
+      (error) => {
+        this.toast.error(
+          'Opps look like the server is too busy, try again later!'
+        );
+        console.log('error', error);
+      }
+    );
+  }
+
+  openShoppingListDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px'; // Set the width of the dialog
+    dialogConfig.data = {
+      shoppingListData: this.shoppingListData,
+      minDate: localStorage.getItem('minDate'),
+      maxDate: localStorage.getItem('maxDate'),
+    };
+    dialogConfig.autoFocus = false; // Disable auto-focus
+    const dialogRef = this.dialog.open(
+      ShoppingListLandingPageComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterOpened().subscribe(() => {
+      const dialogContent = document.querySelector('.popup-max-height');
+      if (dialogContent) {
+        dialogContent.scrollTop = 0;
+      }
+    });
+  }
+
+  /**
+   * Update the meal plan data with the new meal plan
+   * @param mealPlan The new meal plan with a replaced recipe
+   * @returns The updated meal plan data
+   */
+  updateMealPlan(mealPlan: any) {
+    this.mealPlanResponse = mealPlan;
+    return this.mealPlanResponse;
+  }
+
+  /**
+   * Refreshes the snack list
+   * @param id  The id of the snack
+   * @param i  The index of the snack
+   */
+  refreshSnack(id: number, i: number) {
+    this.recipe = [];
+    for (const snack of this.mealPlanResponse.snacks) {
+      this.recipe.push(snack);
+    }
+  }
 
   /**
    * Listener for the "Replace Meal" dropdown
@@ -430,5 +636,45 @@ export class LandingComponent implements OnInit {
       block: 'end',
       inline: 'start',
     });
+  }
+
+  openDialog(
+    title: string,
+    message: string,
+    redirectUrl: string,
+    confirmLabel: string
+  ) {
+    const dialogRef = this.dialog.open(GeneratePopUpComponent, {
+      width: '500px',
+      data: { title, message, confirmLabel },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.router.navigate([redirectUrl]);
+      }
+    });
+  }
+
+  openRecipeDialog(recipe: any): void {
+    this.dialog.open(RecipeDialogComponent, {
+      data: {
+        recipe: recipe,
+        imageUrl: this.getImageUrl(recipe.id),
+      },
+      width: '800px',
+    });
+  }
+
+  getShoppingListFromBackend(): Observable<ShoppingList[]> {
+    return this.http.post<ShoppingList[]>(
+      'http://127.0.0.1:5000/api/get-shopping-list',
+      this.mealPlanResponse,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
   }
 }

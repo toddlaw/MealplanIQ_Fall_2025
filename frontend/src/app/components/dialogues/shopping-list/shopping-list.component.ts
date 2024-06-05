@@ -1,0 +1,22 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ShoppingList } from './shopping-list.interface';
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-shopping-list',
+  templateUrl: './shopping-list.component.html',
+  styleUrls: ['./shopping-list.component.css'],
+})
+export class ShoppingListComponent implements OnInit {
+  data: ShoppingList[] = []; // Initialize the "data" property with an empty object
+  constructor(
+    @Inject(MAT_DIALOG_DATA) private dialogData: any,
+    private datePipe: DatePipe
+  ) {} // Inject the MAT_DIALOG_DATA token to receive the data from the parent component
+
+  ngOnInit(): void {
+    this.data = this.dialogData; // Assign the received data to the local variable
+    console.log('Received data:', this.data);
+  }
+}

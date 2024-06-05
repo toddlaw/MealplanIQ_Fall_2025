@@ -1,0 +1,13 @@
+<!-- <div class="text-center">
+<h1>With Subscription, you can</h1>
+<h3>Generate meal plan for longer period with different goal!</h3>
+<p>User ID: {{ userId }}</p>
+</div> --><br>
+<div class="flex flex-col min-h-screen">
+  <div class="flex-grow">
+<stripe-pricing-table [attr.pricing-table-id]="stripePricingTableId" [attr.publishable-key]="stripePublicKey"
+  [attr.client-reference-id]="userId" [attr.customer-email]="userEmail">
+</stripe-pricing-table>
+
+  </div>
+</div>

@@ -1,4 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: rgb(136, 165, 111)
+  }
+}
 
 html,
 body {
@@ -7,6 +16,10 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.bg-primary {
+  background-color: var(--color-primary) !important;
 }
 
 .form-container {
@@ -35,4 +48,30 @@ body {
 
 .text-center {
   text-align: center;
+}
+
+.popup-max-height {
+  max-height: 70vh;
+}
+
+.dialog-content {
+  overflow-y: auto; /* or overflow-y: scroll; */
+}
+
+/* add this class name if you want to hide the scroll bar in the html element while maintaining its functionality */
+.hide_scroll {
+  overflow: auto;
+}
+
+/* Style the scrollbar */
+.hide_scroll::-webkit-scrollbar {
+  width: 0; 
+}
+
+.hide_scroll::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.hide_scroll::-webkit-scrollbar-thumb {
+  background: transparent;
 }

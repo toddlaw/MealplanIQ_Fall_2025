@@ -1,0 +1,19 @@
+.text-date {
+  font-size: 28px;
+}
+
+.shopping-item {
+  border-left: 4px solid var(--primary-color);
+}
+
+.text-item {
+  line-height: 34px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.popup-icon {
+  width: 20vw;
+  max-width: 70px;
+}
