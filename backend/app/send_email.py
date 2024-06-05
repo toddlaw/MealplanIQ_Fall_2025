@@ -27,16 +27,13 @@ from user_db.user_db import instantiate_database
 
 app = Flask(__name__)
 
-# import scheduler
-# from flask_apscheduler import APScheduler
+SERVICE_ACCOUNT_JSON = os.getenv('SERVICE_JSON')
+SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-SERVICE_ACCOUNT_FILE = os.path.join(dir_path, "service-key.json")
-
-credentials = service_account.Credentials.from_service_account_file(
-    filename=SERVICE_ACCOUNT_FILE,
-    scopes=["https://mail.google.com/"],
-    subject=os.getenv("SENDER_EMAIL"),
+credentials = service_account.Credentials.from_service_account_info(
+  SERVICE_ACCOUNT_INFO,
+  scopes=['https://mail.google.com/'],
+  subject=os.getenv('SENDER_EMAIL')
 )
 
 service_gmail = build("gmail", "v1", credentials=credentials)
@@ -273,88 +270,3 @@ def create_and_send_maizzle_email_test(response, user_id, db):
             sender_email, to_email, subject, email_template, shopping_list_pdf
         )
         send_message(service_gmail, "me", message)
-
-
-def main():
-    sender_email = "warren@mealplaniq.com"
-    sender_email = "globalyy2020@gmail.com"
-    sender_email = "ohjeoung5224@gmail.com"
-    to_email = "globalyy2020@gmail.com"
-
-    root_path = app.root_path
-
-    json_file_path = os.path.join(root_path, "maizzleTemplates", "output.json")
-
-    # db = instantiate_database()
-    # user_id = 300
-    # request_data = create_data_input_for_auto_gen_meal_plan(db, user_id)
-    # message_text = gen_meal_plan(request_data)
-    # db.update_user_last_date_plan_profile(user_id, request_data["maxDate"])
-
-    # Write the template data to the JSON file
-    # with open(json_file_path, "w+") as f:
-    #     json.dump(message_text, f)
-    #     f.flush()  # Ensure all data is written to the disk
-    #     os.fsync(
-    #         f.fileno()
-    #     )  # Ensure all internal buffers associated with f are written to disk
-
-    maizzle_project_path = os.path.join(root_path, "maizzleTemplates")
-    # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
-    # print(maizzle_project_path)
-
-    subject = "Text Email"
-    message_text = "text email with image?!!"
-
-    # Run the Maizzle build command
-    try:
-        result = subprocess.run(
-            ["npm", "run", "build"],
-            cwd=maizzle_project_path,
-            capture_output=True,
-            text=True,
-            shell=True,  # Add shell=True to ensure the command runs correctly on Windows
-            encoding="utf-8",
-        )
-        if result.returncode == 0:
-            time.sleep(15)
-            with app.app_context():
-                email_template = render_template_string(
-                    open(maizzle_project_path + "/build_production/index.html").read()
-                    # open(maizzle_project_path + "\\build_production\\index.html").read()
-                    # **template_data,
-                )
-
-                shopping_list_template = render_template_string(
-                    open(
-                        maizzle_project_path + "/build_production/shoppingList.html"
-                    ).read()
-                    # open(
-                    #     maizzle_project_path + "\\build_production\\shoppingList.html"
-                    # ).read()
-                    # **template_data,
-                )
-
-            # message = create_message_with_attachment(
-            #     sender_email, to_email, subject, email_template, is_html=True
-            # )
-
-            # Convert the rendered HTML to PDF
-            shopping_list_pdf = pdfkit.from_string(
-                shopping_list_template, False, options={"enable-local-file-access": ""}
-            )
-
-            message = create_message_with_attachment(
-                sender_email, to_email, subject, email_template, shopping_list_pdf
-            )
-            send_message(service_gmail, "me", message)
-        else:
-            print("Build failed with return code:", result.returncode)
-            return "build failed"
-    except Exception as e:
-        print("error occur" + str(e))
-        return "error occur" + str(e)
-
-
-if __name__ == "__main__":
-    main()
