@@ -9,22 +9,13 @@ from app.payment_stripe import (
     handle_subscription_updated,
 )
 from app.manage_user_data import *
-from app.send_email import (
-    create_and_send_maizzle_email,
-    create_and_send_maizzle_email,
-    scheduled_email_test,
-    email_by_generation_button,
-    send_weekly_email_by_google_scheduler,
-)
 from user_db.user_db import instantiate_database
 import stripe
-import os
-import asyncio
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update
+# from app.send_email import send_weekly_email_by_google_scheduler
 
 # Enable CORS for all domains on all routes
 CORS(app)
-
 
 # serve static files
 @app.route("/", defaults={"path": ""})
@@ -34,7 +25,6 @@ def index(path):
         return send_from_directory("static", path)
     else:
         return send_from_directory("static", "index.html")
-
 
 @app.route("/static/splash")
 @app.route("/static/mission")
@@ -59,12 +49,12 @@ def page_not_found(e):
     return redirect("/")
 
 
-@app.route("/schedule-email", methods=["GET"])
-def schedule_email():
-    if request.headers.get("X-Appengine-Cron") != "true":
-        return "Unauthorized", 403
-    db = instantiate_database()
-    send_weekly_email_by_google_scheduler(db)
+# @app.route("/schedule-email", methods=["GET"])
+# def schedule_email():
+#     if request.headers.get("X-Appengine-Cron") != "true":
+#         return "Unauthorized", 403
+#     db = instantiate_database()
+#     send_weekly_email_by_google_scheduler(db)
 
 
 @app.route("/signup", methods=["POST"])
@@ -103,9 +93,6 @@ def receive_data():
     data = request.json
     print(data)
     db = instantiate_database()
-    # user_name = 'Diane' # hard coded user name
-    # hard_coded_user_id = 300
-    # email = 'diane@test.ca' # hard coded user email
     user_id = data["user_id"]
     user_data = extract_user_profile_data_from_json(data, user_id)
     extract_data = extract_data_from_json(data)
@@ -119,9 +106,10 @@ def receive_data():
         response = {"error": str(e)}
         print(f"Failed to generate meal plan: {str(e)}")
 
-    # email_sent_time = create_and_send_maizzle_email(db, user_id, data)
-    # create_and_send_maizzle_email_test(response)
-    # scheduled_email_test(email_sent_time, db, user_id)
+    try:
+        create_and_send_maizzle_email_test(response, user_id, db)
+    except Exception as e:
+        print(f"Failed to send email: {str(e)}")
     return jsonify(response)
 
 
