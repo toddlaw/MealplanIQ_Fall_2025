@@ -39,7 +39,7 @@ npm install -g @angular/cli
 ```
 7. Create a folder called environments under the **frontend/src** directory
 8. Place the environment.ts and environment.prod.ts files in the newly created environments folder (Files to be provided by the owner)
-9. Place the .env file under the **backend** directory
+9. Place the .env file under the **backend** directory (Files to be provided by the owner)
 
 ## Usage
 1. Make sure the Python environment is activated and run backend server in the backend directory
