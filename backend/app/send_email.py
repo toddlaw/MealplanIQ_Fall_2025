@@ -53,30 +53,6 @@ def create_message(sender, to, subject, message_text, is_html=True):
     return {"raw": raw_message.decode("utf-8")}
 
 
-# def create_message_with_attachment(
-#     sender_email, receiver_email, subject, message_text, file_path
-# ):
-#     message = MIMEMultipart()
-#     message["to"] = receiver_email
-#     message["from"] = "MealPlanIQ <{}>".format(sender_email)
-#     message["subject"] = subject
-
-#     msg = MIMEText(message_text)
-#     message.attach(msg)
-
-#     with open(file_path, "rb") as file:
-#         attachment = MIMEApplication(file.read(), _subtype="pdf")
-#         attachment.add_header(
-#             "Content-Disposition", "attachment", filename=os.path.basename(file_path)
-#         )
-#         message.attach(attachment)
-
-#     raw_message = base64.urlsafe_b64encode(message.as_bytes())
-#     raw_message = raw_message.decode()
-#     body = {"raw": raw_message}
-#     return body
-
-
 def create_message_with_attachment(
     sender_email, to_email, subject, message_text, attachment
 ):
@@ -269,18 +245,16 @@ def create_and_send_maizzle_email(db, user_id, request_data=None):
         return "error occur" + str(e)
 
 
-def create_and_send_maizzle_email_test(response, request_data=None):
-    sender_email = "ohjeoung5224@gmail.com"
-    to_email = "globalyy2020@gmail.com"
+def create_and_send_maizzle_email_test(response, user_id, db):
+    sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
+    to_email = db.retrieve_user_email(user_id)
+    user_name = db.retrieve_user_name(user_id)
 
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
-    # maizzle_project_path = '/Users/jeongeun/Desktop/BCIT CST/Summer_2024/MealPlanIQ_May_2024/backend/app/maizzleTemplates'
-    # print(maizzle_project_path)
-
-    subject = "Text Email"
-    message_text = "text email with image?!!"
+    subject = f"Your personalized Meal Plan is Ready, {user_name}!"
+    response["user_name"] = user_name
 
     with app.app_context():
         email_template = render_template_string(
