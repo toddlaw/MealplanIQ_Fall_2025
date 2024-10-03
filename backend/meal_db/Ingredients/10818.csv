@@ -1,0 +1,9 @@
+Ingredient Name,Quantity,Unit,State,Energy (kcal),Carbohydrates,Protein (g),Total Lipid (Fat) (g)
+water,2,cups,,0.0,0.0,0.0,0.0
+white sugar,1,tablespoon,,48.762,12.5975,0.0,0.0
+yeast,1,tablespoon,,33.3,3.6756,4.2984,0.162
+salt,1,tablespoon,,-,-,-,-
+bread flour,4,cups,,1978.28,397.4644,65.6504,9.0968
+mozzarella cheese,1,cup,shredded,-,-,-,-
+milk,1/4,cup,,37.21,2.9158,1.9215,1.9947
+basil,1,tablespoon,,0.6095,0.0702,0.0835,0.017
