@@ -184,7 +184,8 @@ def is_within_target(actual, target):
     parts = target.split("-")
 
     lower_bound = int(parts[0].strip())
-    upper_bound = float("inf") if not parts[1].strip() else int(parts[1].strip())
+    upper_bound = float("inf") if not parts[1].strip() else int(
+        parts[1].strip())
 
     if actual != 0 and lower_bound == 0 and not parts[1].strip():
         return False
@@ -223,7 +224,6 @@ def gen_meal_plan(data):
 
     # 3. Calculate energy
     energy = []
-
     for i, person in enumerate(data["people"]):
         energy.append(
             energy_calculator_function(
@@ -238,12 +238,11 @@ def gen_meal_plan(data):
 
     # 4. Calculate nutritional requirements
     macros = calculate_macros(energy, data["people"])
-
     micros = calculate_micros(data["people"])
-
     all_recipes_df = pd.read_csv("./meal_db/meal_database_V2.csv")
 
-    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"] == "['snack']"]
+    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"]
+                                      == "['snack']"]
 
     # 5. Apply user prefs to meal database
     recipes_with_scores = apply_user_prefs(
@@ -283,7 +282,8 @@ def gen_meal_plan(data):
     print("Difference in days:", days)
 
     if "nutrient" in diet_info["nutrients"]:
-        list_of_excluded_nutrients = list(diet_info["nutrients"]["nutrient"].values())
+        list_of_excluded_nutrients = list(
+            diet_info["nutrients"]["nutrient"].values())
     else:
         list_of_excluded_nutrients = []
 
@@ -307,7 +307,6 @@ def gen_meal_plan(data):
     response = post_process_results(
         recipes_with_scores, optimized_results, min_date, days
     )
-
     response = update_meals_with_snacks(response, snack_recipes_df.copy())
     response = process_response_meal_name(response)
     response = distribute_snacks_to_date(response)

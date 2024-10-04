@@ -1,0 +1,11 @@
+Ingredient Name,Quantity,Unit,State,Energy (kcal),Carbohydrates,Protein (g),Total Lipid (Fat) (g)
+tomato,2,,ripe,124.1379,27.5262,6.4768,1.0795
+garlic,1,clove,,4.47,0.9918,0.1908,0.015
+basil,1,tablespoon,chopped,0.6095,0.0702,0.0835,0.017
+cinnamon,1,pinch,ground,-,-,-,-
+salt,1,teaspoon,,-,-,-,-
+black pepper,1,pinch,ground,0.3608,0.0919,0.0149,0.0047
+white sugar,1/4,teaspoon,,4.0635,1.0498,0.0,0.0
+oregano,1,teaspoon,,2.65,0.6892,0.09,0.0428
+olive oil,2,tablespoons,,238.68,0.0,0.0,27.0
+parsley,1,teaspoon,chopped,0.45,0.0791,0.0371,0.0099
