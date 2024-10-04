@@ -18,6 +18,8 @@ from app.find_matched_recipe_and_update import find_matched_recipe_and_update
 CORS(app)
 
 # serve static files
+
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def index(path):
@@ -25,6 +27,7 @@ def index(path):
         return send_from_directory("static", path)
     else:
         return send_from_directory("static", "index.html")
+
 
 @app.route("/static/splash")
 @app.route("/static/mission")
@@ -91,7 +94,6 @@ def get_user_landing_page_profile(user_id):
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json
-    print(data)
     db = instantiate_database()
     user_id = data["user_id"]
     user_data = extract_user_profile_data_from_json(data, user_id)
