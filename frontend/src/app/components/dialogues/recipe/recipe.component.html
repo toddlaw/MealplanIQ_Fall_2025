@@ -18,7 +18,7 @@
     <div
       class="flex flex-col justify-between pt-5 px-5 md:pl-8 w-full md:w-1/2"
     >
-      <p class="mb-4"><b>Energy:</b> {{ data.recipe.calories }} calories</p>
+      <p class="mb-4"><b>Energy:</b> {{ data.recipe.calories | number: '1.0-0' }} calories</p>
       <p class="mb-4"><b>Cuisine:</b> {{ data.recipe.region }}</p>
       <p class="mb-4"><b>Prep time:</b> {{ data.recipe.prep_time }}</p>
       <p class="mb-4"><b>Cook time:</b> {{ data.recipe.cook_time }}</p>
