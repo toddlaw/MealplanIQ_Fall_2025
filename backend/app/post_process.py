@@ -1,3 +1,4 @@
+import csv
 import datetime
 import ast
 
@@ -120,7 +121,7 @@ def reduce_optmized_results(optimized_results, optimized_snacks, recipe_name):
             if recipe['multiples'] == 0:
                 optimized_results['recipes'].remove(recipe)
             optimized_snacks = add_multiple_to_snacks(optimized_snacks,
-                                                     recipe_name)
+                                                      recipe_name)
 
             break
 
@@ -210,12 +211,12 @@ def create_days_array(recipe_df, optimized_results, min_date, days):
     for date in date_list:
         day = date.strftime("%Y-%m-%d")
         days_array.append(create_meal_date(recpies_balanced_by_day[
-                                                      start_slice_index:start_slice_end],
-                                           day))
+            start_slice_index:start_slice_end],
+            day))
         start_slice_index += index_increment
         start_slice_end += index_increment
 
-    #sort the days_array by date descending by just reversing the array
+    # sort the days_array by date descending by just reversing the array
     days_array.reverse()
 
     return days_array
@@ -231,7 +232,8 @@ def balance_recipe_calories(recipe_df, recipes):
         processed_recipe.append(process_recipe(recipe_df, recipe))
 
     # sort based off of Calories
-    processed_recipe = sorted(processed_recipe, key=lambda x: float(x['calories']))
+    processed_recipe = sorted(
+        processed_recipe, key=lambda x: float(x['calories']))
 
     # split into 3 lists
     list_length = len(processed_recipe)
@@ -294,10 +296,45 @@ def process_recipe(recipe_df, recipe_name):
     recipe_dict['prep_time'] = recipe_row['preptime'].values[0]
     recipe_dict['sub_region'] = recipe_row['subregion'].values[0]
 
+    # retrive instructions
+
+    # print("recipe_dict_id", recipe_dict['id'])
+    instruction_file_path = f"./meal_db/instructions/instructions_{recipe_dict['id']}.csv"
+    # print("instruction_file_path", instruction_file_path)
+    ingredient_file_path = f"./meal_db/ingredients/{recipe_dict['id']}.csv"
+
+    # instruction_content = pd.read_csv(instruction_file_path)
+    # recipe_dict['instructions'] = instruction_content.values.tolist()
+    # print('typetype3', type(recipe_dict['instructions']))
+
+    with open(instruction_file_path, newline='') as csvfile:
+        content = csv.reader(csvfile)
+        recipe_dict['instructions'] = []
+        for row in content:
+            recipe_dict['instructions'].append(row)
+    # print('recipe_dict_int', recipe_dict['instructions'])
+
+    # retrive ingredients_with_quantities
+
+    # cannot use pandas here, will raise an error
+    with open(ingredient_file_path, newline='') as csvfile:
+        content = csv.reader(csvfile)
+        recipe_dict['ingredients_with_quantities'] = []
+        for row in content:
+            recipe_dict['ingredients_with_quantities'].append(row)
+    # print('ingredients_with_quantities',
+    #       recipe_dict['ingredients_with_quantities'])
+
     for key, value in recipe_dict.items():
         res[key] = f"{value}"
 
     # Convert ingredients from a string to a list
     res['ingredients'] = ast.literal_eval(res['ingredients'])
+    res['instructions'] = ast.literal_eval(res['instructions'])
+    res['ingredients_with_quantities'] = ast.literal_eval(
+        res['ingredients_with_quantities'])
+
+    # print('typetype3', type(recipe_dict['instructions']))
+    # print('typetype4', type(recipe_dict['ingredients']))
 
     return res
