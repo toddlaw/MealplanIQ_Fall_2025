@@ -27,18 +27,33 @@
 
   <div class="flex flex-col pt-5 px-5">
     <h2 class="mb-2"><b>Ingredients:</b></h2>
-    <ul>
-      <li
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Ingredient</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
         *ngFor="
           let ingredient_with_quantity of data.recipe.ingredients_with_quantities.slice(
             1
           )
         "
       >
-        {{ ingredient_with_quantity[0] }} {{ ingredient_with_quantity[1] }}
-        {{ ingredient_with_quantity[2] }} {{ ingredient_with_quantity[3] }}
-      </li>
-    </ul>
+          <td> {{ ingredient_with_quantity[0] }} </td>
+          <td> {{ ingredient_with_quantity[1] | fraction }} </td>
+          <td> {{ ingredient_with_quantity[2] }} </td>
+          <td> 
+            <span *ngIf="ingredient_with_quantity[3]">
+              ({{ ingredient_with_quantity[3] }})
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <h2 class="pt-4 mb-4"><b>Instructions:</b></h2>
     <ol *ngIf="data.recipe.instructions.length > 0">
       <li *ngFor="let instruction of data.recipe.instructions.slice(1)">
