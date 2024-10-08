@@ -11,21 +11,36 @@ export class FractionPipe implements PipeTransform {
   }
 
   transform(value: number): string {
-    if (value % 1 === 0) {
-      return value.toString();  // Return the whole number if it's an integer
+    const tolerance = 0.01;
+
+    if (Math.abs(value - 1/3) < tolerance) {
+      return '1/3';
+    } else if (Math.abs(value - 2/3) < tolerance) {
+      return '2/3';
+    } else if (Math.abs(value - 1/4) < tolerance) {
+      return '1/4';
+    } else if (Math.abs(value - 1/2) < tolerance) {
+      return '1/2';
+    } else if (Math.abs(value - 3/4) < tolerance) {
+      return '3/4';
     }
 
-    const tolerance = 1.0E-6;
+    if (value % 1 === 0) {
+      return value.toString();
+    }
+
+    let wholeNumber = Math.floor(value);
+    let decimalPart = value - wholeNumber;
+
     let numerator = 1;
     let denominator = 1;
-    let frac = value;
+    let frac = decimalPart;
 
-    // Set a maximum value for the denominator to avoid overly large fractions
-    const maxDenominator = 1000;
+    const maxDenominator = 100;
 
-    while (Math.abs(frac - Math.round(frac)) > tolerance && denominator <= maxDenominator) {
+    while (Math.abs(frac - Math.round(frac)) > 1e-6 && denominator <= maxDenominator) {
       denominator++;
-      frac = value * denominator;
+      frac = decimalPart * denominator;
     }
 
     numerator = Math.round(frac);
@@ -34,9 +49,12 @@ export class FractionPipe implements PipeTransform {
     numerator /= gcd;
     denominator /= gcd;
 
-    // If denominator is 1, return just the numerator (whole number)
     if (denominator === 1) {
-      return `${numerator}`;
+      return `${wholeNumber + numerator}`;
+    }
+
+    if (wholeNumber !== 0) {
+      return `${wholeNumber} ${numerator}/${denominator}`;
     }
 
     return `${numerator}/${denominator}`;
