@@ -17,13 +17,7 @@ export class FractionPipe implements PipeTransform {
       return '1/3';
     } else if (Math.abs(value - 2/3) < tolerance) {
       return '2/3';
-    } else if (Math.abs(value - 1/4) < tolerance) {
-      return '1/4';
-    } else if (Math.abs(value - 1/2) < tolerance) {
-      return '1/2';
-    } else if (Math.abs(value - 3/4) < tolerance) {
-      return '3/4';
-    }
+    } 
 
     if (value % 1 === 0) {
       return value.toString();
