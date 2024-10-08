@@ -53,6 +53,7 @@ import { RecipeDialogComponent } from './components/dialogues/recipe/recipe.comp
 import { RefreshComponent } from './services/refresh/refresh.component';
 import { NutritionChartComponent } from './components/dialogues/nutrition-chart/nutrition-chart.component';
 import { ShoppingListLandingPageComponent } from './components/dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
+import { FractionPipe } from './fraction.pipe';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ShoppingListLandingPageComponent } from './components/dialogues/shoppin
     RefreshComponent,
     NutritionChartComponent,
     ShoppingListLandingPageComponent,
+    FractionPipe,
   ],
   imports: [
     BrowserModule,

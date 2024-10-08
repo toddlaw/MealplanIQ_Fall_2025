@@ -54,7 +54,7 @@
         </tr>
       </tbody>
     </table>
-    <h2 class="pt-4 mb-4"><b>Instructions:</b></h2>
+    <h2 class="pt-4 mb-4" *ngIf="data.recipe.instructions.length > 0" ><b>Instructions:</b></h2>
     <ol *ngIf="data.recipe.instructions.length > 0">
       <li *ngFor="let instruction of data.recipe.instructions.slice(1)">
         {{ instruction[0] }}. {{ [instruction[1]] }}
