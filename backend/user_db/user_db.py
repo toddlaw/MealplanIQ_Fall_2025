@@ -549,6 +549,23 @@ class DatabaseManager:
             self.db.rollback()
             print(f"Error updating user profile: {e}")
 
+    def update_user_profile_from_dashboard(self, user_name, email, age,  gender, height, weight, activity_level, user_id):
+        cursor = self.db.cursor()
+        sql = """
+        UPDATE user_profile
+        SET user_name = %s, gender = %s, height = %s, age = %s, weight = %s, activity_level = %s, email = %s
+        WHERE user_id = %s;
+        """
+        values = (user_name, gender, height, age,
+                  weight, activity_level, email, user_id)
+        try:
+            cursor.execute(sql, values)
+            self.db.commit()
+            print("USER PROFILE updated successfully from dashboard.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error updating user profile from dashboard: {e}")
+
     def insert_or_update_user_dietary_constraint(self, user_id, dietary_constraint_name):
         cursor = self.db.cursor()
         find_constraint_id_sql = """

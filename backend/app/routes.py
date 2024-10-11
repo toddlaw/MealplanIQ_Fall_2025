@@ -201,3 +201,19 @@ def webhook():
     else:
         print("Unhandled event type {}".format(event["type"]))
         return jsonify(success=True), 200
+
+
+@app.route("/api/update_user_profile_from_dashboard", methods=["POST"])
+def update_user_profile_from_dashboard():
+    print("1000")
+    data = request.json
+    db = instantiate_database()
+    print("dashboard data received:", data)
+    user_id = data.get("user_id")
+    print("expected user id", user_id)
+    try:
+        db.update_user_profile_from_dashboard(**data)
+        return jsonify({"message": "Profile updated in database successfully from dashboard"}), 200
+    except Exception as e:
+        print(f"Error updating profile in database from dashboard: {e}")
+        return jsonify({"error": str(e)}), 500

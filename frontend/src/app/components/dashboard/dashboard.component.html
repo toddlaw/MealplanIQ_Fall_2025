@@ -1,127 +1,198 @@
 <div class="flex flex-col min-h-screen bg-primary-light">
-    <div class="flex-grow">
-        <section class="px-5 md:px-10 pb-20 lg:mx-72 md:mx-36"> 
-            <mat-card class="mt-5">
-                <p class="text-3xl p-3">Welcome <b>{{ userName }}</b>,</p>
-                <div class="flex justify-center p-5 ml-5">
-                    <img src="assets/images/image-placeholder.png" 
-                        height="150px" 
-                        width="150px" 
-                        alt="placeholder user"
-                        class="rounded-full outline outline-2">
-                    <button mat-mini-fab class="top-28 right-9">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </div>
+  <div class="flex-grow">
+    <section class="px-5 md:px-10 pb-20 lg:mx-72 md:mx-36">
+      <mat-card class="mt-5">
+        <p class="text-3xl p-3">
+          Welcome <b>{{ userName }}</b
+          >,
+        </p>
+        <div class="flex justify-center p-5 ml-5">
+          <img
+            src="assets/images/image-placeholder.png"
+            height="150px"
+            width="150px"
+            alt="placeholder user"
+            class="rounded-full outline outline-2"
+          />
+          <button mat-mini-fab class="top-28 right-9">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
 
-                <mat-card-header>
-                    <mat-card-title> Dashboard</mat-card-title>
-                    <mat-card-subtitle>Here you can view your meal plan, change your profile, check out your shopping list and manage subscription.</mat-card-subtitle>
-                </mat-card-header>
+        <mat-card-header>
+          <mat-card-title> Dashboard</mat-card-title>
+          <mat-card-subtitle
+            >Here you can view your meal plan, change your profile, check out
+            your shopping list and manage subscription.</mat-card-subtitle
+          >
+        </mat-card-header>
+      </mat-card>
+
+      <!-- Profile Info Section -->
+      <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <mat-card>
+          <mat-card-header class="flex items-center p-5">
+            <mat-icon mat-card-avatar class="mr-2">manage_accounts</mat-icon>
+            <mat-card-title>Profile Details</mat-card-title>
+            <mat-card-subtitle>Edit your profile</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form class="p-5" (ngSubmit)="sendProfileData()">
+              <ng-container *ngFor="let info of Profile_info">
+                <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>{{ info.name }}</mat-label>
+                  <input
+                    *ngIf="!info.options; else select"
+                    matInput
+                    [placeholder]="info.placeholder"
+                    name="{{ info.type }}"
+                    [(ngModel)]="info.value"
+                    [readonly]="info.readonly"
+                  />
+                  <span
+                    *ngIf="info.type === 'weight' || info.type === 'height'"
+                    matSuffix
+                    >{{ getSuffix(info.type) }}</span
+                  >
+                  <ng-template #select>
+                    <mat-select
+                      [placeholder]="info.placeholder"
+                      name="{{ info.type }}"
+                      [(ngModel)]="info.value"
+                    >
+                      <mat-option
+                        *ngFor="let option of info.options"
+                        [value]="option.value"
+                      >
+                        {{ option.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </ng-template>
+                </mat-form-field>
+              </ng-container>
+              <div class="flex justify-end mt-5">
+                <button
+                  mat-raised-button
+                  class="bg-secondary text-white hover:bg-primary"
+                  type="submit"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="grid grid-rows-3 gap-5">
+          <mat-card>
+            <mat-card-header class="flex items-center p-5">
+              <mat-icon mat-card-avatar>subscriptions</mat-icon>
+              <mat-card-title>Subscription</mat-card-title>
+              <mat-card-subtitle>Manage your subscription.</mat-card-subtitle>
+            </mat-card-header>
+            <ng-container *ngIf="hasSubscription; else noSubscription">
+              <p>
+                You are currently subscribing <b>{{ subscriptionType }}</b>
+              </p>
+              <p>Your benefits includes:</p>
+              <li>[benefit 1]</li>
+              <li>[benefit 2]</li>
+            </ng-container>
+            <ng-template #noSubscription>
+              <p>
+                By subscribing, personalize your plan to combat cancer, heart
+                disease, or diabetes with meal plans crafted by a registered
+                dietitian.
+              </p>
+              <p>
+                Enjoy delicious recipes tailored to your needs, delivered
+                straight to your inbox.
+              </p>
+            </ng-template>
+            <mat-card-actions>
+              <div class="flex justify-end p-3">
+                <button
+                  mat-raised-button
+                  (click)="manageSubscription()"
+                  class="bg-secondary text-white hover:bg-primary"
+                >
+                  Manage Subscription
+                </button>
+              </div>
+            </mat-card-actions>
+          </mat-card>
+          <mat-card class="relative">
+            <mat-card-header class="flex items-center p-5">
+              <mat-icon mat-card-avatar>restaurant_menu</mat-icon>
+              <mat-card-title>Generate Meal Plan</mat-card-title>
+              <mat-card-subtitle
+                >Generate a meal plan for the week. Personalize your meal plan
+                with our smart IQ generator. Optimize your choices by your diet
+                restrictions and needs.
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions class="absolute bottom-5 right-4">
+              <div class="flex justify-end p-3">
+                <a
+                  mat-raised-button
+                  routerLink="/"
+                  class="bg-secondary text-white hover:bg-primary"
+                  >Go to MealPlanIQ</a
+                >
+              </div>
+            </mat-card-actions>
+          </mat-card>
+          <div class="grid grid-cols-1 gap-5">
+            <mat-card class="relative">
+              <mat-card-header class="flex items-center p-5 pb-10">
+                <mat-icon mat-card-avatar>list</mat-icon>
+                <mat-card-title>Shopping List</mat-card-title>
+                <mat-card-subtitle
+                  >Last generated shopping list.</mat-card-subtitle
+                >
+              </mat-card-header>
+              <mat-card-actions class="absolute bottom-7 right-7">
+                <button
+                  mat-raised-button
+                  class="bg-secondary text-white hover:bg-primary"
+                  (click)="openShoppingListDialog()"
+                >
+                  Open Shopping List
+                </button>
+              </mat-card-actions>
             </mat-card>
 
-            <!-- Profile Info Section -->
-            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-5">
-                <mat-card>
-                    <mat-card-header class="flex items-center p-5">
-                        <mat-icon mat-card-avatar class="mr-2">manage_accounts</mat-icon>
-                        <mat-card-title>Profile Details</mat-card-title>
-                        <mat-card-subtitle>Edit your profile</mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <form class="p-5">
-                            <ng-container *ngFor="let info of Profile_info">
-                                <mat-form-field appearance="fill" class="w-full">
-                                    <mat-label>{{ info.name }}</mat-label>
-                                    <input *ngIf="!info.options; else select" matInput [placeholder]="info.placeholder" name="{{ info.type }}"
-                                        [(ngModel)]="info.value" [readonly]="info.readonly">
-                                    <span *ngIf="info.type === 'weight' || info.type === 'height'" matSuffix>{{ getSuffix(info.type) }}</span>
-                                    <ng-template #select>
-                                        <mat-select [placeholder]="info.placeholder" name="{{ info.type }}" [(ngModel)]="info.value">
-                                            <mat-option *ngFor="let option of info.options" [value]="option.value">
-                                                {{ option.viewValue }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </ng-template>
-                                </mat-form-field>
-                            </ng-container>
-                            <div class="flex justify-end mt-5">
-                                <button mat-raised-button class="bg-secondary text-white hover:bg-primary" type="submit">Save</button>
-                            </div>
-                        </form>
-                    </mat-card-content>
-                </mat-card>
-
-                <div class="grid grid-rows-3 gap-5">
-                    <mat-card>
-                        <mat-card-header class="flex items-center p-5">
-                            <mat-icon mat-card-avatar>subscriptions</mat-icon>
-                            <mat-card-title>Subscription</mat-card-title>
-                            <mat-card-subtitle>Manage your subscription.</mat-card-subtitle>
-                        </mat-card-header>
-                        <ng-container *ngIf="hasSubscription; else noSubscription">
-                            <p>You are currently subscribing <b>{{ subscriptionType }}</b></p>
-                            <p>Your benefits includes:</p>
-                            <li>[benefit 1]</li>
-                            <li>[benefit 2]</li>
-                        </ng-container>
-                        <ng-template #noSubscription>
-                            <p>By subscribing, personalize your plan to combat cancer, heart disease, or diabetes with meal plans crafted by a registered dietitian.
-                            <p>Enjoy delicious recipes tailored to your needs, delivered straight to your inbox.</p>
-                        </ng-template>
-                        <mat-card-actions>
-                            <div class="flex justify-end p-3">
-                                <button mat-raised-button 
-                                (click)="manageSubscription()"
-                                class="bg-secondary text-white hover:bg-primary"
-                                >Manage Subscription</button>
-                            </div>
-                        </mat-card-actions>
-                    </mat-card>
-                    <mat-card class="relative">
-                        <mat-card-header class="flex items-center p-5">
-                            <mat-icon mat-card-avatar>restaurant_menu</mat-icon>
-                            <mat-card-title>Generate Meal Plan</mat-card-title>
-                            <mat-card-subtitle>Generate a meal plan for the week. Personalize your meal plan with our smart IQ generator. 
-                                Optimize your choices by your diet restrictions and needs. </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-actions class="absolute bottom-5 right-4">
-                            <div class="flex justify-end p-3">
-                                <a mat-raised-button 
-                                routerLink="/"
-                                class="bg-secondary text-white hover:bg-primary"
-                                >Go to MealPlanIQ</a>
-                            </div>
-                        </mat-card-actions>
-                    </mat-card>
-                    <div class=" grid grid-cols-1 gap-5"> 
-                        <mat-card class="relative">
-                            <mat-card-header class="flex items-center p-5 pb-10">
-                                <mat-icon mat-card-avatar>list</mat-icon>
-                                <mat-card-title>Shopping List</mat-card-title>
-                                <mat-card-subtitle>Last generated shopping list.</mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-actions class="absolute bottom-7 right-7">
-                                <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>Open Shopping List</button>
-                            </mat-card-actions>
-                        </mat-card>
-
-                        <mat-card class="relative">
-                            <mat-card-header class="flex items-center p-5 pb-10">
-                                <mat-icon mat-card-avatar>bar_chart</mat-icon>
-                                <mat-card-title>Nutrition Chart</mat-card-title>
-                                <mat-card-subtitle>These results are based on your last generated meal plan.</mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-actions class="absolute bottom-7 right-7">
-                                <button mat-button class="bg-secondary text-white hover:bg-primary" (click)="openNutrition()">Open Nutrition Chart</button>
-                            </mat-card-actions>
-                        </mat-card>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-center mt-5">
-                <button mat-raised-button class="bg-secondary text-white hover:bg-primary w-full" (click)="logout()">Logout</button>
-            </div>
-        </section>
-    </div>
+            <mat-card class="relative">
+              <mat-card-header class="flex items-center p-5 pb-10">
+                <mat-icon mat-card-avatar>bar_chart</mat-icon>
+                <mat-card-title>Nutrition Chart</mat-card-title>
+                <mat-card-subtitle
+                  >These results are based on your last generated meal
+                  plan.</mat-card-subtitle
+                >
+              </mat-card-header>
+              <mat-card-actions class="absolute bottom-7 right-7">
+                <button
+                  mat-button
+                  class="bg-secondary text-white hover:bg-primary"
+                  (click)="openNutrition()"
+                >
+                  Open Nutrition Chart
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center mt-5">
+        <button
+          mat-raised-button
+          class="bg-secondary text-white hover:bg-primary w-full"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+      </div>
+    </section>
+  </div>
 </div>

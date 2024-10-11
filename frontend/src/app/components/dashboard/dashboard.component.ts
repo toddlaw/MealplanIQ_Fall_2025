@@ -124,6 +124,11 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.showSubscriptionStatus();
+    await this.getProfileData();
+    await this.sendProfileData();
+  }
+
+  async getProfileData() {
     try {
       const data: any = await this.http
         .get(
@@ -132,13 +137,43 @@ export class DashboardComponent implements OnInit {
         )
         .toPromise();
 
-      console.log(data);
+      console.log('data is:', data);
       this.user = data;
       this.prefillProfileInfo(this.user);
       this.userName = this.user.user_name;
       this.selected_unit = this.user.selected_unit;
     } catch (error) {
       console.error(error);
+    }
+  }
+  async sendProfileData() {
+    const userId = localStorage.getItem('uid');
+    console.log('uid got:', userId);
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+    const profileData = this.Profile_info.reduce((acc, info) => {
+      acc[info.type] = info.value;
+      return acc;
+    }, {} as { [key: string]: string | null });
+    if (userId) {
+      profileData['user_id'] = userId;
+    }
+
+    console.log('profiledata is:', profileData);
+
+    try {
+      console.log('uid got:', userId);
+      const response = await this.http
+        .post(
+          `http://127.0.0.1:5000/api/update_user_profile_from_dashboard`,
+          profileData
+        )
+        .toPromise();
+      console.log('Profile updated successfully:', response);
+    } catch (error) {
+      console.error('Error updating profile:', error);
     }
   }
 
@@ -187,7 +222,9 @@ export class DashboardComponent implements OnInit {
     // 1: monthly, 2: yearly, 3: free-trial for signed up user
     if (subscription_type_id === '1' || subscription_type_id === '2') {
       // for stripe test mode
-      const url = 'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' + email;
+      const url =
+        'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
+        email;
 
       // for stripe live mode
       // const url = 'https://billing.stripe.com/p/login/bIY7sxbu7c14g7eeUU?prefilled_email=' + email;
