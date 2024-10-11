@@ -61,7 +61,8 @@ def energy_calculator_function(age, bmi, gender, weight, height, activity_level)
             pal = 1.24
         elif activity_level == 'Very_Active':
             pal = 1.45
-        result = -114.1 - 50.9 * age + pal * (19.5 * weight + 1161.4 * height_m)
+        result = -114.1 - 50.9 * age + pal * \
+            (19.5 * weight + 1161.4 * height_m)
     elif bmi > 25 and 9 <= age <= 18 and gender == 'Female':
         if activity_level == 'Sedentary':
             pal = 1.0
