@@ -260,11 +260,11 @@ export class LandingComponent implements OnInit {
         this.userSubscriptionTypeId === 1 ||
         this.userSubscriptionTypeId === 2 ||
         (this.userSubscriptionTypeId === 0 &&
-          data.maxDate === data.minDate &&
-          this.selectedHealthGoal === 'lose_weight') ||
+          data.maxDate === data.minDate ) ||
         (this.userSubscriptionTypeId === 3 &&
-          this.selectedHealthGoal === 'lose_weight')
-      ) {
+          data.maxDate === data.minDate )
+      )
+        {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
           behavior: 'smooth',
@@ -318,25 +318,42 @@ export class LandingComponent implements OnInit {
             }
           );
       } else {
-        this.showSpinner = false;
-        this.errorDiv.nativeElement.style.display = 'block';
-        this.element.nativeElement.style.display = 'none';
-        const selectedHealthGoalObject = healthGoals.find(
-          (goal) => goal.value === this.selectedHealthGoal
-        );
-        const title = "Sorry, we can't generate the meal plan.";
-        if (localStorage.getItem('uid')) {
-          // User is logged in
-          const message =
-            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
-            selectedHealthGoalObject?.viewValue +
-            '!<br> Without subscription, you can generate meal plan to lose weight only.';
-          this.openDialog(title, message, '/payment', 'Subscribe');
+        if ((this.userSubscriptionTypeId === 1 || this.userSubscriptionTypeId === 2) && data.maxDate !== data.minDate) {
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'block';
+          this.element.nativeElement.style.display = 'none';
+          const selectedHealthGoalObject = healthGoals.find(
+            (goal) => goal.value === this.selectedHealthGoal
+          );
+        } else if (
+          (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight') ||
+          (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight')
+        ) {
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'block';
+          this.element.nativeElement.style.display = 'none';
+          const selectedHealthGoalObject = healthGoals.find(
+            (goal) => goal.value === this.selectedHealthGoal
+          );
         } else {
-          // User is not logged in
-          const message =
-            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
-          this.openDialog(title, message, '/login', 'Login');
+          this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
+          this.showSpinner = false; // Hide spinner if it's currently shown
+          this.errorDiv.nativeElement.style.display = 'block'; // Show the error div
+          this.element.nativeElement.style.display = 'none'; 
+          return; // Exit the method if the plan exceeds one day
+        // const title = "Sorry, we can't generate the meal plan.";
+        // if (localStorage.getItem('uid')) {
+        //   // User is logged in
+        //   const message =
+        //     'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
+        //     selectedHealthGoalObject?.viewValue +
+        //     '!<br> Without subscription, you can generate meal plan to lose weight only.';
+        //   this.openDialog(title, message, '/payment', 'Subscribe');
+        // } else {
+        //   // User is not logged in
+        //   const message =
+        //     'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
+        //   this.openDialog(title, message, '/login', 'Login');
         }
       }
     }
@@ -657,14 +674,47 @@ export class LandingComponent implements OnInit {
   }
 
   openRecipeDialog(recipe: any): void {
-    this.dialog.open(RecipeDialogComponent, {
-      data: {
-        recipe: recipe,
-        imageUrl: this.getImageUrl(recipe.id),
-      },
-      width: '800px',
-    });
+  //   this.dialog.open(RecipeDialogComponent, {
+  //     data: {
+  //       recipe: recipe,
+  //       imageUrl: this.getImageUrl(recipe.id),
+  //     },
+  //     width: '800px',
+  //   });
+  // }
+  const data = {
+    minDate: this.startDate.get('start')!.value?.getTime(),
+    maxDate: this.startDate.get('end')!.value?.getTime(),
+  };
+
+  if (
+    this.userSubscriptionTypeId === 1 ||
+    this.userSubscriptionTypeId === 2 ||
+    (this.userSubscriptionTypeId === 0 &&
+      data.maxDate === data.minDate &&
+      this.selectedHealthGoal === 'lose_weight') ||
+    (this.userSubscriptionTypeId === 3 &&
+      this.selectedHealthGoal === 'lose_weight')
+  )  {
+      this.dialog.open(RecipeDialogComponent, {
+        data: {
+          recipe: recipe,
+          imageUrl: this.getImageUrl(recipe.id),
+        },
+        width: '800px',
+      });
+    } else {
+      const title = 'Upgrade Required';
+      const message = 'Your subscription does not allow access to this recipe. Upgrade now!';
+      this.openUpgradeDialog(title, message, '/payment', 'Upgrade');
+    }
   }
+
+  openUpgradeDialog(title: string, message: string, link: string, buttonText: string): void {
+    alert(`${title}: ${message}`); // Placeholder logic
+  }
+
+  
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
     return this.http.post<ShoppingList[]>(
