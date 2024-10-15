@@ -325,6 +325,8 @@ export class LandingComponent implements OnInit {
           const selectedHealthGoalObject = healthGoals.find(
             (goal) => goal.value === this.selectedHealthGoal
           );
+
+
         } else if (
           (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight') ||
           (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight')
@@ -336,11 +338,15 @@ export class LandingComponent implements OnInit {
             (goal) => goal.value === this.selectedHealthGoal
           );
         } else {
-          this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
+          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
           this.showSpinner = false; // Hide spinner if it's currently shown
-          this.errorDiv.nativeElement.style.display = 'block'; // Show the error div
+          this.errorDiv.nativeElement.style.display = 'none'; // Show the error div
           this.element.nativeElement.style.display = 'none'; 
-          return; // Exit the method if the plan exceeds one day
+
+          const title = "Sorry, we can't generate the meal plan.";
+          const message = "Without a subscription, you can only generate a meal plan for one day.";
+          this.openDialog(title, message, '/payment', 'Subscribe');
+          // return; // Exit the method if the plan exceeds one day
         // const title = "Sorry, we can't generate the meal plan.";
         // if (localStorage.getItem('uid')) {
         //   // User is logged in
@@ -704,17 +710,11 @@ export class LandingComponent implements OnInit {
         width: '800px',
       });
     } else {
-      const title = 'Upgrade Required';
-      const message = 'Your subscription does not allow access to this recipe. Upgrade now!';
-      this.openUpgradeDialog(title, message, '/payment', 'Upgrade');
+      const title = 'Subscription Required';
+      const message = 'Unsubscribed users can only view recipes for weight loss. Please upgrade to access more recipes.';
+      this.openDialog(title, message, '/payment', 'Upgrade');
     }
   }
-
-  openUpgradeDialog(title: string, message: string, link: string, buttonText: string): void {
-    alert(`${title}: ${message}`); // Placeholder logic
-  }
-
-  
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
     return this.http.post<ShoppingList[]>(
