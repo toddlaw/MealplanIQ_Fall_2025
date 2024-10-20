@@ -1,8 +1,5 @@
 <app-carousel></app-carousel>
-<div
-  class="container mx-auto flex flex-col items-center justify-center min-h-screen"
-  #start
->
+<div class="container mx-auto flex flex-col items-center justify-center min-h-screen" #start>
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg" id="homepage-landing">
     <!-- <h1 class="text-red">
       MealPlanIQ is currently in beta and we are working to make it better! We
@@ -26,16 +23,12 @@
       <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
         <div class="grid-rows">
           <div class="grid-cols-4 p-8 flex flex-wrap justify-center items-center">
-            <button
-              *ngFor="let item of healthGoals; let i = index"
-              type="button"
+            <button *ngFor="let item of healthGoals; let i = index" type="button"
               class="health-goal-button text-white bg-secondary hover:bg-secondary outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm text-center me-2 mb-2"
               [ngClass]="{
                 'bg-primary-strong': selectedHealthGoalIndex === i,
                 'bg-primary': selectedHealthGoalIndex !== i
-              }"
-              (click)="healthGoalChange(i, item.value)"
-            >
+              }" (click)="healthGoalChange(i, item.value)">
               <span class="health-goal-text">
                 {{ item.viewValue }}
               </span>
@@ -49,50 +42,30 @@
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   People &nbsp;
-                  <mat-icon
-                    class="icon-display"
-                    fontIcon="group_add"
-                  ></mat-icon>
+                  <mat-icon class="icon-display" fontIcon="group_add"></mat-icon>
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
               <div class="grid grid-cols-2">
                 <div class="add-people-icons justify-start">
-                  <button
-                    [style.visibility]="
+                  <button [style.visibility]="
                       people.length > MIN_PEOPLE ? 'visible' : 'hidden'
-                    "
-                    mat-icon-button
-                    type="button"
-                    (click)="changeFields(-1)"
-                  >
+                    " mat-icon-button type="button" (click)="changeFields(-1)">
                     <mat-icon class="icon-display red-icon">remove</mat-icon>
                   </button>
                   <span class="person-number">{{ people.length }}</span>
-                  <button
-                    [style.visibility]="
+                  <button [style.visibility]="
                       people.length < MAX_PEOPLE ? 'visible' : 'hidden'
-                    "
-                    mat-icon-button
-                    type="button"
-                    (click)="changeFields(1)"
-                  >
+                    " mat-icon-button type="button" (click)="changeFields(1)">
                     <mat-icon class="icon-display green-icon">add</mat-icon>
                   </button>
                 </div>
 
                 <div class="grid justify-items-end pr-5">
                   <mat-button-toggle-group>
-                    <mat-button-toggle
-                      value=""
-                      (click)="setSelectedUnit('metric')"
-                      checked
-                      >Metric
+                    <mat-button-toggle value="" (click)="setSelectedUnit('metric')" checked>Metric
                     </mat-button-toggle>
-                    <mat-button-toggle
-                      value=""
-                      (click)="setSelectedUnit('imperial')"
-                      >Imperial
+                    <mat-button-toggle value="" (click)="setSelectedUnit('imperial')">Imperial
                     </mat-button-toggle>
                   </mat-button-toggle-group>
                 </div>
@@ -104,30 +77,16 @@
                 <div class="grid md:grid-cols-2 gap-4">
                   <div class="col-span-1">
                     <mat-form-field class="age">
-                      <input
-                        matInput
-                        type="number"
-                        placeholder="Age"
-                        [(ngModel)]="person.age"
-                        min="1"
-                        [name]="'age' + i"
-                        required
-                      />
+                      <input matInput type="number" placeholder="Age" [(ngModel)]="person.age" min="1"
+                        [name]="'age' + i" required />
                     </mat-form-field>
                   </div>
 
                   <div class="col-span-1">
                     <mat-form-field class="gender">
                       <mat-label>Gender</mat-label>
-                      <mat-select
-                        required
-                        [(ngModel)]="person.gender"
-                        [name]="'gender' + i"
-                      >
-                        <mat-option
-                          *ngFor="let gender of genders"
-                          [value]="gender.value"
-                        >
+                      <mat-select required [(ngModel)]="person.gender" [name]="'gender' + i">
+                        <mat-option *ngFor="let gender of genders" [value]="gender.value">
                           {{ gender.viewValue }}
                         </mat-option>
                       </mat-select>
@@ -136,52 +95,29 @@
 
                   <div class="col-span-1">
                     <mat-form-field class="weight">
-                      <input
-                        matInput
-                        type="number"
-                        [placeholder]="
+                      <input matInput type="number" [placeholder]="
                           selectedUnit === 'metric'
                             ? 'Weight' + ' (KG)'
                             : 'Weight ' + ' (LBS)'
-                        "
-                        [(ngModel)]="person.weight"
-                        [name]="'weight' + i"
-                        min="0"
-                        required
-                      />
+                        " [(ngModel)]="person.weight" [name]="'weight' + i" min="0" required />
                     </mat-form-field>
                   </div>
 
                   <div class="col-span-1">
                     <mat-form-field class="height">
-                      <input
-                        matInput
-                        type="number"
-                        [placeholder]="
+                      <input matInput type="number" [placeholder]="
                           selectedUnit === 'metric'
                             ? 'Height' + ' (CM)'
                             : 'Height' + ' (IN)'
-                        "
-                        [(ngModel)]="person.height"
-                        [name]="'height' + i"
-                        min="0"
-                        required
-                      />
+                        " [(ngModel)]="person.height" [name]="'height' + i" min="0" required />
                     </mat-form-field>
                   </div>
 
                   <div class="col-span-1">
                     <mat-form-field class="activity-level">
                       <mat-label>Activity Level</mat-label>
-                      <mat-select
-                        required
-                        [(ngModel)]="person.activityLevel"
-                        [name]="'activityLevel' + i"
-                      >
-                        <mat-option
-                          *ngFor="let activityLevel of activityLevels"
-                          [value]="activityLevel.value"
-                        >
+                      <mat-select required [(ngModel)]="person.activityLevel" [name]="'activityLevel' + i">
+                        <mat-option *ngFor="let activityLevel of activityLevels" [value]="activityLevel.value">
                           {{ activityLevel.viewValue }}
                         </mat-option>
                       </mat-select>
@@ -192,11 +128,7 @@
               </ng-container>
 
               <div class="flex items-center justify-center">
-                <button
-                  type="button"
-                  (click)="closePanel()"
-                  class="justify-items-center px-28 text-white py-2"
-                >
+                <button type="button" (click)="closePanel()" class="justify-items-center px-28 text-white py-2">
                   Done
                 </button>
               </div>
@@ -206,19 +138,11 @@
         <div class="max-w-md mx-auto pt-8">
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field class="dietary-constraints">
-              <mat-label
-                >Dietary Constraints
+              <mat-label>Dietary Constraints
                 <mat-icon fontIcon="eco" color="default"> </mat-icon>
               </mat-label>
-              <mat-select
-                required
-                [(ngModel)]="selectedDietaryConstraint"
-                name="dietaryConstraint"
-              >
-                <mat-option
-                  *ngFor="let vegetarian of vegetarians"
-                  [value]="vegetarian.value"
-                >
+              <mat-select required [(ngModel)]="selectedDietaryConstraint" name="dietaryConstraint">
+                <mat-option *ngFor="let vegetarian of vegetarians" [value]="vegetarian.value">
                   {{ vegetarian.viewValue }}
                 </mat-option>
               </mat-select>
@@ -227,19 +151,11 @@
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field class="religious-constraints">
-              <mat-label
-                >Religious Constraints
+              <mat-label>Religious Constraints
                 <mat-icon fontIcon="church" color="default"> </mat-icon>
               </mat-label>
-              <mat-select
-                required
-                [(ngModel)]="selectedReligiousConstraint"
-                name="religiousConstraint"
-              >
-                <mat-option
-                  *ngFor="let Religious of religiousConstraints"
-                  [value]="Religious.value"
-                >
+              <mat-select required [(ngModel)]="selectedReligiousConstraint" name="religiousConstraint">
+                <mat-option *ngFor="let Religious of religiousConstraints" [value]="Religious.value">
                   {{ Religious.viewValue }}
                 </mat-option>
               </mat-select>
@@ -248,8 +164,7 @@
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field class="liked-foods">
-              <mat-label
-                >Liked Foods
+              <mat-label>Liked Foods
                 <mat-icon fontIcon="thumb_up" color="default"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="likedFoods" multiple name="likedFoods">
@@ -260,10 +175,7 @@
                     {{ likedFoods.value?.length === 2 ? "other" : "others" }})
                   </span>
                 </mat-select-trigger>
-                <mat-option
-                  *ngFor="let likedFood of likedFoodsList"
-                  [value]="likedFood"
-                >
+                <mat-option *ngFor="let likedFood of likedFoodsList" [value]="likedFood">
                   {{ likedFood }}
                 </mat-option>
               </mat-select>
@@ -272,8 +184,7 @@
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field class="favourite-cuisines">
-              <mat-label
-                >Disliked Foods
+              <mat-label>Disliked Foods
                 <mat-icon fontIcon="thumb_down" color="default"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="dislikedFoods" multiple>
@@ -282,23 +193,19 @@
                   <span *ngIf="(dislikedFoods.value?.length || 0) > 1">
                     (+{{ (dislikedFoods.value?.length || 0) - 1 }}
                     {{
-                      dislikedFoods.value?.length === 2 ? "other" : "others"
+                    dislikedFoods.value?.length === 2 ? "other" : "others"
                     }})
                   </span>
                 </mat-select-trigger>
-                <mat-option
-                  *ngFor="let dislikedFoods of dislikedFoodsList"
-                  [value]="dislikedFoods"
-                  >{{ dislikedFoods }}</mat-option
-                >
+                <mat-option *ngFor="let dislikedFoods of dislikedFoodsList" [value]="dislikedFoods">{{ dislikedFoods
+                  }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field class="favourite-cuisines">
-              <mat-label
-                >Favourite Cuisines
+              <mat-label>Favourite Cuisines
                 <mat-icon fontIcon="favorite" color="default"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="cuisines" multiple>
@@ -309,19 +216,14 @@
                     {{ cuisines.value?.length === 2 ? "other" : "others" }})
                   </span>
                 </mat-select-trigger>
-                <mat-option
-                  *ngFor="let cuisine of cuisinesList"
-                  [value]="cuisine"
-                  >{{ cuisine }}</mat-option
-                >
+                <mat-option *ngFor="let cuisine of cuisinesList" [value]="cuisine">{{ cuisine }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field>
-              <mat-label
-                >Allergies
+              <mat-label>Allergies
                 <mat-icon fontIcon="grain" color="default"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="allergies" multiple>
@@ -332,10 +234,7 @@
                     {{ allergies.value?.length === 2 ? "other" : "others" }})
                   </span>
                 </mat-select-trigger>
-                <mat-option
-                  *ngFor="let allergy of allergiesList"
-                  [value]="allergy"
-                >
+                <mat-option *ngFor="let allergy of allergiesList" [value]="allergy">
                   {{ allergy }}
                 </mat-option>
               </mat-select>
@@ -344,8 +243,7 @@
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field>
-              <mat-label
-                >Breakfast Preferences
+              <mat-label>Breakfast Preferences
                 <mat-icon fontIcon="bakery_dining" class="text-sm"> </mat-icon>
               </mat-label>
               <mat-select [formControl]="breakfasts" multiple>
@@ -365,8 +263,7 @@
 
           <div class="grid md:grid-cols-1 gap-6">
             <mat-form-field>
-              <mat-label
-                >Snack Preferences
+              <mat-label>Snack Preferences
                 <mat-icon fontIcon="egg"></mat-icon>
               </mat-label>
               <mat-select [formControl]="snacks" multiple>
@@ -389,29 +286,11 @@
               <div class="flex items-center">
                 <!-- Add a div and flex layout -->
                 <mat-label>Meal plan range &nbsp;</mat-label>
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="mealPlanRange"
-                ></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="mealPlanRange"></mat-datepicker-toggle>
               </div>
-              <mat-date-range-input
-                [formGroup]="startDate"
-                [rangePicker]="mealPlanRange"
-              >
-                <input
-                  matStartDate
-                  placeholder="Start date"
-                  formControlName="start"
-                  required
-                  readonly
-                />
-                <input
-                  matEndDate
-                  placeholder="End date"
-                  formControlName="end"
-                  required
-                  readonly
-                />
+              <mat-date-range-input [formGroup]="startDate" [rangePicker]="mealPlanRange">
+                <input matStartDate placeholder="Start date" formControlName="start" required readonly />
+                <input matEndDate placeholder="End date" formControlName="end" required readonly />
               </mat-date-range-input>
               <mat-date-range-picker #mealPlanRange></mat-date-range-picker>
             </mat-form-field>
@@ -419,10 +298,7 @@
 
           <div class="container text-center">
             <p class="text-2xl">③ Generate your meal plan!</p>
-            <button
-              type="submit"
-              class="rounded-lg bg-secondary hover:bg-primary text-white px-40 py-3"
-            >
+            <button type="submit" class="rounded-lg bg-secondary hover:bg-primary text-white px-40 py-3">
               <mat-icon fontIcon="search" class="pt-1"></mat-icon>
             </button>
           </div>
@@ -434,9 +310,7 @@
 
   <!-- start of response ui -->
   <div #scrollToMe hidden>
-    <div
-      class="loading-meal-plan flex flex-col items-center justify-center h-screen"
-    >
+    <div class="loading-meal-plan flex flex-col items-center justify-center h-screen">
       <div>
         <h1 class="centered-text text-xl mb-4">Generating your meal plan...</h1>
       </div>
@@ -483,66 +357,65 @@
 
 
       <app-popup></app-popup>
-      
+
       <div class="text-center">
-      <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>
-        Open Shopping List
-      </button>
-    </div>
-    <br />
-      <div
-        *ngFor="let day of mealPlanResponse.days; index as i"
-        class="recipe-day"
-        [ngClass]="{ 'no-top-margin': i === 0 }"
-      >
-        <h2>{{ day.date }}</h2>
+        <button mat-raised-button class="bg-secondary text-white hover:bg-primary" (click)='openShoppingListDialog()'>
+          Open Shopping List
+        </button>
+      </div>
+      <br />
+      <div *ngFor="let day of mealPlanResponse.days; index as i" class="recipe-day"
+        [ngClass]="{ 'no-top-margin': i === 0 }">
+        <h2>{{ formatDate(day.date) }}-{{ getDayOfWeek(day.date) }}</h2> <!-- Add a day of the week display -->
         <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <!-- Loop for recipes -->
-          <ng-container
-            *ngFor="let recipe of day.recipes; index as j"
-            class="w-full"
-          >
+          <ng-container *ngFor="let recipe of day.recipes; index as j" class="w-full">
+            <!-- container -->
             <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between">
-              <div class="flex justify-items-center">
-                <ng-container *ngIf="recipe.id !== null; else defaultMeanImg">
-                <img
-                  [src]="getImageUrl(recipe.id)"
-                  alt="Image"
-                  class="text-center"
-                />
-                </ng-container>
-                <ng-template #defaultMeanImg>
-                  <img
-                    src="assets/images/meal-placeholder.png"
-                    alt="Image"
-                    class="text-center"
-                  />
-                </ng-template>
-              </div>
-              <div class="p-6 flex flex-col flex-grow ">
-                <mat-card-title>{{ recipe.title }}</mat-card-title>
-                <mat-card-subtitle>{{ recipe.meal_name }}</mat-card-subtitle>
-                <mat-card-content class="p-4">
-                  <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
-                  <p>Cuisine: {{ recipe.region }}</p>
-                  <p>Prep time: {{ recipe.prep_time }}</p>
-                </mat-card-content>
-                <mat-card-footer class="absolute bottom-10 right-6 w-full pt-5">
-                  <div class="flex justify-between items-center px-6">
-                  <!-- <ng-container  *ngIf="recipe.meal_name !== 'Snack'; else noSnack"> -->
-                    <button 
-                    class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1" 
-                    (click)="openRecipeDialog(recipe)">Recipe</button>
-                  <!-- </ng-container> -->
-                  <!-- <ng-template #noSnack> -->
-                    <div 
-                    class="bg-white white-text px-5 py-2 rounded-lg ml-1" 
-                  ></div>
-                  <!-- </ng-template> -->
-                  <button class="button hover:bg-primary hover:text-white p-1 rounded-full" (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
+              <!-- Use flex-col to align title and content vertically -->
+
+              <mat-card-title>{{ recipe.title }}</mat-card-title>
+              <mat-card-subtitle style="font-size: 1.2rem">{{ recipe.meal_name }}</mat-card-subtitle>
+
+              <!-- Pictures and energy information are arranged horizontally -->
+              <div class="flex flex-row justify-between items-start mt-4">
+
+                <!-- the image -->
+                <div class="w-1/3">
+                  <ng-container *ngIf="recipe.id !== null; else defaultMeanImg">
+                    <img [src]="getImageUrl(recipe.id)" alt="Image" class="text-center"
+                      style="width: 80%; height: auto; border-radius: 15px;" />
+                    <!-- The image becomes rounded and resized -->
+                  </ng-container>
+                  <ng-template #defaultMeanImg>
+                    <img src="assets/images/meal-placeholder.png" alt="Image" class="text-center" />
+                  </ng-template>
                 </div>
-                </mat-card-footer>
+                \
+                <div class="w-2/3" style="margin-left: 10px;">
+                  <mat-card-content class="p-4">
+                    <p>Energy: {{ this.floor(recipe.calories) }} calories</p>
+                    <p>Cuisine: {{ recipe.region }}</p>
+                    <p>Prep time: {{ recipe.prep_time }}</p>
+                  </mat-card-content>
+                </div>
               </div>
+
+              <!-- button -->
+              <mat-card-footer class="w-full pt-5">
+                <div class="flex justify-between items-center px-6">
+                  <ng-container *ngIf="recipe.meal_name !== 'Snack'; else noSnack">
+                    <button class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1"
+                      (click)="openRecipeDialog(recipe)">Recipe</button>
+                  </ng-container>
+                  <ng-template #noSnack>
+                    <div class="bg-white white-text px-5 py-2 rounded-lg ml-1"></div>
+                  </ng-template>
+                  <button class="button hover:bg-primary hover:text-white p-1 rounded-full"
+                    (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
+                </div>
+              </mat-card-footer>
+
             </mat-card>
           </ng-container>
         </div>
@@ -550,72 +423,43 @@
         <br />
       </div>
       <div>
-        <table
-          mat-table
-          [dataSource]="mealPlanResponse.tableData"
-          class="w-full text-sm shadow-sm rounded text-center"
-          align="center"
-        >
+        <table mat-table [dataSource]="mealPlanResponse.tableData" class="w-full text-sm shadow-sm rounded text-center"
+          align="center">
           <ng-container matColumnDef="nutrientName">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="bg-primary-light text-left"
-              style="padding-left: 12px"
-            ></th>
-            <td
-              mat-cell
-              *matCellDef="let element"
-              class="text-left"
-              style="padding-left: 12px"
-            >
+            <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-left" style="padding-left: 12px"></th>
+            <td mat-cell *matCellDef="let element" class="text-left" style="padding-left: 12px">
               <!-- Turn "Vitamin a" "Vitamin A" -->
               {{
-                element.nutrientName.includes("vitamin")
-                  ? this.displayVitamin(element.nutrientName)
-                  : element.nutrientName.charAt(0).toUpperCase() +
-                    element.nutrientName.slice(1)
+              element.nutrientName.includes("vitamin")
+              ? this.displayVitamin(element.nutrientName)
+              : element.nutrientName.charAt(0).toUpperCase() +
+              element.nutrientName.slice(1)
               }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="target">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="bg-primary-light text-center"
-              style="text-align: center"
-            >
+            <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-center" style="text-align: center">
               Target
             </th>
             <td mat-cell *matCellDef="let element">
-              <p
-                class="inline-block text-text-info font-semibold rounded text-sm"
-                style="margin: 0; display: inline-block"
-              >
+              <p class="inline-block text-text-info font-semibold rounded text-sm"
+                style="margin: 0; display: inline-block">
                 {{ element.display_target }}
               </p>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="actual">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="bg-primary-light text-center"
-              style="text-align: center; padding-right: 12px"
-            >
+            <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-center"
+              style="text-align: center; padding-right: 12px">
               Your Meal Plan
             </th>
             <td mat-cell *matCellDef="let element" style="padding-right: 12px">
-              <p
-                class="inline-block text-text-success font-semibold rounded text-sm"
-                [ngClass]="{
+              <p class="inline-block text-text-success font-semibold rounded text-sm" [ngClass]="{
                   'text-text-success': element.status === 'success',
                   'text-text-warning': element.status !== 'success'
-                }"
-                style="margin: 0; display: inline-block"
-              >
+                }" style="margin: 0; display: inline-block">
                 {{ element.actual }}
               </p>
             </td>
@@ -627,4 +471,3 @@
       </div>
     </div>
   </div>
-</div>

@@ -49,7 +49,20 @@ export class LandingComponent implements OnInit {
     private router: Router,
     private toast: HotToastService,
     private refresh: RefreshComponent
-  ) {}
+  ) { }
+  // generate day of the week
+  getDayOfWeek(date: string): string {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const d = new Date(date);
+    return days[d.getDay()];
+  }
+  // change date format to e.g. September 14, 2024
+  formatDate(date: string): string {
+    const utcDate = new Date(date + 'T00:00:00Z');
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return utcDate.toLocaleDateString('en-US', options);
+  }
+
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -145,7 +158,7 @@ export class LandingComponent implements OnInit {
         const response: any = await this.http
           .get(
             'http://127.0.0.1:5000/api/subscription_type_id/' +
-              localStorage.getItem('uid')
+            localStorage.getItem('uid')
           )
           .toPromise();
         if (response.subscription_type_id) {
@@ -167,7 +180,7 @@ export class LandingComponent implements OnInit {
       this.http
         .get(
           'http://127.0.0.1:5000/api/landing/profile/' +
-            localStorage.getItem('uid')
+          localStorage.getItem('uid')
         )
         .subscribe((data: any) => {
           this.people[0].age = data.age;
@@ -176,6 +189,16 @@ export class LandingComponent implements OnInit {
           this.people[0].gender = data.gender;
           this.people[0].activityLevel = data.activity_level;
           this.selectedUnit = data.selected_unit || 'metric';
+          // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
+          this.mealPlanResponse.days.forEach((day: { recipes: { meal_name: string }[] }) => {
+            day.recipes.sort((a: { meal_name: string }, b: { meal_name: string }) => {
+              const mealOrder = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner', 'Snack'];
+              return mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name);
+            });
+          });
+
+
+
         });
     }
   }
@@ -432,7 +455,7 @@ export class LandingComponent implements OnInit {
   /**
    * Click handler for the "Get Full Meal Plan" button
    */
-  getFullMealPlan() {}
+  getFullMealPlan() { }
 
   /**
    * Replace a recipe in the meal plan
@@ -677,4 +700,5 @@ export class LandingComponent implements OnInit {
       }
     );
   }
+
 }
