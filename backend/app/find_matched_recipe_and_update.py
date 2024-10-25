@@ -19,10 +19,9 @@ def find_matched_recipe_and_update(response, recipe_id):
 
     # Load the recipes pool from the CSV file
     recipe_df = pd.read_csv("./meal_db/meal_database.csv")
-
-    all_recipes_df = pd.read_csv("./meal_db/meal_database_V2.csv")
-
-    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"] == "['snack']"]
+    all_recipes_df = pd.read_csv("./meal_db/meal_database.csv")
+    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"]
+                                      == "['snack']"]
 
     # Traverse the response to find and remove the clicked recipe
     for day in response["days"]:
@@ -43,7 +42,8 @@ def find_matched_recipe_and_update(response, recipe_id):
     clicked_recipe["id"] = int(clicked_recipe["id"])
 
     # Call find_matched_recipe with the clicked_recipe
-    recipe_to_replace = find_matched_recipe(clicked_recipe, recipe_df, snack_recipes_df)
+    recipe_to_replace = find_matched_recipe(
+        clicked_recipe, recipe_df, snack_recipes_df)
 
     # Ensure that a matched recipe is found before proceeding
     if recipe_to_replace:
@@ -67,7 +67,8 @@ def find_matched_recipe_and_update(response, recipe_id):
         response = insert_status_nutrient_info(response)
         time.sleep(0.1)
 
-        output_data = {"meal_plan": response, "id_to_replace": recipe_to_replace["id"]}
+        output_data = {"meal_plan": response,
+                       "id_to_replace": recipe_to_replace["id"]}
         return output_data
     else:
         raise ValueError("No matched recipe found")
@@ -143,9 +144,7 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
             matched_recipe_row["ingredients"]
         )
 
-        print(matched_recipe["ingredients"])
     else:
-        print("debug message")
         original_recipe_row = snack_df.loc[snack_df["number"] == recipe_id]
         print("Original Recipe Row:\n", original_recipe_row)
 
@@ -183,12 +182,14 @@ def update_nutrition_values(response, recipe, operation, recipe_df, snack_df):
 
     if recipe["meal_slot"] == "['lunch', 'dinner']":
         # Find the original recipe row in the DataFrame
-        original_recipe_row = recipe_df.loc[recipe_df["number"] == recipe["id"]]
+        original_recipe_row = recipe_df.loc[recipe_df["number"]
+                                            == recipe["id"]]
     else:
         original_recipe_row = snack_df.loc[snack_df["number"] == recipe["id"]]
 
     if original_recipe_row.empty:
-        raise ValueError(f"Recipe with ID {recipe['id']} not found in the database")
+        raise ValueError(
+            f"Recipe with ID {recipe['id']} not found in the database")
 
     # Define the nutrients to update based on the provided CSV columns
     nutrients = {
