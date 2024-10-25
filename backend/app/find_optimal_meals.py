@@ -3,8 +3,10 @@ This file contains methods used to generate or help generate an optimal meal
 plan for a given set of constraints. These constraints are to be passed into the
 methods used for the generation of the meal plans.
 """
+import traceback
 from pulp import *
 import pandas as pd
+
 
 def get_recipe_dict_from_df(recipe_df):
     """
@@ -91,7 +93,7 @@ def get_recipe_dict_from_df(recipe_df):
 
 
 def optimize_meals_integration(recipe_df, macros, micros, user_diet,
-                               days=1,exclude = [], include = [], excluded_nutrients = [],
+                               days=1, exclude=[], include=[], excluded_nutrients=[],
                                constraint_relaxation=0.1):
     """
     This method generates a meal plan for a given set of constraints. If the
@@ -162,7 +164,6 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
         [recipe_var[i] * recipe_dict["user_score"][i] * user_diet[i] for i in
          recipes])
 
-
     prob += (
         lpSum(
             [recipe_dict["Calories"][recipe] * recipe_var[recipe] for recipe in
@@ -224,7 +225,6 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
                in recipes]) >= macros["fat_g"][MIN_INDEX],
         "Minfats_(g)Requirement",
     )
-
 
     """
     Micros
@@ -503,7 +503,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
 
     prob += (
         lpSum(
-            [(recipe_dict["vitamin_E"][recipe] )
+            [(recipe_dict["vitamin_E"][recipe])
              * recipe_var[recipe] for recipe in
              recipes]) >= micros["vit_e_mg_rda"],
         "Minvitamin_e_(mg)Requirement",
@@ -541,20 +541,23 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     purpose of them are to fine tune the results to give values that we want
     less about fitting a mealplan into a diet.
     """
+
     prob += lpSum([recipe_var[i] for i in recipes]) <= 11 * days
 
-    #restrict the number of recipes that can be selected
+    # restrict the number of recipes that can be selected
+
     prob += lpSum([recipe_var[int(i)] for i in exclude]) == 0
 
-    #force inclusion of recipe
+    # recipe_var comes from generate_meal_plan.py 257
     prob += lpSum([recipe_var[int(i)] for i in include]) >= len(include)
 
     CALORIE_CAP = 400
     MIN_CALORIE_CAP = 100
     # Ensures that a recipe is not selected more than a certain amount of times, can be changed
     for recipe in recipes:
-        calories = recipe_df.loc[recipe_df['number'] == recipe]["energy_kcal"].values
-        if calories and calories[0] < CALORIE_CAP  and calories[0] > MIN_CALORIE_CAP:
+        calories = recipe_df.loc[recipe_df['number']
+                                 == recipe]["energy_kcal"].values
+        if calories and calories[0] < CALORIE_CAP and calories[0] > MIN_CALORIE_CAP:
             recipe_limit = int(CALORIE_CAP / calories[0])
         else:
             recipe_limit = 1
@@ -572,7 +575,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     Repeat solving with loosened constraints if infeasible not implmented yet a
     last resort measure
     """
-    #used in the event  we need to loosen constraints
+    # used in the event  we need to loosen constraints
     original_constraints = None
 
     if LpStatus[prob.status] == LpStatus[LpStatusInfeasible]:
@@ -585,22 +588,24 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
         max_change_factor = 10
         current_change_factor = 1
 
-        #keep on looping until optimal is found, or until we have loosened the constraints by a factor of 10
-        #factor of 10 is arbitrary and right now done to stop infinite loops as if we increase other nutrients by
-        #a factor of 10, and still have infeasible, the problem may be somewhere else.
+        # keep on looping until optimal is found, or until we have loosened the constraints by a factor of 10
+        # factor of 10 is arbitrary and right now done to stop infinite loops as if we increase other nutrients by
+        # a factor of 10, and still have infeasible, the problem may be somewhere else.
         while LpStatus[prob.status] == LpStatus[LpStatusInfeasible] and current_change_factor < max_change_factor:
-            prob = solveWithLoosenedConstraints(prob, constraint_relaxation, excluded_nutrients)
+            prob = solveWithLoosenedConstraints(
+                prob, constraint_relaxation, excluded_nutrients)
             current_change_factor += constraint_relaxation
 
         print("Solved for meal plan with loosened constraints")
 
     recipe_name_quant = []
     for v in prob.variables():
-        if v.varValue is not None and v.varValue > 0 :
+        if v.varValue is not None and v.varValue > 0:
             recipe_id = v.name[8:]
-            recipe_name = recipe_df.loc[recipe_df['number'] == int(recipe_id)]['title'].values[0]
+            recipe_name = recipe_df.loc[recipe_df['number'] == int(
+                recipe_id)]['title'].values[0]
             recipe_name_quant.append({'name': f"{recipe_name}",
-                                    'multiples': v.varValue})
+                                      'multiples': v.varValue})
 
             print(recipe_name, "=", v.varValue)
 
@@ -611,8 +616,10 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     constraint_results = print_soln_constraints(prob.constraints)
 
     if orig_constraints is not None:
-        result["out_of_orig_bound_nutrients"] = print_constraint_differences(orig_constraints, constraint_results)
-        constraint_results = combine_orig_constraints(orig_constraints, constraint_results)
+        result["out_of_orig_bound_nutrients"] = print_constraint_differences(
+            orig_constraints, constraint_results)
+        constraint_results = combine_orig_constraints(
+            orig_constraints, constraint_results)
 
     # The optimised objective function value is printed to the screen
     print("Maximum Meal Plan Value = ", value(prob.objective))
@@ -623,6 +630,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     result["constraint_targets"] = constraint_results
     return result
 
+
 def combine_orig_constraints(orig, current):
     """
     Combines the original constraints from the original problem with the
@@ -632,6 +640,8 @@ def combine_orig_constraints(orig, current):
         current[index]["target"] = orig[index]["target"]
 
     return current
+
+
 def print_constraint_differences(orig, current):
     """
     Given output from print_soln_constraints with the original values and current
@@ -650,14 +660,17 @@ def print_constraint_differences(orig, current):
 
         if curr_nutrient_value < orig_nutrient_min:
             out_of_range_nutrients.append(orig_nutrient_name)
-            print(f"{orig_nutrient_name} is lower than original {orig_nutrient_min}: curr value {curr_nutrient_value}")
+            print(
+                f"{orig_nutrient_name} is lower than original {orig_nutrient_min}: curr value {curr_nutrient_value}")
         elif curr_nutrient_value > orig_nutrient_max:
             out_of_range_nutrients.append(orig_nutrient_name)
-            print(f"{orig_nutrient_name} is higher than original {orig_nutrient_max}: curr value {curr_nutrient_value}")
+            print(
+                f"{orig_nutrient_name} is higher than original {orig_nutrient_max}: curr value {curr_nutrient_value}")
 
     return out_of_range_nutrients
 
-def solveWithLoosenedConstraints(prob, scale, excluded = []):
+
+def solveWithLoosenedConstraints(prob, scale, excluded=[]):
     """
     Given an already defined pulp problem who's status is infeasible, try to
     loosen the constraints and try again.
@@ -673,7 +686,8 @@ def solveWithLoosenedConstraints(prob, scale, excluded = []):
         if prob.constraints[constraint].name is not None:
             # get name of the nutrient. Constraint has naming convention
             # Min<constraint_name>Requirement or Max<constraint_name>Requirement
-            nutrient_name = prob.constraints[constraint].name[3:-11].lower().replace("_", " ")
+            nutrient_name = prob.constraints[constraint].name[3:-
+                                                              11].lower().replace("_", " ")
             nutrient_name = nutrient_name.rsplit(" ", 1)[0]
 
             if nutrient_name in excluded or nutrient_name in GENERAL_EXCLUDED_NUTRIENTS:
@@ -692,6 +706,7 @@ def solveWithLoosenedConstraints(prob, scale, excluded = []):
     prob.solve(PULP_CBC_CMD(msg=0))
 
     return prob
+
 
 def rreplace(s, old, new, occurrence):
     """
@@ -712,6 +727,7 @@ def rreplace(s, old, new, occurrence):
 
     li = s.rsplit(old, occurrence)
     return new.join(li)
+
 
 def print_soln_constraints(constraints):
     """

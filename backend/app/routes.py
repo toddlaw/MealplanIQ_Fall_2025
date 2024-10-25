@@ -94,15 +94,16 @@ def get_user_landing_page_profile(user_id):
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json
+    print("get data from frontend", data)
     db = instantiate_database()
     user_id = data["user_id"]
     user_data = extract_user_profile_data_from_json(data, user_id)
     extract_data = extract_data_from_json(data)
-
     db.update_user_profile(**user_data)
     process_user_data(db, user_id, extract_data)
 
     try:
+        print("data sent to gen_meal_plan", data)
         response = gen_meal_plan(data)
     except Exception as e:
         response = {"error": str(e)}

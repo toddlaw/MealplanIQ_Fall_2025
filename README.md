@@ -16,6 +16,11 @@ git clone https://github.com/toddlaw/MealPlanIQ_May_2024.git
 2. Create a Python virtual environment in the backend directory to store dependencies
 
 ```
+# go to backend folder
+cd backend
+```
+
+```
 # Linux / MacOS
 python3 -m venv venv
 
@@ -29,8 +34,13 @@ python -m venv venv
 # Linux / MacOS
 source venv/bin/activate
 
-# Windows
+# Windows powershell
 .\venv\Scripts\activate
+```
+
+```
+# Windows Gitbash
+source venv/scripts/activate
 ```
 
 4. Install dependencies in the backend directory
@@ -39,7 +49,16 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+```
+pip install cryptography
+```
+
 5. Install dependencies in the frontend directory
+
+```
+# go to frontend folder
+cd frontend
+```
 
 ```
 npm install --force
@@ -57,19 +76,35 @@ npm install -g @angular/cli
 
 ## Usage
 
-1. Make sure the Python environment is activated and run backend server in the backend directory
+1. Make sure the database is connected
+
+   1.1 Download the sql file (the file to be provided by the owner)
+
+   1.2 Rename the file to avoid white space in the name
+
+   1.3 Upload the database file into your local databse
+
+   Open command prompt and run
+
+   ```
+   mysql -u <username of your database connection> -p -t < <the file name with extension>
+   ```
+
+   1.4 Change the "password" variable in the .env to your database account password
+
+2. Make sure the Python environment is activated and run backend server in the backend directory
 
 ```
 flask run
 ```
 
-2.  Run the frontend server in the frontend directory
+3.  Run the frontend server in the frontend directory
 
 ```
 ng serve
 ```
 
-3. Access the application
+4. Access the application
 
 ```
 http://localhost:4200/

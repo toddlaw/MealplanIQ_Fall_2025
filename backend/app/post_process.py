@@ -20,7 +20,6 @@ def post_process_results(recipe_df, optimized_results, min_date, days):
     }
 
     """
-    print("--------before response", optimized_results)
     meals_by_calories = []
     optimized_snacks = []
     num_multiples = get_total_multiples(optimized_results)
@@ -190,7 +189,6 @@ def extract_recipes(array_of_recipe_dict):
 
     returns an array with the recipe name
     """
-    print("-----------recipes", array_of_recipe_dict)
     recipes = []
     for recipe in array_of_recipe_dict:
         while recipe['multiples'] > 0:
@@ -235,11 +233,7 @@ def balance_recipe_calories(recipe_df, recipes):
     takes recipes and balances them by calories. The goal is to reduce the
     disparity of calories between the days.
     """
-    print("sus1", recipe_df)
     column_headers_sus1 = list(recipe_df.columns.values)
-    print("The Column Header sus1 :", column_headers_sus1)
-    print("sus2", recipes)
-
     processed_recipe = []
     for recipe in recipes:
         processed_recipe.append(process_recipe(recipe_df, recipe))
@@ -261,9 +255,6 @@ def balance_recipe_calories(recipe_df, recipes):
         returned_recipes.append(low_cal.pop(0))
         returned_recipes.append(mid_cal.pop(0))
         returned_recipes.append(high_cal.pop(0))
-    print("sus3", returned_recipes)
-    # column_headers_sus3 = list(returned_recipes.columns.values)
-    # print("The Column Header :", column_headers_sus3)
     return returned_recipes
 
 
@@ -278,7 +269,6 @@ def create_meal_date(recipes, day):
     day_dict['date'] = day
     day_dict['date_weekday'] = date_object.strftime('%A %B %d')
     recipe_array = []
-    print("recipes for day array", recipes)
     for recipe in recipes:
         recipe_array.append(recipe)
 
@@ -313,24 +303,17 @@ def process_recipe(recipe_df, recipe_name):
 
     # retrive instructions
 
-
-    # print("recipe_dict_id", recipe_dict['id'])
     instruction_file_path = f"./meal_db/instructions/instructions_{recipe_dict['id']}.csv"
-    # print("instruction_file_path", instruction_file_path)
     ingredient_file_path = f"./meal_db/ingredients/{recipe_dict['id']}.csv"
 
     # instruction_content = pd.read_csv(instruction_file_path)
     # recipe_dict['instructions'] = instruction_content.values.tolist()
-    # print('typetype3', type(recipe_dict['instructions']))
-
 
     with open(instruction_file_path, newline='') as csvfile:
         content = csv.reader(csvfile)
         recipe_dict['instructions'] = []
         for row in content:
             recipe_dict['instructions'].append(row)
-    # print('recipe_dict_int', recipe_dict['instructions'])
-
 
     # retrive ingredients_with_quantities
 
@@ -342,9 +325,6 @@ def process_recipe(recipe_df, recipe_name):
         for row in content:
             recipe_dict['ingredients_with_quantities'].append(row)
 
-    # print('ingredients_with_quantities',
-    #       recipe_dict['ingredients_with_quantities'])
-
     for key, value in recipe_dict.items():
         res[key] = f"{value}"
 
@@ -353,8 +333,5 @@ def process_recipe(recipe_df, recipe_name):
     res['instructions'] = ast.literal_eval(res['instructions'])
     res['ingredients_with_quantities'] = ast.literal_eval(
         res['ingredients_with_quantities'])
-
-    # print('typetype3', type(recipe_dict['instructions']))
-    # print('typetype4', type(recipe_dict['ingredients']))
 
     return res

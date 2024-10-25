@@ -237,6 +237,8 @@ export class LandingComponent implements OnInit {
       includedRecipes: this.includedRecipes,
       excludedRecipes: this.excludedRecipes,
     };
+    console.log('included recipes:', data.includedRecipes);
+    console.log('this included recipes:', this.includedRecipes);
 
     // if (!data.maxDate && data.minDate) {
     //   data.maxDate = data.minDate;
