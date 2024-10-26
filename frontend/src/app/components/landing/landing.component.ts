@@ -346,20 +346,6 @@ export class LandingComponent implements OnInit {
           const title = "Sorry, we can't generate the meal plan.";
           const message = "Without a subscription, you can only generate a meal plan for one day.";
           this.openDialog(title, message, '/payment', 'Subscribe');
-          // return; // Exit the method if the plan exceeds one day
-        // const title = "Sorry, we can't generate the meal plan.";
-        // if (localStorage.getItem('uid')) {
-        //   // User is logged in
-        //   const message =
-        //     'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
-        //     selectedHealthGoalObject?.viewValue +
-        //     '!<br> Without subscription, you can generate meal plan to lose weight only.';
-        //   this.openDialog(title, message, '/payment', 'Subscribe');
-        // } else {
-        //   // User is not logged in
-        //   const message =
-        //     'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
-        //   this.openDialog(title, message, '/login', 'Login');
         }
       }
     }
