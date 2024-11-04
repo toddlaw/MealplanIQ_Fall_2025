@@ -156,6 +156,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob = LpProblem("Meal plan generation", LpMaximize)
     recipe_var = LpVariable.dicts("Recipes", recipes, lowBound=0,
                                   cat='Integer')
+    print("recipe_var",recipe_var)
 
     """
     Macros
@@ -545,11 +546,17 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob += lpSum([recipe_var[i] for i in recipes]) <= 11 * days
 
     # restrict the number of recipes that can be selected
-
+    print("exclude,",exclude)
     prob += lpSum([recipe_var[int(i)] for i in exclude]) == 0
 
     # recipe_var comes from generate_meal_plan.py 257
-    prob += lpSum([recipe_var[int(i)] for i in include]) >= len(include)
+    # :param exclude: list of strings, names of recipes to exclude
+    # :param include: list of strings, names of recipes to include
+    
+    # print("include,",include)
+    # prob += lpSum([recipe_var[int(i)] for i in include]) >= len(include)
+ 
+      
 
     CALORIE_CAP = 400
     MIN_CALORIE_CAP = 100
@@ -562,6 +569,11 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
         else:
             recipe_limit = 1
         prob += recipe_var[recipe] <= recipe_limit
+
+    snack_recipes = [recipe_id for recipe_id in recipe_var.keys() if 200681 <= recipe_id <= 200714]
+    print('snack_recipes',snack_recipes)
+
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in snack_recipes) == 2 * days
 
     # The problem data is written to an .lp file
 
@@ -628,6 +640,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     print("Status:", LpStatus[prob.status])
 
     result["constraint_targets"] = constraint_results
+    print('opt_result',result)
     return result
 
 
