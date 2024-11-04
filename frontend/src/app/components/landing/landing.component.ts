@@ -43,6 +43,7 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
+  expanded: boolean = false;  // expanded state of the panel--for the nutrient table
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
