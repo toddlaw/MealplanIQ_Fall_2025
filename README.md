@@ -1,4 +1,4 @@
-# MealPlanIQ_May_2024
+# MealPlanIQ_Fall_2024
 
 ## Required
 
@@ -49,10 +49,6 @@ source venv/scripts/activate
 pip install -r requirements.txt
 ```
 
-```
-pip install cryptography
-```
-
 5. Install dependencies in the frontend directory
 
 ```
@@ -80,9 +76,9 @@ npm install -g @angular/cli
 
    1.1 Download the sql file (the file to be provided by the owner)
 
-   1.2 Rename the file to avoid white space in the name
+   1.2 Rename the file to remove white space in the filename
 
-   1.3 Upload the database file into your local databse
+   1.3 Upload the database file into your local database:
 
    Open command prompt and run
 
