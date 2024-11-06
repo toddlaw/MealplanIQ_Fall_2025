@@ -27,38 +27,49 @@
 
   <div class="flex flex-col pt-5 px-5">
     <h2 class="mb-2"><b>Ingredients:</b></h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Ingredient</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-        *ngFor="
-          let ingredient_with_quantity of data.recipe.ingredients_with_quantities.slice(
-            1
-          )
-        "
-      >
-          <td> {{ ingredient_with_quantity[0] }} </td>
-          <td> {{ ingredient_with_quantity[1] | fraction }} </td>
-          <td> {{ ingredient_with_quantity[2] }} </td>
-          <td> 
-            <span *ngIf="ingredient_with_quantity[3]">
-              ({{ ingredient_with_quantity[3] }})
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h2 class="pt-4 mb-4" *ngIf="data.recipe.instructions.length > 0" ><b>Instructions:</b></h2>
-    <ol *ngIf="data.recipe.instructions.length > 0">
-      <li *ngFor="let instruction of data.recipe.instructions.slice(1)">
-        {{ instruction[0] }}. {{ [instruction[1]] }}
-      </li>
+  
+    <ng-container *ngFor="let part of parts">
+      <h3 class="my-3" *ngIf="part.header">{{ part.header }}</h3>
+  
+      <table class="table ingredients-table">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <ng-container *ngFor="let ingredient of part.ingredients">
+          <tr>
+            <td>{{ ingredient.name }}</td>
+            <td>{{ (ingredient.quantity) | fraction }}</td>
+            <!-- <td>{{ ingredient.quantity | fraction }}</td> -->
+            <td>{{ ingredient.unit }}</td>
+            <td *ngIf="ingredient.state">
+              ({{ ingredient.state }})
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+  
+    <h2 class="pt-4 mb-4 instructions-heading" *ngIf="instructions.length > 0">
+      <b>Instructions:</b>
+    </h2>
+    <ol *ngIf="instructions.length > 0">
+      <ng-container *ngFor="let instruction of instructions">
+        <li *ngIf="instruction.step === null" [ngClass]="{'subheading-spacing': instruction.step === null}">
+          <i>{{ instruction.text }}</i> 
+        </li>
+        <li *ngIf="instruction.step !== null" class="instruction-item">
+          <div class="step">{{ instruction.step }}.</div>
+          <div class="text">{{ instruction.text }}</div>
+        </li>
+      </ng-container>
     </ol>
   </div>
 

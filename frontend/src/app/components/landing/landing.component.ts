@@ -262,11 +262,11 @@ export class LandingComponent implements OnInit {
         this.userSubscriptionTypeId === 1 ||
         this.userSubscriptionTypeId === 2 ||
         (this.userSubscriptionTypeId === 0 &&
-          data.maxDate === data.minDate &&
-          this.selectedHealthGoal === 'lose_weight') ||
+          data.maxDate === data.minDate ) ||
         (this.userSubscriptionTypeId === 3 &&
-          this.selectedHealthGoal === 'lose_weight')
-      ) {
+          data.maxDate === data.minDate )
+      )
+        {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
           behavior: 'smooth',
@@ -320,25 +320,44 @@ export class LandingComponent implements OnInit {
             }
           );
       } else {
-        this.showSpinner = false;
-        this.errorDiv.nativeElement.style.display = 'block';
-        this.element.nativeElement.style.display = 'none';
-        const selectedHealthGoalObject = healthGoals.find(
-          (goal) => goal.value === this.selectedHealthGoal
-        );
-        const title = "Sorry, we can't generate the meal plan.";
-        if (localStorage.getItem('uid')) {
-          // User is logged in
-          const message =
-            'Selected health goal is for subscribed users.<br> Subscribe to get the meal plan to ' +
-            selectedHealthGoalObject?.viewValue +
-            '!<br> Without subscription, you can generate meal plan to lose weight only.';
-          this.openDialog(title, message, '/payment', 'Subscribe');
-        } else {
-          // User is not logged in
-          const message =
-            'Login to explore more features!<br>Without login, you can only generate the meal plan to lose weight for one day.';
-          this.openDialog(title, message, '/login', 'Login');
+        if ((this.userSubscriptionTypeId === 1 || this.userSubscriptionTypeId === 2) && data.maxDate !== data.minDate) {
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'block';
+          this.element.nativeElement.style.display = 'none';
+          const selectedHealthGoalObject = healthGoals.find(
+            (goal) => goal.value === this.selectedHealthGoal
+          );
+
+        } 
+
+          else if (
+            (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
+            (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate)
+          ) {
+            this.showSpinner = false;
+            this.errorDiv.nativeElement.style.display = 'block';
+            this.element.nativeElement.style.display = 'none';
+            const selectedHealthGoalObject = healthGoals.find(
+              (goal) => goal.value === this.selectedHealthGoal
+            );
+        } else if 
+          (this.userSubscriptionTypeId === 0 && data.maxDate != data.minDate) {
+            this.showSpinner = false; 
+            this.errorDiv.nativeElement.style.display = 'none'; 
+            this.element.nativeElement.style.display = 'none'; 
+  
+            const title = "Subscription Required";
+            const message = "Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.";
+            this.openDialog(title, message, '/sign-up', 'Sign Up');
+         } else {
+          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
+          this.showSpinner = false; 
+          this.errorDiv.nativeElement.style.display = 'none';
+          this.element.nativeElement.style.display = 'none'; 
+
+          const title = "Subscription Required";
+          const message = "Multi-day plans require a subscription. Try it now for only $5/month. Cancel anytime.";
+          this.openDialog(title, message, '/payment', 'Upgrade');
         }
       }
     }
@@ -659,13 +678,28 @@ export class LandingComponent implements OnInit {
   }
 
   openRecipeDialog(recipe: any): void {
-    this.dialog.open(RecipeDialogComponent, {
-      data: {
-        recipe: recipe,
-        imageUrl: this.getImageUrl(recipe.id),
-      },
-      width: '800px',
-    });
+  const data = {
+    minDate: this.startDate.get('start')!.value?.getTime(),
+    maxDate: this.startDate.get('end')!.value?.getTime(),
+  };
+
+  if (
+    this.userSubscriptionTypeId === 1 ||
+    this.userSubscriptionTypeId === 2 ||
+    this.userSubscriptionTypeId === 3
+  )  {
+      this.dialog.open(RecipeDialogComponent, {
+        data: {
+          recipe: recipe,
+          imageUrl: this.getImageUrl(recipe.id),
+        },
+        width: '800px',
+      });
+    } else if (this.userSubscriptionTypeId === 0) {
+      const title = 'Sign Up and Try!';
+      const message = 'To see recipe details for this plan, please sign up.  No credit card or payment required.';
+      this.openDialog(title, message, '/sign-up', 'Sign Up');
+    }
   }
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
