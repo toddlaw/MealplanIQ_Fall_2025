@@ -10,42 +10,35 @@ export class FractionPipe implements PipeTransform {
     return this.greatestCommonDivisor(b, a % b);
   }
 
-  transform(value: number): string {
+  transform(value: number | string): string {
+    if (typeof value === 'string' && value.includes('/')) {
+      return value; 
+    }
+
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+
     const tolerance = 0.01;
-
-    if (Math.abs(value - 1/3) < tolerance) {
+    if (Math.abs(numValue - 1 / 3) < tolerance) {
       return '1/3';
-    } else if (Math.abs(value - 2/3) < tolerance) {
+    } else if (Math.abs(numValue - 2 / 3) < tolerance) {
       return '2/3';
-    } 
-
-    if (value % 1 === 0) {
-      return value.toString();
+    } else if (Math.abs(numValue - 3 / 4) < tolerance) {
+      return '3/4';
     }
 
-    let wholeNumber = Math.floor(value);
-    let decimalPart = value - wholeNumber;
-
-    let numerator = 1;
-    let denominator = 1;
-    let frac = decimalPart;
-
-    const maxDenominator = 100;
-
-    while (Math.abs(frac - Math.round(frac)) > 1e-6 && denominator <= maxDenominator) {
-      denominator++;
-      frac = decimalPart * denominator;
+    if (numValue % 1 === 0) {
+      return numValue.toString();
     }
 
-    numerator = Math.round(frac);
+    let wholeNumber = Math.floor(numValue);
+    let decimalPart = numValue - wholeNumber;
+
+    let numerator = Math.round(decimalPart * 100);
+    let denominator = 100;
 
     const gcd = this.greatestCommonDivisor(numerator, denominator);
     numerator /= gcd;
     denominator /= gcd;
-
-    if (denominator === 1) {
-      return `${wholeNumber + numerator}`;
-    }
 
     if (wholeNumber !== 0) {
       return `${wholeNumber} ${numerator}/${denominator}`;

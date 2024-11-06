@@ -29,7 +29,7 @@
     <h2 class="mb-2"><b>Ingredients:</b></h2>
   
     <ng-container *ngFor="let part of parts">
-      <h3 class="my-3" *ngIf="part.header"><b>{{ part.header }}</b></h3>
+      <h3 class="my-3" *ngIf="part.header">{{ part.header }}</h3>
   
       <table class="table ingredients-table">
         <thead>
@@ -45,8 +45,8 @@
           <ng-container *ngFor="let ingredient of part.ingredients">
           <tr>
             <td>{{ ingredient.name }}</td>
+            <td>{{ (ingredient.quantity) | fraction }}</td>
             <!-- <td>{{ ingredient.quantity | fraction }}</td> -->
-            <td>{{ ingredient.quantity }}</td>
             <td>{{ ingredient.unit }}</td>
             <td *ngIf="ingredient.state">
               ({{ ingredient.state }})
@@ -57,16 +57,17 @@
       </table>
     </ng-container>
   
-    <h2 class="pt-4 mb-4" *ngIf="instructions.length > 0">
+    <h2 class="pt-4 mb-4 instructions-heading" *ngIf="instructions.length > 0">
       <b>Instructions:</b>
     </h2>
     <ol *ngIf="instructions.length > 0">
       <ng-container *ngFor="let instruction of instructions">
-        <li *ngIf="instruction.step === null">
+        <li *ngIf="instruction.step === null" [ngClass]="{'subheading-spacing': instruction.step === null}">
           <i>{{ instruction.text }}</i> 
         </li>
-        <li *ngIf="instruction.step !== null"> 
-          {{ instruction.step }}. {{ instruction.text }}
+        <li *ngIf="instruction.step !== null" class="instruction-item">
+          <div class="step">{{ instruction.step }}.</div>
+          <div class="text">{{ instruction.text }}</div>
         </li>
       </ng-container>
     </ol>
