@@ -40,6 +40,8 @@ def post_process_results(recipe_df, optimized_results, min_date, days):
         days = create_days_array(recipe_df, optimized_results, min_date, days)
         response['days'] = days
         response['snacks'] = create_snacks_array(recipe_df, optimized_snacks)
+    print("4444444:",response['snacks'])
+    print("===============")
 
     return response
 
@@ -51,6 +53,8 @@ def create_snacks_array(recipe_df, optimized_snacks):
     recipe, creates an array of dictionaries that contain all of the information
     for the recipes that the frontend expects
     """
+    print("333333333333",optimized_snacks)
+    print("======================================")
     snacks_array = []
     for snack in optimized_snacks:
         recipe = process_recipe(recipe_df, snack['name'])
@@ -92,6 +96,8 @@ def reduce_optimized_results(meals_by_calories, num_multiples,
                 optimized_results, optimized_snacks, lowest_cal_recipe_name)
             num_multiples_of_lowest_cal_recipe -= 1
             current_multiples = get_total_multiples(optimized_results)
+    print("optimized snacks", optimized_snacks)
+    print("optimized_results", optimized_snacks)
 
     return optimized_results, optimized_snacks
 

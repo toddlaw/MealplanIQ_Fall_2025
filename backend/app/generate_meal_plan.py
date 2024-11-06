@@ -40,6 +40,7 @@ def process_response_meal_name(response):
 
     # delete this part after the composite meal logic is completed
     for day in response["days"]:
+        print("day_recipes",day["recipes"])
         day["recipes"][0]["meal_name"] = "Breakfast"
         day["recipes"][1]["meal_name"] = "Lunch"
         day["recipes"][2]["meal_name"] = "Dinner"
@@ -192,7 +193,7 @@ def is_within_target(actual, target):
 
 
 def update_meals_with_snacks(response, snack_recipes_df):
-    snacks = response["snacks"]
+    snacks = response["snacks"]  # optimized results snacks
     new_snacks = process_the_recipes_with_snacks(snacks, snack_recipes_df)
     response["snacks"] = new_snacks
 
@@ -300,14 +301,17 @@ def gen_meal_plan(data):
         exclude=data["excludedRecipes"],
         include=data["includedRecipes"],
     )
+    print("optimized_results",optimized_results)
 
     # 9. Post-process response
     response = post_process_results(
         recipes_with_scores, optimized_results, min_date, days
     )
-    # print("response1:", response)
+    print("response1:", response)  # at this point, fake snack
+    print("=============")
     response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    # print("response2:", response)
+    print("response2:", response)  # at this point, real snack 
+    print("=============")
     response = process_response_meal_name(response)
     # print("response3:", response)
     response = distribute_snacks_to_date(response)
