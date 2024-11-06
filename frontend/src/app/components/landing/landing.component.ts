@@ -327,16 +327,6 @@ export class LandingComponent implements OnInit {
           );
 
         } 
-        // else if (
-        //   (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight') ||
-        //   (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate && this.selectedHealthGoal === 'lose_weight')
-        // ) {
-        //   this.showSpinner = false;
-        //   this.errorDiv.nativeElement.style.display = 'block';
-        //   this.element.nativeElement.style.display = 'none';
-        //   const selectedHealthGoalObject = healthGoals.find(
-        //     (goal) => goal.value === this.selectedHealthGoal
-        //   );
 
           else if (
             (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
@@ -350,8 +340,8 @@ export class LandingComponent implements OnInit {
             );
         } else if 
           (this.userSubscriptionTypeId === 0 && data.maxDate != data.minDate) {
-            this.showSpinner = false; // Hide spinner if it's currently shown
-            this.errorDiv.nativeElement.style.display = 'none'; // Show the error div
+            this.showSpinner = false; 
+            this.errorDiv.nativeElement.style.display = 'none'; 
             this.element.nativeElement.style.display = 'none'; 
   
             const title = "Subscription Required";
@@ -359,8 +349,8 @@ export class LandingComponent implements OnInit {
             this.openDialog(title, message, '/sign-up', 'Sign Up');
          } else {
           // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
-          this.showSpinner = false; // Hide spinner if it's currently shown
-          this.errorDiv.nativeElement.style.display = 'none'; // Show the error div
+          this.showSpinner = false; 
+          this.errorDiv.nativeElement.style.display = 'none';
           this.element.nativeElement.style.display = 'none'; 
 
           const title = "Subscription Required";
@@ -686,42 +676,10 @@ export class LandingComponent implements OnInit {
   }
 
   openRecipeDialog(recipe: any): void {
-  //   this.dialog.open(RecipeDialogComponent, {
-  //     data: {
-  //       recipe: recipe,
-  //       imageUrl: this.getImageUrl(recipe.id),
-  //     },
-  //     width: '800px',
-  //   });
-  // }
   const data = {
     minDate: this.startDate.get('start')!.value?.getTime(),
     maxDate: this.startDate.get('end')!.value?.getTime(),
   };
-
-  // if (
-  //   this.userSubscriptionTypeId === 1 ||
-  //   this.userSubscriptionTypeId === 2 ||
-  //   (this.userSubscriptionTypeId === 3 &&
-  //     this.selectedHealthGoal === 'lose_weight')
-  // )  {
-  //     this.dialog.open(RecipeDialogComponent, {
-  //       data: {
-  //         recipe: recipe,
-  //         imageUrl: this.getImageUrl(recipe.id),
-  //       },
-  //       width: '800px',
-  //     });
-  //   } else if (this.userSubscriptionTypeId === 0) {
-  //     const title = 'Sign Up and Try!';
-  //     const message = 'To see recipe details for this plan, please sign up.  No credit card or payment required.';
-  //     this.openDialog(title, message, '/sign-up', 'Sign Up');
-  //   } else {
-  //     const title = 'Subscription Required';
-  //     const message = 'Recipe details for your chosen health goal require a subscription.  Try it now for only $5/month.  Cancel anytime.';
-  //     this.openDialog(title, message, '/payment', 'Upgrade');
-  //   }
-  // }
 
   if (
     this.userSubscriptionTypeId === 1 ||
