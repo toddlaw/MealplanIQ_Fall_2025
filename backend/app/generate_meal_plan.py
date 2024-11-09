@@ -301,16 +301,23 @@ def gen_meal_plan(data):
         exclude=data["excludedRecipes"],
         include=data["includedRecipes"],
     )
-    print("optimized_results",optimized_results)
+    print("optimized_results1",optimized_results)
+
+    optimized_snacks = []
+    optimized_snacks = [recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) > 200000]
+    optimized_results["recipes"] = [recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) <= 200000]
+
+    print("11-08-01",optimized_results["recipes"])
+    print("11-08-02",optimized_snacks)
 
     # 9. Post-process response
     response = post_process_results(
-        recipes_with_scores, optimized_results, min_date, days
+        recipes_with_scores, optimized_results, optimized_snacks, min_date, days
     )
-    print("response1:", response)  # at this point, fake snack
+    print("response1:", response)  
     print("=============")
     response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    print("response2:", response)  # at this point, real snack 
+    print("response2:", response)  
     print("=============")
     response = process_response_meal_name(response)
     # print("response3:", response)

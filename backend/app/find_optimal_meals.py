@@ -152,11 +152,12 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     macros = modifyUserConstraintsByDays(days, macros)
 
     # Create user ref and diet
+    # objective function
     recipes = recipe_dict["number"]
     prob = LpProblem("Meal plan generation", LpMaximize)
     recipe_var = LpVariable.dicts("Recipes", recipes, lowBound=0,
-                                  cat='Integer')
-    print("recipe_var",recipe_var)
+                                  cat='Integer')  # define varValue as integer, meaning the count of each recipe in the solution 
+    # print("recipe_var",recipe_var)
 
     """
     Macros
@@ -570,10 +571,11 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
             recipe_limit = 1
         prob += recipe_var[recipe] <= recipe_limit
 
+    # add constraints to make the result containing 2 * days snacks
     snack_recipes = [recipe_id for recipe_id in recipe_var.keys() if 200681 <= recipe_id <= 200714]
     print('snack_recipes',snack_recipes)
 
-    prob += lpSum(recipe_var[recipe_id] for recipe_id in snack_recipes) == 2 * days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in snack_recipes) == 2*days
 
     # The problem data is written to an .lp file
 
@@ -611,12 +613,15 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
         print("Solved for meal plan with loosened constraints")
 
     recipe_name_quant = []
+    # print("prob.variables()",prob.variables())
+    print("summary:\n")
     for v in prob.variables():
         if v.varValue is not None and v.varValue > 0:
             recipe_id = v.name[8:]
             recipe_name = recipe_df.loc[recipe_df['number'] == int(
                 recipe_id)]['title'].values[0]
             recipe_name_quant.append({'name': f"{recipe_name}",
+                                      'id':recipe_id,               # add a field "id" to help the following track of the snack recipe
                                       'multiples': v.varValue})
 
             print(recipe_name, "=", v.varValue)
@@ -640,7 +645,6 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     print("Status:", LpStatus[prob.status])
 
     result["constraint_targets"] = constraint_results
-    print('opt_result',result)
     return result
 
 
