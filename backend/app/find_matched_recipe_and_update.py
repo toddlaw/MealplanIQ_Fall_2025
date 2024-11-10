@@ -2,7 +2,7 @@ import pandas as pd
 import ast
 import time
 from app.generate_meal_plan import gen_shopping_list, insert_status_nutrient_info
-from app.post_process_with_real_snack import process_recipe
+from app.post_process import process_recipe
 
 
 def find_matched_recipe_and_update(response, recipe_id):
@@ -22,6 +22,8 @@ def find_matched_recipe_and_update(response, recipe_id):
     all_recipes_df = pd.read_csv("./meal_db/meal_database.csv")
     snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"]
                                       == "['snack']"]
+    #print("snack recipes:",snack_recipes_df[['subregion', 'title']])
+   
 
     # Traverse the response to find and remove the clicked recipe
     for day in response["days"]:
@@ -48,6 +50,10 @@ def find_matched_recipe_and_update(response, recipe_id):
     # Ensure that a matched recipe is found before proceeding
     if recipe_to_replace:
         recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
+        
+        # changed list within string to just list (so frontend can read instructions and ingredients)
+        recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
+        recipe_to_replace['ingredients_with_quantities'] = ast.literal_eval(recipe_to_replace['ingredients_with_quantities'])
 
         # Update the recipe at the same position
         response["days"][date_counter]["recipes"].insert(
@@ -157,11 +163,23 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
 
         # Find the row with the minimum calories difference from the remaining rows
         matched_recipe_row = filtered_recipe_df.sample(n=1).iloc[0]
-
-        matched_recipe = process_recipe(matched_recipe_row)
+        #matched_recipe = process_recipe(matched_recipe_row)
+        
+        # USING process_recipe function from post_processing instead of post_process_with_real_snack
+        # Convert matched_recipe_row to a single-row DataFrame
+        matched_recipe_df = pd.DataFrame([matched_recipe_row])
+        # Extract the recipe name from the row for process_recipe call
+        recipe_name = matched_recipe_row['title']
+        # Now call process_recipe with single row DataFrame and recipe name
+        matched_recipe = process_recipe(matched_recipe_df, recipe_name)
+        
+        # Had issue where lists would be turned into strings (f'') in process_recipe
+        # fixed in find_matched_recipe_and_update method
 
         for key, value in matched_recipe.items():
             matched_recipe[key] = f"{value}"
+        
+        #print('MATCHED RECIEPE',matched_recipe)
 
     print("New id found is", matched_recipe["id"])
 

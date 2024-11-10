@@ -8,7 +8,7 @@ from app.retrieve_diet import get_diet_plan
 from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
 from app.post_process import post_process_results
-from app.post_process_with_real_snack import process_the_recipes_with_snacks
+# from app.post_process_with_real_snack import process_the_recipes_with_snacks
 import json
 import os
 import pandas as pd
@@ -316,21 +316,21 @@ def gen_meal_plan(data):
     )
     print("response1:", response)  
     print("=============")
-    response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    print("response2:", response)  
-    print("=============")
+    #response = update_meals_with_snacks(response, snack_recipes_df.copy())
+    #print("response2:", response)  
+    #print("=============")
     response = process_response_meal_name(response)
-    # print("response3:", response)
+    print("response3:", response)
     response = distribute_snacks_to_date(response)
-    # print("response4:", response)
+    #print("response4:", response)
     response = insert_snacks_between_meals(response)
-    # print("response5:", response)
+    #print("response5:", response)
     response = process_type_normal(response)
-    # print("response6:", response)
+    #print("response6:", response)
     response = insert_status_nutrient_info(response)
-    # print("response7:", response)
+    #print("response7:", response)
     response = gen_shopping_list(response)
-    # print("response8:", response)
+    #print("\n\nresponse8:\n\n", response)
 
     return response
 
