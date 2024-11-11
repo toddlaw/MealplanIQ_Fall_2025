@@ -51,9 +51,10 @@ def find_matched_recipe_and_update(response, recipe_id):
     if recipe_to_replace:
         recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
         
+        if recipe_to_replace["meal_name"] == 'Snack':
         # changed list within string to just list (so frontend can read instructions and ingredients)
-        recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
-        recipe_to_replace['ingredients_with_quantities'] = ast.literal_eval(recipe_to_replace['ingredients_with_quantities'])
+            recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
+            recipe_to_replace['ingredients_with_quantities'] = ast.literal_eval(recipe_to_replace['ingredients_with_quantities'])
 
         # Update the recipe at the same position
         response["days"][date_counter]["recipes"].insert(
