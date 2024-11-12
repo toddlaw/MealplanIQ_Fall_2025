@@ -73,32 +73,56 @@ def gen_shopping_list(response):
 
 
 def distribute_snacks_to_date(response):
+    
+    # New function distributes snacks acroess given number of days, with two meals per day. 
+    # Accounts for multiples of each snack to be used across days.
     """
     Distribute snacks evenly across a given number of days, with an additional distribution of any remainder
     to minimize consecutive days without snacks.
     """
-    days_len = len(response["days"])
-    snacks_len = len(response["snacks"])
+    
+    # create list of multiples of each snack
+    snack_multiples = []
+    for snack in response["snacks"]:
+        snack_multiples.append(int(snack["multiples"]))
+        print(snack_multiples)
 
-    min_num_snacks_in_a_day = snacks_len // days_len
-    remainder = snacks_len % days_len
-
-    snack_index = 0
+    num_snacks_in_a_day = 2 # 2 snacks in a day
 
     # Even distribution
+    snack_index = 0
     for day in response["days"]:
-        for _ in range(min_num_snacks_in_a_day):
-            day["recipes"].append(response["snacks"][snack_index])
-            snack_index += 1
-
+        for _ in range(num_snacks_in_a_day):
+            if snack_multiples[snack_index] > 0:
+            # if multiple of snack is > 0
+                day["recipes"].append(response["snacks"][snack_index])
+                #print("APPENDED SNACK",response["snacks"][i])
+                snack_multiples[snack_index] -=1
+                # reduce multiple by 1
+                
+            else:    
+                snack_index+=1
+                # move to the next snack
+                day["recipes"].append(response["snacks"][snack_index])
+                #print("APPENDED SNACK",response["snacks"][i])
+                snack_multiples[snack_index] -=1
+                # reduce multiple by 1
+        
+    # OLD LOGIC
+    # days_len = len(response["days"])
+    # snacks_len = len(response["snacks"])
+    
+    #snacks_len // days_len
+    #remainder = snacks_len % days_len
+    
     # Distribute the remainder in a way that minimizes consecutive days without snacks
-    if remainder > 0:
-        interval = days_len // remainder
-        for i in range(remainder):
-            response["days"][i * interval]["recipes"].append(
-                response["snacks"][snack_index]
-            )
-            snack_index += 1
+    # if remainder > 0:
+    #     interval = days_len // remainder
+    #     for i in range(remainder):
+    #         response["days"][i * interval]["recipes"].append(
+    #             response["snacks"][snack_index]
+    #         )
+    #         snack_index += 1
 
     return response
 
@@ -142,11 +166,11 @@ def insert_snacks_between_meals(response):
         insert_between_breakfast_lunch = (
             breakfast_indices[-1] + 1 if breakfast_indices else 0
         )
-        print("\n\nINSERTION POINT1:  \n\n",insert_between_breakfast_lunch)
+        #print("\n\nINSERTION POINT1:  \n\n",insert_between_breakfast_lunch)
         insert_between_lunch_dinner = (
             lunch_indices[-1] + 1 if lunch_indices else len(day["recipes"])
         )
-        print("\n\nINSERTION POINT2:  \n\n",insert_between_lunch_dinner)
+        #print("\n\nINSERTION POINT2:  \n\n",insert_between_lunch_dinner)
 
         # Split snacks into two approximately equal parts
         mid = (
@@ -156,22 +180,20 @@ def insert_snacks_between_meals(response):
         snacks1 = snacks[:mid]
         snacks2 = snacks[mid:]
         
-        print("\n\nSNACK1: \n\n",snacks1)
-        print("\n\nSNACK2: \n\n",snacks2)
+        #print("\n\nSNACK1: \n\n",snacks1)
+        #print("\n\nSNACK2: \n\n",snacks2)
 
         # Insert snacks into the right positions
         for snack in reversed(snacks1):
             day["recipes"].insert(insert_between_breakfast_lunch, snack)
             
-        print("\n\nRESPONSE AFTER INSERTION1:  \n\n",response)
+        #print("\n\nRESPONSE AFTER INSERTION1:  \n\n",response)
 
         # Adjust the second insertion point after inserting the first batch of snacks
         insert_between_lunch_dinner = insert_between_lunch_dinner + len(snacks1)
-        print("\n\nADJUSTED INSERTION POINT2:  \n\n",insert_between_lunch_dinner)
+        #print("\n\nADJUSTED INSERTION POINT2:  \n\n",insert_between_lunch_dinner)
         
-        #currently snacks2 is empty (there's only one snack in the snack list at end of response)
-        #so use snack1 to insert between lunch and dinner
-        for snack in reversed(snacks1):
+        for snack in reversed(snacks2):
             day["recipes"].insert(insert_between_lunch_dinner, snack)
 
     return response
@@ -330,7 +352,7 @@ def gen_meal_plan(data):
     #print("response2:", response)  
     #print("=============")
     response = process_response_meal_name(response)
-    #print("response3:", response)
+    print("response3:", response)
     response = distribute_snacks_to_date(response)
     #print("response4:", response)
     response = insert_snacks_between_meals(response)
