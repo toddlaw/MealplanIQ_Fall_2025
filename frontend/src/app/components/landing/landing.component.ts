@@ -43,13 +43,35 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
+  expanded: boolean = false;  // expanded state of the panel--for the nutrient table
+
+  // group the nutrients into 3 categories: macros, vitamins, minerals
+  macros: any[] = [];
+  vitamins: any[] = [];
+  minerals: any[] = [];
+  energy: any[] = [];
+
+
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
     private refresh: RefreshComponent
-  ) {}
+  ) { }
+  // generate day of the week
+  getDayOfWeek(date: string): string {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const d = new Date(date);
+    return days[d.getDay()];
+  }
+  // change date format to e.g. September 14, 2024
+  formatDate(date: string): string {
+    const utcDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return utcDate.toLocaleDateString('en-US', options);
+  }
+
 
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
@@ -145,7 +167,7 @@ export class LandingComponent implements OnInit {
         const response: any = await this.http
           .get(
             'http://127.0.0.1:5000/api/subscription_type_id/' +
-              localStorage.getItem('uid')
+            localStorage.getItem('uid')
           )
           .toPromise();
         if (response.subscription_type_id) {
@@ -167,7 +189,7 @@ export class LandingComponent implements OnInit {
       this.http
         .get(
           'http://127.0.0.1:5000/api/landing/profile/' +
-            localStorage.getItem('uid')
+          localStorage.getItem('uid')
         )
         .subscribe((data: any) => {
           this.people[0].age = data.age;
@@ -176,10 +198,102 @@ export class LandingComponent implements OnInit {
           this.people[0].gender = data.gender;
           this.people[0].activityLevel = data.activity_level;
           this.selectedUnit = data.selected_unit || 'metric';
+          // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
+          this.mealPlanResponse.days.forEach((day: { recipes: { meal_name: string }[] }) => {
+            day.recipes.sort((a: { meal_name: string }, b: { meal_name: string }) => {
+              const mealOrder = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner', 'Snack'];
+              return mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name);
+            });
+          });
+
+
+
         });
     }
+
   }
 
+  categorizeNutrients() {
+    this.energy = [];  // add new "Energy" category
+    this.macros = [];
+    this.vitamins = [];
+    this.minerals = [];
+
+    // define nutrient aliases
+    const nutrientAliases: { [key: string]: string } = {
+      'thiamin (mg)': 'Vitamin B1 (Thiamine)',
+      'riboflavin (mg)': 'Vitamin B2 (Riboflavin)',
+      'niacin (mg)': 'Vitamin B3 (Niacin)',
+      'vitamin_b5 (mg)': 'Vitamin B5 (Pantothenic Acid)',
+      'vitamin_b6 (mg)': 'Vitamin B6 (Pyridoxine)',
+      'vitamin_b12 (ug)': 'Vitamin B12 (Cobalamin)',
+      'folate (ug)': 'Vitamin B9 (Folate)',
+      'vitamin_a (iu)': 'Vitamin A',
+      'vitamin_c (mg)': 'Vitamin C',
+      'vitamin_d (iu)': 'Vitamin D',
+      'vitamin_e (mg)': 'Vitamin E',
+      'vitamin_k (ug)': 'Vitamin K'
+    };
+
+    this.mealPlanResponse.tableData.forEach((nutrient: any) => {
+      const nutrientName = nutrient.nutrientName.toLowerCase();
+      // replace nutrient name with alias if it exists
+      if (nutrientAliases[nutrientName]) {
+        nutrient.displayName = nutrientAliases[nutrientName];
+      } else {
+        // use the original name if no alias is found
+        nutrient.displayName = nutrient.nutrientName;
+      }
+
+      // Parse display_target as range or single value
+      if (typeof nutrient.display_target === 'string' && nutrient.display_target.includes('-')) {
+        const [min, max] = nutrient.display_target.split('-').map((val: string) => parseFloat(val.trim()));
+        nutrient.display_target_min = min;
+        nutrient.display_target_max = max;
+      } else {
+        const target = parseFloat(nutrient.display_target);
+        nutrient.display_target_min = target;
+        nutrient.display_target_max = target;
+      }
+
+
+      if (nutrientName === 'energy (calories)') {
+        this.energy.push(nutrient);
+      } else if (['fiber (g)', 'carbohydrates (g)', 'protein (g)', 'fats (g)'].includes(nutrientName)) {
+        this.macros.push(nutrient);
+      } else if (Object.keys(nutrientAliases).includes(nutrientName)) {
+        nutrient.displayName = nutrientAliases[nutrientName];
+        this.vitamins.push(nutrient);
+      } else {
+        nutrient.displayName = nutrient.nutrientName;
+        this.minerals.push(nutrient);
+      }
+    }
+    );
+    // sort minerals and vitamins 
+    this.minerals.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    this.vitamins.sort((a, b) => {
+      const extractVitaminInfo = (name: string) => {
+        const match = name.match(/vitamin\s*(\D*)(\d*)/i);
+        if (match) {
+          const letterPart = match[1].toUpperCase();
+          const numberPart = match[2] ? parseInt(match[2], 10) : 0;
+          return { letterPart, numberPart };
+        }
+        return { letterPart: name, numberPart: 0 };
+      };
+
+      const aInfo = extractVitaminInfo(a.displayName);
+      const bInfo = extractVitaminInfo(b.displayName);
+
+      // sort by letterPart first, then by numberPart
+      if (aInfo.letterPart === bInfo.letterPart) {
+        return aInfo.numberPart - bInfo.numberPart;
+      }
+      return aInfo.letterPart.localeCompare(bInfo.letterPart);
+    });
+
+  }
   /**
    * Shows the terms and conditions dialog and sends the data if the terms and conditions are accepted
    */
@@ -281,11 +395,16 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              console.log(response);
+              // console.log("test");
+              console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
+              //
+              if (this.mealPlanResponse.tableData) {
+                this.categorizeNutrients();
+              }
               this.getShoppingListFromBackend().subscribe(
                 (secondResponse) => {
                   console.log('Fetched Shopping List: ', secondResponse);
@@ -453,7 +572,7 @@ export class LandingComponent implements OnInit {
   /**
    * Click handler for the "Get Full Meal Plan" button
    */
-  getFullMealPlan() {}
+  getFullMealPlan() { }
 
   /**
    * Replace a recipe in the meal plan
@@ -713,4 +832,5 @@ export class LandingComponent implements OnInit {
       }
     );
   }
+
 }
