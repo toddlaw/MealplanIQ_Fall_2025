@@ -67,7 +67,7 @@ export class LandingComponent implements OnInit {
   }
   // change date format to e.g. September 14, 2024
   formatDate(date: string): string {
-    const utcDate = new Date(date + 'T00:00:00Z');
+    const utcDate = new Date(date);
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return utcDate.toLocaleDateString('en-US', options);
   }
@@ -210,23 +210,16 @@ export class LandingComponent implements OnInit {
 
         });
     }
-    // console.log("123456789")
-    // console.log('Meal Plan Response:', this.mealPlanResponse);
-    // console.log("1111")
-    // console.log('Table Data:', this.mealPlanResponse.tableData);
 
-    // if (this.mealPlanResponse.tableData) {
-    //   this.categorizeNutrients(); // 调用 categorizeNutrients 方法进行分类
-    // }
   }
-  // 我改的我改的我改的
+
   categorizeNutrients() {
-    this.energy = [];  // 新增的 "Energy" 分类
+    this.energy = [];  // add new "Energy" category
     this.macros = [];
     this.vitamins = [];
     this.minerals = [];
 
-    // 定义营养素别名字典
+    // define nutrient aliases
     const nutrientAliases: { [key: string]: string } = {
       'thiamin (mg)': 'Vitamin B1 (Thiamine)',
       'riboflavin (mg)': 'Vitamin B2 (Riboflavin)',
@@ -244,70 +237,61 @@ export class LandingComponent implements OnInit {
 
     this.mealPlanResponse.tableData.forEach((nutrient: any) => {
       const nutrientName = nutrient.nutrientName.toLowerCase();
-      // 如果有别名，用别名替换显示的名称
+      // replace nutrient name with alias if it exists
       if (nutrientAliases[nutrientName]) {
         nutrient.displayName = nutrientAliases[nutrientName];
       } else {
-        // 否则使用原名称
+        // use the original name if no alias is found
         nutrient.displayName = nutrient.nutrientName;
       }
 
-      // if (nutrientName === 'energy (calories)') {
-      //   // 将 "Energy" 作为单独的分类
-      //   this.energy.push(nutrient);
-      // } else if (['fiber (g)', 'carbohydrates (g)', 'protein (g)', 'fats (g)'].includes(nutrientName)) {
-      //   // 其他宏量营养素放入 "Macros"
-      //   this.macros.push(nutrient);
-      // } else if ([
-      //   'vitamin_a (iu)', 'thiamin (mg)', 'riboflavin (mg)', 'niacin (mg)',
-      //   'vitamin_b5 (mg)', 'vitamin_b6 (mg)', 'vitamin_b12 (ug)', 'folate (ug)',
-      //   'vitamin_c (mg)', 'vitamin_d (iu)', 'vitamin_e (mg)', 'vitamin_k (ug)'
-      // ].includes(nutrientName)) {
-      //   // 维生素放入 "Vitamins"
-      //   this.vitamins.push(nutrient);
-      // } else if ([
-      //   'calcium (mg)', 'sodium (mg)', 'copper (mg)', 'fluoride (mg)',
-      //   'iron (mg)', 'magnesium (mg)', 'manganese (mg)', 'potassium (mg)',
-      //   'selenium (ug)', 'zinc (mg)', 'choline (mg)'
-      // ].includes(nutrientName)) {
-      //   // 矿物质放入 "Minerals"
-      //   this.minerals.push(nutrient);
-      // }
+      // Parse display_target as range or single value
+      if (typeof nutrient.display_target === 'string' && nutrient.display_target.includes('-')) {
+        const [min, max] = nutrient.display_target.split('-').map((val: string) => parseFloat(val.trim()));
+        nutrient.display_target_min = min;
+        nutrient.display_target_max = max;
+      } else {
+        const target = parseFloat(nutrient.display_target);
+        nutrient.display_target_min = target;
+        nutrient.display_target_max = target;
+      }
+
+
       if (nutrientName === 'energy (calories)') {
         this.energy.push(nutrient);
       } else if (['fiber (g)', 'carbohydrates (g)', 'protein (g)', 'fats (g)'].includes(nutrientName)) {
         this.macros.push(nutrient);
       } else if (Object.keys(nutrientAliases).includes(nutrientName)) {
-        nutrient.displayName = nutrientAliases[nutrientName];  // 使用别名
+        nutrient.displayName = nutrientAliases[nutrientName];
         this.vitamins.push(nutrient);
       } else {
-        nutrient.displayName = nutrient.nutrientName; // 默认使用原名称
+        nutrient.displayName = nutrient.nutrientName;
         this.minerals.push(nutrient);
       }
     }
     );
-    // 对 minerals 和 vitamins 排序
-    // this.minerals.sort((a, b) => a.displayName.localeCompare(b.displayName));
-    // this.vitamins.sort((a, b) => {
-    //   const extractVitaminInfo = (name: string) => {
-    //     const match = name.match(/vitamin\s*(\D*)(\d*)/i); // 匹配维生素字母和数字部分
-    //     if (match) {
-    //       const letterPart = match[1].toUpperCase(); // 提取字母部分
-    //       const numberPart = match[2] ? parseInt(match[2], 10) : 0; // 提取数字部分
-    //       return { letterPart, numberPart };
-    //     }
-    //     return { letterPart: name, numberPart: 0 };
-    //   };
+    // sort minerals and vitamins 
+    this.minerals.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    this.vitamins.sort((a, b) => {
+      const extractVitaminInfo = (name: string) => {
+        const match = name.match(/vitamin\s*(\D*)(\d*)/i);
+        if (match) {
+          const letterPart = match[1].toUpperCase();
+          const numberPart = match[2] ? parseInt(match[2], 10) : 0;
+          return { letterPart, numberPart };
+        }
+        return { letterPart: name, numberPart: 0 };
+      };
 
-    //   const aInfo = extractVitaminInfo(a.displayName);
-    //   const bInfo = extractVitaminInfo(b.displayName);
+      const aInfo = extractVitaminInfo(a.displayName);
+      const bInfo = extractVitaminInfo(b.displayName);
 
-    //   // 先按字母部分排序，如果字母部分相同则按数字部分排序
-    //   if (aInfo.letterPart === bInfo.letterPart) {
-    //     return aInfo.numberPart - bInfo.numberPart;
-    //   }
-    //   return aInfo.letterPart.localeCompare(bInfo.letterPart);
-    // });
+      // sort by letterPart first, then by numberPart
+      if (aInfo.letterPart === bInfo.letterPart) {
+        return aInfo.numberPart - bInfo.numberPart;
+      }
+      return aInfo.letterPart.localeCompare(bInfo.letterPart);
+    });
 
   }
   /**
@@ -415,7 +399,7 @@ export class LandingComponent implements OnInit {
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
-              //我加的我加的
+              //
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }

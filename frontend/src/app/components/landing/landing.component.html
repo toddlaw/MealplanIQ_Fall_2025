@@ -423,79 +423,18 @@
         <br />
       </div>
       <div>
-        <!-- put the nutrient table in a card, expand detailed information when user click on it-->
-        <!-- <mat-card>
+
+
+        <!-- group nutrient table into four cards -->
+        <mat-card>
           <mat-card-header (click)="expanded = !expanded" class="cursor-pointer">
             <mat-card-title>Nutrient Information</mat-card-title>
           </mat-card-header>
 
           <mat-card-content *ngIf="expanded">
-            <mat-expansion-panel [expanded]="expanded">
-              <mat-expansion-panel-header>
-                <mat-panel-title>Show Detailed Nutrient Information</mat-panel-title>
-              </mat-expansion-panel-header>
-              <div>
-                <table mat-table [dataSource]="mealPlanResponse.tableData"
-                  class="w-full text-sm shadow-sm rounded text-center" align="center">
-                  <ng-container matColumnDef="nutrientName">
-                    <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-left" style="padding-left: 12px">
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="text-left" style="padding-left: 12px">
-                      {{
-                      element.nutrientName.includes("vitamin")
-                      ? this.displayVitamin(element.nutrientName)
-                      : element.nutrientName.charAt(0).toUpperCase() + element.nutrientName.slice(1)
-                      }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="target">
-                    <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-center"
-                      style="text-align: center">
-                      Target
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                      <p class="inline-block text-text-info font-semibold rounded text-sm"
-                        style="margin: 0; display: inline-block">
-                        {{ element.display_target }}
-                      </p>
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="actual">
-                    <th mat-header-cell *matHeaderCellDef class="bg-primary-light text-center"
-                      style="text-align: center; padding-right: 12px">
-                      Your Meal Plan
-                    </th>
-                    <td mat-cell *matCellDef="let element" style="padding-right: 12px">
-                      <p class="inline-block text-text-success font-semibold rounded text-sm" [ngClass]="{
-                          'text-text-success': element.status === 'success',
-                          'text-text-warning': element.status !== 'success'
-                        }" style="margin: 0; display: inline-block">
-                        {{ element.actual }}
-                      </p>
-                    </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                </table>
-              </div>
-            </mat-expansion-panel>
-          </mat-card-content>
-        </mat-card> -->
-
-        <!-- 下面的是四个卡片的扩展 -->
-
-        <!-- <mat-card>
-          <mat-card-header (click)="expanded = !expanded" class="cursor-pointer">
-            <mat-card-title>Nutrient Information</mat-card-title>
-          </mat-card-header>
-
-          <mat-card-content *ngIf="expanded">
-            <mat-accordion> -->
-        <!-- Energy section -->
-        <!-- <mat-expansion-panel>
+            <mat-accordion [multi]="true">
+              <!-- Energy section -->
+              <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>Energy</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -511,124 +450,20 @@
                   </ng-container>
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
+                    <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                    <td mat-cell *matCellDef="let element"
+                      [ngClass]="{'out-of-range': element.actual < element.display_target || element.actual > element.display_target}">
+                      {{ element.actual }}
+                    </td>
+
+
                   </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                </table>
-              </mat-expansion-panel> -->
-        <!-- Macros Section -->
-        <!-- <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>Macros</mat-panel-title>
-                </mat-expansion-panel-header>
-                <table mat-table [dataSource]="macros" class="w-full text-sm shadow-sm rounded text-center"
-                  align="center">
-                  <ng-container matColumnDef="nutrientName">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.nutrientName | titlecase }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="target">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="actual">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                </table>
-              </mat-expansion-panel> -->
-
-        <!-- Vitamins Section -->
-        <!-- <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>Vitamins</mat-panel-title>
-                </mat-expansion-panel-header>
-                <table mat-table [dataSource]="vitamins" class="w-full text-sm shadow-sm rounded text-center"
-                  align="center">
-                  <ng-container matColumnDef="nutrientName">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.displayName }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="target">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="actual">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                </table>
-              </mat-expansion-panel> -->
-
-        <!-- Minerals Section -->
-        <!-- <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>Minerals</mat-panel-title>
-                </mat-expansion-panel-header>
-                <table mat-table [dataSource]="minerals" class="w-full text-sm shadow-sm rounded text-center"
-                  align="center">
-                  <ng-container matColumnDef="nutrientName">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.nutrientName | titlecase }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="target">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="actual">
-                    <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
-                  </ng-container>
-
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
               </mat-expansion-panel>
-            </mat-accordion>
-          </mat-card-content>
-        </mat-card> -->
-        <!-- 下面是energy没有扩展的版本 -->
-        <mat-card>
-          <mat-card-header (click)="expanded = !expanded" class="cursor-pointer">
-            <mat-card-title>Nutrient Information</mat-card-title>
-          </mat-card-header>
-
-          <mat-card-content>
-            <!-- Energy section (always visible) -->
-            <table mat-table [dataSource]="energy" class="w-full text-sm shadow-sm rounded text-center" align="center">
-              <ng-container matColumnDef="nutrientName">
-                <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
-                <td mat-cell *matCellDef="let element"> {{ element.nutrientName | titlecase }} </td>
-              </ng-container>
-              <ng-container matColumnDef="target">
-                <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
-              </ng-container>
-              <ng-container matColumnDef="actual">
-                <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-
-            <!-- Expandable sections -->
-            <mat-accordion *ngIf="expanded">
               <!-- Macros Section -->
-              <mat-expansion-panel>
+              <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>Macros</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -638,21 +473,30 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
                     <td mat-cell *matCellDef="let element"> {{ element.nutrientName | titlecase }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
                     <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
+                    <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                    <td mat-cell *matCellDef="let element"
+                      [ngClass]="{'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max}">
+                      {{ element.actual }}
+                    </td>
+
+
                   </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
               </mat-expansion-panel>
 
               <!-- Vitamins Section -->
-              <mat-expansion-panel>
+              <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>Vitamins</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -662,21 +506,30 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
                     <td mat-cell *matCellDef="let element"> {{ element.displayName }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
                     <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
+                    <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                    <td mat-cell *matCellDef="let element"
+                      [ngClass]="{'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max}">
+                      {{ element.actual }}
+                    </td>
+
+
                   </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
               </mat-expansion-panel>
 
               <!-- Minerals Section -->
-              <mat-expansion-panel>
+              <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>Minerals</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -686,14 +539,23 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Nutrient </th>
                     <td mat-cell *matCellDef="let element"> {{ element.nutrientName | titlecase }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
                     <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
                   </ng-container>
+
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.actual }} </td>
+                    <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                    <td mat-cell *matCellDef="let element"
+                      [ngClass]="{'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max}">
+                      {{ element.actual }}
+                    </td>
+
+
                   </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -701,6 +563,7 @@
             </mat-accordion>
           </mat-card-content>
         </mat-card>
+
 
 
       </div>
