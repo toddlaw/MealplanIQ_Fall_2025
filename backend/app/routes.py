@@ -134,6 +134,26 @@ def get_meal_plan_refresh():
     return jsonify(output_data)
 
 
+@app.route("/api/delete-recipe", methods=["DELETE"])
+def delete_recipe():
+    data = request.json  # Get JSON data from the request
+    recipe_id = data.get("recipe_id")  # Extract the recipe ID
+
+    try:
+        # Call a function to delete the recipe based on recipe_id
+        result = delete_recipe_by_id(recipe_id)
+        if result:  # If deletion is successful
+            response = {"success": True, "message": "Recipe deleted successfully."}
+        else:
+            response = {"success": False, "message": "Recipe not found."}
+    except ValueError as e:
+        response = {"error": str(e)}
+        print(f"Failed to delete recipe: {str(e)}")
+
+    # Return a JSON response with the result of the delete operation
+    return jsonify(response)
+
+
 @app.route("/api/get-shopping-list", methods=["POST"])
 def get_meal_plan():
     response = request.json

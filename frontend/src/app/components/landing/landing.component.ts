@@ -606,6 +606,34 @@ export class LandingComponent implements OnInit {
     );
   }
 
+  deleteRecipe(id: string) {
+
+
+    const index = this.mealPlanResponse.tableData.findIndex((recipe: any) => recipe.id === id);
+      console.log("Recipe ID to delete:", id);
+      console.log("Meal plan data:", this.mealPlanResponse.tableData);
+      if (index !== -1) {
+        // Remove the recipe from the array
+        this.mealPlanResponse.tableData.splice(index, 1);
+        this.toast.success('Recipe removed from the meal plan!');
+        // Optionally, update the meal plan after deletion or navigate away
+        this.mealPlanResponse = this.mealPlanResponse.filter((recipe: any) => recipe.id !== id);
+        
+        // Optionally, refresh the shopping list as well
+        this.getShoppingListFromBackend().subscribe(
+          (updatedShoppingList) => {
+            this.shoppingListData = updatedShoppingList;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      } else {
+          this.toast.error('Unable to delete the recipe. Try again later!');
+        };
+  }
+  
+
   openShoppingListDialog(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px'; // Set the width of the dialog

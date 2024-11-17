@@ -22,4 +22,7 @@ export class RefreshComponent {
       headers: headers,
     });
   }
+  deleteRecipe(id: string) {
+    return this.http.delete(`/api/recipes/${id}`);
+  }
 }
