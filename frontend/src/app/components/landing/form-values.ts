@@ -23,7 +23,7 @@ export const activityLevels: ActivityLevel[] = [
 export const genders: Gender[] = [
   { value: 'Male', viewValue: 'Male' },
   { value: 'Female', viewValue: 'Female' },
-  { value: 'Female', viewValue: 'Other' },
+  // { value: 'Female', viewValue: 'Other' },
 ];
 
 export const vegetarians: Vegetarian[] = [
