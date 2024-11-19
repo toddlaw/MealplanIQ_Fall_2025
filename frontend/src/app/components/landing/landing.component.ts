@@ -36,6 +36,8 @@ import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
+import { ChangeDetectorRef } from '@angular/core';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-landing',
@@ -57,7 +59,9 @@ export class LandingComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
-    private refresh: RefreshComponent
+    private refresh: RefreshComponent,
+    private zone: NgZone, 
+    private cdr: ChangeDetectorRef
   ) { }
   // generate day of the week
   getDayOfWeek(date: string): string {
@@ -457,8 +461,9 @@ export class LandingComponent implements OnInit {
             this.errorDiv.nativeElement.style.display = 'block';
             this.element.nativeElement.style.display = 'none';
             const selectedHealthGoalObject = healthGoals.find(
+
               (goal) => goal.value === this.selectedHealthGoal
-            );
+             );
         } else if 
           (this.userSubscriptionTypeId === 0 && data.maxDate != data.minDate) {
             this.showSpinner = false; 
@@ -606,34 +611,24 @@ export class LandingComponent implements OnInit {
     );
   }
 
-  deleteRecipe(id: string) {
+  /**
+   * Delete a recipe from the current meal plan
+   */
 
-
-    const index = this.mealPlanResponse.tableData.findIndex((recipe: any) => recipe.id === id);
-      console.log("Recipe ID to delete:", id);
-      console.log("Meal plan data:", this.mealPlanResponse.tableData);
-      if (index !== -1) {
-        // Remove the recipe from the array
-        this.mealPlanResponse.tableData.splice(index, 1);
-        this.toast.success('Recipe removed from the meal plan!');
-        // Optionally, update the meal plan after deletion or navigate away
-        this.mealPlanResponse = this.mealPlanResponse.filter((recipe: any) => recipe.id !== id);
-        
-        // Optionally, refresh the shopping list as well
-        this.getShoppingListFromBackend().subscribe(
-          (updatedShoppingList) => {
-            this.shoppingListData = updatedShoppingList;
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
-      } else {
-          this.toast.error('Unable to delete the recipe. Try again later!');
-        };
+  deleteRecipe(id: string): void {
+    const recipeIndex = this.includedRecipes.findIndex((recipeId: any) => recipeId === id || recipeId === +id);
+    console.log(recipeIndex)
+  
+    if (recipeIndex !== -1) {
+      this.mealPlanResponse.days[0].recipes[recipeIndex] = null;
+    } else {
+      this.toast.error('Error deleting recipe. Please try again.');
+      console.error('Failed to delete recipe with ID', id);
+    }
+    
+  
   }
   
-
   openShoppingListDialog(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px'; // Set the width of the dialog
