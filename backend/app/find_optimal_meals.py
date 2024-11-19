@@ -625,6 +625,13 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob += lpSum(recipe_var[recipe_id]
                   for recipe_id in breakfast_recipes) >= days
 
+    # add a constraint to make breakfast, lunch and main not the same
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in lunch_recipes) != lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes)
+
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in breakfast_recipes) != lpSum(
+        recipe_var[recipe_id] for recipe_id in main_recipes)
+
     # The problem data is written to an .lp file
 
     # The problem is solved using PuLP's choice of Solver, the input
@@ -637,7 +644,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     Repeat solving with loosened constraints if infeasible not implmented yet a
     last resort measure
     """
-    # used in the event  we need to loosen constraints
+  # used in the event  we need to loosen constraints
     original_constraints = None
 
     if LpStatus[prob.status] == LpStatus[LpStatusInfeasible]:

@@ -341,7 +341,10 @@ def gen_meal_plan(data):
         recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) > 200000]
     optimized_results["recipes"] = [
         recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) <= 200000]
-
+    '''
+    Note: for optimized_results, a meal_slot might have all breakfast, lunch and main. 
+    Then main and lunch have the priority since both of them are restrict to one. 
+    '''
     print("11-19 (excluded snacks)", optimized_results["recipes"])
     print("11-19 (snacks)", optimized_snacks)
 
