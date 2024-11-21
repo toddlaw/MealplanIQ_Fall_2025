@@ -85,7 +85,7 @@ def distribute_snacks_to_date(response):
     snack_multiples = []
     for snack in response["snacks"]:
         snack_multiples.append(int(snack["multiples"]))
-        print(snack_multiples)
+        #print(snack_multiples)
 
     num_snacks_in_a_day = 2  # 2 snacks in a day
 
@@ -352,10 +352,10 @@ def gen_meal_plan(data):
     response = post_process_results(
         recipes_with_scores, optimized_results, optimized_snacks, min_date, days
     )
-    # print("response1:", response)
+    print("response1:", response)
     print("=============")
     # response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    # print("response2:", response)
+    #print("response2:", response)
     # print("=============")
     response = process_response_meal_name(response)
     # print("response3:", response)
@@ -368,7 +368,7 @@ def gen_meal_plan(data):
     response = insert_status_nutrient_info(response)
     # print("response7:", response)
     response = gen_shopping_list(response)
-    # print("\n\nresponse8:\n\n", response)
+    #print("\n\nresponse8:\n\n", response)
 
     return response
 

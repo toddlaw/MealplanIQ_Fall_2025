@@ -22,6 +22,7 @@ def post_process_results(recipe_df, optimized_results, optimized_snacks, min_dat
 
     """
     meals_by_calories = []
+    print("===============")
     num_multiples = get_total_multiples(optimized_results)
     response = {}
 
@@ -35,9 +36,14 @@ def post_process_results(recipe_df, optimized_results, optimized_snacks, min_dat
     elif num_multiples > days * 3:
         response['tableData'] = create_table_data(optimized_results)
         meals_by_calories = get_meals_by_calories(recipe_df, optimized_results)
+        print("\n\nOPTIMIZED RESULTS BEFORE REDUCED: \n\n",optimized_results)
+        
+        print(f'\n\nMEALS BY CALORIES:\n{meals_by_calories},\n\nNUM_MULTIPLES:\n {num_multiples},\n\nDAYS:\n {days}\n\n')
         optimized_results = reduce_optimized_results(         # modify: reduce_optimized_results doesn't return optimized_snacks
             meals_by_calories, num_multiples, optimized_results, days)
+        print("\n\nOPTIMIZED RESULTS AFTER REDUCED: \n\n",optimized_results)
         days = create_days_array(recipe_df, optimized_results, min_date, days)
+        print("\n\nDAYS IN OPTIMIZEATION: \n\n",days)
         # print("24optimized_snacks", optimized_snacks)
         response['days'] = days
         response['snacks'] = create_snacks_array(recipe_df, optimized_snacks)
