@@ -28,6 +28,38 @@
   font-weight: bold;
 }
 
+.header-text-left {
+  background-color: #8CB173;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
 .out-of-range {
   color: red;
+  font-weight: bold;
+}
+
+.in-range {
+  color: green;
+  font-weight: bold;
+}
+
+.text-left {
+  text-align: left;
+}
+
+th.text-left {
+  padding-left: 10px;
+}
+
+th[mat-header-cell],
+td[mat-cell] {
+  width: 33%;
+
+}
+
+.mat-table {
+  table-layout: fixed;
+
 }

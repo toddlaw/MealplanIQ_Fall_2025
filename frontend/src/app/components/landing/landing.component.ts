@@ -221,29 +221,44 @@ export class LandingComponent implements OnInit {
 
     // define nutrient aliases
     const nutrientAliases: { [key: string]: string } = {
-      'thiamin (mg)': 'Vitamin B1 (Thiamine)',
-      'riboflavin (mg)': 'Vitamin B2 (Riboflavin)',
-      'niacin (mg)': 'Vitamin B3 (Niacin)',
-      'vitamin_b5 (mg)': 'Vitamin B5 (Pantothenic Acid)',
-      'vitamin_b6 (mg)': 'Vitamin B6 (Pyridoxine)',
-      'vitamin_b12 (ug)': 'Vitamin B12 (Cobalamin)',
-      'folate (ug)': 'Vitamin B9 (Folate)',
-      'vitamin_a (iu)': 'Vitamin A',
-      'vitamin_c (mg)': 'Vitamin C',
-      'vitamin_d (iu)': 'Vitamin D',
-      'vitamin_e (mg)': 'Vitamin E',
-      'vitamin_k (ug)': 'Vitamin K'
+      'thiamin (mg)': 'Vitamin B1 (Thiamine) (mg)',
+      'riboflavin (mg)': 'Vitamin B2 (Riboflavin) (mg)',
+      'niacin (mg)': 'Vitamin B3 (Niacin) (mg)',
+      'vitamin_b5 (mg)': 'Vitamin B5 (Pantothenic Acid) (mg)',
+      'vitamin_b6 (mg)': 'Vitamin B6 (Pyridoxine) (mg)',
+      'vitamin_b12 (ug)': 'Vitamin B12 (cyanocobalamin) (ug)',
+      'folate (ug)': 'Vitamin B9 (Folate) (ug)',
+      'vitamin_a (iu)': 'Vitamin A (iu)',
+      'vitamin_c (mg)': 'Vitamin C (mg)',
+      'vitamin_d (iu)': 'Vitamin D (iu)',
+      'vitamin_e (mg)': 'Vitamin E (mg)',
+      'vitamin_k (ug)': 'Vitamin K (ug)'
     };
 
     this.mealPlanResponse.tableData.forEach((nutrient: any) => {
       const nutrientName = nutrient.nutrientName.toLowerCase();
       // replace nutrient name with alias if it exists
+
+
+
       if (nutrientAliases[nutrientName]) {
         nutrient.displayName = nutrientAliases[nutrientName];
       } else {
         // use the original name if no alias is found
         nutrient.displayName = nutrient.nutrientName;
       }
+
+      nutrient.displayName = nutrient.displayName.replace(/\((.*?)\)/g, (match: any, p1: any) => `(${p1.toLowerCase()})`);
+
+
+
+      nutrient.displayName = nutrient.displayName
+        .split(' ')
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log('1234:', nutrient.displayName);
+
+
 
       // Parse display_target as range or single value
       if (typeof nutrient.display_target === 'string' && nutrient.display_target.includes('-')) {
@@ -268,6 +283,11 @@ export class LandingComponent implements OnInit {
         nutrient.displayName = nutrient.nutrientName;
         this.minerals.push(nutrient);
       }
+      nutrient.displayName = nutrient.displayName
+        .split(' ')
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log('1234:', nutrient.displayName);
     }
     );
     // sort minerals and vitamins 
@@ -292,6 +312,8 @@ export class LandingComponent implements OnInit {
       }
       return aInfo.letterPart.localeCompare(bInfo.letterPart);
     });
+
+
 
   }
   /**
@@ -376,11 +398,10 @@ export class LandingComponent implements OnInit {
         this.userSubscriptionTypeId === 1 ||
         this.userSubscriptionTypeId === 2 ||
         (this.userSubscriptionTypeId === 0 &&
-          data.maxDate === data.minDate ) ||
+          data.maxDate === data.minDate) ||
         (this.userSubscriptionTypeId === 3 &&
-          data.maxDate === data.minDate )
-      )
-        {
+          data.maxDate === data.minDate)
+      ) {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
           behavior: 'smooth',
@@ -447,32 +468,32 @@ export class LandingComponent implements OnInit {
             (goal) => goal.value === this.selectedHealthGoal
           );
 
-        } 
+        }
 
-          else if (
-            (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
-            (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate)
-          ) {
-            this.showSpinner = false;
-            this.errorDiv.nativeElement.style.display = 'block';
-            this.element.nativeElement.style.display = 'none';
-            const selectedHealthGoalObject = healthGoals.find(
-              (goal) => goal.value === this.selectedHealthGoal
-            );
-        } else if 
+        else if (
+          (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
+          (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate)
+        ) {
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'block';
+          this.element.nativeElement.style.display = 'none';
+          const selectedHealthGoalObject = healthGoals.find(
+            (goal) => goal.value === this.selectedHealthGoal
+          );
+        } else if
           (this.userSubscriptionTypeId === 0 && data.maxDate != data.minDate) {
-            this.showSpinner = false; 
-            this.errorDiv.nativeElement.style.display = 'none'; 
-            this.element.nativeElement.style.display = 'none'; 
-  
-            const title = "Subscription Required";
-            const message = "Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.";
-            this.openDialog(title, message, '/sign-up', 'Sign Up');
-         } else {
-          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
-          this.showSpinner = false; 
+          this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'none';
-          this.element.nativeElement.style.display = 'none'; 
+          this.element.nativeElement.style.display = 'none';
+
+          const title = "Subscription Required";
+          const message = "Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.";
+          this.openDialog(title, message, '/sign-up', 'Sign Up');
+        } else {
+          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
+          this.showSpinner = false;
+          this.errorDiv.nativeElement.style.display = 'none';
+          this.element.nativeElement.style.display = 'none';
 
           const title = "Subscription Required";
           const message = "Multi-day plans require a subscription. Try it now for only $5/month. Cancel anytime.";
@@ -797,16 +818,16 @@ export class LandingComponent implements OnInit {
   }
 
   openRecipeDialog(recipe: any): void {
-  const data = {
-    minDate: this.startDate.get('start')!.value?.getTime(),
-    maxDate: this.startDate.get('end')!.value?.getTime(),
-  };
+    const data = {
+      minDate: this.startDate.get('start')!.value?.getTime(),
+      maxDate: this.startDate.get('end')!.value?.getTime(),
+    };
 
-  if (
-    this.userSubscriptionTypeId === 1 ||
-    this.userSubscriptionTypeId === 2 ||
-    this.userSubscriptionTypeId === 3
-  )  {
+    if (
+      this.userSubscriptionTypeId === 1 ||
+      this.userSubscriptionTypeId === 2 ||
+      this.userSubscriptionTypeId === 3
+    ) {
       this.dialog.open(RecipeDialogComponent, {
         data: {
           recipe: recipe,
