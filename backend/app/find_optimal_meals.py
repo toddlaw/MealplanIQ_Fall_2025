@@ -545,7 +545,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     less about fitting a mealplan into a diet.
     """
 
-    prob += lpSum([recipe_var[i] for i in recipes]) <= 11 * days
+    prob += lpSum([recipe_var[i] for i in recipes]) <= 9 * days
 
     # restrict the number of recipes that can be selected
     # print("exclude,", exclude)
@@ -579,7 +579,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob += lpSum(recipe_var[recipe_id]
                   for recipe_id in snack_recipes) == 2*days
 
-    # add constraints to make #main == 1 * day
+    # add constraints: #main = 1 * day
     main_recipes = [
         recipe_id for recipe_id in recipe_var.keys()
         if any(
@@ -589,7 +589,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     ]
     prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) == days
 
-    # add constraints to make #side <= 3*days
+    # add constraints: #side <= 2*days
     side_recipes = [
         recipe_id for recipe_id in recipe_var.keys()
         if any(
@@ -599,9 +599,9 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     ]
 
     prob += lpSum(recipe_var[recipe_id]
-                  for recipe_id in side_recipes) <= 3 * days
+                  for recipe_id in side_recipes) <= 2 * days
 
-    # add a constraint to make one lunch
+    # add a constraint: #lunch = 1*days
     lunch_recipes = [
         recipe_id for recipe_id in recipe_var.keys()
         if any(
@@ -613,7 +613,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob += lpSum(recipe_var[recipe_id]
                   for recipe_id in lunch_recipes) == days
 
-    # add a constraint to make one breakfast
+    # add a constraint: #breakfast >=1*days <= 3*days
     breakfast_recipes = [
         recipe_id for recipe_id in recipe_var.keys()
         if any(
@@ -625,12 +625,28 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     prob += lpSum(recipe_var[recipe_id]
                   for recipe_id in breakfast_recipes) >= days
 
-    # add a constraint to make breakfast, lunch and main not the same
-    prob += lpSum(recipe_var[recipe_id] for recipe_id in lunch_recipes) != lpSum(
-        recipe_var[recipe_id] for recipe_id in breakfast_recipes)
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in breakfast_recipes) <= 3 * days
 
-    prob += lpSum(recipe_var[recipe_id] for recipe_id in breakfast_recipes) != lpSum(
-        recipe_var[recipe_id] for recipe_id in main_recipes)
+    # add a constraint: #lunch and #main >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in lunch_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in main_recipes) >= 2
+    # add a constraint: #lunch and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in breakfast_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in lunch_recipes) >= 2
+
+    # add a constraint: #main and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) >= 2
+    # add a constraint: #side and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in side_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) >= 2
+
+    # main+lunch+breakfast+snack >= 4*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in lunch_recipes) + lpSum(recipe_var[recipe_id]
+                                                                      for recipe_id in snack_recipes) >= 4
 
     # The problem data is written to an .lp file
 

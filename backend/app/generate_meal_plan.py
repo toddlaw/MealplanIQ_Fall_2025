@@ -334,13 +334,26 @@ def gen_meal_plan(data):
         exclude=data["excludedRecipes"],
         include=data["includedRecipes"],
     )
-    # print("optimized_results1", optimized_results)
+    print("optimized_results1", optimized_results)
 
     optimized_snacks = []
-    optimized_snacks = [
-        recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) > 200000]
-    optimized_results["recipes"] = [
-        recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) <= 200000]
+
+    for i in range(len(optimized_results["recipes"])):
+        if len(optimized_snacks) >= 2:
+            break
+        if 'snack' in optimized_results["recipes"][i]["meal_slot"]:
+            if optimized_results["recipes"][i]["multiples"] > 1:
+                optimized_results["recipes"][i]["multiples"] -= 1
+                snack = optimized_results["recipes"][i]
+                print('11-22', snack)
+            else:
+                snack = optimized_results["recipes"].pop(i)
+                print('11-22-2', snack)
+            optimized_snacks.append(snack)
+
+    print('11-22-3', optimized_snacks)
+    print('11-22-4', optimized_results['recipes'])
+
     '''
     Note: for optimized_results, a meal_slot might have all breakfast, lunch and main. 
     Then main and lunch have the priority since both of them are restrict to one. 
