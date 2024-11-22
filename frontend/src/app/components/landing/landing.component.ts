@@ -59,18 +59,25 @@ export class LandingComponent implements OnInit {
     private toast: HotToastService,
     private refresh: RefreshComponent
   ) { }
+
+  // change date format to e.g. September 14, 2024
+  formatDate(date: string): string {
+
+    const [year, month, day] = date.split('-').map(Number);
+    const localDate = new Date(year, month - 1, day);
+    console.log('Original Date:', date);
+    console.log('Local Date (Corrected):', localDate.toLocaleString());
+
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return localDate.toLocaleDateString('en-US', options);
+  }
   // generate day of the week
   getDayOfWeek(date: string): string {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const d = new Date(date);
-    return days[d.getDay()];
+    const localDate = new Date(date);
+    return days[localDate.getDay()];
   }
-  // change date format to e.g. September 14, 2024
-  formatDate(date: string): string {
-    const utcDate = new Date(date);
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return utcDate.toLocaleDateString('en-US', options);
-  }
+
 
 
   readonly MIN_PEOPLE = 1;
@@ -416,7 +423,8 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              // console.log("test");
+
+              // console.log('Raw Response:', response);
               console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
