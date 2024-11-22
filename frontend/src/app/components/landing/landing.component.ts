@@ -617,16 +617,72 @@ export class LandingComponent implements OnInit {
 
   deleteRecipe(id: string): void {
     const recipeIndex = this.includedRecipes.findIndex((recipeId: any) => recipeId === id || recipeId === +id);
-    console.log(recipeIndex)
+    console.log(recipeIndex);
   
     if (recipeIndex !== -1) {
-      this.mealPlanResponse.days[0].recipes[recipeIndex] = null;
+      const recipeToDelete = this.mealPlanResponse.days[0].recipes[recipeIndex];
+  
+      // Set the deleted recipe  as an empty object
+      this.mealPlanResponse.days[0].recipes[recipeIndex] = {
+        id: '',  
+        name: '',
+        ingredients: [], 
+        instructions: [],
+        deleted: true,
+      };
+  
+      this.updateNutrientTable(recipeToDelete);
+  
+      console.log('Updated meal plan:', this.mealPlanResponse);
+      console.log('Updated nutrient table:', this.mealPlanResponse.tableData);
+  
+      this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
+        (response) => {
+          this.toast.success('Recipe deleted!');
+          
+          this.getShoppingListFromBackend().subscribe(
+            (updatedShoppingList) => {
+              this.shoppingListData = updatedShoppingList;
+              console.log('Updated shopping list:', this.shoppingListData);
+            },
+            (error) => {
+              console.error('Error fetching updated shopping list:', error);
+            }
+          );
+        },
+        (error) => {
+          this.toast.error('Error updating meal plan. Please try again.');
+          console.error('Error updating meal plan:', error);
+        }
+      );
     } else {
       this.toast.error('Error deleting recipe. Please try again.');
       console.error('Failed to delete recipe with ID', id);
     }
-    
+  }
   
+
+  updateNutrientTable(recipe: any) {
+    const nutrientsToUpdate = ['calories', 'carbohydrates', 'protein', 'fat', 'fiber', 'fiber',
+      'calcium',
+      'iron',
+      'zinc',
+      'vitamin_a',
+      'vitamin_c',
+      'vitamin_d',
+      'vitamin_e',
+      'vitamin_k'];
+    nutrientsToUpdate.forEach((key) => {
+      const nutrient = this.mealPlanResponse.tableData.find((n: any) => n.nutrientName.toLowerCase().includes(key));
+      if (nutrient) {
+        nutrient.actual -= parseFloat(recipe[key] || 0);
+      }
+    });
+    this.mealPlanResponse.tableData.forEach((nutrient: any) => {
+      if (nutrient.actual < 0) {
+        nutrient.actual = 0;
+      }
+    });
   }
   
   openShoppingListDialog(): void {
