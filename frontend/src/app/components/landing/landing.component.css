@@ -25,14 +25,16 @@
   background-color: #8CB173;
   color: white;
   text-align: center;
-  font-weight: bold;
+  /* font-weight: bold; */
+  font-size: 16px;
 }
 
 .header-text-left {
   background-color: #8CB173;
   color: white;
   text-align: left;
-  font-weight: bold;
+  /* font-weight: bold; */
+  font-size: 16px;
 }
 
 .out-of-range {
@@ -61,5 +63,10 @@ td[mat-cell] {
 
 .mat-table {
   table-layout: fixed;
+
+}
+
+mat-panel-title {
+  font-size: 19px;
 
 }
