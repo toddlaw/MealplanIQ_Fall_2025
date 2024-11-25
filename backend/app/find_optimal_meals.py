@@ -143,6 +143,15 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     # Indexes for minimum/maximum values for macros
     MIN_INDEX = 0
     MAX_INDEX = 1
+    # exclude_slots = ['[\'component\']', '[\'drink\']', '[\'dessert\']', '[]']
+    # recipe_df = [recipe_df['meal_slot'].fillna('').apply(
+    #     lambda x: x not in exclude_slots)]
+
+    exclude_slots = ["['component']", "['drink']", "['dessert']", "[]"]
+    # Filter the DataFrame
+    recipe_df = recipe_df[recipe_df['meal_slot'].fillna(
+        '').apply(lambda x: x not in exclude_slots)]
+
     # print("recipe_df", recipe_df)
     # Process Recipes dataframe
     recipe_dict = get_recipe_dict_from_df(recipe_df)
@@ -571,8 +580,14 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
         prob += recipe_var[recipe] <= recipe_limit
 
     # add constraints to make the result containing 2 * days snacks
-    snack_recipes = [recipe_id for recipe_id in recipe_var.keys()
-                     if 200681 <= recipe_id <= 200714]
+
+    snack_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('snack'))
+        )
+    ]
     print('snack_recipes', snack_recipes)
     # print('receipe_var', recipe_var)
 
@@ -653,6 +668,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     # The problem is solved using PuLP's choice of Solver, the input
     # is so messages are no longer displayd
     prob.solve(PULP_CBC_CMD(msg=0))
+    print('11111')
 
     result = {}
     result["constraints_loosened"] = False
@@ -685,6 +701,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
 
     recipe_name_quant = []
     # print("prob.variables()",prob.variables())
+    print('22222222')
     print("summary:\n")
     for v in prob.variables():
         if v.varValue is not None and v.varValue > 0:
@@ -700,8 +717,9 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
                                       'multiples': v.varValue})
 
             print(recipe_name, "=", v.varValue)
-
+    print('333333333')
     result["recipes"] = recipe_name_quant
+    print('444444', result["recipes"])
     result["status"] = LpStatus[prob.status]
     print("\n")
 

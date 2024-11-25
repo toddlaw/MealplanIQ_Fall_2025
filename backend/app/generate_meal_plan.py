@@ -38,7 +38,7 @@ def process_response_meal_name(response):
     :return: response object with meal slot replaced with actual meal names
     """
 
-    #delete this part after the composite meal logic is completed
+    # delete this part after the composite meal logic is completed
     for day in response["days"]:
         # print("day_recipes",day["recipes"])
         day["recipes"][0]["meal_name"] = "Breakfast"
@@ -85,7 +85,7 @@ def distribute_snacks_to_date(response):
     snack_multiples = []
     for snack in response["snacks"]:
         snack_multiples.append(int(snack["multiples"]))
-        #print(snack_multiples)
+        # print(snack_multiples)
 
     num_snacks_in_a_day = 2  # 2 snacks in a day
 
@@ -358,8 +358,6 @@ def gen_meal_plan(data):
     Note: for optimized_results, a meal_slot might have all breakfast, lunch and main. 
     Then main and lunch have the priority since both of them are restrict to one. 
     '''
-    print("11-19 (excluded snacks)", optimized_results["recipes"])
-    print("11-19 (snacks)", optimized_snacks)
 
     # 9. Post-process response
     response = post_process_results(
@@ -368,18 +366,18 @@ def gen_meal_plan(data):
     print("response1:", response)
     print("=============")
     # response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    #print("response2:", response)
+    # print("response2:", response)
     # print("=============")
-    #response = process_response_meal_name(response)
+    # response = process_response_meal_name(response)
     # print("response3:", response)
-    #response = distribute_snacks_to_date(response)
+    # response = distribute_snacks_to_date(response)
     # print("response4:", response)
-    #response = insert_snacks_between_meals(response)
+    # response = insert_snacks_between_meals(response)
     # print("response5:", response)
-    #response = process_type_normal(response)
-    #print("response6:", response)
+    # response = process_type_normal(response)
+    # print("response6:", response)
     response = insert_status_nutrient_info(response)
-    #print("response7:", response)
+    # print("response7:", response)
     response = gen_shopping_list(response)
     print("\n\nresponse8:\n\n", response)
 
