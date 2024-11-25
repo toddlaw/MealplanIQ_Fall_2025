@@ -7,7 +7,7 @@ from app.apply_user_prefs_to_meal_database import apply_user_prefs
 from app.retrieve_diet import get_diet_plan
 from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
-from app.post_process import post_process_results
+from app.V2_post_process import post_process_results
 # from app.post_process_with_real_snack import process_the_recipes_with_snacks
 import json
 import os
@@ -38,7 +38,7 @@ def process_response_meal_name(response):
     :return: response object with meal slot replaced with actual meal names
     """
 
-    # delete this part after the composite meal logic is completed
+    #delete this part after the composite meal logic is completed
     for day in response["days"]:
         # print("day_recipes",day["recipes"])
         day["recipes"][0]["meal_name"] = "Breakfast"
@@ -338,18 +338,18 @@ def gen_meal_plan(data):
 
     optimized_snacks = []
 
-    for i in range(len(optimized_results["recipes"])):
-        if len(optimized_snacks) >= 2:
-            break
-        if 'snack' in optimized_results["recipes"][i]["meal_slot"]:
-            if optimized_results["recipes"][i]["multiples"] > 1:
-                optimized_results["recipes"][i]["multiples"] -= 1
-                snack = optimized_results["recipes"][i]
-                print('11-22', snack)
-            else:
-                snack = optimized_results["recipes"].pop(i)
-                print('11-22-2', snack)
-            optimized_snacks.append(snack)
+    # for i in range(len(optimized_results["recipes"])):
+    #     if len(optimized_snacks) >= 2:
+    #         break
+    #     if 'snack' in optimized_results["recipes"][i]["meal_slot"]:
+    #         if optimized_results["recipes"][i]["multiples"] > 1:
+    #             optimized_results["recipes"][i]["multiples"] -= 1
+    #             snack = optimized_results["recipes"][i]
+    #             print('11-22', snack)
+    #         else:
+    #             snack = optimized_results["recipes"].pop(i)
+    #             print('11-22-2', snack)
+    #         optimized_snacks.append(snack)
 
     print('11-22-3', optimized_snacks)
     print('11-22-4', optimized_results['recipes'])
@@ -370,18 +370,18 @@ def gen_meal_plan(data):
     # response = update_meals_with_snacks(response, snack_recipes_df.copy())
     #print("response2:", response)
     # print("=============")
-    response = process_response_meal_name(response)
+    #response = process_response_meal_name(response)
     # print("response3:", response)
-    response = distribute_snacks_to_date(response)
+    #response = distribute_snacks_to_date(response)
     # print("response4:", response)
-    response = insert_snacks_between_meals(response)
+    #response = insert_snacks_between_meals(response)
     # print("response5:", response)
-    response = process_type_normal(response)
-    # print("response6:", response)
+    #response = process_type_normal(response)
+    #print("response6:", response)
     response = insert_status_nutrient_info(response)
-    # print("response7:", response)
+    #print("response7:", response)
     response = gen_shopping_list(response)
-    #print("\n\nresponse8:\n\n", response)
+    print("\n\nresponse8:\n\n", response)
 
     return response
 
