@@ -263,11 +263,11 @@ export class LandingComponent implements OnInit {
         .split(' ')
         .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-      console.log('1234:', nutrient.displayName);
+      // console.log('1234:', nutrient.displayName);
 
 
 
-      // Parse display_target as range or single value
+      // Parse display_target as range 
       if (typeof nutrient.display_target === 'string' && nutrient.display_target.includes('-')) {
         const [min, max] = nutrient.display_target.split('-').map((val: string) => parseFloat(val.trim()));
         nutrient.display_target_min = min;
@@ -276,7 +276,19 @@ export class LandingComponent implements OnInit {
         const target = parseFloat(nutrient.display_target);
         nutrient.display_target_min = target;
         nutrient.display_target_max = target;
+
+
+        if (nutrient.actualValue < target) {
+          nutrient.display_target_max = target;
+          nutrient.display_target_min = null;
+        } else {
+          nutrient.display_target_min = target;
+          nutrient.display_target_max = null;
+        }
       }
+
+
+
 
 
       if (nutrientName === 'energy (calories)') {
@@ -294,7 +306,7 @@ export class LandingComponent implements OnInit {
         .split(' ')
         .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-      console.log('1234:', nutrient.displayName);
+      // console.log('1234:', nutrient.displayName);
     }
     );
     // sort minerals and vitamins 
