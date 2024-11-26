@@ -447,7 +447,11 @@
                   </ng-container>
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
+                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                      ? element.display_target_min + ' - ' + element.display_target_max
+                      : element.display_target_min
+                      ? element.display_target_min + '-'
+                      : '-' + element.display_target_max }} </td>
                   </ng-container>
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
@@ -479,7 +483,11 @@
 
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
+                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                      ? element.display_target_min + ' - ' + element.display_target_max
+                      : element.display_target_min
+                      ? element.display_target_min + ' - '
+                      : '-' + element.display_target_max }} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="actual">
@@ -514,7 +522,14 @@
 
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
+                    <!-- <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td> -->
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.display_target_min && element.display_target_max
+                      ? element.display_target_min + ' - ' + element.display_target_max
+                      : element.display_target_min
+                      ? element.display_target_min + ' - '
+                      : '-' + element.display_target_max }}
+                    </td>
                   </ng-container>
 
                   <ng-container matColumnDef="actual">
@@ -549,7 +564,11 @@
 
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td>
+                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                      ? element.display_target_min + ' - ' + element.display_target_max
+                      : element.display_target_min
+                      ? element.display_target_min + ' - '
+                      : '-' + element.display_target_max }} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="actual">
