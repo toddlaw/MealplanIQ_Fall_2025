@@ -147,7 +147,8 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     # recipe_df = [recipe_df['meal_slot'].fillna('').apply(
     #     lambda x: x not in exclude_slots)]
 
-    exclude_slots = ["['component']", "['drink']", "['dessert']", "[]"]
+    exclude_slots = ["['component']", "['drink']", "['dessert']",
+                     "[]", "['dessert', 'compound']", "['dessert', 'component']"]
     # Filter the DataFrame
     recipe_df = recipe_df[recipe_df['meal_slot'].fillna(
         '').apply(lambda x: x not in exclude_slots)]

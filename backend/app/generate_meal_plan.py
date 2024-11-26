@@ -361,7 +361,7 @@ def gen_meal_plan(data):
 
     # 9. Post-process response
     response = post_process_results(
-        recipes_with_scores, optimized_results, optimized_snacks, min_date, days
+        recipes_with_scores, optimized_results, min_date, days
     )
     print("response1:", response)
     print("=============")
