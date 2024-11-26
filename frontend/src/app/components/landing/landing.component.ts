@@ -590,7 +590,7 @@ export class LandingComponent implements OnInit {
         this.toast.success('Recipe refreshed successfully!');
         console.log('recipe replaced', response);
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
-        console.log('updated meal plan', this.mealPlanResponse);
+        console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
         // After the meal plan is updated, get the updated shopping list
         this.getShoppingListFromBackend().subscribe(
@@ -615,17 +615,105 @@ export class LandingComponent implements OnInit {
    * Delete a recipe from the current meal plan
    */
 
-  deleteRecipe(id: string): void {
-    const recipeIndex = this.includedRecipes.findIndex((recipeId: any) => recipeId === id || recipeId === +id);
-    console.log(recipeIndex);
+  // deleteRecipe(id: string): void {
+  //   const recipeIndex = this.includedRecipes.findIndex((recipeId: any) => recipeId === id || recipeId === +id);
+  //   console.log(recipeIndex);
     
+  //   console.log('Deleting recipe with ID:', id)
+  //   this.refresh.deleteRecipe(id, this.mealPlanResponse).subscribe(
+  //     (response) => {
+  //       if (response.error) {
+  //         this.toast.error(response.error);
+  //         console.error('Error from backend:', response.error);
+  //         return;
+  //       }
+        
+  //       this.toast.success('Recipe refreshed successfully!');
+  //       console.log('recipe replaced (delete)', response);
+  //       this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
+  //       console.log('updated meal plan (delete)', this.mealPlanResponse);
+
+  //       // After the meal plan is updated, get the updated shopping list
+  //       this.getShoppingListFromBackend().subscribe(
+  //         (updatedShoppingList) => {
+  //           this.shoppingListData = updatedShoppingList;
+  //         },
+  //         (error) => {
+  //           console.error(error);
+  //         }
+  //       );
+  //     },
+      
+  //     (error) => {
+  //       this.toast.error(
+  //         'Opps look like the server is too busy, try again later!'
+  //       );
+  //       console.log('error', error);
+  //     }
+  //   );
+  
+  //   if (recipeIndex !== -1) {
+  //     const recipeToDelete = this.mealPlanResponse.days[0].recipes[recipeIndex];
+  
+  //     // Set the deleted recipe  as an empty object
+  //     this.mealPlanResponse.days[0].recipes[recipeIndex] = {
+  //       id: '',  
+  //       name: '',
+  //       ingredients: [], 
+  //       instructions: [],
+  //       deleted: true,
+  //     };
+  //     // this.refresh.deleteRecipe(id, this.mealPlanResponse)
+
+  //     // this.updateNutrientTable(recipeToDelete);
+  
+  //     console.log('Updated meal plan:', this.mealPlanResponse);
+  //     console.log('Updated nutrient table:', this.mealPlanResponse.tableData);
+  
+  //     // this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
+  //     //   (response) => {
+  //     //     this.toast.success('Recipe deleted!');
+          
+  //     //     this.getShoppingListFromBackend().subscribe(
+  //     //       (updatedShoppingList) => {
+  //     //         this.shoppingListData = updatedShoppingList;
+  //     //         console.log('Updated shopping list:', this.shoppingListData);
+  //     //       },
+  //     //       (error) => {
+  //     //         console.error('Error fetching updated shopping list:', error);
+  //     //       }
+  //     //     );
+  //     //   },
+  //     //   (error) => {
+  //     //     this.toast.error('Error updating meal plan. Please try again.');
+  //     //     console.error('Error updating meal plan:', error);
+  //     //   }
+  //     // );
+  //   } else {
+  //     this.toast.error('Error deleting recipe. Please try again.');
+  //     console.error('Failed to delete recipe with ID', id);
+  //   }
+  // }
+  
+  deleteRecipe(id: string): void {
+    console.log('Deleting recipe with ID:', id);
+  
     this.refresh.deleteRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
-        this.toast.success('Recipe refreshed successfully!');
-        console.log('recipe replaced', response);
+        if (response.error) {
+          this.toast.error(response.error);
+          console.error('Error from backend:', response.error);
+          return;
+        }
+        
+        // Successfully deleted recipe and got updated meal plan
+        this.toast.success('Recipe deleted and meal plan refreshed!');
+        console.log('recipe replaced (delete)', response);
+  
+        // Update the frontend with the updated meal plan from the backend
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
-        console.log('updated meal plan', this.mealPlanResponse);
-
+        console.log('updated meal plan (delete)', this.mealPlanResponse);
+  
         // After the meal plan is updated, get the updated shopping list
         this.getShoppingListFromBackend().subscribe(
           (updatedShoppingList) => {
@@ -637,58 +725,16 @@ export class LandingComponent implements OnInit {
         );
       },
       (error) => {
-        this.toast.error(
-          'Opps look like the server is too busy, try again later!'
-        );
+        this.toast.error('Oops, the server is too busy, try again later!');
         console.log('error', error);
       }
     );
-  
-    if (recipeIndex !== -1) {
-      const recipeToDelete = this.mealPlanResponse.days[0].recipes[recipeIndex];
-  
-      // Set the deleted recipe  as an empty object
-      this.mealPlanResponse.days[0].recipes[recipeIndex] = {
-        id: '',  
-        name: '',
-        ingredients: [], 
-        instructions: [],
-        deleted: true,
-      };
-      // this.refresh.deleteRecipe(id, this.mealPlanResponse)
-
-      // this.updateNutrientTable(recipeToDelete);
-  
-      console.log('Updated meal plan:', this.mealPlanResponse);
-      console.log('Updated nutrient table:', this.mealPlanResponse.tableData);
-  
-      // this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
-      //   (response) => {
-      //     this.toast.success('Recipe deleted!');
-          
-      //     this.getShoppingListFromBackend().subscribe(
-      //       (updatedShoppingList) => {
-      //         this.shoppingListData = updatedShoppingList;
-      //         console.log('Updated shopping list:', this.shoppingListData);
-      //       },
-      //       (error) => {
-      //         console.error('Error fetching updated shopping list:', error);
-      //       }
-      //     );
-      //   },
-      //   (error) => {
-      //     this.toast.error('Error updating meal plan. Please try again.');
-      //     console.error('Error updating meal plan:', error);
-      //   }
-      // );
-    } else {
-      this.toast.error('Error deleting recipe. Please try again.');
-      console.error('Failed to delete recipe with ID', id);
-    }
   }
+  
   
 
   updateNutrientTable(recipe: any) {
+    console.log("recipe test:" + {recipe});
     const nutrientsToUpdate = ['calories', 'carbohydrates', 'protein', 'fat', 'fiber', 'fiber',
       'calcium',
       'iron',

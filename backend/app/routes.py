@@ -139,6 +139,8 @@ def delete_recipe():
     data = request.json
     meal_plan_data = data.get("meal_plan")
     recipe_id = data.get("recipe_id")
+    print(f"delete_recipe: recipe_id = {recipe_id}")
+    print(f"delete_recipe: meal_plan_data = {meal_plan_data}")
 
     try:
         output_data = find_matched_recipe_and_delete(meal_plan_data, recipe_id)
@@ -148,9 +150,9 @@ def delete_recipe():
 
     return jsonify(output_data)
 
-@app.route("/api/test-post", methods=["POST"])
-def test_post():
-    return jsonify({"message": "POST request was received"})
+# @app.route("/api/test-post", methods=["POST"])
+# def test_post():
+#     return jsonify({"message": "POST request was received"})
 
 
 

@@ -74,6 +74,8 @@ def find_matched_recipe_and_update(response, recipe_id):
         raise ValueError("No matched recipe found")
 
 def find_matched_recipe_and_delete(response, recipe_id):
+    print("Received recipe_id:", recipe_id)
+    print("Current response['days'] structure:", response["days"])
     clicked_recipe = {}
     date_counter = 0
     recipe_counter = 0
@@ -85,19 +87,21 @@ def find_matched_recipe_and_delete(response, recipe_id):
                                       == "['snack']"]
 
     # # Traverse the response to find and remove the clicked recipe
-    # for day in response["days"]:
-    #     for i, recipe in enumerate(day["recipes"]):
-    #         if recipe["id"] == recipe_id:
-    #             clicked_recipe = day["recipes"].pop(i)
-    #             recipe_counter = i
-    #             break
-    #     if clicked_recipe:
-    #         break
-    #     date_counter += 1
+    recipe_id = str(recipe_id)
+    for day in response["days"]:
+        for i, recipe in enumerate(day["recipes"]):
+            if str(recipe["id"]) == recipe_id:
+                clicked_recipe = day["recipes"].pop(i)
+                print(clicked_recipe)
+                recipe_counter = i
+                break
+        if clicked_recipe:
+            break
+        date_counter += 1
 
     # Check if clicked_recipe has been found
     if not clicked_recipe:
-        raise ValueError("No recipe found with the specified ID.")
+        raise ValueError(f"No recipe found with ID {recipe_id}")
 
     # Ensure 'id' is an integer
     clicked_recipe["id"] = int(clicked_recipe["id"])
@@ -108,12 +112,18 @@ def find_matched_recipe_and_delete(response, recipe_id):
         response, clicked_recipe, "subtract", recipe_df, snack_recipes_df
     )
 
+    print("Response after update_nutrition_values:", response)
+
     time.sleep(0.1)
-    response = gen_shopping_list(response)
+    # response = gen_shopping_list(response)
     response = insert_status_nutrient_info(response)
+    print("Response after insert_status_nutrient_info:", response)
     time.sleep(0.1)
 
     output_data = {"meal_plan": response}
+
+    print("Final output_data before returning:", output_data)
+
     return output_data
 
 
