@@ -73,6 +73,90 @@ def find_matched_recipe_and_update(response, recipe_id):
     else:
         raise ValueError("No matched recipe found")
 
+def find_matched_recipe_and_delete(response, recipe_id):
+    clicked_recipe = {}
+    date_counter = 0
+    recipe_counter = 0
+
+    # Load the recipes pool from the CSV file
+    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
+    all_recipes_df = pd.read_csv("./meal_db/meal_database.csv")
+    snack_recipes_df = all_recipes_df[all_recipes_df["meal_slot"]
+                                      == "['snack']"]
+
+    # # Traverse the response to find and remove the clicked recipe
+    # for day in response["days"]:
+    #     for i, recipe in enumerate(day["recipes"]):
+    #         if recipe["id"] == recipe_id:
+    #             clicked_recipe = day["recipes"].pop(i)
+    #             recipe_counter = i
+    #             break
+    #     if clicked_recipe:
+    #         break
+    #     date_counter += 1
+
+    # Check if clicked_recipe has been found
+    if not clicked_recipe:
+        raise ValueError("No recipe found with the specified ID.")
+
+    # Ensure 'id' is an integer
+    clicked_recipe["id"] = int(clicked_recipe["id"])
+
+    # Update nutrition values and other related data
+
+    response = update_nutrition_values(
+        response, clicked_recipe, "subtract", recipe_df, snack_recipes_df
+    )
+
+    time.sleep(0.1)
+    response = gen_shopping_list(response)
+    response = insert_status_nutrient_info(response)
+    time.sleep(0.1)
+
+    output_data = {"meal_plan": response}
+    return output_data
+
+
+# def find_matched_recipe_and_delete(response, recipe_id):
+#     """
+#     Find the recipe in the response and mark it as deleted.
+#     Update the nutrient table and shopping list.
+#     """
+#     clicked_recipe = None
+#     recipe_index = -1
+
+#     # Iterate over the first day's recipes to find the target recipe
+#     for i, recipe in enumerate(response["days"][0]["recipes"]):
+#         if recipe["id"] == recipe_id or recipe["id"] == int(recipe_id):
+#             clicked_recipe = recipe
+#             recipe_index = i
+#             break
+
+#     if not clicked_recipe:
+#         raise ValueError("No recipe found with the specified ID.")
+
+#     # Mark the recipe as deleted
+#     response["days"][0]["recipes"][recipe_index] = {
+#         "id": "",
+#         "name": "",
+#         "ingredients": [],
+#         "instructions": [],
+#         "deleted": True,
+#     }
+
+#     # Update the nutrient table by subtracting the nutrients of the deleted recipe
+#     response = update_nutrition_values(
+#         response, clicked_recipe, "subtract", None, None
+#     )
+
+#     # Generate a new shopping list
+#     response = gen_shopping_list(response)
+
+#     # Insert status and nutrient information
+#     response = insert_status_nutrient_info(response)
+
+#     return {"meal_plan": response}
+
 
 def find_matched_recipe(recipe, recipe_df, snack_df):
     """
@@ -240,6 +324,40 @@ def update_nutrition_values(response, recipe, operation, recipe_df, snack_df):
                         item["actual"] = 0
 
     return response
+
+# def delete_and_refresh_meal_plan(meal_plan_data, recipe_id):
+#     """
+#     Deletes the specified recipe and refreshes the nutrient table.
+#     :param meal_plan_data: JSON object containing the meal plan
+#     :param recipe_id: ID of the recipe to delete
+#     :return: Updated meal plan data with recalculated nutrients
+#     """
+
+#     # Find the recipe to delete from the meal plan data
+#     recipe_to_delete = None
+#     for recipe in meal_plan_data["recipes"]:
+#         if recipe["id"] == recipe_id:
+#             recipe_to_delete = recipe
+#             break
+
+#     if recipe_to_delete is None:
+#         raise ValueError(f"Recipe with ID {recipe_id} not found in the meal plan.")
+
+#     # Remove the recipe from the meal plan
+#     meal_plan_data["recipes"].remove(recipe_to_delete)
+
+#     # Update the meal plan's nutrient table after the deletion using the reused update_nutrition_values
+#     updated_response = update_nutrition_values(
+#         meal_plan_data, 
+#         recipe_to_delete, 
+#         operation="subtract",  # Subtract the deleted recipe's nutrients
+#         recipe_df=recipe_df, 
+#         snack_df=snack_df
+#     )
+
+#     # Return the updated meal plan with the recalculated nutrient values
+#     return updated_response
+
 
 
 def main():

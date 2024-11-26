@@ -11,7 +11,7 @@ from app.payment_stripe import (
 from app.manage_user_data import *
 from user_db.user_db import instantiate_database
 import stripe
-from app.find_matched_recipe_and_update import find_matched_recipe_and_update
+from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete
 # from app.send_email import send_weekly_email_by_google_scheduler
 
 # Enable CORS for all domains on all routes
@@ -133,25 +133,45 @@ def get_meal_plan_refresh():
     # Return the modified template data as JSON response
     return jsonify(output_data)
 
-
-@app.route("/api/delete-recipe", methods=["DELETE"])
+@app.route("/api/delete-recipe", methods=["POST"])
 def delete_recipe():
-    data = request.json  # Get JSON data from the request
-    recipe_id = data.get("recipe_id")  # Extract the recipe ID
+    print("DELETE Recipe API hit")  # Check if the route is being hit
+    data = request.json
+    meal_plan_data = data.get("meal_plan")
+    recipe_id = data.get("recipe_id")
 
     try:
-        # Call a function to delete the recipe based on recipe_id
-        result = delete_recipe_by_id(recipe_id)
-        if result:  # If deletion is successful
-            response = {"success": True, "message": "Recipe deleted successfully."}
-        else:
-            response = {"success": False, "message": "Recipe not found."}
+        output_data = find_matched_recipe_and_delete(meal_plan_data, recipe_id)
     except ValueError as e:
-        response = {"error": str(e)}
-        print(f"Failed to delete recipe: {str(e)}")
+        output_data = {"error": str(e)}
+        print(f"Failed to generate meal plan: {str(e)}")
 
-    # Return a JSON response with the result of the delete operation
-    return jsonify(response)
+    return jsonify(output_data)
+
+@app.route("/api/test-post", methods=["POST"])
+def test_post():
+    return jsonify({"message": "POST request was received"})
+
+
+
+# @app.route("/api/delete-recipe", methods=["DELETE"])
+# def delete_recipe():
+#     data = request.json  # Get JSON data from the request
+#     recipe_id = data.get("recipe_id")  # Extract the recipe ID
+
+#     try:
+#         # Call a function to delete the recipe based on recipe_id
+#         result = delete_recipe_by_id(recipe_id)
+#         if result:  # If deletion is successful
+#             response = {"success": True, "message": "Recipe deleted successfully."}
+#         else:
+#             response = {"success": False, "message": "Recipe not found."}
+#     except ValueError as e:
+#         response = {"error": str(e)}
+#         print(f"Failed to delete recipe: {str(e)}")
+
+#     # Return a JSON response with the result of the delete operation
+#     return jsonify(response)
 
 
 @app.route("/api/get-shopping-list", methods=["POST"])
