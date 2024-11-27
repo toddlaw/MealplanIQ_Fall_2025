@@ -5,7 +5,7 @@ import json
 import pandas as pd
 
 
-def post_process_results(recipe_df, optimized_results, min_date, days):
+def post_process_results(recipe_df, optimized_results, optimized_snacks,min_date, days): # add optimized_snacks as input
     """
     Called to process the results from the optimization function in addition
     to other data so that a JSON response can be sent to the frontend.
@@ -21,7 +21,6 @@ def post_process_results(recipe_df, optimized_results, min_date, days):
 
     """
     meals_by_calories = []
-    optimized_snacks = []
     num_multiples = get_total_multiples(optimized_results)
     response = {}
 
@@ -35,11 +34,16 @@ def post_process_results(recipe_df, optimized_results, min_date, days):
     elif num_multiples > days * 3:
         response['tableData'] = create_table_data(optimized_results)
         meals_by_calories = get_meals_by_calories(recipe_df, optimized_results)
-        optimized_results, optimized_snacks = reduce_optimized_results(
-            meals_by_calories, num_multiples, optimized_results, days)
+        optimized_results = reduce_optimized_results(         # modify: reduce_optimized_results doesn't return optimized_snacks
+            meals_by_calories, num_multiples, optimized_results, days)    
         days = create_days_array(recipe_df, optimized_results, min_date, days)
+        print("24optimized_snacks",optimized_snacks)  
         response['days'] = days
         response['snacks'] = create_snacks_array(recipe_df, optimized_snacks)
+    print("optimized_snacks_hh",optimized_snacks)
+    print("optimized_results_hh",optimized_results)
+    print("4444444:",response['snacks']) 
+    print("===============")
 
     return response
 
@@ -56,7 +60,6 @@ def create_snacks_array(recipe_df, optimized_snacks):
         recipe = process_recipe(recipe_df, snack['name'])
         recipe['multiples'] = snack['multiples']
         snacks_array.append(recipe)
-
     return snacks_array
 
 
@@ -75,11 +78,11 @@ def reduce_optimized_results(meals_by_calories, num_multiples,
     """
     Reduces the number of multiples in the optimized_results dictionary by taking
     away the lowest calorie recipe until the number of multiples is = days * 3.
-    It adds those taken away recipes to th optimized_snacks array.
+    It adds those taken away recipes to th optimized_snacks array.                
     """
     # meals_by_calories is sorted by greatest calories to least calories
     target_multiples = days * 3
-    optimized_snacks = []
+    optimized_snacks = []              
     current_multiples = num_multiples  # 37 for example
 
     while current_multiples > target_multiples:
@@ -88,12 +91,14 @@ def reduce_optimized_results(meals_by_calories, num_multiples,
         num_multiples_of_lowest_cal_recipe = get_multiples_for_recipe(
             optimized_results, lowest_cal_recipe_name)
         while num_multiples_of_lowest_cal_recipe > 0 and current_multiples > target_multiples:
-            optimized_results, optimized_snacks = reduce_optmized_results(
-                optimized_results, optimized_snacks, lowest_cal_recipe_name)
+            optimized_results = reduce_results(
+                optimized_results, lowest_cal_recipe_name)  # modify: take optimized_snacks away from the input
             num_multiples_of_lowest_cal_recipe -= 1
             current_multiples = get_total_multiples(optimized_results)
+    print("optimized snacks", optimized_snacks)
+    print("optimized_results_hhh", optimized_results)
 
-    return optimized_results, optimized_snacks
+    return optimized_results                   # modify: don't return optimized_snacks
 
 
 def get_multiples_for_recipe(optimized_results, recipe_name):
@@ -108,7 +113,7 @@ def get_multiples_for_recipe(optimized_results, recipe_name):
     return 0
 
 
-def reduce_optmized_results(optimized_results, optimized_snacks, recipe_name):
+def reduce_results(optimized_results, recipe_name):  # modify: take optimized_snacks away from the input
     """
     Given a recipe name, reduces the multiples of that recipe in the
     optimized_results dictionary by 1. If the multiples of that recipe
@@ -122,29 +127,29 @@ def reduce_optmized_results(optimized_results, optimized_snacks, recipe_name):
             recipe['multiples'] -= 1
             if recipe['multiples'] == 0:
                 optimized_results['recipes'].remove(recipe)
-            optimized_snacks = add_multiple_to_snacks(optimized_snacks,
-                                                      recipe_name)
+            # optimized_snacks = add_multiple_to_snacks(optimized_snacks,           #  delete: don't modify optimized_snacks
+            #                                           recipe_name)
 
             break
 
-    return optimized_results, optimized_snacks
+    return optimized_results    # modify: on't return optimized_snacks
 
 
-def add_multiple_to_snacks(optimized_snacks, recipe_name):
-    """
-    Given a recipe name, adds a multiple of that recipe to the optimized_snacks
-    array. If the recipe is already in the array, then it just adds a multiple
-    to that recipe.
-    """
-    for snack in optimized_snacks:
-        if snack['name'] == recipe_name:
-            snack['multiples'] += 1
-            return optimized_snacks
+# def add_multiple_to_snacks(optimized_snacks, recipe_name):   # won't be called
+#     """
+#     Given a recipe name, adds a multiple of that recipe to the optimized_snacks
+#     array. If the recipe is already in the array, then it just adds a multiple
+#     to that recipe.
+#     """
+#     for snack in optimized_snacks:
+#         if snack['name'] == recipe_name:
+#             snack['multiples'] += 1
+#             return optimized_snacks
 
-    # if the recipe is not in the optimized_snacks array, then add it
-    optimized_snacks.append({'name': recipe_name, 'multiples': 1})
+#     # if the recipe is not in the optimized_snacks array, then add it
+#     optimized_snacks.append({'name': recipe_name, 'multiples': 1})
 
-    return optimized_snacks
+#     return optimized_snacks
 
 
 def get_total_multiples(optimized_results):

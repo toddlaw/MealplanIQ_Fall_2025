@@ -25,73 +25,21 @@
   background-color: #8CB173;
   color: white;
   text-align: center;
-  font-weight: bold;
+  /* font-weight: bold; */
+  font-size: 16px;
+}
+
+.header-text-left {
+  background-color: #8CB173;
+  color: white;
+  text-align: left;
+  /* font-weight: bold; */
+  font-size: 16px;
 }
 
 .out-of-range {
   color: red;}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 #deleted-card {
   padding: 20px;
   background-color: #f0f0f0;
@@ -105,3 +53,35 @@
   align-items: center;
 }
 
+  color: red;
+  font-weight: bold;
+}
+
+.in-range {
+  color: green;
+  font-weight: bold;
+}
+
+.text-left {
+  text-align: left;
+}
+
+th.text-left {
+  padding-left: 10px;
+}
+
+th[mat-header-cell],
+td[mat-cell] {
+  width: 33%;
+
+}
+
+.mat-table {
+  table-layout: fixed;
+
+}
+
+mat-panel-title {
+  font-size: 19px;
+
+}

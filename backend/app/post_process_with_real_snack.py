@@ -1,5 +1,6 @@
 import pandas as pd
 
+### UNUSED FILE
 
 def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
     def calculate_difference(snack_row):
@@ -8,7 +9,8 @@ def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
     selected_snacks = pd.DataFrame()
     remaining_nutrition = cumulative_nutrition
 
-    while not snack_recipe_df.empty:
+    # loop to get close to the required nutrition, if we limit the number of snacks, it is possible to comprimise the nutrition goal
+    while not snack_recipe_df.empty:  
         snack_recipe_df.loc[:, "difference"] = snack_recipe_df.apply(
             calculate_difference, axis=1
         )
@@ -20,6 +22,7 @@ def find_best_snack_match(snack_recipe_df, cumulative_nutrition, nutrition_key):
 
         if abs(remaining_nutrition) < 100:
             break
+    print("selected_snacks",selected_snacks)  # this is what we should limit, to days *2
 
     return selected_snacks, remaining_nutrition
 
@@ -36,6 +39,7 @@ def process_the_recipes_with_snacks(snack_recipes, snack_recipe_df):
     best_snack_match = selected_snacks_df.apply(process_recipe, axis=1).tolist()
 
     final_differences = cumulative_nutrition - selected_snacks_df[nutrition_key].sum()
+    # print("best_snack_match",best_snack_match)
 
     return best_snack_match
 
