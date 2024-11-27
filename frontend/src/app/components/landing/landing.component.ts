@@ -36,6 +36,8 @@ import { TermsAndConditionsComponent } from '../dialogues/tac-dialog/tac-dialog.
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
+import { ChangeDetectorRef } from '@angular/core';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-landing',
@@ -57,7 +59,9 @@ export class LandingComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
-    private refresh: RefreshComponent
+    private refresh: RefreshComponent,
+    private zone: NgZone, 
+    private cdRef: ChangeDetectorRef
   ) { }
 
   // change date format to e.g. September 14, 2024
@@ -487,7 +491,6 @@ export class LandingComponent implements OnInit {
           const selectedHealthGoalObject = healthGoals.find(
             (goal) => goal.value === this.selectedHealthGoal
           );
-
         }
 
         else if (
@@ -626,7 +629,7 @@ export class LandingComponent implements OnInit {
         this.toast.success('Recipe refreshed successfully!');
         console.log('recipe replaced', response);
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
-        console.log('updated meal plan', this.mealPlanResponse);
+        console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
         // After the meal plan is updated, get the updated shopping list
         this.getShoppingListFromBackend().subscribe(
@@ -645,6 +648,66 @@ export class LandingComponent implements OnInit {
         console.log('error', error);
       }
     );
+  }
+  
+  deleteRecipe(id: string): void {
+    console.log('Deleting recipe with ID:', id);
+  
+    this.refresh.deleteRecipe(id, this.mealPlanResponse).subscribe(
+      (response) => {
+        if (response.error) {
+          this.toast.error(response.error);
+          console.error('Error from backend:', response.error);
+          return;
+        }
+        
+        // Successfully deleted recipe and got updated meal plan
+        this.toast.success('Recipe deleted and meal plan refreshed!');
+        console.log('recipe replaced (delete)', response);
+  
+        // Update the frontend with the updated meal plan from the backend
+        this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
+        console.log('updated meal plan (delete)', this.mealPlanResponse);
+        
+        // After the meal plan is updated, get the updated shopping list
+        this.getShoppingListFromBackend().subscribe(
+          (updatedShoppingList) => {
+            this.shoppingListData = updatedShoppingList;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      },
+      (error) => {
+        this.toast.error('Oops, the server is too busy, try again later!');
+        console.log('error', error);
+      }
+    );
+  }
+
+  updateNutrientTable(recipe: any) {
+    console.log("recipe test:", recipe);
+    const nutrientsToUpdate = ['calories', 'carbohydrates', 'protein', 'fat', 'fiber', 'fiber',
+      'calcium',
+      'iron',
+      'zinc',
+      'vitamin_a',
+      'vitamin_c',
+      'vitamin_d',
+      'vitamin_e',
+      'vitamin_k'];
+    nutrientsToUpdate.forEach((key) => {
+      const nutrient = this.mealPlanResponse.tableData.find((n: any) => n.nutrientName.toLowerCase().includes(key));
+      if (nutrient) {
+        nutrient.actual -= parseFloat(recipe[key] || 0);
+      }
+    });
+    this.mealPlanResponse.tableData.forEach((nutrient: any) => {
+      if (nutrient.actual < 0) {
+        nutrient.actual = 0;
+      }
+    });
   }
 
   openShoppingListDialog(): void {
