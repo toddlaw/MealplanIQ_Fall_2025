@@ -38,7 +38,9 @@
 }
 
 .out-of-range {
-  color: red;}
+  color: red;
+  font-weight: bold;
+}
 
 #deleted-card {
   padding: 20px;
@@ -51,10 +53,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-  color: red;
-  font-weight: bold;
 }
 
 .in-range {
