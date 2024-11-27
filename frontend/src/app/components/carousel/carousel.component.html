@@ -1,10 +1,10 @@
 <div id="default-carousel" class="w-full mx-auto max-w-xl relative" data-carousel="slide">
-  <div class="relative h-56 overflow-hidden md:h-96">
+  <div class="relative h-56 overflow-hidden md:h-96 flex items-center justify-center">
     <div *ngFor="let item of placeHolders; let i = index" 
          [ngClass]="{'hidden': currentItem !== i, 'block': currentItem === i, 'duration-700': true, 'ease-in-out': true}" 
          data-carousel-item>
       <img [src]="item.file_name" 
-           class="absolute block w-full h-full object-cover top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+           class="max-w-full max-h-full object-contain" 
            [alt]="item.image">
     </div>
   </div>

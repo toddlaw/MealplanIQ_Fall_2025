@@ -413,7 +413,9 @@
                   </ng-template>
                   <button class="button hover:bg-primary hover:text-white p-1 rounded-full"
                     (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
-                  <button (click)="deleteRecipe(recipe.id)">Delete</button>
+                  <button class="button bg-red-500 text-white px-5 py-2 rounded-lg ml-1"
+                  style="border: none;color:white;background-color:darkred"
+                  (click)="deleteRecipe(recipe.id)">Delete</button>
                 </div>
               </mat-card-footer>
 
