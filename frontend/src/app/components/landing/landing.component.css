@@ -70,3 +70,8 @@ mat-panel-title {
   font-size: 19px;
 
 }
+
+.blue-text {
+  color: rgb(46, 52, 212);
+  font-weight: bold;
+}

@@ -423,8 +423,6 @@
         <br />
       </div>
       <div>
-
-
         <!-- group nutrient table into four cards -->
         <mat-card>
           <mat-card-header (click)="expanded = !expanded" class="cursor-pointer">
@@ -447,7 +445,8 @@
                   </ng-container>
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                    <td mat-cell *matCellDef="let element" [ngClass]="'blue-text'"> {{ element.display_target_min &&
+                      element.display_target_max
                       ? element.display_target_min + ' - ' + element.display_target_max
                       : element.display_target_min
                       ? element.display_target_min + '-'
@@ -455,11 +454,10 @@
                   </ng-container>
                   <ng-container matColumnDef="actual">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
-                    <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
                     <td mat-cell *matCellDef="let element" [ngClass]="{
-        'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
-        'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
-    }">
+'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
+'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
+}">
                       {{ element.actual }}
                     </td>
 
@@ -483,7 +481,8 @@
 
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                    <td mat-cell *matCellDef="let element" [ngClass]="'blue-text'"> {{ element.display_target_min &&
+                      element.display_target_max
                       ? element.display_target_min + ' - ' + element.display_target_max
                       : element.display_target_min
                       ? element.display_target_min + ' - '
@@ -494,9 +493,9 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
                     <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
                     <td mat-cell *matCellDef="let element" [ngClass]="{
-        'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
-        'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
-    }">
+'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
+'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
+}">
                       {{ element.actual }}
                     </td>
 
@@ -523,7 +522,7 @@
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
                     <!-- <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td> -->
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="'blue-text'">
                       {{ element.display_target_min && element.display_target_max
                       ? element.display_target_min + ' - ' + element.display_target_max
                       : element.display_target_min
@@ -536,9 +535,9 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
                     <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
                     <td mat-cell *matCellDef="let element" [ngClass]="{
-        'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
-        'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
-    }">
+'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
+'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
+}">
                       {{ element.actual }}
                     </td>
 
@@ -564,7 +563,8 @@
 
                   <ng-container matColumnDef="target">
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Target </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.display_target_min && element.display_target_max
+                    <td mat-cell *matCellDef="let element" [ngClass]="'blue-text'"> {{ element.display_target_min &&
+                      element.display_target_max
                       ? element.display_target_min + ' - ' + element.display_target_max
                       : element.display_target_min
                       ? element.display_target_min + ' - '
@@ -575,9 +575,9 @@
                     <th mat-header-cell *matHeaderCellDef class="header-cell"> Your Meal Plan </th>
                     <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
                     <td mat-cell *matCellDef="let element" [ngClass]="{
-        'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
-        'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
-    }">
+'out-of-range': element.actual < element.display_target_min || element.actual > element.display_target_max,
+'in-range': element.actual >= element.display_target_min && element.actual <= element.display_target_max
+}">
                       {{ element.actual }}
                     </td>
 
@@ -591,6 +591,8 @@
             </mat-accordion>
           </mat-card-content>
         </mat-card>
+
+
 
 
 
