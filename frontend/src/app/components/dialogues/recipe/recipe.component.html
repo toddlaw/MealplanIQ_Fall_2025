@@ -46,7 +46,6 @@
           <tr>
             <td>{{ ingredient.name }}</td>
             <td>{{ (ingredient.quantity) | fraction }}</td>
-            <!-- <td>{{ ingredient.quantity | fraction }}</td> -->
             <td>{{ ingredient.unit }}</td>
             <td *ngIf="ingredient.state">
               ({{ ingredient.state }})
