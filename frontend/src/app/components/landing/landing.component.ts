@@ -39,6 +39,8 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
 
+
+
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -225,6 +227,7 @@ export class LandingComponent implements OnInit {
   }
 
   categorizeNutrients() {
+
     this.energy = [];  // add new "Energy" category
     this.macros = [];
     this.vitamins = [];
@@ -339,6 +342,11 @@ export class LandingComponent implements OnInit {
 
 
   }
+
+
+
+
+
   /**
    * Shows the terms and conditions dialog and sends the data if the terms and conditions are accepted
    */
