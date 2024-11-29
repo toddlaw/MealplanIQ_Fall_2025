@@ -574,7 +574,10 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     for recipe in recipes:
         calories = recipe_df.loc[recipe_df['number']
                                  == recipe]["energy_kcal"].values
-        if calories and calories[0] < CALORIE_CAP and calories[0] > MIN_CALORIE_CAP:
+        if (len(calories) > 0 and 
+            isinstance(calories[0], (int,float)) and
+            calories[0] < CALORIE_CAP and 
+            calories[0] > MIN_CALORIE_CAP):
             recipe_limit = int(CALORIE_CAP / calories[0])
         else:
             recipe_limit = 1

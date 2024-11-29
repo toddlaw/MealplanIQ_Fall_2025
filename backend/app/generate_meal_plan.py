@@ -126,7 +126,7 @@ def gen_meal_plan(data):
         data["likedFoods"],
         data["dislikedFoods"],
         data["allergies"],
-        pd.read_csv("./meal_db/meal_database.csv"),
+        all_recipes_df,
     )
 
     # 6. Retrieve diet
@@ -170,7 +170,7 @@ def gen_meal_plan(data):
         user_diet=diet_info["diet_score"],
         days=days,
         excluded_nutrients=[
-            nutrient.lower() for nutrient in list_of_excluded_nutrients
+            str(nutrient).lower() for nutrient in list_of_excluded_nutrients
         ],
         constraint_relaxation=constraint_relaxation,
         exclude=data["excludedRecipes"],
