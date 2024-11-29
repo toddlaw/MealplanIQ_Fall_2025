@@ -235,13 +235,13 @@ export class LandingComponent implements OnInit {
 
     // define nutrient aliases
     const nutrientAliases: { [key: string]: string } = {
-      'thiamin (mg)': 'Vitamin B1 (Thiamine) (mg)',
-      'riboflavin (mg)': 'Vitamin B2 (Riboflavin) (mg)',
-      'niacin (mg)': 'Vitamin B3 (Niacin) (mg)',
-      'vitamin_b5 (mg)': 'Vitamin B5 (Pantothenic Acid) (mg)',
-      'vitamin_b6 (mg)': 'Vitamin B6 (Pyridoxine) (mg)',
-      'vitamin_b12 (ug)': 'Vitamin B12 (cyanocobalamin) (ug)',
-      'folate (ug)': 'Vitamin B9 (Folate) (ug)',
+      'thiamin (mg)': 'Vitamin B1 / Thiamine (mg)',
+      'riboflavin (mg)': 'Vitamin B2 / Riboflavin (mg)',
+      'niacin (mg)': 'Vitamin B3 / Niacin (mg)',
+      'vitamin_b5 (mg)': 'Vitamin B5 / Pantothenic Acid (mg)',
+      'vitamin_b6 (mg)': 'Vitamin B6 / Pyridoxine (mg)',
+      'vitamin_b12 (ug)': 'Vitamin B12 / cyanocobalamin (ug)',
+      'folate (ug)': 'Vitamin B9 / Folate (ug)',
       'vitamin_a (iu)': 'Vitamin A (iu)',
       'vitamin_c (mg)': 'Vitamin C (mg)',
       'vitamin_d (iu)': 'Vitamin D (iu)',
