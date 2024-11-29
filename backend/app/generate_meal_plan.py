@@ -7,7 +7,7 @@ from app.apply_user_prefs_to_meal_database import apply_user_prefs
 from app.retrieve_diet import get_diet_plan
 from app.adjust_nutritional_requirements import adjust_nutrients
 from app.find_optimal_meals import optimize_meals_integration
-from app.post_process import post_process_results
+from app.V2_post_process import post_process_results
 # from app.post_process_with_real_snack import process_the_recipes_with_snacks
 import json
 import os
@@ -30,28 +30,6 @@ def process_type_normal(response):
     return response
 
 
-def process_response_meal_name(response):
-    """
-    A part of this method is a test phase method to generate the meal name with actual meal names.
-
-    :param response: response object
-    :return: response object with meal slot replaced with actual meal names
-    """
-
-    # delete this part after the composite meal logic is completed
-    for day in response["days"]:
-        print("day_recipes",day["recipes"])
-        day["recipes"][0]["meal_name"] = "Breakfast"
-        day["recipes"][1]["meal_name"] = "Lunch"
-        day["recipes"][2]["meal_name"] = "Dinner"
-
-    # Don't delete this!!!
-    for snack in response["snacks"]:
-        snack["meal_name"] = "Snack"
-
-    return response
-
-
 def gen_shopping_list(response):
     """
     This method returns the meal plan with the shopping list data generated based on each recipe ingredient names.
@@ -68,133 +46,6 @@ def gen_shopping_list(response):
                     shopping_list.add(ingredient)
 
     response["shopping_list"] = list(shopping_list)
-
-    return response
-
-
-def distribute_snacks_to_date(response):
-    
-    # New function distributes snacks acroess given number of days, with two meals per day. 
-    # Accounts for multiples of each snack to be used across days.
-    """
-    Distribute snacks evenly across a given number of days, with an additional distribution of any remainder
-    to minimize consecutive days without snacks.
-    """
-    
-    # create list of multiples of each snack
-    snack_multiples = []
-    for snack in response["snacks"]:
-        snack_multiples.append(int(snack["multiples"]))
-        print(snack_multiples)
-
-    num_snacks_in_a_day = 2 # 2 snacks in a day
-
-    # Even distribution
-    snack_index = 0
-    for day in response["days"]:
-        for _ in range(num_snacks_in_a_day):
-            if snack_multiples[snack_index] > 0:
-            # if multiple of snack is > 0
-                day["recipes"].append(response["snacks"][snack_index])
-                #print("APPENDED SNACK",response["snacks"][i])
-                snack_multiples[snack_index] -=1
-                # reduce multiple by 1
-                
-            else:    
-                snack_index+=1
-                # move to the next snack
-                day["recipes"].append(response["snacks"][snack_index])
-                #print("APPENDED SNACK",response["snacks"][i])
-                snack_multiples[snack_index] -=1
-                # reduce multiple by 1
-        
-    # OLD LOGIC
-    # days_len = len(response["days"])
-    # snacks_len = len(response["snacks"])
-    
-    #snacks_len // days_len
-    #remainder = snacks_len % days_len
-    
-    # Distribute the remainder in a way that minimizes consecutive days without snacks
-    # if remainder > 0:
-    #     interval = days_len // remainder
-    #     for i in range(remainder):
-    #         response["days"][i * interval]["recipes"].append(
-    #             response["snacks"][snack_index]
-    #         )
-    #         snack_index += 1
-
-    return response
-
-
-def insert_snacks_between_meals(response):
-    """
-    Insert snacks into the right snack time, one between breakfast and lunch, and the other between lunch and dinner.
-
-    Ensure the number of snack recipes in the two positions are as close as possible, with a difference of at most +1.
-    """
-    for day in response["days"]:
-        breakfast_indices = [
-            i
-            for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"].lower() == "breakfast"
-        ]
-        lunch_indices = [
-            i
-            for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"].lower() == "lunch"
-        ]
-        dinner_indices = [
-            i
-            for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"].lower() == "dinner"
-        ]
-
-        snack_indices = [
-            i
-            for i, recipe in enumerate(day["recipes"])
-            if recipe["meal_name"].lower() == "snack"
-        ]
-        snacks = [day["recipes"][i] for i in snack_indices]
-
-        # Remove existing snacks from the list
-        day["recipes"] = [
-            recipe for i, recipe in enumerate(day["recipes"]) if i not in snack_indices
-        ]
-
-        # Determine insertion points
-        insert_between_breakfast_lunch = (
-            breakfast_indices[-1] + 1 if breakfast_indices else 0
-        )
-        #print("\n\nINSERTION POINT1:  \n\n",insert_between_breakfast_lunch)
-        insert_between_lunch_dinner = (
-            lunch_indices[-1] + 1 if lunch_indices else len(day["recipes"])
-        )
-        #print("\n\nINSERTION POINT2:  \n\n",insert_between_lunch_dinner)
-
-        # Split snacks into two approximately equal parts
-        mid = (
-            len(snacks) + 1
-        ) // 2  # Ensure the first part has one more element if odd
-
-        snacks1 = snacks[:mid]
-        snacks2 = snacks[mid:]
-        
-        #print("\n\nSNACK1: \n\n",snacks1)
-        #print("\n\nSNACK2: \n\n",snacks2)
-
-        # Insert snacks into the right positions
-        for snack in reversed(snacks1):
-            day["recipes"].insert(insert_between_breakfast_lunch, snack)
-            
-        #print("\n\nRESPONSE AFTER INSERTION1:  \n\n",response)
-
-        # Adjust the second insertion point after inserting the first batch of snacks
-        insert_between_lunch_dinner = insert_between_lunch_dinner + len(snacks1)
-        #print("\n\nADJUSTED INSERTION POINT2:  \n\n",insert_between_lunch_dinner)
-        
-        for snack in reversed(snacks2):
-            day["recipes"].insert(insert_between_lunch_dinner, snack)
 
     return response
 
@@ -222,14 +73,6 @@ def is_within_target(actual, target):
     if actual != 0 and lower_bound == 0 and not parts[1].strip():
         return False
     return lower_bound <= actual <= upper_bound
-
-
-def update_meals_with_snacks(response, snack_recipes_df):
-    snacks = response["snacks"]  # optimized results snacks
-    new_snacks = process_the_recipes_with_snacks(snacks, snack_recipes_df)
-    response["snacks"] = new_snacks
-
-    return response
 
 
 def gen_meal_plan(data):
@@ -283,7 +126,7 @@ def gen_meal_plan(data):
         data["likedFoods"],
         data["dislikedFoods"],
         data["allergies"],
-        pd.read_csv("./meal_db/meal_database.csv"),
+        all_recipes_df,
     )
 
     # 6. Retrieve diet
@@ -327,68 +170,34 @@ def gen_meal_plan(data):
         user_diet=diet_info["diet_score"],
         days=days,
         excluded_nutrients=[
-            nutrient.lower() for nutrient in list_of_excluded_nutrients
+            str(nutrient).lower() for nutrient in list_of_excluded_nutrients
         ],
         constraint_relaxation=constraint_relaxation,
         exclude=data["excludedRecipes"],
         include=data["includedRecipes"],
     )
-    print("optimized_results1",optimized_results)
+    print("optimized_results1", optimized_results)
 
-    optimized_snacks = []
-    optimized_snacks = [recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) > 200000]
-    optimized_results["recipes"] = [recipe for recipe in optimized_results["recipes"] if int(recipe["id"]) <= 200000]
+    # optimized_snacks = []
+    # print('11-22-3', optimized_snacks)
+    # print('11-22-4', optimized_results['recipes'])
 
-    print("11-08-01",optimized_results["recipes"])
-    print("11-08-02",optimized_snacks)
+    '''
+    Note: for optimized_results, a meal_slot might have all breakfast, lunch and main. 
+    Then main and lunch have the priority since both of them are restrict to one. 
+    '''
 
     # 9. Post-process response
     response = post_process_results(
-        recipes_with_scores, optimized_results, optimized_snacks, min_date, days
+        recipes_with_scores, optimized_results, min_date, days
     )
-    print("response1:", response)  
+    print("response1:", response)
     print("=============")
-    #response = update_meals_with_snacks(response, snack_recipes_df.copy())
-    #print("response2:", response)  
-    #print("=============")
-    response = process_response_meal_name(response)
-    print("response3:", response)
-    response = distribute_snacks_to_date(response)
-    #print("response4:", response)
-    response = insert_snacks_between_meals(response)
-    #print("response5:", response)
-    response = process_type_normal(response)
-    #print("response6:", response)
+    # response = process_type_normal(response)
+    # print("response6:", response)
     response = insert_status_nutrient_info(response)
-    #print("response7:", response)
+    # print("response7:", response)
     response = gen_shopping_list(response)
-    #print("\n\nresponse8:\n\n", response)
+    print("\n\nresponse8:\n\n", response)
 
     return response
-
-
-def main():
-    # Construct the file path relative to the script location
-    script_dir = os.path.dirname(__file__)
-    message_file_path = os.path.join(script_dir, "message.json")
-    output_file_path = os.path.join(script_dir, "output.json")
-
-    # Load the JSON file as a dictionary
-    with open(message_file_path, "r") as file:
-        data = json.load(file)
-
-    # Process the response
-    response = process_response_meal_name(data)
-    response = process_type_normal(response)
-    response = distribute_snacks_to_date(response)
-    response = insert_snacks_between_meals(response)
-
-    # Write the response to a new JSON file
-    with open(output_file_path, "w") as output_file:
-        json.dump(response, output_file, indent=4)
-
-    print("Response written to output.json")
-
-
-if __name__ == "__main__":
-    main()

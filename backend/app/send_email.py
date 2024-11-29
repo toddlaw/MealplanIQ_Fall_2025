@@ -9,10 +9,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from app.generate_meal_plan import (
-    distribute_snacks_to_date,
     gen_meal_plan,
-    insert_snacks_between_meals,
-    process_response_meal_name,
     process_type_normal,
 )
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan

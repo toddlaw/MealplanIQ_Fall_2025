@@ -18,6 +18,7 @@ from app.find_matched_recipe_and_update import find_matched_recipe_and_update, f
 CORS(app)
 
 # serve static files
+import traceback
 
 
 @app.route("/", defaults={"path": ""})
@@ -106,8 +107,10 @@ def receive_data():
         print("data sent to gen_meal_plan", data)
         response = gen_meal_plan(data)
     except Exception as e:
-        response = {"error": str(e)}
-        print(f"Failed to generate meal plan: {str(e)}")
+        error_traceback = traceback.format_exc()
+        response = {"error": str(e),
+                    "traceback": error_traceback}
+        print(f"Failed to generate meal plan: {str(e)}\nTraceback: {error_traceback}")
 
     try:
         create_and_send_maizzle_email_test(response, user_id, db)

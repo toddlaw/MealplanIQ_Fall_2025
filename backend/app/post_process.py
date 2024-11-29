@@ -5,7 +5,8 @@ import json
 import pandas as pd
 
 
-def post_process_results(recipe_df, optimized_results, optimized_snacks,min_date, days): # add optimized_snacks as input
+# add optimized_snacks as input
+def post_process_results(recipe_df, optimized_results, optimized_snacks, min_date, days):
     """
     Called to process the results from the optimization function in addition
     to other data so that a JSON response can be sent to the frontend.
@@ -21,6 +22,7 @@ def post_process_results(recipe_df, optimized_results, optimized_snacks,min_date
 
     """
     meals_by_calories = []
+    print("===============")
     num_multiples = get_total_multiples(optimized_results)
     response = {}
 
@@ -34,15 +36,20 @@ def post_process_results(recipe_df, optimized_results, optimized_snacks,min_date
     elif num_multiples > days * 3:
         response['tableData'] = create_table_data(optimized_results)
         meals_by_calories = get_meals_by_calories(recipe_df, optimized_results)
-        optimized_results = reduce_optimized_results(         # modify: reduce_optimized_results doesn't return optimized_snacks
-            meals_by_calories, num_multiples, optimized_results, days)    
+        print("\n\nOPTIMIZED RESULTS BEFORE REDUCED: \n\n",optimized_results)
+        
+        print(f'\n\nMEALS BY CALORIES:\n{meals_by_calories},\n\nNUM_MULTIPLES:\n {num_multiples},\n\nDAYS:\n {days}\n\n')
+        #optimized_results = reduce_optimized_results(         # modify: reduce_optimized_results doesn't return optimized_snacks
+        #    meals_by_calories, num_multiples, optimized_results, days)
+        print("\n\nOPTIMIZED RESULTS AFTER REDUCED: \n\n",optimized_results)
         days = create_days_array(recipe_df, optimized_results, min_date, days)
-        print("24optimized_snacks",optimized_snacks)  
+        print("\n\nDAYS IN OPTIMIZEATION: \n\n",days)
+        # print("24optimized_snacks", optimized_snacks)
         response['days'] = days
         response['snacks'] = create_snacks_array(recipe_df, optimized_snacks)
-    print("optimized_snacks_hh",optimized_snacks)
-    print("optimized_results_hh",optimized_results)
-    print("4444444:",response['snacks']) 
+    # print("optimized_snacks_hh", optimized_snacks)
+    # print("optimized_results_hh", optimized_results)
+    # print("4444444:", response['snacks'])
     print("===============")
 
     return response
@@ -82,7 +89,7 @@ def reduce_optimized_results(meals_by_calories, num_multiples,
     """
     # meals_by_calories is sorted by greatest calories to least calories
     target_multiples = days * 3
-    optimized_snacks = []              
+    optimized_snacks = []
     current_multiples = num_multiples  # 37 for example
 
     while current_multiples > target_multiples:
@@ -92,7 +99,8 @@ def reduce_optimized_results(meals_by_calories, num_multiples,
             optimized_results, lowest_cal_recipe_name)
         while num_multiples_of_lowest_cal_recipe > 0 and current_multiples > target_multiples:
             optimized_results = reduce_results(
-                optimized_results, lowest_cal_recipe_name)  # modify: take optimized_snacks away from the input
+                # modify: take optimized_snacks away from the input
+                optimized_results, lowest_cal_recipe_name)
             num_multiples_of_lowest_cal_recipe -= 1
             current_multiples = get_total_multiples(optimized_results)
     print("optimized snacks", optimized_snacks)
@@ -113,7 +121,8 @@ def get_multiples_for_recipe(optimized_results, recipe_name):
     return 0
 
 
-def reduce_results(optimized_results, recipe_name):  # modify: take optimized_snacks away from the input
+# modify: take optimized_snacks away from the input
+def reduce_results(optimized_results, recipe_name):
     """
     Given a recipe name, reduces the multiples of that recipe in the
     optimized_results dictionary by 1. If the multiples of that recipe
@@ -205,31 +214,34 @@ def extract_recipes(array_of_recipe_dict):
 
 def create_days_array(recipe_df, optimized_results, min_date, days):
     # this list below only includes the recipe names
-    print("Days: ", days)
+    print("Days: ------------ ", days)
     recipes = extract_recipes(optimized_results['recipes'])
-    print("extracted recipes", recipes)
+    print("\n\nextracted recipes\n\n", recipes)
     recpies_balanced_by_day = balance_recipe_calories(recipe_df, recipes)
-    print("recpies_balanced_by_day", recpies_balanced_by_day)
+    print("\n\nrecpies_balanced_by_day\n\n", recpies_balanced_by_day)
+    # includes nutritional info and recipe infomration for all recipes (all the 9)
     base = min_date
     date_list = [base + datetime.timedelta(days=x) for x in range(days)]
     start_slice_index = 0
-    start_slice_end = 3
-    index_increment = 3
+    start_slice_end = 9
+    index_increment = 9
     days_array = []
 
     for date in date_list:
         day = date.strftime("%Y-%m-%d")
-        print("what", recpies_balanced_by_day[
-            start_slice_index:start_slice_end])
+        # print("what", recpies_balanced_by_day[
+        # start_slice_index:start_slice_end])
         days_array.append(create_meal_date(recpies_balanced_by_day[
             start_slice_index:start_slice_end],
             day))
+        
         start_slice_index += index_increment
         start_slice_end += index_increment
 
+    print("\n\ndays array before reverse\n\n", days_array)
     # sort the days_array by date descending by just reversing the array
     days_array.reverse()
-
+    print("\n\ndays array after reverse\n\n", days_array)
     return days_array
 
 
@@ -242,26 +254,89 @@ def balance_recipe_calories(recipe_df, recipes):
     processed_recipe = []
     for recipe in recipes:
         processed_recipe.append(process_recipe(recipe_df, recipe))
+        
+        
+    
+    #returned_recipes = sort_by_tags(processed_recipe)    
+        
 
+    print("\n\nprocessed Recipe:\n\n", processed_recipe)
+    
+    
     # sort based off of Calories
     processed_recipe = sorted(
         processed_recipe, key=lambda x: float(x['calories']))
 
+    return processed_recipe
     # split into 3 lists
-    list_length = len(processed_recipe)
-    low_cal = processed_recipe[:list_length//3]
-    low_cal.reverse()
-    mid_cal = processed_recipe[list_length//3:2*list_length//3]
-    high_cal = processed_recipe[2*list_length//3:]
-    high_cal.reverse()
+    # list_length = len(processed_recipe)
+    # low_cal = processed_recipe[:list_length//3]
+    # low_cal.reverse()
+    # mid_cal = processed_recipe[list_length//3:2*list_length//3]
+    # high_cal = processed_recipe[2*list_length//3:]
+    # high_cal.reverse()
 
-    returned_recipes = []
-    while len(low_cal) > 0:
-        returned_recipes.append(low_cal.pop(0))
-        returned_recipes.append(mid_cal.pop(0))
-        returned_recipes.append(high_cal.pop(0))
-    return returned_recipes
+    # returned_recipes = []
+    # while len(low_cal) > 0:
+    #     returned_recipes.append(low_cal.pop(0))
+    #     returned_recipes.append(mid_cal.pop(0))
+    #     returned_recipes.append(high_cal.pop(0))
+    # return returned_recipes
 
+def sort_by_tags(recipes):
+    
+    def parse_meal_slots(meal_slot_str):
+        return eval(meal_slot_str.strip('"'))
+    
+    def sort_single_day(day_recipes):
+        breakfasts = []
+        lunches = []
+        mains = []
+        sides = []
+        others = []
+        
+        for recipe in day_recipes:
+            meal_slots = parse_meal_slots(recipe['meal_slot'])
+            if len(meal_slots) ==1:
+                if 'breakfast' in meal_slots:
+                    breakfasts.append(recipe)
+                elif 'lunch' in meal_slots:
+                    lunches.append(recipe)
+                elif 'main' in meal_slots:
+                    mains.append(recipe)
+                elif 'side' in meal_slots:
+                    sides.append(recipe)
+                else:
+                    others.append(recipe)
+        
+        sorted_day = []
+        
+        sorted_day.extend(breakfasts)
+        
+        sorted_day.append(lunches.pop(0))
+        
+        sorted_day.append(mains.pop(0))
+        
+        sorted_day.extend(sides)
+        
+        sorted_day.extend(lunches)
+        sorted_day.extend(mains)
+        sorted_day.extend(others)
+        
+        return sorted_day
+    
+    num_days = len(recipes) // 9
+    sorted_recipes = []
+    
+    for day in range(num_days):
+        start_idx = day * 9
+        end_idx = start_idx + 9
+        day_recipes = recipes[start_idx:end_idx]
+        
+        sorted_day = sort_single_day(day_recipes)
+        sorted_recipes.extend(sorted_day)
+    
+    return sorted_recipes
 
 def create_meal_date(recipes, day):
     """
@@ -308,7 +383,8 @@ def process_recipe(recipe_df, recipe_name):
 
     # retrive instructions
 
-    instruction_file_path = f"./meal_db/instructions/instructions_{recipe_dict['id']}.csv"
+    instruction_file_path = f'''./meal_db/instructions/instructions_{
+        recipe_dict['id']}.csv'''
     ingredient_file_path = f"./meal_db/ingredients/{recipe_dict['id']}.csv"
 
     # instruction_content = pd.read_csv(instruction_file_path)

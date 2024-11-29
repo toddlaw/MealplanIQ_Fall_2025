@@ -143,9 +143,20 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     # Indexes for minimum/maximum values for macros
     MIN_INDEX = 0
     MAX_INDEX = 1
+    # exclude_slots = ['[\'component\']', '[\'drink\']', '[\'dessert\']', '[]']
+    # recipe_df = [recipe_df['meal_slot'].fillna('').apply(
+    #     lambda x: x not in exclude_slots)]
 
+    exclude_slots = ["['component']", "['drink']", "['dessert']",
+                     "[]", "['dessert', 'compound']", "['dessert', 'component']"]
+    # Filter the DataFrame
+    recipe_df = recipe_df[recipe_df['meal_slot'].fillna(
+        '').apply(lambda x: x not in exclude_slots)]
+
+    # print("recipe_df", recipe_df)
     # Process Recipes dataframe
     recipe_dict = get_recipe_dict_from_df(recipe_df)
+    # print("recipe_dict", recipe_dict)
 
     # Update micros and macros to number of days
     micros = modifyUserConstraintsByDays(days, micros)
@@ -156,8 +167,8 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     recipes = recipe_dict["number"]
     prob = LpProblem("Meal plan generation", LpMaximize)
     recipe_var = LpVariable.dicts("Recipes", recipes, lowBound=0,
-                                  cat='Integer')  # define varValue as integer, meaning the count of each recipe in the solution 
-    # print("recipe_var",recipe_var)
+                                  cat='Integer')  # define varValue as integer, meaning the count of each recipe in the solution
+    # print("recipe_var", recipe_var)
 
     """
     Macros
@@ -544,20 +555,18 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     less about fitting a mealplan into a diet.
     """
 
-    prob += lpSum([recipe_var[i] for i in recipes]) <= 11 * days
+    prob += lpSum([recipe_var[i] for i in recipes]) <= 9 * days
 
     # restrict the number of recipes that can be selected
-    print("exclude,",exclude)
+    # print("exclude,", exclude)
     prob += lpSum([recipe_var[int(i)] for i in exclude]) == 0
 
     # recipe_var comes from generate_meal_plan.py 257
     # :param exclude: list of strings, names of recipes to exclude
     # :param include: list of strings, names of recipes to include
-    
+
     # print("include,",include)
     # prob += lpSum([recipe_var[int(i)] for i in include]) >= len(include)
- 
-      
 
     CALORIE_CAP = 400
     MIN_CALORIE_CAP = 100
@@ -565,23 +574,105 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     for recipe in recipes:
         calories = recipe_df.loc[recipe_df['number']
                                  == recipe]["energy_kcal"].values
-        if calories and calories[0] < CALORIE_CAP and calories[0] > MIN_CALORIE_CAP:
+        if (len(calories) > 0 and 
+            isinstance(calories[0], (int,float)) and
+            calories[0] < CALORIE_CAP and 
+            calories[0] > MIN_CALORIE_CAP):
             recipe_limit = int(CALORIE_CAP / calories[0])
         else:
             recipe_limit = 1
         prob += recipe_var[recipe] <= recipe_limit
 
     # add constraints to make the result containing 2 * days snacks
-    snack_recipes = [recipe_id for recipe_id in recipe_var.keys() if 200681 <= recipe_id <= 200714]
-    print('snack_recipes',snack_recipes)
 
-    prob += lpSum(recipe_var[recipe_id] for recipe_id in snack_recipes) == 2*days
+    snack_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('snack'))
+        )
+    ]
+    print('snack_recipes', snack_recipes)
+    # print('receipe_var', recipe_var)
+
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in snack_recipes) == 2*days
+
+    # add constraints: #main = 1 * day
+    main_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('main'))
+        )
+    ]
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) == days
+
+    # add constraints: #side <= 2*days
+    side_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('side'))
+        )
+    ]
+
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in side_recipes) <= 2 * days
+
+    # add a constraint: #lunch = 1*days
+    lunch_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('lunch'))
+        )
+    ]
+
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in lunch_recipes) == days
+
+    # add a constraint: #breakfast >=1*days <= 3*days
+    breakfast_recipes = [
+        recipe_id for recipe_id in recipe_var.keys()
+        if any(
+            (recipe_df['number'] == recipe_id) &
+            (recipe_df['meal_slot'].fillna('').str.contains('breakfast'))
+        )
+    ]
+
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in breakfast_recipes) >= days
+
+    prob += lpSum(recipe_var[recipe_id]
+                  for recipe_id in breakfast_recipes) <= 3 * days
+
+    # add a constraint: #lunch and #main >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in lunch_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in main_recipes) >= 2
+    # add a constraint: #lunch and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in breakfast_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in lunch_recipes) >= 2
+
+    # add a constraint: #main and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) >= 2
+    # add a constraint: #side and #breakfast >=2*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in side_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) >= 2
+
+    # main+lunch+breakfast+snack >= 4*days
+    prob += lpSum(recipe_var[recipe_id] for recipe_id in main_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in breakfast_recipes) + lpSum(
+        recipe_var[recipe_id] for recipe_id in lunch_recipes) + lpSum(recipe_var[recipe_id]
+                                                                      for recipe_id in snack_recipes) >= 4
 
     # The problem data is written to an .lp file
 
     # The problem is solved using PuLP's choice of Solver, the input
     # is so messages are no longer displayd
     prob.solve(PULP_CBC_CMD(msg=0))
+    print('11111')
 
     result = {}
     result["constraints_loosened"] = False
@@ -589,7 +680,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     Repeat solving with loosened constraints if infeasible not implmented yet a
     last resort measure
     """
-    # used in the event  we need to loosen constraints
+  # used in the event  we need to loosen constraints
     original_constraints = None
 
     if LpStatus[prob.status] == LpStatus[LpStatusInfeasible]:
@@ -614,19 +705,25 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
 
     recipe_name_quant = []
     # print("prob.variables()",prob.variables())
+    print('22222222')
     print("summary:\n")
     for v in prob.variables():
         if v.varValue is not None and v.varValue > 0:
             recipe_id = v.name[8:]
             recipe_name = recipe_df.loc[recipe_df['number'] == int(
                 recipe_id)]['title'].values[0]
+            recipe_meal_slot = recipe_df.loc[recipe_df['number'] == int(
+                recipe_id)]['meal_slot'].values[0]
             recipe_name_quant.append({'name': f"{recipe_name}",
-                                      'id':recipe_id,               # add a field "id" to help the following track of the snack recipe
+                                      # add a field "id" to help the following track of the snack recipe
+                                      'id': recipe_id,
+                                      'meal_slot': recipe_meal_slot,
                                       'multiples': v.varValue})
 
             print(recipe_name, "=", v.varValue)
-
+    print('333333333')
     result["recipes"] = recipe_name_quant
+    print('444444', result["recipes"])
     result["status"] = LpStatus[prob.status]
     print("\n")
 
@@ -645,6 +742,7 @@ def optimize_meals_integration(recipe_df, macros, micros, user_diet,
     print("Status:", LpStatus[prob.status])
 
     result["constraint_targets"] = constraint_results
+    print("optimized_result", result)
     return result
 
 
