@@ -51,6 +51,7 @@ def find_matched_recipe_and_update(response, recipe_id):
     if recipe_to_replace:
         recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
         
+        print("\n\nRECIPE TO REPLACE\n\n: ",recipe_to_replace)
         if recipe_to_replace["meal_name"] == 'Snack':
         # changed list within string to just list (so frontend can read instructions and ingredients)
             recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
