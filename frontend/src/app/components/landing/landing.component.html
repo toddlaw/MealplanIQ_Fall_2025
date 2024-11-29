@@ -333,7 +333,7 @@
 
   <!-- response ui starts here -->
   <div class="container py-5 px-10">
-    <div *ngIf="!this.isEmpty(mealPlanResponse)">
+    <div *ngIf="!isEmpty(mealPlanResponse)">
       <p class="text-2xl text-center" *ngIf="searchClicked">
         ④ Want to change this plan? <br />
         Select the meals you don't like and search again.
@@ -371,7 +371,7 @@
           <!-- Loop for recipes -->
           <ng-container *ngFor="let recipe of day.recipes; index as j" class="w-full">
             <!-- container -->
-            <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between">
+            <mat-card *ngIf="recipe && !recipe.deleted; else emptyCard" class="meal-card w-full h-full p-4 flex flex-col justify-between">
               <!-- Use flex-col to align title and content vertically -->
 
               <mat-card-title>{{ recipe.title }}</mat-card-title>
@@ -413,10 +413,18 @@
                   <!-- </ng-template> -->
                   <button class="button hover:bg-primary hover:text-white p-1 rounded-full"
                     (click)="refreshRecipe(recipe.id)"><mat-icon>refresh</mat-icon></button>
+                  <button class="button bg-red-500 text-white px-5 py-2 rounded-lg ml-1"
+                  style="border: none;color:white;background-color:darkred"
+                  (click)="deleteRecipe(recipe.id)">Delete</button>
                 </div>
               </mat-card-footer>
 
             </mat-card>
+            <ng-template #emptyCard>
+              <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between" id="deleted-card">
+                <span class="text-gray-500">Deleted Recipe</span>
+            </mat-card>
+          </ng-template>
           </ng-container>
         </div>
         <br />

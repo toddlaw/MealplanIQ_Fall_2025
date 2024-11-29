@@ -11,7 +11,7 @@ from app.payment_stripe import (
 from app.manage_user_data import *
 from user_db.user_db import instantiate_database
 import stripe
-from app.find_matched_recipe_and_update import find_matched_recipe_and_update
+from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete
 # from app.send_email import send_weekly_email_by_google_scheduler
 
 # Enable CORS for all domains on all routes
@@ -134,6 +134,19 @@ def get_meal_plan_refresh():
     # Return the modified template data as JSON response
     return jsonify(output_data)
 
+@app.route("/api/delete-recipe", methods=["POST"])
+def delete_recipe():
+    data = request.json
+    meal_plan_data = data.get("meal_plan")
+    recipe_id = data.get("recipe_id")
+
+    try:
+        output_data = find_matched_recipe_and_delete(meal_plan_data, recipe_id)
+    except ValueError as e:
+        output_data = {"error": str(e)}
+        print(f"Failed to generate meal plan: {str(e)}")
+
+    return jsonify(output_data)
 
 @app.route("/api/get-shopping-list", methods=["POST"])
 def get_meal_plan():

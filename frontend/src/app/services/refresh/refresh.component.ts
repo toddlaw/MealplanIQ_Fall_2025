@@ -1,6 +1,7 @@
 import { Component, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -22,4 +23,16 @@ export class RefreshComponent {
       headers: headers,
     });
   }
+
+  private apiUrl_delete = 'http://localhost:5000/api/delete-recipe';
+
+  deleteRecipe(recipeId: string, mealPlan: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = { recipe_id: recipeId, meal_plan: mealPlan };
+    console.log('Request body:', body);
+    return this.http.post<any>(this.apiUrl_delete, body, {
+      headers: headers,
+    });
+  }
+
 }
