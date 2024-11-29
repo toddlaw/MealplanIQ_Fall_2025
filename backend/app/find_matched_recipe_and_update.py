@@ -147,7 +147,38 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
     # Ensure 'id' is an integer
     recipe_id = int(recipe["id"])
 
-    if recipe["meal_slot"] == "['lunch', 'dinner']":
+    if recipe["meal_slot"] == "['snack']":
+        
+        original_recipe_row = snack_df.loc[snack_df["number"] == recipe_id]
+        print("Original Recipe Row:\n", original_recipe_row)
+
+        if original_recipe_row.empty:
+            print("No recipe found with the given id:", recipe["id"])
+            return None  # Handle the case where the recipe is not found
+
+        # Filter out the rows where the number equals the original recipe's number
+        filtered_recipe_df = snack_df[snack_df["number"] != recipe_id]
+
+        # Find the row with the minimum calories difference from the remaining rows
+        matched_recipe_row = filtered_recipe_df.sample(n=1).iloc[0]
+        #matched_recipe = process_recipe(matched_recipe_row)
+        
+        # USING process_recipe function from post_processing instead of post_process_with_real_snack
+        # Convert matched_recipe_row to a single-row DataFrame
+        matched_recipe_df = pd.DataFrame([matched_recipe_row])
+        # Extract the recipe name from the row for process_recipe call
+        recipe_name = matched_recipe_row['title']
+        # Now call process_recipe with single row DataFrame and recipe name
+        matched_recipe = process_recipe(matched_recipe_df, recipe_name)
+        
+        # Had issue where lists would be turned into strings (f'') in process_recipe
+        # fixed in find_matched_recipe_and_update method
+
+        for key, value in matched_recipe.items():
+            matched_recipe[key] = f"{value}"
+        
+        #print('MATCHED RECIEPE',matched_recipe)
+    else:
         # Find the calories of the original recipe
         original_recipe_row = recipe_df.loc[recipe_df["number"] == recipe_id]
         print("Original Recipe Row:\n", original_recipe_row)
@@ -196,37 +227,6 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
             matched_recipe_row["ingredients"]
         )
 
-    else:
-        original_recipe_row = snack_df.loc[snack_df["number"] == recipe_id]
-        print("Original Recipe Row:\n", original_recipe_row)
-
-        if original_recipe_row.empty:
-            print("No recipe found with the given id:", recipe["id"])
-            return None  # Handle the case where the recipe is not found
-
-        # Filter out the rows where the number equals the original recipe's number
-        filtered_recipe_df = snack_df[snack_df["number"] != recipe_id]
-
-        # Find the row with the minimum calories difference from the remaining rows
-        matched_recipe_row = filtered_recipe_df.sample(n=1).iloc[0]
-        #matched_recipe = process_recipe(matched_recipe_row)
-        
-        # USING process_recipe function from post_processing instead of post_process_with_real_snack
-        # Convert matched_recipe_row to a single-row DataFrame
-        matched_recipe_df = pd.DataFrame([matched_recipe_row])
-        # Extract the recipe name from the row for process_recipe call
-        recipe_name = matched_recipe_row['title']
-        # Now call process_recipe with single row DataFrame and recipe name
-        matched_recipe = process_recipe(matched_recipe_df, recipe_name)
-        
-        # Had issue where lists would be turned into strings (f'') in process_recipe
-        # fixed in find_matched_recipe_and_update method
-
-        for key, value in matched_recipe.items():
-            matched_recipe[key] = f"{value}"
-        
-        #print('MATCHED RECIEPE',matched_recipe)
-
     print("New id found is", matched_recipe["id"])
 
     return matched_recipe
@@ -244,12 +244,12 @@ def update_nutrition_values(response, recipe, operation, recipe_df, snack_df):
     # Convert recipe ID to integer
     recipe["id"] = int(recipe["id"])
 
-    if recipe["meal_slot"] == "['lunch', 'dinner']":
+    if recipe["meal_slot"] == "['snack']":
         # Find the original recipe row in the DataFrame
-        original_recipe_row = recipe_df.loc[recipe_df["number"]
-                                            == recipe["id"]]
-    else:
         original_recipe_row = snack_df.loc[snack_df["number"] == recipe["id"]]
+    else:
+         original_recipe_row = recipe_df.loc[recipe_df["number"]
+                                            == recipe["id"]]
 
     if original_recipe_row.empty:
         raise ValueError(
