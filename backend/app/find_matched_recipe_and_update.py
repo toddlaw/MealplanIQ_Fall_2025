@@ -203,30 +203,36 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
         matched_recipe_row = filtered_recipe_df.loc[
             filtered_recipe_df["calories_diff"].idxmin()
         ]
-
+        
+        matched_recipe_df = pd.DataFrame([matched_recipe_row])
+        # Extract the recipe name from the row for process_recipe call
+        recipe_name = matched_recipe_row['title']
+        # Now call process_recipe with single row DataFrame and recipe name
+        matched_recipe = process_recipe(matched_recipe_df, recipe_name)
+        
         # Convert the matched recipe row to the expected dictionary format
-        matched_recipe = {
-            "carbohydrates": matched_recipe_row["carbohydrates_g"],
-            "country": matched_recipe_row["country"],
-            "fat": matched_recipe_row["fats_total_g"],
-            "price": "N/A",
-            "protein": matched_recipe_row["protein_g"],
-            "region": matched_recipe_row["region"],
-            "title": matched_recipe_row["title"],
-            "calories": matched_recipe_row["energy_kcal"],
-            "meal_slot": matched_recipe_row["meal_slot"],
-            "id": matched_recipe_row["number"],
-            "cook_time": matched_recipe_row["cooktime"],
-            "prep_time": matched_recipe_row["preptime"],
-            "sub_region": matched_recipe_row["subregion"],
-        }
+        # matched_recipe = {
+        #     "carbohydrates": matched_recipe_row["carbohydrates_g"],
+        #     "country": matched_recipe_row["country"],
+        #     "fat": matched_recipe_row["fats_total_g"],
+        #     "price": "N/A",
+        #     "protein": matched_recipe_row["protein_g"],
+        #     "region": matched_recipe_row["region"],
+        #     "title": matched_recipe_row["title"],
+        #     "calories": matched_recipe_row["energy_kcal"],
+        #     "meal_slot": matched_recipe_row["meal_slot"],
+        #     "id": matched_recipe_row["number"],
+        #     "cook_time": matched_recipe_row["cooktime"],
+        #     "prep_time": matched_recipe_row["preptime"],
+        #     "sub_region": matched_recipe_row["subregion"],
+        # }
 
         for key, value in matched_recipe.items():
             matched_recipe[key] = f"{value}"
 
-        matched_recipe["ingredients"] = ast.literal_eval(
-            matched_recipe_row["ingredients"]
-        )
+        # matched_recipe["ingredients"] = ast.literal_eval(
+        #     matched_recipe_row["ingredients"]
+        # )
 
     print("New id found is", matched_recipe["id"])
 
