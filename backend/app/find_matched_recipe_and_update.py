@@ -52,10 +52,10 @@ def find_matched_recipe_and_update(response, recipe_id):
         recipe_to_replace["meal_name"] = clicked_recipe["meal_name"]
         
         print("\n\nRECIPE TO REPLACE\n\n: ",recipe_to_replace)
-        if recipe_to_replace["meal_name"] == 'Snack':
+        #if recipe_to_replace["meal_name"] == 'Snack':
         # changed list within string to just list (so frontend can read instructions and ingredients)
-            recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
-            recipe_to_replace['ingredients_with_quantities'] = ast.literal_eval(recipe_to_replace['ingredients_with_quantities'])
+        recipe_to_replace['instructions'] = ast.literal_eval(recipe_to_replace['instructions'])
+        recipe_to_replace['ingredients_with_quantities'] = ast.literal_eval(recipe_to_replace['ingredients_with_quantities'])
 
         # Update the recipe at the same position
         response["days"][date_counter]["recipes"].insert(
@@ -230,8 +230,12 @@ def find_matched_recipe(recipe, recipe_df, snack_df):
         for key, value in matched_recipe.items():
             matched_recipe[key] = f"{value}"
 
-        # matched_recipe["ingredients"] = ast.literal_eval(
-        #     matched_recipe_row["ingredients"]
+        # matched_recipe["ingredients_with_quantities"] = ast.literal_eval(
+        #     matched_recipe_row["ingredients_with_quantities"]
+        # )
+        
+        # matched_recipe["instructions"] = ast.literal_eval(
+        #     matched_recipe_row["instructions"]
         # )
 
     print("New id found is", matched_recipe["id"])
