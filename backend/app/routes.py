@@ -15,7 +15,7 @@ from app.find_matched_recipe_and_update import find_matched_recipe_and_update, f
 # from app.send_email import send_weekly_email_by_google_scheduler
 
 # Enable CORS for all domains on all routes
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # serve static files
 import traceback
@@ -76,6 +76,15 @@ def handle_signup():
     except Exception as e:
         print(f"Failed to insert user: {str(e)}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/<path:path>", methods=["OPTIONS"])
+def handle_preflight(path):
+    response = jsonify({"status": "preflight OK"})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
+
 
 
 @app.route("/api/profile/<user_id>")
