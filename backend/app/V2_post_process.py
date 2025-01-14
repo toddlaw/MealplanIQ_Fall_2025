@@ -274,7 +274,7 @@ def process_recipe(recipe_df, recipe_name):
     # instruction_content = pd.read_csv(instruction_file_path)
     # recipe_dict['instructions'] = instruction_content.values.tolist()
 
-    with open(instruction_file_path, newline='') as csvfile:
+    with open(instruction_file_path, newline='', encoding='utf-8', errors='replace') as csvfile:
         content = csv.reader(csvfile)
         recipe_dict['instructions'] = []
         for row in content:
