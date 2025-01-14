@@ -458,15 +458,15 @@ export class LandingComponent implements OnInit {
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }
-              this.getShoppingListFromBackend().subscribe(
-                (secondResponse) => {
-                  console.log('Fetched Shopping List: ', secondResponse);
-                  this.shoppingListData = secondResponse;
-                },
-                (error) => {
-                  console.error(error);
-                }
-              );
+              // this.getShoppingListFromBackend().subscribe(
+              //   (secondResponse) => {
+              //     console.log('Fetched Shopping List: ', secondResponse);
+              //     this.shoppingListData = secondResponse;
+              //   },
+              //   (error) => {
+              //     console.error(error);
+              //   }
+              // );
 
               const numDays = this.getNumDays(this.mealPlanResponse);
               for (let i = 0; i < numDays; i++) {
@@ -640,14 +640,14 @@ export class LandingComponent implements OnInit {
         console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
         // After the meal plan is updated, get the updated shopping list
-        this.getShoppingListFromBackend().subscribe(
-          (updatedShoppingList) => {
-            this.shoppingListData = updatedShoppingList;
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+        // this.getShoppingListFromBackend().subscribe(
+        //   (updatedShoppingList) => {
+        //     this.shoppingListData = updatedShoppingList;
+        //   },
+        //   (error) => {
+        //     console.error(error);
+        //   }
+        // );
       },
       (error) => {
         this.toast.error(
@@ -678,14 +678,14 @@ export class LandingComponent implements OnInit {
         console.log('updated meal plan (delete)', this.mealPlanResponse);
         
         // After the meal plan is updated, get the updated shopping list
-        this.getShoppingListFromBackend().subscribe(
-          (updatedShoppingList) => {
-            this.shoppingListData = updatedShoppingList;
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+        // this.getShoppingListFromBackend().subscribe(
+        //   (updatedShoppingList) => {
+        //     this.shoppingListData = updatedShoppingList;
+        //   },
+        //   (error) => {
+        //     console.error(error);
+        //   }
+        // );
       },
       (error) => {
         this.toast.error('Oops, the server is too busy, try again later!');
