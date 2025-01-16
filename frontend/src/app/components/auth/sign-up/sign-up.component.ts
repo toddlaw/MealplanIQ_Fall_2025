@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { switchMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 // import { UsersService } from 'src/app/services/users.service';
 
@@ -98,7 +99,7 @@ export class SignUpComponent implements OnInit {
 
       try {
         const response = await this.http
-          .post('http://127.0.0.1:5000/signup', data)
+          .post(`${environment.baseUrl}/signup`, data)
           .toPromise();
         console.log(response);
         this.toast.observe({

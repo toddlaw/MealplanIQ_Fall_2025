@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class PopupComponent implements OnInit {
     const uid = localStorage.getItem('uid');
     if (uid) {
       try {
-        const response: any = await this.http.get(`http://127.0.0.1:5000/api/subscription_type_id/${uid}`).toPromise();
+        const response: any = await this.http.get(`${environment.baseUrl}/api/subscription_type_id/${uid}`).toPromise();
         if (response.subscription_type_id) {
           this.userSubscriptionTypeId = response.subscription_type_id;
           localStorage.setItem('subscription_type_id', response.subscription_type_id.toString());

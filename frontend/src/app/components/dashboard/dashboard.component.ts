@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 import { NutritionChartComponent } from '../dialogues/nutrition-chart/nutrition-chart.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -131,10 +132,7 @@ export class DashboardComponent implements OnInit {
   async getProfileData() {
     try {
       const data: any = await this.http
-        .get(
-          'http://127.0.0.1:5000/api/landing/profile/' +
-            localStorage.getItem('uid')
-        )
+        .get(`${environment.baseUrl}/api/landing/profile/${localStorage.getItem('uid')}`)
         .toPromise();
 
       console.log('data is:', data);
@@ -167,7 +165,7 @@ export class DashboardComponent implements OnInit {
       console.log('uid got:', userId);
       const response = await this.http
         .post(
-          `http://127.0.0.1:5000/api/update_user_profile_from_dashboard`,
+          `${environment.baseUrl}/api/update_user_profile_from_dashboard`,
           profileData
         )
         .toPromise();

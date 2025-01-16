@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
+import { environment } from 'src/environments/environment';
 import {
   units,
   activityLevels,
@@ -178,10 +179,7 @@ export class LandingComponent implements OnInit {
     if (localStorage.getItem('uid')) {
       try {
         const response: any = await this.http
-          .get(
-            'http://127.0.0.1:5000/api/subscription_type_id/' +
-            localStorage.getItem('uid')
-          )
+          .get(`${environment.baseUrl}/api/subscription_type_id/${localStorage.getItem('uid')}`)
           .toPromise();
         if (response.subscription_type_id) {
           localStorage.setItem(
@@ -200,10 +198,7 @@ export class LandingComponent implements OnInit {
     // prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
       this.http
-        .get(
-          'http://127.0.0.1:5000/api/landing/profile/' +
-          localStorage.getItem('uid')
-        )
+        .get(`${environment.baseUrl}/api/landing/profile/${localStorage.getItem('uid')}`)
         .subscribe((data: any) => {
           this.people[0].age = data.age;
           this.people[0].weight = data.weight;
@@ -442,7 +437,7 @@ export class LandingComponent implements OnInit {
         this.showSpinner = true;
         this.searchClicked = true;
         this.http
-          .post('http://127.0.0.1:5000/api', data, {
+          .post(`${environment.baseUrl}/api`, data, {
             responseType: 'text',
           })
           .subscribe(
@@ -935,7 +930,7 @@ export class LandingComponent implements OnInit {
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
     return this.http.post<ShoppingList[]>(
-      'http://127.0.0.1:5000/api/get-shopping-list',
+      `${environment.baseUrl}/api/get-shopping-list`,
       this.mealPlanResponse,
       {
         headers: new HttpHeaders({
