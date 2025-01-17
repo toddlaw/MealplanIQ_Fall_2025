@@ -52,17 +52,23 @@ class DatabaseManager:
     @staticmethod
     def connect_to_database():
         print("begin to instantiate database -------------")
-        print("DB_HOST:", os.getenv('DB_HOST'))
+        print("UNIX_SOCKET:", os.getenv('DB_HOST'))
         print("DB_USER:", os.getenv('DB_USER'))
         print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
         print("DB_NAME:", os.getenv('DB_NAME'))
-        return pymysql.connect(
-            host=os.getenv('DB_HOST'),
-            user=os.getenv('DB_USER'),
-            password=os.getenv('DB_PASSWORD'),
-            database=os.getenv('DB_NAME'),
-            charset='utf8'
-        )
+        
+        try:
+            connection = pymysql.connect(
+                unix_socket=os.getenv('DB_HOST'), 
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+                database=os.getenv('DB_NAME'),
+                charset='utf8'
+            )
+            print("Database connection established successfully!")
+            return connection
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     def disconnect_from_database(self):
         self.db.close()
