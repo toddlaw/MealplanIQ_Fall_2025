@@ -1,4 +1,5 @@
 from app import app
+from app.calculate_bmi import bmi_calculator_function
 from flask import redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
@@ -184,6 +185,24 @@ def get_subscription_type_id(user_id):
         print(f"No subscription_type_id found for user_id: {user_id}")
         return jsonify({"error": "User not found"}), 404
 
+@app.route("/api/get-bmi", methods=["POST"])
+def get_bmi():
+    try:
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
+        
+        weight = data.get("weight")
+        height = data.get("height")
+
+        if weight is None or height is None:
+            return jsonify({"error": "Missing weight or height"}), 400
+
+        bmi = bmi_calculator_function(weight, height)
+        return jsonify({"bmi": bmi})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
