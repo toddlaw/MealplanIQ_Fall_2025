@@ -3,6 +3,8 @@ from app.calculate_bmi import bmi_calculator_function
 from flask import redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
+from app.calculate_energy import energy_calculator_function
+from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
 from app.send_email import create_and_send_maizzle_email_test
 from app.payment_stripe import (
     handle_checkout_session_completed,
@@ -203,6 +205,55 @@ def get_bmi():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/get-nutrition-requirements", methods=["POST"])
+def get_nutrition_requirements():
+    try: 
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
+
+        age = data.get("age")
+        bmi = data.get("bmi")
+        gender = data.get("gender")
+        weight = data.get("weight")
+        height = data.get("height")
+        activityLevel = data.get("activityLevel")
+
+        if None in [age, bmi, gender, weight, height, activityLevel]:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
+        macros = calculate_macros(energy, [data])
+        micros = calculate_micros([data])
+        micro_nutrient_data = read_micro_nutrients_file()
+
+        all_keys = list(micro_nutrient_data.keys())
+        mineral_keys = [key for key in all_keys if "vit_" not in key] 
+        vitamin_keys = [key for key in all_keys if "vit_" in key]  
+
+        minerals = {key: int(micros[key]) for key in micros if key in mineral_keys}
+        vitamins = {key: int(micros[key]) for key in micros if key in vitamin_keys}
+
+        response_data = {
+            "Energy": {
+                "Energy (Calories)": int(energy[0]) 
+            },
+            "Macros": {
+                "Fiber (g)": [int(value) for value in macros["fiber_g"]], 
+                "Carbohydrates (g)": [int(value) for value in macros["carbohydrates_g"]],
+                "Protein (g)": [int(value) for value in macros["protein_g"]],
+                "Fats (g)": [int(value) for value in macros["fat_g"]]
+            },
+            "Vitamins": vitamins,
+            "Minerals": minerals 
+        }
+
+        return jsonify(response_data), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
