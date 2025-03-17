@@ -254,6 +254,25 @@ def get_nutrition_requirements():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/one-day-meal-plan-api", methods=["POST"])
+def create_one_day_meal_plan():
+    data = request.json
+    print("get data from frontend", data)
+
+    try:
+        print("data sent to gen_meal_plan", data)
+        response = gen_meal_plan(data)
+    except Exception as e:
+        error_traceback = traceback.format_exc()
+        response = {"error": str(e),
+                    "traceback": error_traceback}
+        print(f"Failed to generate meal plan: {str(e)}\nTraceback: {error_traceback}")
+        
+    # try:
+    #     create_and_send_maizzle_email_test(response, user_id, db)
+    # except Exception as e:
+    #     print(f"Failed to send email: {str(e)}")
+    return jsonify(response)
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
