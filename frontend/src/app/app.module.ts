@@ -54,6 +54,7 @@ import { RefreshComponent } from './services/refresh/refresh.component';
 import { NutritionChartComponent } from './components/dialogues/nutrition-chart/nutrition-chart.component';
 import { ShoppingListLandingPageComponent } from './components/dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 import { FractionPipe } from './fraction.pipe';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { FractionPipe } from './fraction.pipe';
     NutritionChartComponent,
     ShoppingListLandingPageComponent,
     FractionPipe,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

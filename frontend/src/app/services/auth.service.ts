@@ -6,6 +6,7 @@ import {
   authState,
   createUserWithEmailAndPassword,
   UserCredential,
+  sendPasswordResetEmail
 } from '@angular/fire/auth';
 import { concatMap, from, Observable, of, switchMap } from 'rxjs';
 
@@ -18,12 +19,18 @@ export class AuthService {
   constructor(private auth: Auth, private toast: HotToastService) {}
 
   signUp(email: string, password: string): Observable<UserCredential> {
-    
     return from(createUserWithEmailAndPassword(this.auth, email, password));
   }
 
   login(email: string, password: string): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, password));
+  }
+
+  // resetPassword(email: string): Observable<any> {
+  //   return from(sendPasswordResetEmail(this.auth, email));
+  // }
+  resetPassword(email: string): Promise<any> {
+    return sendPasswordResetEmail(this.auth, email);
   }
 
   logout(): Observable<any> {

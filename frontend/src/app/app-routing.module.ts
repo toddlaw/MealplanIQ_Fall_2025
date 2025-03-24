@@ -18,6 +18,7 @@ import { PrivacyComponent } from './components/static/privacy/privacy.component'
 import { OpportunityComponent } from './components/static/opportunity/opportunity.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PopupComponent } from './components/dialogues/popup/popup.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -37,6 +38,10 @@ const routes: Routes = [
     path: 'sign-up',
     component: SignUpComponent,
     // ...canActivate(redirectLoggedInToLanding),
+  },
+    {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
   },
   {
     path: 'about',
