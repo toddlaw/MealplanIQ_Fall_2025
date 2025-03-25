@@ -226,30 +226,9 @@ def get_nutrition_requirements():
         energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
         macros = calculate_macros(energy, [data])
         micros = calculate_micros([data])
-        micro_nutrient_data = read_micro_nutrients_file()
 
-        all_keys = list(micro_nutrient_data.keys())
-        mineral_keys = [key for key in all_keys if "vit_" not in key] 
-        vitamin_keys = [key for key in all_keys if "vit_" in key]  
-
-        minerals = {key: int(micros[key]) for key in micros if key in mineral_keys}
-        vitamins = {key: int(micros[key]) for key in micros if key in vitamin_keys}
-
-        response_data = {
-            "Energy": {
-                "Energy (Calories)": int(energy[0]) 
-            },
-            "Macros": {
-                "Fiber (g)": [int(value) for value in macros["fiber_g"]], 
-                "Carbohydrates (g)": [int(value) for value in macros["carbohydrates_g"]],
-                "Protein (g)": [int(value) for value in macros["protein_g"]],
-                "Fats (g)": [int(value) for value in macros["fat_g"]]
-            },
-            "Vitamins": vitamins,
-            "Minerals": minerals 
-        }
-
-        return jsonify(response_data), 200
+        data = { "energy": energy[0], "macros": macros, "micros": micros }
+        return jsonify(data), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
