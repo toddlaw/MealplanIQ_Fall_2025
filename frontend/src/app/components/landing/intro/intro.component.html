@@ -1,0 +1,20 @@
+<div class="flex flex-col md:flex-row items-center justify-center md:justify-between h-screen">
+  <div class="md:w-1/3 w-full text-left">
+    <h2 class="text-lg">
+      Reach your health goal with better eating.
+    </h2>
+    <p class="text-lg mb-4 font-light">
+      Personalized, and safe meal plans, designed by a registered dietician,
+      customized to your nutritional requirements, personal preferences and restrictions.
+    </p>
+    <button class="bg-secondary text-white px-6 py-2 rounded hover:bg-primary" (click)="goToQuestionnaire()">
+      Continue
+    </button>
+  </div>
+
+  <!-- Carousel -->
+  <div class="md:w-2/3 w-full h-full overflow-hidden flex justify-end">
+    <app-carousel [containerClass]="'h-screen justify-end'"></app-carousel>
+  </div>
+
+</div>

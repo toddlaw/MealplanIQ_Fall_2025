@@ -125,6 +125,7 @@ export class LandingComponent implements OnInit {
   userSubscriptionTypeId: number = 0;
   updatedMealPlan: any;
   shoppingListData: ShoppingList[] = [];
+  userId: string | null = null;
 
   people: {
     age: number | null;
@@ -173,6 +174,7 @@ export class LandingComponent implements OnInit {
   snackExpandedStates: boolean[] = [];
 
   async ngOnInit() {
+    this.userId = localStorage.getItem('uid');
     console.log('user ID: ' + localStorage.getItem('uid'));
     console.log('email: ' + localStorage.getItem('email'));
 

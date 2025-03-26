@@ -1,4 +1,9 @@
-<app-carousel></app-carousel>
+<ng-template #landingForNewUser>
+  <app-intro></app-intro>
+</ng-template>
+
+<div *ngIf="userId; else landingForNewUser">
+<app-carousel [containerClass]="'h-full justify-center'"></app-carousel>
 <div class="container mx-auto flex flex-col items-center justify-center min-h-screen" #start>
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg" id="homepage-landing">
     <!-- <h1 class="text-red">
@@ -604,6 +609,7 @@
 
 
 
+        </div>
       </div>
     </div>
-  </div>
+</div>
