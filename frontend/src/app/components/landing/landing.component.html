@@ -3,7 +3,8 @@
 </ng-template>
 
 <div *ngIf="userId; else landingForNewUser">
-<app-carousel [containerClass]="'h-full justify-center'"></app-carousel>
+  <app-carousel [imgClass]="'max-w-full max-h-full object-contain'" [containerClass]="''"
+    [extraClass]="'h-56 md:h-96'"></app-carousel>
 <div class="container mx-auto flex flex-col items-center justify-center min-h-screen" #start>
   <div class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg" id="homepage-landing">
     <!-- <h1 class="text-red">

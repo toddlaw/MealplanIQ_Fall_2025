@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-carousel',
@@ -7,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class CarouselComponent implements OnInit {
-
+  @Input() imgClass: string = ''; 
+  @Input() containerClass: string = '';
+  @Input() extraClass: string = '';
   currentItem: number = 0;
   totalItems: number = 13; 
 
