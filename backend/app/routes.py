@@ -10,6 +10,7 @@ from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
     handle_subscription_updated,
+    create_trial_payment_and_subscription
 )
 from app.manage_user_data import *
 from user_db.user_db import instantiate_database
@@ -312,3 +313,13 @@ def update_user_profile_from_dashboard():
     except Exception as e:
         print(f"Error updating profile in database from dashboard: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route("/trial-payment", methods=["POST"])
+def handle_payment():
+    data = request.json
+    try:
+        result = create_trial_payment_and_subscription(data)
+        return jsonify({'success': True, **result})
+    except Exception as e:
+        print('Stripe Payment Error:', str(e))
+        return jsonify({'success': False, 'error': str(e)}), 400
