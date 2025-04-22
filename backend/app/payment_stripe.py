@@ -72,3 +72,50 @@ def handle_subscription_deleted(subscription):
         return jsonify(success=True), 200
     except stripe.error.StripeError as e:
         return jsonify(error=str(e)), 400
+    
+def create_trial_payment_and_subscription(data):
+    print('Received Payment Data:', data)
+    billing = data.get('billing_details', {})
+    address = billing.get('address', {})
+    print('address:', address)
+
+    # Create customer
+    customer = stripe.Customer.create(
+        email=data.get('customer_email'),
+        name=billing.get('name'),
+        address=address,
+    )
+
+    # Attach payment method to customer
+    stripe.PaymentMethod.attach(
+        data['payment_method'],
+        customer=customer.id,
+    )
+
+    # One-time payment
+    payment_intent = stripe.PaymentIntent.create(
+        amount=int(data['price'] * 100),
+        currency='usd',
+        payment_method=data['payment_method'],
+        customer=customer.id,
+        receipt_email=data['customer_email'],
+        confirm=True,
+        description=f"2 week trial with ${data['price']}",
+        automatic_payment_methods={
+            'enabled': True,
+            'allow_redirects': 'never'
+        }
+    )
+
+    # Create subscription with 14-day trial
+    subscription = stripe.Subscription.create(
+        customer=customer.id,
+        items=[{'price': 'price_1RDbAT08iagEEr2StBVcQv0A'}],
+        trial_period_days=14,
+        default_payment_method=data['payment_method'],
+    )
+
+    return {
+        'payment_intent_id': payment_intent.id,
+        'subscription_id': subscription.id
+    }
