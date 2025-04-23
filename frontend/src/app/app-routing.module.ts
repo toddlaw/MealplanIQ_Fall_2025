@@ -19,6 +19,7 @@ import { OpportunityComponent } from './components/static/opportunity/opportunit
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -39,9 +40,13 @@ const routes: Routes = [
     component: SignUpComponent,
     // ...canActivate(redirectLoggedInToLanding),
   },
-    {
+  {
     path: 'reset-password',
     component: ResetPasswordComponent,
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
   },
   {
     path: 'about',

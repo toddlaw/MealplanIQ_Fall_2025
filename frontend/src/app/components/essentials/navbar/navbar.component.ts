@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-navbar',
@@ -13,17 +13,20 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private toast: HotToastService
+  ) {}
 
   logout() {
     this.authService.logout().subscribe(() => {
       localStorage.removeItem('email');
       localStorage.removeItem('uid');
-      this.router.navigate(['/']);
+      this.toast.success('You have been logged out.');
+
+      setTimeout(() => {
+        window.location.replace('');
+      }, 500);
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

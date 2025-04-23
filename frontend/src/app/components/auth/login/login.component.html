@@ -5,7 +5,7 @@
               <p class="text-center text-xl font-bold leading-tight tracking-tight md:text-2xl ">
                   Existing User? <br/>Login to your account
               </p>
-              <form class="p-2 space-y-4 md:space-y-6" [formGroup]="loginForm" (ngSubmit)="submit()">
+              <form class="p-2 space-y-4 md:space-y-6 text-center" [formGroup]="loginForm" (ngSubmit)="submit()">
               <div>
               <mat-form-field class="w-full max-w-lg">
                 <input matInput placeholder="Email address" formControlName="email" />
@@ -42,7 +42,7 @@
                 class="w-full text-white bg-primary focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 Login</button>
               </div>
-          <a class="cursor-pointer font-medium text-primary-600 hover:underline" routerLink="/reset-password">
+          <a class="cursor-pointer font-medium text-primary-600 hover:underline" routerLink="/forgot-password">
             &nbsp;Forgot Password?
           </a>
           <p class="text-sm font-light">
