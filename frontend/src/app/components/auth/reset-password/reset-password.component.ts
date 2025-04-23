@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  NonNullableFormBuilder,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
+  Auth,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
+} from '@angular/fire/auth';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { switchMap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AuthService } from 'src/app/services/auth.service';
-import { firstValueFrom } from 'rxjs';
+import { passwordsMatchValidator } from '../sign-up/sign-up.component';
 
 @Component({
   selector: 'app-reset-password',
@@ -22,86 +15,82 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['./reset-password.component.css'],
 })
 export class ResetPasswordComponent implements OnInit {
-  resetPwForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-  });
+  resetPwForm = this.fb.group(
+    {
+      password: [
+        '',
+        [Validators.required, Validators.pattern(/^(?=.*[A-Z]).{8,}$/)],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: passwordsMatchValidator() }
+  );
 
+  oobCode: string = '';
+  email: string = '';
+  errorMessage: string = '';
   showConfirmation: boolean = false;
-  countdown: number = 60;
-  timer: any;
-  resendAvailable: boolean = false;
-  emailToResend: string = '';
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private toast: HotToastService,
-    private authService: AuthService
+    private auth: Auth,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toast: HotToastService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.oobCode = this.route.snapshot.queryParams['oobCode'];
 
-  get email() {
-    return this.resetPwForm.get('email');
+    if (!this.oobCode) {
+      this.errorMessage =
+        'The reset link is invalid or has expired.<br>Please request a new link.';
+    } else {
+      this.verifyCode(this.oobCode);
+    }
+  }
+
+  get password() {
+    return this.resetPwForm.get('password');
+  }
+
+  get confirmPassword() {
+    return this.resetPwForm.get('confirmPassword');
+  }
+
+  // verify the reset link
+  verifyCode(oobCode: string) {
+    verifyPasswordResetCode(this.auth, oobCode)
+      .then((email) => {
+        this.email = email;
+      })
+      .catch((error) => {
+        console.log('Error in verifying reset code: ', error);
+        this.errorMessage =
+          'The reset link is invalid or has expired. <br> Please request a new link.';
+      });
   }
 
   submit() {
-    const email = this.resetPwForm.get('email')?.value;
+    const { password, confirmPassword } = this.resetPwForm.value;
 
-    if (!this.resetPwForm.valid || !email) {
+    if (!this.resetPwForm.valid || !password || !confirmPassword) {
       return;
     }
 
-    const toastRef = this.toast.loading('Sending password reset email...');
+    const toastRef = this.toast.loading('Resetting your password...');
 
-    this.authService
-      .resetPassword(email)
-      .then(() => {
-        toastRef.close();
-        this.emailToResend = email;
-        this.showConfirmation = true;
-        this.startCountdown();
-      })
-      .catch((error) => {
-        toastRef.close();
-        if (error.code === 'auth/invalid-email') {
-          this.toast.error(
-            'Invalid email. Please check the email address and try again.'
-          );
-        } else {
-          this.toast.error(
-            'Unable to send reset email. Please try again later.'
-          );
-        }
-      });
+    // change pwd through Firebase
+    confirmPasswordReset(this.auth, this.oobCode, password!).then(() => {
+      toastRef.close();
+      this.showConfirmation = true;
+    });
   }
 
-  startCountdown() {
-    this.countdown = 60;
-    this.resendAvailable = false;
-    this.timer = setInterval(() => {
-      this.countdown--;
-      if (this.countdown <= 0) {
-        this.resendAvailable = true;
-        clearInterval(this.timer);
-      }
-    }, 1000);
-  }
+  showPassword = false;
 
-  resendEmail() {
-    if (!this.resendAvailable || !this.emailToResend) return;
-
-    const toastRef = this.toast.loading('Resending password reset email...');
-
-    this.authService
-      .resetPassword(this.emailToResend)
-      .then(() => {
-        toastRef.close();
-        this.toast.success('The password reset email has been resent.');
-        this.startCountdown();
-      })
-      .catch(() => {
-        toastRef.close();
-        this.toast.error('Failed to resend. Please try again later.');
-      });
+  togglePasswordVisibility(event: Event) {
+    event.preventDefault();
+    this.showPassword = !this.showPassword;
   }
 }
