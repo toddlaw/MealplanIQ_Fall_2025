@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HotToastService } from '@ngneat/hot-toast';
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -16,7 +15,7 @@ import { concatMap, from, Observable, of, switchMap } from 'rxjs';
 export class AuthService {
   currentUser$ = authState(this.auth);
 
-  constructor(private auth: Auth, private toast: HotToastService) {}
+  constructor(private auth: Auth) {}
 
   signUp(email: string, password: string): Observable<UserCredential> {
     return from(createUserWithEmailAndPassword(this.auth, email, password));
@@ -26,9 +25,6 @@ export class AuthService {
     return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
-  // resetPassword(email: string): Observable<any> {
-  //   return from(sendPasswordResetEmail(this.auth, email));
-  // }
   resetPassword(email: string): Promise<any> {
     return sendPasswordResetEmail(this.auth, email);
   }
@@ -37,7 +33,6 @@ export class AuthService {
     localStorage.removeItem('uid');
     // localStorage.removeItem('email');
     localStorage.removeItem('data');
-    this.toast.success('You have been logged out.');
     return from(this.auth.signOut());
   }
 }
