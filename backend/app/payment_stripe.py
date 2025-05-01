@@ -7,9 +7,20 @@ from user_db.user_db import instantiate_database
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
+def get_subscription_type_id_from_product_id(product_id):
+    if product_id == os.getenv('STRIPE_MONTHLY_SUBSCRIPTION_KEY'):
+        return 3
+    elif product_id == os.getenv('STRIPE_QUARTERLY_SUBSCRIPTION_KEY'):
+        return 4
+    elif product_id == os.getenv('STRIPE_YEARLY_SUBSCRIPTION_KEY'):
+        return 5
+    else:
+        return 1 
+
 def handle_checkout_session_completed(session, user_id):
     print("User ID From Firebase:", user_id)
     subscription_stripe_id = session['subscription']
+    customer_id = session['customer']
     print("Subscription Stripe ID: ", subscription_stripe_id)
 
     # Make an API call to Stripe to retrieve the subscription object
@@ -20,14 +31,14 @@ def handle_checkout_session_completed(session, user_id):
 
     # Map the product ID to the corresponding subscription_type_id
     product_id = subscription['plan']['product']
-    subscription_type_id = 1 if product_id == os.getenv('STRIPE_MONTHLY_SUBSCRIPTION_KEY') else 2 if product_id == os.getenv('STRIPE_YEARLY_SUBSCRIPTION_KEY') else 3
+    subscription_type_id = get_subscription_type_id_from_product_id(product_id)
     print("Subscription Type ID: ", subscription_type_id)
 
     db = instantiate_database()
     with db.db.cursor() as cursor:
         cursor.execute(
-            "UPDATE user_subscription SET subscription_type_id = %s, subscription_stripe_id = %s, subscription_expiry_date = %s WHERE user_id = %s",
-            (subscription_type_id, subscription_stripe_id, subscription_expiry_date, user_id)
+            "UPDATE user_subscription SET subscription_type_id = %s, subscription_stripe_id = %s, subscription_expiry_date = %s, stripe_customer_id = %s WHERE user_id = %s",
+            (subscription_type_id, subscription_stripe_id, subscription_expiry_date, customer_id, user_id)
         )
         db.db.commit()
     return jsonify(success=True), 200
@@ -38,7 +49,7 @@ def handle_subscription_updated(subscription):
     subscription_expiry_date = datetime.datetime.fromtimestamp(expiry_date).date()
 
     product_id = subscription['plan']['product']
-    subscription_type_id = 1 if product_id == os.getenv('STRIPE_MONTHLY_SUBSCRIPTION_KEY') else 2 if product_id == os.getenv('STRIPE_YEARLY_SUBSCRIPTION_KEY') else 3
+    subscription_type_id = get_subscription_type_id_from_product_id(product_id)
 
     db = instantiate_database()
     with db.db.cursor() as cursor:
