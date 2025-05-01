@@ -132,7 +132,11 @@ export class DashboardComponent implements OnInit {
   async getProfileData() {
     try {
       const data: any = await this.http
-        .get(`${environment.baseUrl}/api/landing/profile/${localStorage.getItem('uid')}`)
+        .get(
+          `${environment.baseUrl}/api/landing/profile/${localStorage.getItem(
+            'uid'
+          )}`
+        )
         .toPromise();
 
       console.log('data is:', data);
@@ -217,28 +221,34 @@ export class DashboardComponent implements OnInit {
   manageSubscription() {
     const user_id = localStorage.getItem('uid');
     const subscription_type_id = localStorage.getItem('subscription_type_id');
-    if (subscription_type_id === '1') {
+    const validSubscribedTypes = ['2', '3', '4', '5'];
+
+    if (
+      !subscription_type_id ||
+      !validSubscribedTypes.includes(subscription_type_id)
+    ) {
       this.openDialog(
         "You're currently not subscribed.",
         "<div class='text-center'>Interested in For-pay feature?<br>Click <strong>'Subscribe'</strong> to get started.</div>",
         '/payment',
         'Subscribe'
       );
-    } else {
-      this.http
-        .post<{ url: string }>(`${environment.baseUrl}/create-customer-portal`, {
-          uid: user_id,
-        })
-        .subscribe({
-          next: (res) => {
-            window.location.href = res.url; 
-          },
-          error: (err) => {
-            console.error('Error creating portal session', err);
-            alert('Failed to open subscription portal.');
-          },
-        });
+      return;
     }
+
+    this.http
+      .post<{ url: string }>(`${environment.baseUrl}/create-customer-portal`, {
+        uid: user_id,
+      })
+      .subscribe({
+        next: (res) => {
+          window.location.href = res.url;
+        },
+        error: (err) => {
+          console.error('Error creating portal session', err);
+          alert('Failed to open subscription portal.');
+        },
+      });
   }
 
   openDialog(

@@ -499,7 +499,7 @@ class DatabaseManager:
                                height, age, weight, activity_level, selected_unit, health_goal)
         sql_subscription = """
         INSERT INTO user_subscription (user_id, subscription_type_id, stripe_customer_id, subscription_stripe_id, subscription_expiry_date)
-        VALUES (%s, 3, NULL, NULL, NULL);
+        VALUES (%s, 1, NULL, NULL, NULL);
         """
         values_subscription = (user_id,)  # Subscription values for the user
 
