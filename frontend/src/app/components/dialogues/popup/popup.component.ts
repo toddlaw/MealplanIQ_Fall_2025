@@ -31,30 +31,22 @@ export class PopupComponent implements OnInit {
     this.checkUserSubscriptionType();
   }
 
-  async checkUserSubscriptionType() {
+  checkUserSubscriptionType(): void {
     const uid = localStorage.getItem('uid');
-    if (uid) {
-      try {
-        const response: any = await this.http.get(`${environment.baseUrl}/api/subscription_type_id/${uid}`).toPromise();
-        if (response.subscription_type_id) {
-          this.userSubscriptionTypeId = response.subscription_type_id;
-          localStorage.setItem('subscription_type_id', response.subscription_type_id.toString());
-        } else {
-          this.userSubscriptionTypeId = 0;
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        this.userSubscriptionTypeId = 0;
-      }
-    } else {
+    if (!uid) {
       this.userSubscriptionTypeId = 0;
+      return;
     }
+
+    const stored = localStorage.getItem('subscription_type_id');
+    this.userSubscriptionTypeId = stored ? Number(stored) : 0;
+
     this.checkPopupStatus();
     console.log('subscription type ID:', this.userSubscriptionTypeId);
   }
 
   checkPopupStatus() {
-    if (this.userSubscriptionTypeId === 0 || this.userSubscriptionTypeId === 3) {
+    if (this.userSubscriptionTypeId === 0 || this.userSubscriptionTypeId === 1) {
       this.showPopup = true;
     } else {
       this.showPopup = false;
@@ -68,7 +60,7 @@ export class PopupComponent implements OnInit {
   getPopupContent() {
     if (this.userSubscriptionTypeId === 0) {
       return this.textValues[0];
-    } else if (this.userSubscriptionTypeId === 3) {
+    } else if (this.userSubscriptionTypeId === 1) {
       return this.textValues[1];
     }
     return null;

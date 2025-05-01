@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   user: any;
   userName: string = '';
   selected_unit: string = '';
-  subscriptionType: string = '';
+  subscriptionType: string | null = null;
   hasSubscription: boolean = false;
 
   Profile_info = [
@@ -270,14 +270,36 @@ export class DashboardComponent implements OnInit {
   }
 
   showSubscriptionStatus(): void {
-    const subscriptionTypeId = localStorage.getItem('subscription_type_id');
-    if (subscriptionTypeId === '1' || subscriptionTypeId === '2') {
-      this.subscriptionType = subscriptionTypeId === '1' ? 'monthly' : 'yearly';
-      this.hasSubscription = true;
-    } else if (subscriptionTypeId === '3') {
+  const subscriptionTypeId = localStorage.getItem('subscription_type_id');
+
+  switch (subscriptionTypeId) {
+    case '1': // free trial
       this.hasSubscription = false;
-    }
+      this.subscriptionType = 'none';
+      break;
+    case '2': // paid trial
+      this.hasSubscription = true;
+      this.subscriptionType = 'trial';
+      break;
+    case '3':
+      this.hasSubscription = true;
+      this.subscriptionType = 'monthly';
+      break;
+    case '4':
+      this.hasSubscription = true;
+      this.subscriptionType = 'quarterly';
+      break;
+    case '5':
+      this.hasSubscription = true;
+      this.subscriptionType = 'yearly';
+      break;
+    default:
+      this.hasSubscription = false;
+      this.subscriptionType = null;
+      break;
   }
+}
+
 
   logout() {
     this.authService.logout().subscribe(() => {

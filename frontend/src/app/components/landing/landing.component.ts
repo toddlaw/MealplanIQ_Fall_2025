@@ -96,6 +96,7 @@ export class LandingComponent implements OnInit {
     'This meal plan has some nutrients which are out of the target range.   Please see the table at the bottom for details.';
   readonly NO_RECIPES =
     "We're sorry!  We could not find a meal plan that fits your constraints.";
+  readonly PAID_SUBSCRIPTION_TYPES = [2, 3, 4, 5]
 
   @ViewChild('peoplePanel') peoplePanel!: MatExpansionPanel;
   @ViewChild('peopleForm') peopleForm!: NgForm;
@@ -187,7 +188,7 @@ export class LandingComponent implements OnInit {
           localStorage.setItem(
             'subscription_type_id',
             response.subscription_type_id
-          ); // 1: monthly, 2: yearly, 3: free-trial for signed up user
+          ); // 1: free trial, 2: paid trial, 3: monthly, 4: quarterly, 5: yearly
           this.userSubscriptionTypeId = response.subscription_type_id;
         }
       } catch (error) {
@@ -423,12 +424,9 @@ export class LandingComponent implements OnInit {
       this.toast.error('Please enter the details!');
     } else {
       if (
-        this.userSubscriptionTypeId === 1 ||
-        this.userSubscriptionTypeId === 2 ||
-        (this.userSubscriptionTypeId === 0 &&
-          data.maxDate === data.minDate) ||
-        (this.userSubscriptionTypeId === 3 &&
-          data.maxDate === data.minDate)
+        this.PAID_SUBSCRIPTION_TYPES.includes(this.userSubscriptionTypeId) ||
+        (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) || // non-signed user
+        (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
       ) {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
@@ -444,7 +442,6 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-
               // console.log('Raw Response:', response);
               console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
@@ -489,18 +486,19 @@ export class LandingComponent implements OnInit {
             }
           );
       } else {
-        if ((this.userSubscriptionTypeId === 1 || this.userSubscriptionTypeId === 2) && data.maxDate !== data.minDate) {
+        if (
+          this.PAID_SUBSCRIPTION_TYPES.includes(this.userSubscriptionTypeId) &&
+          data.maxDate !== data.minDate
+        ) {
           this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'block';
           this.element.nativeElement.style.display = 'none';
           const selectedHealthGoalObject = healthGoals.find(
             (goal) => goal.value === this.selectedHealthGoal
           );
-        }
-
-        else if (
+        } else if (
           (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
-          (this.userSubscriptionTypeId === 3 && data.maxDate === data.minDate)
+          (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate)
         ) {
           this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'block';
