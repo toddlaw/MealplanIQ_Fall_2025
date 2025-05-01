@@ -215,26 +215,29 @@ export class DashboardComponent implements OnInit {
   }
 
   manageSubscription() {
-    const email = localStorage.getItem('email');
+    const user_id = localStorage.getItem('uid');
     const subscription_type_id = localStorage.getItem('subscription_type_id');
-    // 1: monthly, 2: yearly, 3: free-trial for signed up user
-    if (subscription_type_id === '1' || subscription_type_id === '2') {
-      // for stripe test mode
-      const url =
-        'https://billing.stripe.com/p/login/test_bIY4h4eET9xWbZe9AA?prefilled_email=' +
-        email;
-
-      // for stripe live mode
-      // const url = 'https://billing.stripe.com/p/login/bIY7sxbu7c14g7eeUU?prefilled_email=' + email;
-
-      window.location.href = url;
-    } else if (subscription_type_id === '3') {
+    if (subscription_type_id === '1') {
       this.openDialog(
         "You're currently not subscribed.",
         "<div class='text-center'>Interested in For-pay feature?<br>Click <strong>'Subscribe'</strong> to get started.</div>",
         '/payment',
         'Subscribe'
       );
+    } else {
+      this.http
+        .post<{ url: string }>(`${environment.baseUrl}/create-customer-portal`, {
+          uid: user_id,
+        })
+        .subscribe({
+          next: (res) => {
+            window.location.href = res.url; 
+          },
+          error: (err) => {
+            console.error('Error creating portal session', err);
+            alert('Failed to open subscription portal.');
+          },
+        });
     }
   }
 

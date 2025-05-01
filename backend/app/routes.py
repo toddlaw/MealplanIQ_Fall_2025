@@ -10,7 +10,8 @@ from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
     handle_subscription_updated,
-    create_trial_payment_and_subscription
+    create_trial_payment_and_subscription,
+    create_customer_portal_by_id
 )
 from app.manage_user_data import *
 from user_db.user_db import instantiate_database
@@ -71,11 +72,20 @@ def handle_signup():
     user_id = data.get("user_id")
     user_name = data.get("user_name")
     email = data.get("email")
+    stripe_subscription_id = data.get("subscription_id")
+    stripe_customer_id = data.get("customer_id")
+    stripe_trial_end = data.get("trial_end")
     db = instantiate_database()
     try:
-        result = db.insert_user_and_set_default_subscription_signup(
-            user_id, user_name, email
-        )
+        if stripe_subscription_id:
+            print("trying to insert paid trial users!")
+            result = db.insert_new_user_with_paid_trial(
+                user_id, user_name, email, stripe_subscription_id, stripe_customer_id, stripe_trial_end
+            )
+        else:
+            result = db.insert_user_and_set_default_subscription_signup(
+                user_id, user_name, email
+            )
         return result
     except Exception as e:
         print(f"Failed to insert user: {str(e)}")
@@ -320,6 +330,20 @@ def handle_payment():
     try:
         result = create_trial_payment_and_subscription(data)
         return jsonify({'success': True, **result})
+    except stripe.error.CardError as e:
+        err = e.error
+        print('Stripe Card Error:', err.message)
+        return jsonify({'success': False, 'error': err.message}), 400
     except Exception as e:
-        print('Stripe Payment Error:', str(e))
-        return jsonify({'success': False, 'error': str(e)}), 400
+        print('Server Error:', str(e))
+        return jsonify({'success': False, 'error': str(e)}), 500
+    
+@app.route("/create-customer-portal", methods=["POST"])
+def create_customer_portal_session():
+    user_id = request.json.get("uid")
+    url, error = create_customer_portal_by_id(user_id)
+
+    if error:
+        return jsonify({"error": error}), 404
+
+    return jsonify({"url": url})

@@ -77,45 +77,74 @@ def create_trial_payment_and_subscription(data):
     print('Received Payment Data:', data)
     billing = data.get('billing_details', {})
     address = billing.get('address', {})
-    print('address:', address)
 
-    # Create customer
+    # Create Customer
     customer = stripe.Customer.create(
         email=data.get('customer_email'),
         name=billing.get('name'),
         address=address,
     )
 
-    # Attach payment method to customer
+    # Attach PaymentMethod to Customer
     stripe.PaymentMethod.attach(
         data['payment_method'],
         customer=customer.id,
     )
 
-    # One-time payment
-    payment_intent = stripe.PaymentIntent.create(
-        amount=int(data['price'] * 100),
-        currency='usd',
-        payment_method=data['payment_method'],
-        customer=customer.id,
-        receipt_email=data['customer_email'],
-        confirm=True,
-        description=f"2 week trial with ${data['price']}",
-        automatic_payment_methods={
-            'enabled': True,
-            'allow_redirects': 'never'
+    # Set default payment method
+    stripe.Customer.modify(
+        customer.id,
+        invoice_settings={
+            'default_payment_method': data['payment_method'],
         }
     )
 
-    # Create subscription with 14-day trial
+    # Create InvoiceItem (for 2week paid trial)
+    stripe.InvoiceItem.create(
+        customer=customer.id,
+        amount=int(data['price'] * 100),
+        currency="usd",
+        description="2-week paid trial"
+    )
+
+    # Create and pay invoice
+    invoice = stripe.Invoice.create(
+        customer=customer.id,
+        collection_method="charge_automatically"
+    )
+    finalized_invoice = stripe.Invoice.finalize_invoice(invoice.id)
+
+    # Create subscription for 3-month plan after 14day trial
     subscription = stripe.Subscription.create(
         customer=customer.id,
         items=[{'price': 'price_1RDbAT08iagEEr2StBVcQv0A'}],
-        trial_period_days=14,
         default_payment_method=data['payment_method'],
+        trial_period_days=14
     )
+    trial_end_date = datetime.datetime.fromtimestamp(subscription.trial_end).date()
 
     return {
-        'payment_intent_id': payment_intent.id,
-        'subscription_id': subscription.id
+        'invoice_id': finalized_invoice.id,
+        'subscription_id': subscription.id,
+        'customer_id': customer.id,
+        'trial_end_date': trial_end_date.isoformat()
     }
+
+def create_customer_portal_by_id(user_id, return_url="http://localhost:4200/dashboard"):
+    db = instantiate_database()
+    cursor = db.db.cursor()
+    cursor.execute(
+        "SELECT stripe_customer_id FROM user_subscription WHERE user_id = %s",
+        (user_id,)
+    )
+    result = cursor.fetchone()
+
+    if not result:
+        return None, "Customer not found"
+
+    customer_id = result[0]
+    session = stripe.billing_portal.Session.create(
+        customer=customer_id,
+        return_url=return_url
+    )
+    return session.url, None
