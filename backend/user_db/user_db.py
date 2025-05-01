@@ -52,14 +52,15 @@ class DatabaseManager:
     @staticmethod
     def connect_to_database():
         print("begin to instantiate database -------------")
-        print("UNIX_SOCKET:", os.getenv('DB_HOST'))
+        print("DB_HOST:", os.getenv('DB_HOST'))
         print("DB_USER:", os.getenv('DB_USER'))
         print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
         print("DB_NAME:", os.getenv('DB_NAME'))
         
         try:
             connection = pymysql.connect(
-                unix_socket=os.getenv('DB_HOST'), 
+                # unix_socket=os.getenv('DB_HOST'), 
+                host=os.getenv('DB_HOST'),
                 user=os.getenv('DB_USER'),
                 password=os.getenv('DB_PASSWORD'),
                 database=os.getenv('DB_NAME'),
@@ -319,9 +320,11 @@ class DatabaseManager:
         );
         """
         subscription_types = [
-            (1, 'monthly_subscription'),
-            (2, 'yearly_subscription'),
-            (3, 'free_trial')
+            (1, 'free_trial'),
+            (2, 'paid_trial'),
+            (3, 'monthly_subscription'),
+            (4, 'quarterly_subscription'),
+            (5, 'yearly_subscription')
         ]
         try:
             cursor.execute(create_table_sql)
@@ -352,6 +355,7 @@ class DatabaseManager:
         CREATE TABLE IF NOT EXISTS user_subscription (
             user_id VARCHAR(255) PRIMARY KEY,
             subscription_type_id INT,
+            stripe_customer_id VARCHAR(255),
             subscription_stripe_id VARCHAR(255),
             subscription_expiry_date DATE,
             FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
@@ -494,8 +498,8 @@ class DatabaseManager:
         values_user_profile = (user_id, user_name, email, gender, last_meal_plan_date,
                                height, age, weight, activity_level, selected_unit, health_goal)
         sql_subscription = """
-        INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, subscription_expiry_date)
-        VALUES (%s, 3, NULL, NULL);
+        INSERT INTO user_subscription (user_id, subscription_type_id, stripe_customer_id, subscription_stripe_id, subscription_expiry_date)
+        VALUES (%s, 3, NULL, NULL, NULL);
         """
         values_subscription = (user_id,)  # Subscription values for the user
 
@@ -507,6 +511,32 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             return {"success": False, "msg": f"Error inserting user profile and subscription for user_id {user_id}: {str(e)}"}
+
+    def insert_new_user_with_paid_trial(self, user_id, user_name, email, stripe_subscription_id, stripe_customer_id, trial_end, last_meal_plan_date=None, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
+        cursor = self.db.cursor()
+
+        sql_user_profile = """
+        INSERT INTO user_profile (user_id, user_name, email, gender, last_meal_plan_date, height, age, weight, activity_level, selected_unit, health_goal)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """
+        values_user_profile = (user_id, user_name, email, gender, last_meal_plan_date,
+                            height, age, weight, activity_level, selected_unit, health_goal)
+
+        sql_subscription = """
+        INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, stripe_customer_id, subscription_expiry_date)
+        VALUES (%s, %s, %s, %s, %s);
+        """
+        values_subscription = (user_id, 2, stripe_subscription_id, stripe_customer_id, trial_end) 
+
+        try:
+            cursor.execute(sql_user_profile, values_user_profile)
+            cursor.execute(sql_subscription, values_subscription)
+            self.db.commit()
+            return {"success": True, "message": "User profile and paid subscription created successfully."}
+        except pymysql.Error as e:
+            self.db.rollback()
+            return {"success": False, "msg": f"DB Error: {str(e)}"}
+
 
     # def insert_user_profile(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
     #     cursor = self.db.cursor()
@@ -1134,7 +1164,7 @@ class DatabaseManager:
         sql = "SELECT subscription_type_id FROM user_subscription WHERE user_id = %s"
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
-        if result[0] == 3:
+        if result[0] == 1:
             return False
         return True
 
