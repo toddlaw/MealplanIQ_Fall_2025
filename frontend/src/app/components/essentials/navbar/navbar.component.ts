@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { HotToastService } from '@ngneat/hot-toast';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private toast: HotToastService
+    private toast: HotToastService,
+    private router: Router
   ) {}
 
   logout() {
@@ -25,6 +27,12 @@ export class NavbarComponent implements OnInit {
       setTimeout(() => {
         window.location.replace('');
       }, 500);
+    });
+  }
+
+  goToGenerateMealPlan() {
+    this.router.navigate(['/generate'], {
+      queryParams: { guest: 'true' }
     });
   }
 

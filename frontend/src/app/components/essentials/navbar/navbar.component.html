@@ -25,7 +25,7 @@
 
 
 <mat-menu #menu="matMenu">
-  <button mat-menu-item routerLink="/">
+  <button mat-menu-item (click)="goToGenerateMealPlan()">
     <mat-icon>restaurant_menu</mat-icon>
     Generate Meal Plan
   </button>

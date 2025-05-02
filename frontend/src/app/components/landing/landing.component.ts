@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
@@ -40,8 +40,6 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
 
-
-
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -56,20 +54,19 @@ export class LandingComponent implements OnInit {
   minerals: any[] = [];
   energy: any[] = [];
 
-
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
     private router: Router,
     private toast: HotToastService,
     private refresh: RefreshComponent,
-    private zone: NgZone, 
-    private cdRef: ChangeDetectorRef
-  ) { }
+    private zone: NgZone,
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {}
 
   // change date format to e.g. September 14, 2024
   formatDate(date: string): string {
-
     const [year, month, day] = date.split('-').map(Number);
     const localDate = new Date(year, month - 1, day);
     console.log('Original Date:', date);
@@ -85,8 +82,6 @@ export class LandingComponent implements OnInit {
     return days[localDate.getDay()];
   }
 
-
-
   readonly MIN_PEOPLE = 1;
   readonly MAX_PEOPLE = 6;
   readonly TAC_KEY = 'acceptedTac';
@@ -96,7 +91,7 @@ export class LandingComponent implements OnInit {
     'This meal plan has some nutrients which are out of the target range.   Please see the table at the bottom for details.';
   readonly NO_RECIPES =
     "We're sorry!  We could not find a meal plan that fits your constraints.";
-  readonly PAID_SUBSCRIPTION_TYPES = [2, 3, 4, 5]
+  readonly PAID_SUBSCRIPTION_TYPES = [2, 3, 4, 5];
 
   @ViewChild('peoplePanel') peoplePanel!: MatExpansionPanel;
   @ViewChild('peopleForm') peopleForm!: NgForm;
@@ -127,6 +122,7 @@ export class LandingComponent implements OnInit {
   updatedMealPlan: any;
   shoppingListData: ShoppingList[] = [];
   userId: string | null = null;
+  isFromHamburger: boolean = false;
 
   people: {
     age: number | null;
@@ -176,8 +172,12 @@ export class LandingComponent implements OnInit {
 
   async ngOnInit() {
     this.userId = localStorage.getItem('uid');
-    console.log('user ID: ' + localStorage.getItem('uid'));
+    console.log('user ID: ' + this.userId);
     console.log('email: ' + localStorage.getItem('email'));
+
+    this.route.queryParamMap.subscribe((params) => {
+      this.isFromHamburger = params.get('guest') === 'true';
+    });
 
     if (localStorage.getItem('uid')) {
       try {

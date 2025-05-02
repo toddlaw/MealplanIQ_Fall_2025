@@ -27,7 +27,11 @@ const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
 const routes: Routes = [
   {
     path: '',
+    component: LandingComponent,
     pathMatch: 'full',
+  },
+  {
+    path: 'generate',
     component: LandingComponent,
   },
   {
