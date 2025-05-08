@@ -1,4 +1,4 @@
-# MealPlanIQ_Fall_2024
+# MealPlanIQ_Winter_2025
 
 ## Required
 
@@ -10,7 +10,7 @@
 1. Clone repository
 
 ```
-git clone https://github.com/toddlaw/MealPlanIQ_May_2024.git
+git clone https://github.com/Tianyou-Xie/MealPlanIQ_Winter_2025.git
 ```
 
 2. Create a Python virtual environment in the backend directory to store dependencies
