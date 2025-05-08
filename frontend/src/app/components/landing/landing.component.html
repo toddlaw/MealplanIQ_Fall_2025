@@ -133,11 +133,11 @@
                 </div>
               </ng-container>
 
-              <div class="flex items-center justify-center">
+              <!-- <div class="flex items-center justify-center">
                 <button type="button" (click)="closePanel()" class="justify-items-center px-28 text-white py-2">
                   Done
                 </button>
-              </div>
+              </div> -->
             </mat-expansion-panel>
           </mat-accordion>
         </div>
@@ -345,9 +345,20 @@
         Select the meals you don't like and search again.
       </p>
       <div *ngIf="mealPlanResponse.constraints_loosened">
-        <p class="change-recipe-text text-center" style="font-style: italic">
+        <!-- <p class="change-recipe-text text-center" style="font-style: italic">
           {{ OUT_OF_RANGE }}
-        </p>
+        </p> -->
+        <div class="change-recipe-text text-center" style="font-style: italic">
+          <ng-container *ngIf="getOutOfRangeMessages().length; else noIssues">
+            <div *ngFor="let message of getOutOfRangeMessages()">
+              {{ message }}
+            </div>
+          </ng-container>
+          <ng-template #noIssues>
+            <p>All nutrients are within the recommended ranges!</p>
+          </ng-template>
+        </div>
+        
         <br />
       </div>
 

@@ -123,7 +123,7 @@ def receive_data():
     user_id = data["user_id"]
     user_data = extract_user_profile_data_from_json(data, user_id)
     extract_data = extract_data_from_json(data)
-    db.update_user_profile(**user_data)
+    # db.update_user_profile(**user_data)
     process_user_data(db, user_id, extract_data)
 
     try:

@@ -4,3 +4,9 @@ img {
     image-rendering: pixelated;                 /* For pixelated images */
   }
   
+:host {
+      display: block;
+       height: 100%;
+      width: 100%;
+ }
+  

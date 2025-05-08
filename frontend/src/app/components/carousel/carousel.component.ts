@@ -3,33 +3,84 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
-  styleUrls: ['./carousel.component.css']
+  styleUrls: ['./carousel.component.css'],
 })
-
 export class CarouselComponent implements OnInit {
-  @Input() imgClass: string = ''; 
+  @Input() imgClass: string = '';
   @Input() containerClass: string = '';
   @Input() extraClass: string = '';
   currentItem: number = 0;
-  totalItems: number = 13; 
+  totalItems: number = 13;
 
   placeHolders = [
-    {image:'1', file_name: 'assets/images/placeholders/placeholder_1.png'},
-    {image: '2', file_name: 'assets/images/placeholders/placeholder_2.png'},
-    {image:'3', file_name: 'assets/images/placeholders/placeholder_3.png'},
-    {image: '4', file_name: 'assets/images/placeholders/placeholder_4.png'},
-    {image: '5', file_name: 'assets/images/placeholders/placeholder_5.png'},
-    {image: '6', file_name: 'assets/images/placeholders/placeholder_6.png'},
-    {image: '7', file_name: 'assets/images/placeholders/placeholder_7.png'},
-    {image: '8', file_name: 'assets/images/placeholders/placeholder_8.png'},
-    {image: '9', file_name: 'assets/images/placeholders/placeholder_9.png'},
-    {image: '10', file_name: 'assets/images/placeholders/placeholder_10.png'},
-    {image: '11', file_name: 'assets/images/placeholders/placeholder_11.png'},
-    {image: '12', file_name: 'assets/images/placeholders/placeholder_12.png'},
-    {image: '13', file_name: 'assets/images/placeholders/placeholder_13.png'},
-  ]
+    {
+      file_name: 'assets/images/placeholders/carousel1.jpg',
+      title: 'Fight cancer',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel2.jpg',
+      title: 'Fight heart disease',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel3.jpg',
+      title: 'Fight diabetes',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel4.jpg',
+      title: 'Fight obesity',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel5.jpg',
+      title: '...or build muscle',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel6.jpg',
+      title: '... with personalized meal plans',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel7.jpg',
+      title: 'designed by a registered dietitian',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel8.jpg',
+      title: 'and meet government dietary guidelines',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel9.jpg',
+      title: 'automatically generated and sent to your inbox',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel10.jpg',
+      title: 'selecting food for you want to eat',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel11.jpg',
+      title: 'optimizing for your preferences and health goals',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel12.jpg',
+      title: 'all for less than $10 a month',
+      subtitle: '',
+    },
+    {
+      file_name: 'assets/images/placeholders/carousel3.jpg',
+      title: 'and now free for our weight-loss plan members!',
+      subtitle: '',
+    },
+  ];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.setupCarousel();
@@ -38,9 +89,8 @@ export class CarouselComponent implements OnInit {
   setupCarousel(): void {
     const totalItems = this.placeHolders.length;
     setInterval(() => {
-      this.goToNext()
-    }, 3000); // change every 3 seconds
-
+      this.goToNext();
+    }, 4000); // change every 3 seconds
   }
 
   updateCarousel(index: number) {
@@ -52,6 +102,7 @@ export class CarouselComponent implements OnInit {
   }
 
   goToPrev() {
-    this.currentItem = (this.currentItem - 1 + this.totalItems) % this.totalItems;
+    this.currentItem =
+      (this.currentItem - 1 + this.totalItems) % this.totalItems;
   }
 }

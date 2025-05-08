@@ -1,6 +1,6 @@
-<div class="flex flex-col md:flex-row items-center justify-center md:justify-between h-screen p-20">
-  <div class="md:w-1/4 w-full text-left">
-    <h1 class="text-xl">
+<div class="flex flex-col md:flex-row items-stretch h-screen">
+  <div class="md:w-1/2 w-full p-10 flex flex-col justify-center items-start text-left">
+    <h1 class="text-2xl font-bold mb-4">
       Reach your health goal with better eating.
     </h1>
     <p class="text-lg mb-4 font-light">
@@ -13,8 +13,10 @@
   </div>
 
   <!-- Carousel -->
-  <div class="md:w-3/4 w-full h-full overflow-hidden flex justify-end h-screen">
-    <app-carousel [imgClass]="'w-full h-full object-fill'" [containerClass]="'h-full'"></app-carousel>
+  <div class="md:w-1/2 w-full h-screen relative overflow-hidden">
+    <app-carousel [imgClass]="'w-full h-full object-cover'"
+      [containerClass]="'w-full h-full flex items-center p-10 md:pr-10'" [extraClass]="'w-full h-full'">
+    </app-carousel>
   </div>
 
 </div>

@@ -46,7 +46,7 @@ import { NgZone } from '@angular/core';
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
-  expanded: boolean = false;  // expanded state of the panel--for the nutrient table
+  expanded: boolean = false; // expanded state of the panel--for the nutrient table
 
   // group the nutrients into 3 categories: macros, vitamins, minerals
   macros: any[] = [];
@@ -72,12 +72,24 @@ export class LandingComponent implements OnInit {
     console.log('Original Date:', date);
     console.log('Local Date (Corrected):', localDate.toLocaleString());
 
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
     return localDate.toLocaleDateString('en-US', options);
   }
   // generate day of the week
   getDayOfWeek(date: string): string {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
     const localDate = new Date(date);
     return days[localDate.getDay()];
   }
@@ -182,7 +194,11 @@ export class LandingComponent implements OnInit {
     if (localStorage.getItem('uid')) {
       try {
         const response: any = await this.http
-          .get(`${environment.baseUrl}/api/subscription_type_id/${localStorage.getItem('uid')}`)
+          .get(
+            `${
+              environment.baseUrl
+            }/api/subscription_type_id/${localStorage.getItem('uid')}`
+          )
           .toPromise();
         if (response.subscription_type_id) {
           localStorage.setItem(
@@ -201,7 +217,11 @@ export class LandingComponent implements OnInit {
     // prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
       this.http
-        .get(`${environment.baseUrl}/api/landing/profile/${localStorage.getItem('uid')}`)
+        .get(
+          `${environment.baseUrl}/api/landing/profile/${localStorage.getItem(
+            'uid'
+          )}`
+        )
         .subscribe((data: any) => {
           this.people[0].age = data.age;
           this.people[0].weight = data.weight;
@@ -210,23 +230,32 @@ export class LandingComponent implements OnInit {
           this.people[0].activityLevel = data.activity_level;
           this.selectedUnit = data.selected_unit || 'metric';
           // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
-          this.mealPlanResponse.days.forEach((day: { recipes: { meal_name: string }[] }) => {
-            day.recipes.sort((a: { meal_name: string }, b: { meal_name: string }) => {
-              const mealOrder = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner', 'Snack'];
-              return mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name);
-            });
-          });
-
-
-
+          this.mealPlanResponse.days.forEach(
+            (day: { recipes: { meal_name: string }[] }) => {
+              day.recipes.sort(
+                (a: { meal_name: string }, b: { meal_name: string }) => {
+                  const mealOrder = [
+                    'Breakfast',
+                    'Snack',
+                    'Lunch',
+                    'Snack',
+                    'Dinner',
+                    'Snack',
+                  ];
+                  return (
+                    mealOrder.indexOf(a.meal_name) -
+                    mealOrder.indexOf(b.meal_name)
+                  );
+                }
+              );
+            }
+          );
         });
     }
-
   }
 
   categorizeNutrients() {
-
-    this.energy = [];  // add new "Energy" category
+    this.energy = []; // add new "Energy" category
     this.macros = [];
     this.vitamins = [];
     this.minerals = [];
@@ -244,14 +273,12 @@ export class LandingComponent implements OnInit {
       'vitamin_c (mg)': 'Vitamin C (mg)',
       'vitamin_d (iu)': 'Vitamin D (iu)',
       'vitamin_e (mg)': 'Vitamin E (mg)',
-      'vitamin_k (ug)': 'Vitamin K (ug)'
+      'vitamin_k (ug)': 'Vitamin K (ug)',
     };
 
     this.mealPlanResponse.tableData.forEach((nutrient: any) => {
       const nutrientName = nutrient.nutrientName.toLowerCase();
       // replace nutrient name with alias if it exists
-
-
 
       if (nutrientAliases[nutrientName]) {
         nutrient.displayName = nutrientAliases[nutrientName];
@@ -260,9 +287,10 @@ export class LandingComponent implements OnInit {
         nutrient.displayName = nutrient.nutrientName;
       }
 
-      nutrient.displayName = nutrient.displayName.replace(/\((.*?)\)/g, (match: any, p1: any) => `(${p1.toLowerCase()})`);
-
-
+      nutrient.displayName = nutrient.displayName.replace(
+        /\((.*?)\)/g,
+        (match: any, p1: any) => `(${p1.toLowerCase()})`
+      );
 
       nutrient.displayName = nutrient.displayName
         .split(' ')
@@ -270,18 +298,20 @@ export class LandingComponent implements OnInit {
         .join(' ');
       // console.log('1234:', nutrient.displayName);
 
-
-
-      // Parse display_target as range 
-      if (typeof nutrient.display_target === 'string' && nutrient.display_target.includes('-')) {
-        const [min, max] = nutrient.display_target.split('-').map((val: string) => parseFloat(val.trim()));
+      // Parse display_target as range
+      if (
+        typeof nutrient.display_target === 'string' &&
+        nutrient.display_target.includes('-')
+      ) {
+        const [min, max] = nutrient.display_target
+          .split('-')
+          .map((val: string) => parseFloat(val.trim()));
         nutrient.display_target_min = min;
         nutrient.display_target_max = max;
       } else {
         const target = parseFloat(nutrient.display_target);
         nutrient.display_target_min = target;
         nutrient.display_target_max = target;
-
 
         if (nutrient.actualValue < target) {
           nutrient.display_target_max = target;
@@ -292,13 +322,13 @@ export class LandingComponent implements OnInit {
         }
       }
 
-
-
-
-
       if (nutrientName === 'energy (calories)') {
         this.energy.push(nutrient);
-      } else if (['fiber (g)', 'carbohydrates (g)', 'protein (g)', 'fats (g)'].includes(nutrientName)) {
+      } else if (
+        ['fiber (g)', 'carbohydrates (g)', 'protein (g)', 'fats (g)'].includes(
+          nutrientName
+        )
+      ) {
         this.macros.push(nutrient);
       } else if (Object.keys(nutrientAliases).includes(nutrientName)) {
         nutrient.displayName = nutrientAliases[nutrientName];
@@ -312,9 +342,8 @@ export class LandingComponent implements OnInit {
         .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
       // console.log('1234:', nutrient.displayName);
-    }
-    );
-    // sort minerals and vitamins 
+    });
+    // sort minerals and vitamins
     this.minerals.sort((a, b) => a.displayName.localeCompare(b.displayName));
     this.vitamins.sort((a, b) => {
       const extractVitaminInfo = (name: string) => {
@@ -336,14 +365,7 @@ export class LandingComponent implements OnInit {
       }
       return aInfo.letterPart.localeCompare(bInfo.letterPart);
     });
-
-
-
   }
-
-
-
-
 
   /**
    * Shows the terms and conditions dialog and sends the data if the terms and conditions are accepted
@@ -497,7 +519,8 @@ export class LandingComponent implements OnInit {
             (goal) => goal.value === this.selectedHealthGoal
           );
         } else if (
-          (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) ||
+          (this.userSubscriptionTypeId === 0 &&
+            data.maxDate === data.minDate) ||
           (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate)
         ) {
           this.showSpinner = false;
@@ -506,14 +529,17 @@ export class LandingComponent implements OnInit {
           const selectedHealthGoalObject = healthGoals.find(
             (goal) => goal.value === this.selectedHealthGoal
           );
-        } else if
-          (this.userSubscriptionTypeId === 0 && data.maxDate != data.minDate) {
+        } else if (
+          this.userSubscriptionTypeId === 0 &&
+          data.maxDate != data.minDate
+        ) {
           this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'none';
           this.element.nativeElement.style.display = 'none';
 
-          const title = "Subscription Required";
-          const message = "Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.";
+          const title = 'Subscription Required';
+          const message =
+            'Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.';
           this.openDialog(title, message, '/sign-up', 'Sign Up');
         } else {
           // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
@@ -521,8 +547,9 @@ export class LandingComponent implements OnInit {
           this.errorDiv.nativeElement.style.display = 'none';
           this.element.nativeElement.style.display = 'none';
 
-          const title = "Subscription Required";
-          const message = "Multi-day plans require a subscription. Try it now for only $5/month. Cancel anytime.";
+          const title = 'Subscription Required';
+          const message =
+            'Multi-day plans require a subscription. Try it now for only $5/month. Cancel anytime.';
           this.openDialog(title, message, '/payment', 'Upgrade');
         }
       }
@@ -619,7 +646,7 @@ export class LandingComponent implements OnInit {
   /**
    * Click handler for the "Get Full Meal Plan" button
    */
-  getFullMealPlan() { }
+  getFullMealPlan() {}
 
   /**
    * Replace a recipe in the meal plan
@@ -634,6 +661,7 @@ export class LandingComponent implements OnInit {
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
         console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
+        this.categorizeNutrients();
         // After the meal plan is updated, get the updated shopping list
         // this.getShoppingListFromBackend().subscribe(
         //   (updatedShoppingList) => {
@@ -652,10 +680,10 @@ export class LandingComponent implements OnInit {
       }
     );
   }
-  
+
   deleteRecipe(id: string): void {
     console.log('Deleting recipe with ID:', id);
-  
+
     this.refresh.deleteRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
         if (response.error) {
@@ -663,15 +691,15 @@ export class LandingComponent implements OnInit {
           console.error('Error from backend:', response.error);
           return;
         }
-        
+
         // Successfully deleted recipe and got updated meal plan
         this.toast.success('Recipe deleted and meal plan refreshed!');
         console.log('recipe replaced (delete)', response);
-  
+
         // Update the frontend with the updated meal plan from the backend
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
         console.log('updated meal plan (delete)', this.mealPlanResponse);
-        
+
         // After the meal plan is updated, get the updated shopping list
         // this.getShoppingListFromBackend().subscribe(
         //   (updatedShoppingList) => {
@@ -690,8 +718,14 @@ export class LandingComponent implements OnInit {
   }
 
   updateNutrientTable(recipe: any) {
-    console.log("recipe test:", recipe);
-    const nutrientsToUpdate = ['calories', 'carbohydrates', 'protein', 'fat', 'fiber', 'fiber',
+    console.log('recipe test:', recipe);
+    const nutrientsToUpdate = [
+      'calories',
+      'carbohydrates',
+      'protein',
+      'fat',
+      'fiber',
+      'fiber',
       'calcium',
       'iron',
       'zinc',
@@ -699,9 +733,12 @@ export class LandingComponent implements OnInit {
       'vitamin_c',
       'vitamin_d',
       'vitamin_e',
-      'vitamin_k'];
+      'vitamin_k',
+    ];
     nutrientsToUpdate.forEach((key) => {
-      const nutrient = this.mealPlanResponse.tableData.find((n: any) => n.nutrientName.toLowerCase().includes(key));
+      const nutrient = this.mealPlanResponse.tableData.find((n: any) =>
+        n.nutrientName.toLowerCase().includes(key)
+      );
       if (nutrient) {
         nutrient.actual -= parseFloat(recipe[key] || 0);
       }
@@ -923,7 +960,8 @@ export class LandingComponent implements OnInit {
       });
     } else if (this.userSubscriptionTypeId === 0) {
       const title = 'Sign Up and Try!';
-      const message = 'To see recipe details for this plan, please sign up.  No credit card or payment required.';
+      const message =
+        'To see recipe details for this plan, please sign up.  No credit card or payment required.';
       this.openDialog(title, message, '/sign-up', 'Sign Up');
     }
   }
@@ -938,6 +976,43 @@ export class LandingComponent implements OnInit {
         }),
       }
     );
+  }
+
+  getNutrientStatusMessage(nutrient: any): string {
+    const actual = nutrient.actual;
+    const min = nutrient.display_target_min;
+    const max = nutrient.display_target_max;
+    const name = nutrient.displayName;
+  
+    if (actual < min && min != null) {
+      return `${name} is ${actual}. Lower than recommended ${min}.`;
+    } else if (actual > max && max != null) {
+      return `${name} is ${actual}. Higher than recommended ${max}.`;
+    } else {
+      return '';  // no message if within range or if no min/max available
+    }
+  }
+
+  getOutOfRangeMessages(): string[] {
+    const messages: string[] = [];
+    const allNutrients = [
+      ...this.energy,
+      ...this.macros,
+      ...this.vitamins,
+      ...this.minerals
+    ];
+  
+    allNutrients.forEach(nutrient => {
+      const message = this.getNutrientStatusMessage(nutrient);
+      if (message) {
+        if (messages.length === 0) {
+          messages.push(this.OUT_OF_RANGE);
+        }
+        messages.push(message);
+      }
+    });
+  
+    return messages;
   }
 
 }
