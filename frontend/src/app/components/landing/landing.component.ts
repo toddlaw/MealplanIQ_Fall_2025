@@ -39,6 +39,7 @@ import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-lan
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 
 @Component({
   selector: 'app-landing',
@@ -1014,5 +1015,34 @@ export class LandingComponent implements OnInit {
   
     return messages;
   }
+
+replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void {
+  this.refresh.replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse).subscribe(
+    (response) => {
+      this.toast.success('Recipe replaced successfully!');
+      console.log('recipe replaced (replace)', response);
+      this.processUpdatedMealPlan(response.meal_plan);
+    },
+    (error) => {
+      this.toast.error('Oops, the server is too busy, try again later!');
+      console.error('error', error);
+    }
+  );
+}
+
+processUpdatedMealPlan(mealPlan: any): void {
+  this.mealPlanResponse = this.updateMealPlan(mealPlan);
+  this.categorizeNutrients();
+}
+
+openSearchDialog(dayIndex: number, recipeIndex: number): void {
+  const dialogRef = this.dialog.open(SearchDialogComponent);
+
+  dialogRef.afterClosed().subscribe((selectedRecipe) => {
+    if (selectedRecipe?.id) {
+      this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
+    }
+  });
+}
 
 }

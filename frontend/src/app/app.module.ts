@@ -57,6 +57,7 @@ import { FractionPipe } from './fraction.pipe';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { IntroComponent } from './components/landing/intro/intro.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
     ResetPasswordComponent,
     IntroComponent,
     ForgotPasswordComponent,
+    SearchDialogComponent,
   ],
   imports: [
     BrowserModule,
