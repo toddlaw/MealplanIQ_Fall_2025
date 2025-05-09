@@ -643,6 +643,14 @@ export class LandingComponent implements OnInit {
     }
   }
 
+  getIngredientsCsvUrl(id: number): string {
+  return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
+}
+
+getInstructionsCsvUrl(id: number): string {
+  return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
+}
+
   /**
    * Click handler for the "Get Full Meal Plan" button
    */
@@ -955,6 +963,8 @@ export class LandingComponent implements OnInit {
         data: {
           recipe: recipe,
           imageUrl: this.getImageUrl(recipe.id),
+          ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
+          instructionsUrl: this.getInstructionsCsvUrl(recipe.id)
         },
         width: '800px',
       });
