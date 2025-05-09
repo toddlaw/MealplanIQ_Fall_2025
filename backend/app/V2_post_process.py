@@ -266,37 +266,30 @@ def process_recipe(recipe_df, recipe_name):
     recipe_dict['prep_time'] = recipe_row['preptime'].values[0]
     recipe_dict['sub_region'] = recipe_row['subregion'].values[0]
 
-    # Use URLs for instructions and ingredients files, incorporating the recipe ID.
-    instruction_file_url = f"storage.googleapis.com/meal_planiq_instruction_files/instruction_{recipe_dict['id']}.csv"
-    ingredient_file_url = f"https://storage.googleapis.com/meal_planiq_ingredients_files/{recipe_dict['id']}.csv"
-
-    recipe_dict['instructions'] = _get_csv_data_from_url(instruction_file_url)
-    recipe_dict['ingredients_with_quantities'] = _get_csv_data_from_url(ingredient_file_url)
-
     # retrive instructions
 
-    # instruction_file_path = f'''./meal_db/instructions/instructions_{
-    #     recipe_dict['id']}.csv'''
-    # ingredient_file_path = f"./meal_db/ingredients/{recipe_dict['id']}.csv"
+    instruction_file_path = f'''./meal_db/instructions/instructions_{
+        recipe_dict['id']}.csv'''
+    ingredient_file_path = f"./meal_db/ingredients/{recipe_dict['id']}.csv"
 
     # instruction_content = pd.read_csv(instruction_file_path)
     # recipe_dict['instructions'] = instruction_content.values.tolist()
 
-    # with open(instruction_file_path, newline='', encoding='utf-8', errors='replace') as csvfile:
-    #     content = csv.reader(csvfile)
-    #     recipe_dict['instructions'] = []
-    #     for row in content:
-    #         recipe_dict['instructions'].append(row)
+    with open(instruction_file_path, newline='', encoding='utf-8', errors='replace') as csvfile:
+        content = csv.reader(csvfile)
+        recipe_dict['instructions'] = []
+        for row in content:
+            recipe_dict['instructions'].append(row)
 
     # retrive ingredients_with_quantities
 
     # cannot use pandas here, will raise an error
 
-    # with open(ingredient_file_path, newline='') as csvfile:
-    #     content = csv.reader(csvfile)
-    #     recipe_dict['ingredients_with_quantities'] = []
-    #     for row in content:
-    #         recipe_dict['ingredients_with_quantities'].append(row)
+    with open(ingredient_file_path, newline='') as csvfile:
+        content = csv.reader(csvfile)
+        recipe_dict['ingredients_with_quantities'] = []
+        for row in content:
+            recipe_dict['ingredients_with_quantities'].append(row)
 
     for key, value in recipe_dict.items():
         res[key] = f"{value}"
@@ -308,36 +301,3 @@ def process_recipe(recipe_df, recipe_name):
         res['ingredients_with_quantities'])
 
     return res
-
-def _get_csv_data_from_url(url):
-    """
-    Helper function to retrieve CSV data from a URL.  Handles the request and CSV reading.
-
-    Args:
-        url (str): The URL of the CSV file.
-
-    Returns:
-        list: A list of rows from the CSV data, or an empty list on error.
-    """
-    import urllib.request
-    try:
-        with urllib.request.urlopen(url) as response:
-            csvfile = io.TextIOWrapper(response, encoding='utf-8')  # Use io.TextIOWrapper
-            content = csv.reader(csvfile)
-            data = list(content)  # Read all rows into a list
-            return data
-    except Exception as e:
-        print(f"Error reading CSV from URL {url}: {e}")
-        return []  # Return an empty list in case of an error.  Handle this in the caller.
-    
-
-if __name__ == "__main__":
-    # Create a mock recipe DataFrame
-    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
-
-    # Test the process_recipe function with a recipe name
-    recipe_name_to_test = 'Sweet Vanilla Custard Tarts'
-    result = process_recipe(recipe_df, recipe_name_to_test)
-
-    # Print the result
-    print(result)
