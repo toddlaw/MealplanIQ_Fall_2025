@@ -586,25 +586,25 @@
 
                 <!-- button -->
                 <mat-card-footer class="w-full pt-5">
-                  <div class="flex justify-between items-center px-6">
+                  <div
+                    class="flex flex-wrap justify-between items-center px-6 gap-2"
+                  >
                     <!-- <ng-container *ngIf="recipe.meal_name !== 'Snack'; else noSnack"> -->
                     <button
-                      class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1"
+                      class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg"
                       (click)="openRecipeDialog(recipe)"
                     >
                       Recipe
                     </button>
                     <button
-                      class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg ml-1"
+                      class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg"
                       (click)="openSearchDialog(i, j)"
                     >
-                      Search
+                      Replace
                     </button>
                     <!-- </ng-container>
                   <ng-template #noSnack> -->
-                    <div
-                      class="bg-white white-text px-5 py-2 rounded-lg ml-1"
-                    ></div>
+                    <div class="bg-white white-text px-5 py-2 rounded-lg"></div>
                     <!-- </ng-template> -->
                     <button
                       class="button hover:bg-primary hover:text-white p-1 rounded-full"
@@ -613,7 +613,7 @@
                       <mat-icon>refresh</mat-icon>
                     </button>
                     <button
-                      class="button bg-red-500 text-white px-5 py-2 rounded-lg ml-1"
+                      class="button bg-red-500 text-white px-5 py-2 rounded-lg"
                       style="
                         border: none;
                         color: white;
