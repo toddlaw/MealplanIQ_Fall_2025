@@ -474,6 +474,10 @@ export class LandingComponent implements OnInit {
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }
+              this.shoppingListData = this.transformMealPlanToShoppingList(
+                this.mealPlanResponse
+              );
+              this.cdRef.detectChanges();
               // this.getShoppingListFromBackend().subscribe(
               //   (secondResponse) => {
               //     console.log('Fetched Shopping List: ', secondResponse);
@@ -671,6 +675,23 @@ export class LandingComponent implements OnInit {
         console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
         this.categorizeNutrients();
+
+        if (response.shopping_list) {
+          this.shoppingListData = response.shopping_list;
+          console.log(
+            'Shopping List from refreshRecipe service:',
+            this.shoppingListData
+          );
+        } else {
+          // Fallback if the service unexpectedly doesn't provide it
+          console.warn(
+            'Shopping list not provided by refresh service, transforming manually.'
+          );
+          this.shoppingListData = this.transformMealPlanToShoppingList(
+            this.mealPlanResponse
+          );
+        }
+        this.cdRef.detectChanges();
         // After the meal plan is updated, get the updated shopping list
         // this.getShoppingListFromBackend().subscribe(
         //   (updatedShoppingList) => {
@@ -708,6 +729,23 @@ export class LandingComponent implements OnInit {
         // Update the frontend with the updated meal plan from the backend
         this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
         console.log('updated meal plan (delete)', this.mealPlanResponse);
+        this.categorizeNutrients();
+
+        if (response.shopping_list) {
+          this.shoppingListData = response.shopping_list;
+          console.log(
+            'Shopping List from deleteRecipe service:',
+            this.shoppingListData
+          );
+        } else {
+          console.warn(
+            'Shopping list not provided by delete service, transforming manually.'
+          );
+          this.shoppingListData = this.transformMealPlanToShoppingList(
+            this.mealPlanResponse
+          );
+        }
+        this.cdRef.detectChanges();
 
         // After the meal plan is updated, get the updated shopping list
         // this.getShoppingListFromBackend().subscribe(
@@ -760,6 +798,11 @@ export class LandingComponent implements OnInit {
   }
 
   openShoppingListDialog(): void {
+    if (!this.shoppingListData || this.shoppingListData.length === 0) {
+      this.toast.info(
+        'Shopping list is empty or not yet loaded. Please generate a meal plan first.'
+      );
+    }
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '500px'; // Set the width of the dialog
     dialogConfig.data = {
@@ -987,6 +1030,82 @@ export class LandingComponent implements OnInit {
         }),
       }
     );
+  }
+
+  transformMealPlanToShoppingList(mealPlan: any): ShoppingList[] {
+    if (!mealPlan || !mealPlan.days || !Array.isArray(mealPlan.days)) {
+      console.error(
+        'Invalid mealPlanResponse structure for shopping list generation:',
+        mealPlan
+      );
+      this.toast.error(
+        'Could not generate shopping list: Invalid meal plan data.'
+      );
+      return [];
+    }
+
+    const shoppingListByDate: ShoppingList[] = [];
+
+    mealPlan.days.forEach((day: any) => {
+      if (!day.date || !day.recipes || !Array.isArray(day.recipes)) {
+        console.warn(
+          'Skipping day in shopping list due to missing date or recipes:',
+          day
+        );
+        return; // Skip this day if data is malformed
+      }
+
+      const dailyItems: { name: string; quantity: string; unit: string }[] = [];
+
+      day.recipes.forEach((recipe: any) => {
+        if (
+          !recipe.ingredients_with_quantities ||
+          !Array.isArray(recipe.ingredients_with_quantities)
+        ) {
+          console.warn(
+            'Skipping recipe in shopping list due to missing ingredients_with_quantities:',
+            recipe
+          );
+          return; // Skip this recipe
+        }
+
+        // Start from index 1 to skip the header row like ['Ingredient Name', 'Quantity', ...]
+        for (let i = 1; i < recipe.ingredients_with_quantities.length; i++) {
+          const ingredientData = recipe.ingredients_with_quantities[i];
+
+          if (Array.isArray(ingredientData) && ingredientData.length >= 3) {
+            const name = ingredientData[0]
+              ? String(ingredientData[0]).trim()
+              : 'Unknown Item';
+            const quantity = ingredientData[1]
+              ? String(ingredientData[1]).trim()
+              : 'N/A';
+            const unit = ingredientData[2]
+              ? String(ingredientData[2]).trim()
+              : ''; // Unit can be empty
+
+            // Ensure we are not accidentally picking up a header if it's malformed
+            if (name && name.toLowerCase() !== 'ingredient name') {
+              dailyItems.push({ name, quantity, unit });
+            }
+          } else {
+            console.warn(
+              'Skipping malformed ingredient data in shopping list:',
+              ingredientData
+            );
+          }
+        }
+      });
+
+      if (dailyItems.length > 0) {
+        shoppingListByDate.push({
+          date: day.date, 
+          'shopping-list': dailyItems,
+        });
+      }
+    });
+    console.log('Generated Shopping List Data:', shoppingListByDate);
+    return shoppingListByDate;
   }
 
   getNutrientStatusMessage(nutrient: any): string {
