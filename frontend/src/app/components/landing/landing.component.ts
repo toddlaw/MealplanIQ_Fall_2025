@@ -644,12 +644,12 @@ export class LandingComponent implements OnInit {
   }
 
   getIngredientsCsvUrl(id: number): string {
-  return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
-}
+    return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
+  }
 
-getInstructionsCsvUrl(id: number): string {
-  return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
-}
+  getInstructionsCsvUrl(id: number): string {
+    return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
+  }
 
   /**
    * Click handler for the "Get Full Meal Plan" button
@@ -666,7 +666,8 @@ getInstructionsCsvUrl(id: number): string {
       (response) => {
         this.toast.success('Recipe refreshed successfully!');
         console.log('recipe replaced', response);
-        this.mealPlanResponse = this.updateMealPlan(response.meal_plan);
+        this.mealPlanResponse = response.meal_plan;
+        this.shoppingListData = response.shopping_list;
         console.log('updated meal plan (refresh)', this.mealPlanResponse);
 
         this.categorizeNutrients();
@@ -964,7 +965,7 @@ getInstructionsCsvUrl(id: number): string {
           recipe: recipe,
           imageUrl: this.getImageUrl(recipe.id),
           ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
-          instructionsUrl: this.getInstructionsCsvUrl(recipe.id)
+          instructionsUrl: this.getInstructionsCsvUrl(recipe.id),
         },
         width: '800px',
       });
@@ -993,13 +994,13 @@ getInstructionsCsvUrl(id: number): string {
     const min = nutrient.display_target_min;
     const max = nutrient.display_target_max;
     const name = nutrient.displayName;
-  
+
     if (actual < min && min != null) {
       return `${name} is ${actual}. Lower than recommended ${min}.`;
     } else if (actual > max && max != null) {
       return `${name} is ${actual}. Higher than recommended ${max}.`;
     } else {
-      return '';  // no message if within range or if no min/max available
+      return ''; // no message if within range or if no min/max available
     }
   }
 
@@ -1009,10 +1010,10 @@ getInstructionsCsvUrl(id: number): string {
       ...this.energy,
       ...this.macros,
       ...this.vitamins,
-      ...this.minerals
+      ...this.minerals,
     ];
-  
-    allNutrients.forEach(nutrient => {
+
+    allNutrients.forEach((nutrient) => {
       const message = this.getNutrientStatusMessage(nutrient);
       if (message) {
         if (messages.length === 0) {
@@ -1021,8 +1022,7 @@ getInstructionsCsvUrl(id: number): string {
         messages.push(message);
       }
     });
-  
+
     return messages;
   }
-
 }
