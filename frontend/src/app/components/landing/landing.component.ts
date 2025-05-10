@@ -643,13 +643,33 @@ export class LandingComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the URL for the ingredients CSV file based on the recipe's ID.
+   *
+   * @param id The unique identifier of the recipe.
+   * @returns The URL pointing to the ingredients CSV file.
+   *
+   * @example
+   * const ingredientsUrl = this.getIngredientsCsvUrl(456);
+   * // ingredientsUrl will be "https://storage.googleapis.com/meal_planiq_ingredients_files/456.csv"
+   */
   getIngredientsCsvUrl(id: number): string {
-  return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
-}
+    return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
+  }
 
-getInstructionsCsvUrl(id: number): string {
-  return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
-}
+  /**
+   * Gets the URL for the instructions CSV file based on the recipe's ID.
+   *
+   * @param id The unique identifier of the recipe.
+   * @returns The URL pointing to the instructions CSV file.
+   *
+   * @example
+   * const instructionsUrl = this.getInstructionsCsvUrl(789);
+   * // instructionsUrl will be "https://storage.googleapis.com/meal_planiq_instructions_files/789_instructions.csv"
+   */
+  getInstructionsCsvUrl(id: number): string {
+    return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
+  }
 
   /**
    * Click handler for the "Get Full Meal Plan" button
