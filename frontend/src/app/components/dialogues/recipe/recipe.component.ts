@@ -179,7 +179,10 @@ export class RecipeDialogComponent implements OnInit {
      */
     fetchInstructions(): void {
         this.http.get(this.data.instructionsUrl, { responseType: 'text' }).subscribe(csv => {
-            const lines = csv.trim().split('\n').map(line => line.split(','));
+            const lines = csv.trim().split('\n').map(line => {
+                const match = line.match(/^(\d+),"(.*)"$/);
+                return match ? [match[1], match[2]] : line.split(',');
+            });
             this.parseDataIntoInstructions(lines);
         });
     }
