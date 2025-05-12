@@ -90,3 +90,6 @@ mat-panel-title {
   font-weight: bold;
 }
 
+::ng-deep .out-of-range-alert {
+  color: #dc2626;
+}

@@ -488,21 +488,23 @@
           {{ OUT_OF_RANGE }}
         </p> -->
           <div
-            class="change-recipe-text text-center"
+            *ngIf="getOutOfRangeMessages().length"
+            class="text-center font-medium out-of-range-alert"
             style="font-style: italic"
           >
-            <ng-container *ngIf="getOutOfRangeMessages().length; else noIssues">
-              <div *ngFor="let message of getOutOfRangeMessages()">
-                {{ message }}
-              </div>
-            </ng-container>
-            <ng-template #noIssues>
-              <p>All nutrients are within the recommended ranges!</p>
-            </ng-template>
+            This meal plan has some nutrients which are out of the target range.
+            <span
+              class="underline cursor-pointer"
+              (click)="openOutOfRangeDialog()"
+            >
+              Click here to see details.
+            </span>
           </div>
 
-          <br />
-        </div>
+          <div *ngIf="!getOutOfRangeMessages().length" class="text-center text-green-600">
+            All nutrients are within the recommended ranges!
+          </div>
+          <br>
 
         <!-- recipe change option -->
         <!-- <button

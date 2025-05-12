@@ -40,6 +40,7 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
+import { OutOfRangeDialogComponent } from '../dialogues/out-of-range-dialog/out-of-range-dialog.component';
 
 @Component({
   selector: 'app-landing',
@@ -1015,6 +1016,14 @@ export class LandingComponent implements OnInit {
   
     return messages;
   }
+
+  openOutOfRangeDialog(): void {
+  const messages = this.getOutOfRangeMessages().slice(1); // skip OUT_OF_RANGE header
+  this.dialog.open(OutOfRangeDialogComponent, {
+    width: '600px',
+    data: messages
+  });
+}
 
 replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void {
   this.refresh.replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse).subscribe(
