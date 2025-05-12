@@ -42,6 +42,25 @@ export class RecipeDialogComponent implements OnInit {
         this.fetchInstructions();
     }
   
+    /**
+     * Parses CSV data into an array of Parts, where each Part contains a header and an array of Ingredients.
+     * The first row of the CSV data is assumed to be headers and is skipped.
+     * Rows starting with "Part" indicate a new section, while subsequent rows within a section are parsed as ingredients.
+     * If no "Part" row is encountered initially, ingredients are grouped under an empty header.
+     *
+     * @param csvData An array of arrays representing the CSV data, where each inner array is a row.
+     *
+     * @example
+     * // Example CSV data structure:
+     * // [
+     * //   ["", "Header", "", ""],
+     * //   ["Part", "Main Ingredients", "", ""],
+     * //   ["Ingredient A", "1", "cup", "fresh"],
+     * //   ["Ingredient B", "2", "tbsp", "dried"],
+     * //   ["Part", "Instructions", "", ""],
+     * //   ["Step 1", "Mix well", "", ""]
+     * // ]
+     */
     parseDataIntoParts(csvData: any[]): void {
         let currentPart: Part | null = null;
     
@@ -83,6 +102,27 @@ export class RecipeDialogComponent implements OnInit {
         }
 
     }
+
+    /**
+     * Parses CSV data into an array of Instructions.
+     * The first row of the CSV data is assumed to be headers and is skipped.
+     * Rows starting with "Part" indicate a new instruction section header,
+     * while subsequent rows within a section are parsed as individual instructions with a step number and text.
+     *
+     * @param csvData An array of arrays representing the CSV data, where each inner array is a row.
+     *
+     * @example
+     * // Example CSV data structure:
+     * // [
+     * //   ["", "Header"],
+     * //   ["Part", "Preparation"],
+     * //   ["1", "Chop the onions"],
+     * //   ["2", "Sauté with garlic"],
+     * //   ["Part", "Cooking"],
+     * //   ["1", "Boil the sauce"],
+     * //   ["2", "Simmer for 20 minutes"]
+     * // ]
+     */
     parseDataIntoInstructions(csvData: any[]): void {
         const dataRows = csvData.slice(1); 
         let currentInstructionPart: string | null = null;
@@ -108,6 +148,17 @@ export class RecipeDialogComponent implements OnInit {
       this.dialogRef.close();
     }
 
+    /**
+     * Fetches ingredient data from a CSV file using an HTTP GET request.
+     * The fetched CSV data is then parsed into the parts array using the parseDataIntoParts method.
+     *
+     * @returns void
+     *
+     * @example
+     * // Assumes this.data.ingredientsUrl is a valid URL pointing to a CSV file.
+     * this.fetchIngredients();
+     * // After successful fetch, this.parts will be populated with ingredient data.
+     */
     fetchIngredients(): void {
         this.http.get(this.data.ingredientsUrl, { responseType: 'text' }).subscribe(csv => {
             const lines = csv.trim().split('\n').map(line => line.split(','));
@@ -115,9 +166,23 @@ export class RecipeDialogComponent implements OnInit {
         });
     }
 
+    /**
+     * Fetches instruction data from a CSV file using an HTTP GET request.
+     * The fetched CSV data is then parsed into the instructions array using the parseDataIntoInstructions method.
+     *
+     * @returns void
+     *
+     * @example
+     * // Assumes this.data.instructionsUrl is a valid URL pointing to a CSV file.
+     * this.fetchInstructions();
+     * // After successful fetch, this.instructions will be populated with instruction data.
+     */
     fetchInstructions(): void {
         this.http.get(this.data.instructionsUrl, { responseType: 'text' }).subscribe(csv => {
-            const lines = csv.trim().split('\n').map(line => line.split(','));
+            const lines = csv.trim().split('\n').map(line => {
+                const match = line.match(/^(\d+),"(.*)"$/);
+                return match ? [match[1], match[2]] : line.split(',');
+            });
             this.parseDataIntoInstructions(lines);
         });
     }

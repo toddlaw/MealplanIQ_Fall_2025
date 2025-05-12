@@ -649,6 +649,16 @@ export class LandingComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the URL for the ingredients CSV file based on the recipe's ID.
+   *
+   * @param id The unique identifier of the recipe.
+   * @returns The URL pointing to the ingredients CSV file.
+   *
+   * @example
+   * const ingredientsUrl = this.getIngredientsCsvUrl(456);
+   * // ingredientsUrl will be "https://storage.googleapis.com/meal_planiq_ingredients_files/456.csv"
+   */
   getIngredientsCsvUrl(id: number): string {
     return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
   }
