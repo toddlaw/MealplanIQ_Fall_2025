@@ -1171,6 +1171,24 @@ replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void 
       this.toast.success('Recipe replaced successfully!');
       console.log('recipe replaced (replace)', response);
       this.processUpdatedMealPlan(response.meal_plan);
+      
+      this.shoppingListData = response.shopping_list;
+      if (response.shopping_list) {
+          this.shoppingListData = response.shopping_list;
+          console.log(
+            'Shopping List from refreshRecipe service:',
+            this.shoppingListData
+          );
+        } else {
+          // Fallback if the service unexpectedly doesn't provide it
+          console.warn(
+            'Shopping list not provided by refresh service, transforming manually.'
+          );
+          this.shoppingListData = this.transformMealPlanToShoppingList(
+            this.mealPlanResponse
+          );
+        }
+        this.cdRef.detectChanges();
     },
     (error) => {
       this.toast.error('Oops, the server is too busy, try again later!');
