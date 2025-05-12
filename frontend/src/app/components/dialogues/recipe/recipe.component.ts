@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
 
 interface Ingredient {
     name: string;
@@ -30,12 +31,15 @@ export class RecipeDialogComponent implements OnInit {
   
     constructor(
       public dialogRef: MatDialogRef<RecipeDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any
+      @Inject(MAT_DIALOG_DATA) public data: any,
+      private http: HttpClient
     ) {}
   
     ngOnInit(): void {
-      this.parseDataIntoParts(this.data.recipe.ingredients_with_quantities);
-      this.parseDataIntoInstructions(this.data.recipe.instructions);
+    //   this.parseDataIntoParts(this.data.recipe.ingredients_with_quantities);
+        // this.parseDataIntoInstructions(this.data.recipe.instructions);
+        this.fetchIngredients();
+        this.fetchInstructions();
     }
   
     parseDataIntoParts(csvData: any[]): void {
@@ -102,5 +106,19 @@ export class RecipeDialogComponent implements OnInit {
     
     close(): void {
       this.dialogRef.close();
+    }
+
+    fetchIngredients(): void {
+        this.http.get(this.data.ingredientsUrl, { responseType: 'text' }).subscribe(csv => {
+            const lines = csv.trim().split('\n').map(line => line.split(','));
+            this.parseDataIntoParts(lines);
+        });
+    }
+
+    fetchInstructions(): void {
+        this.http.get(this.data.instructionsUrl, { responseType: 'text' }).subscribe(csv => {
+            const lines = csv.trim().split('\n').map(line => line.split(','));
+            this.parseDataIntoInstructions(lines);
+        });
     }
 }
