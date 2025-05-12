@@ -1,3 +1,5 @@
+import time
+
 from app import app
 from app.calculate_bmi import bmi_calculator_function
 from flask import redirect, request, jsonify, send_from_directory
@@ -16,7 +18,12 @@ from app.payment_stripe import (
 from app.manage_user_data import *
 from user_db.user_db import instantiate_database
 import stripe
-from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete
+from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
+import csv
+import pandas as pd
+
+from app.generate_meal_plan import insert_status_nutrient_info
+
 # from app.send_email import send_weekly_email_by_google_scheduler
 
 # Enable CORS for all domains on all routes
@@ -347,3 +354,105 @@ def create_customer_portal_session():
         return jsonify({"error": error}), 404
 
     return jsonify({"url": url})
+
+
+recipes = []
+
+
+def load_recipe_data():
+    global recipes
+    try:
+        with open('./meal_db/meal_database.csv', 'r', encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f)
+            recipes = list(reader)
+            print(f"Loaded {len(recipes)} recipes from meal_database.csv")
+    except Exception as e:
+        print(f"Error loading meal_database.csv: {e}")
+        recipes = []
+
+load_recipe_data()
+
+@app.route('/api/recipes/search', methods=['GET'])
+def search_recipes():
+    query = request.args.get('q', '').lower().strip()
+    if not query:
+        return jsonify([])
+
+    matched = []
+    for recipe in recipes:
+        title = recipe.get('title', '').lower()
+        ingredients = recipe.get('ingredients', '').lower()
+        region = recipe.get('region', '').lower()
+        subregion = recipe.get('subregion', '').lower()
+
+        if query in title or query in ingredients or query in region or query in subregion:
+            try:
+                matched_recipe = {
+                    'id': int(recipe.get('number', 0)),
+                    'title': recipe.get('title', ''),
+                    'calories': float(recipe.get('energy_kcal', 0)),
+                    'region': recipe.get('region', ''),
+                    'prep_time': recipe.get('preptime', '')
+                }
+                matched.append(matched_recipe)
+            except ValueError as e:
+                print(f"Skipping recipe due to invalid data: {e}")
+                continue
+
+    return jsonify(matched)
+
+@app.route("/api/replace-meal-plan-recipe", methods=["POST"])
+def replace_recipe_in_meal_plan():
+    data = request.json
+    meal_plan = data.get("meal_plan")
+    recipe_id = data.get("recipe_id")
+    id = recipe_id.get("id")
+    day_index = data.get("day_index")
+    recipe_index = data.get("recipe_index")
+
+    # Load recipes from database
+    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
+    snack_recipes_df = recipe_df[recipe_df["meal_slot"] == "['snack']"]
+
+    # Find the old recipe at that position
+    old_recipe = meal_plan["days"][day_index]["recipes"].pop(recipe_index)
+
+    # Find the new recipe by ID in your CSV
+    new_recipe_row = recipe_df.loc[recipe_df["number"] == int(id)]
+
+    if new_recipe_row.empty:
+        return jsonify({"error": "New recipe not found."}), 400
+
+    new_recipe = new_recipe_row.iloc[0].to_dict()
+    new_recipe = {k: (None if pd.isnull(v) else v) for k, v in new_recipe.items()}
+
+    # Convert JSON string fields to lists if needed
+    if new_recipe["meal_slot"] == 'Snack':
+        new_recipe['instructions'] = ast.literal_eval(new_recipe['instructions'])
+        new_recipe['ingredients_with_quantities'] = ast.literal_eval(new_recipe['ingredients_with_quantities'])
+
+    new_recipe["id"] = int(new_recipe["number"])
+    new_recipe["calories"] = int(new_recipe["energy_kcal"])
+    new_recipe["prep_time"] = new_recipe["preptime"]
+
+    # Keep same meal slot as old recipe
+    new_recipe["meal_name"] = old_recipe["meal_name"]
+
+    # Remove old recipe nutrition values
+    meal_plan = update_nutrition_values(meal_plan, old_recipe, "subtract", recipe_df, snack_recipes_df)
+
+    # Insert new recipe at same position
+    meal_plan["days"][day_index]["recipes"].insert(recipe_index, new_recipe)
+
+    # Add new recipe nutrition values
+    meal_plan = update_nutrition_values(meal_plan, new_recipe, "add", recipe_df, snack_recipes_df)
+
+    # Update shopping list and nutrient info
+    time.sleep(0.1)
+    meal_plan = gen_shopping_list(meal_plan)
+    meal_plan = insert_status_nutrient_info(meal_plan)
+    time.sleep(0.1)
+
+
+
+    return jsonify({"meal_plan": meal_plan, "id_replaced": new_recipe["number"]})

@@ -35,4 +35,12 @@ export class RefreshComponent {
     });
   }
 
+  private apiUrl_replace = 'http://localhost:5000/api/replace-meal-plan-recipe';
+
+  replaceRecipe(recipeId: string, dayIndex: number, recipeIndex: number, mealPlan: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = { recipe_id: recipeId, day_index: dayIndex, recipe_index: recipeIndex, meal_plan: mealPlan };
+    return this.http.post<any>(this.apiUrl_replace, body, { headers });
+  }
+
 }
