@@ -232,7 +232,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
         isPrimaryQuantityDetermined = true;
         let countableStr = itemEffectiveNumericQuantity.toString();
         if (needsPrefixOverall) {
-          countableStr = `> ${countableStr}`;
+          countableStr = `${countableStr}`;
         }
         displayParts.push(countableStr);
       }
@@ -276,7 +276,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
               aggData.summableVolume.entryCount === 1 &&
               aggData.nonSummableOther.length > 0)
           ) {
-            summablePartStr = `> ${summablePartStr}`;
+            summablePartStr = `~ ${summablePartStr}`;
           }
           displayParts.push(summablePartStr);
           if (!primaryUnitForDisplay) primaryUnitForDisplay = unitStr;
@@ -305,7 +305,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
           let nsPart = `${nsEntry.quantity} ${nsEntry.unit || ''}`.trim();
           if (nsPart) {
             if (needsPrefixOverall && index === 0) {
-              nsPart = `> ${nsPart}`;
+              nsPart = `~ ${nsPart}`;
             }
             displayParts.push(nsPart);
           }
