@@ -84,19 +84,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
         }
       }
     }
-    for (const category in this.categoryKeywords) {
-      if (this.CATEGORY.includes(category) && category !== 'Other') continue;
-      const keywords = this.categoryKeywords[category];
-      if (keywords) {
-        if (
-          keywords.some(
-            (keyword) => keyword.toLowerCase().trim() === lowerItemName
-          )
-        ) {
-          return category;
-        }
-      }
-    }
+    // If no category matched, return 'Other'
     return 'Other';
   }
 
@@ -166,8 +154,6 @@ export class ShoppingListLandingPageComponent implements OnInit {
     const aggregationMap = new Map<string, AggregationWorkData>();
 
     rawItems.forEach((item) => {
-      // ... (existing logic for populating aggregationMap - no changes here) ...
-      // (This part is from your previous correct version)
       const itemKey = `${item.category}_${item.name.toLowerCase().trim()}`;
 
       if (!aggregationMap.has(itemKey)) {
@@ -237,7 +223,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       const needsPrefixOverall = aggData.totalOriginalEntryCount > 1;
       let primaryUnitForDisplay = '';
 
-      let itemEffectiveNumericQuantity = 0; // To store the primary quantity for pluralization check
+      let itemEffectiveNumericQuantity = 0;
       let isPrimaryQuantityDetermined = false;
 
       // --- 1. Process Countable Part ---
@@ -269,13 +255,13 @@ export class ShoppingListLandingPageComponent implements OnInit {
           let quantityInDisplayTargetUnit =
             aggData.summableVolume.totalInTeaspoons /
             teaspoonsPerDisplayTargetUnit;
-          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit; // Store for pluralization
+          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit; 
           isPrimaryQuantityDetermined = true;
 
           let finalDisplayNumStr = this.formatNumberForDisplay(
             quantityInDisplayTargetUnit
           );
-          const numericValueForPlural = parseFloat(finalDisplayNumStr); // Use for pluralizing unit
+          const numericValueForPlural = parseFloat(finalDisplayNumStr); 
           const unitStr =
             Math.abs(numericValueForPlural - 1) < 1e-5
               ? displayTargetUnitNorm
@@ -309,9 +295,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
         aggData.summableVolume.entryCount === 0
       ) {
         aggData.nonSummableOther.forEach((nsEntry, index) => {
-          // Try to parse quantity for non-summable to check for pluralization, if it's simple number
           if (!isPrimaryQuantityDetermined && index === 0) {
-            // Only for the first non-summable part
             const nsNumQty = this.parseQuantity(nsEntry.quantity);
             if (nsNumQty !== null) {
               itemEffectiveNumericQuantity = nsNumQty;
@@ -352,10 +336,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
         displayParts.length === 1 &&
         displayParts[0].startsWith('0 ')
       ) {
-        // And shows "0 [unit]"
-        // This case was for showing "0 cups" etc. if sum was 0.
-        // It might conflict with pluralization logic if itemEffectiveNumericQuantity is 0.
-        // The pluralization check `itemEffectiveNumericQuantity - 1 > 1e-5` will handle it.
+        // If the only part is "0 <unit>", we can just show "0" instead
+        finalQuantityString = '0';
       }
 
       // --- Pluralize Item Name ---
@@ -461,6 +443,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'celery',
       'cherry tomatoes',
       'cilantro',
+      'coconut',
+      'corn',
       'cucumber',
       'daikon radish',
       'eggplant',
@@ -484,6 +468,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'onion',
       'parsley',
       'pepper',
+      'pineapple',
       'potato',
       'radishes',
       'roma tomatoes',
