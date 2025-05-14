@@ -19,11 +19,9 @@ from app.manage_user_data import *
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
-import csv
-import pandas as pd
-import re
-
-from app.generate_meal_plan import insert_status_nutrient_info
+from app.recipe_management.search import search_recipes_logic
+from app.recipe_management.replace import replace_recipe_logic
+from app.recipe_management.get_recipe import get_recipe_logic
 
 # from app.send_email import send_weekly_email_by_google_scheduler
 
@@ -60,9 +58,37 @@ def static_files():
 
 
 # redirect 404 to root URL
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     print(request.path)
+#     return redirect("/")
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     if request.path.startswith('/api'):
+#         return jsonify({'error': 'Not found'}), 404
+#     return redirect("/")
+
 @app.errorhandler(404)
 def page_not_found(e):
-    print(request.path)
+    """
+    Handle 404 Not Found errors.
+
+    If the requested path begins with '/api', a JSON error response is returned.
+    Otherwise, the user is redirected to the homepage.
+
+    Parameters:
+    -----------
+    e : Exception
+        The exception instance representing the 404 error.
+
+    Returns:
+    --------
+    Response
+        - For API requests: JSON response with error message and status code 404.
+        - For non-API requests: Redirect response to the homepage ('/').
+    """
+    if request.path.startswith('/api'):
+        return jsonify({'error': 'Not found'}), 404
     return redirect("/")
 
 
@@ -356,164 +382,82 @@ def create_customer_portal_session():
 
     return jsonify({"url": url})
 
-
-recipes = []
-
-
-def load_recipe_data():
-    global recipes
-    try:
-        with open('./meal_db/meal_database.csv', 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f)
-            recipes = list(reader)
-            print(f"Loaded {len(recipes)} recipes from meal_database.csv")
-    except Exception as e:
-        print(f"Error loading meal_database.csv: {e}")
-        recipes = []
-
-load_recipe_data()
-
-# @app.route('/api/recipes/search', methods=['GET'])
-# def search_recipes():
-#     query = request.args.get('q', '').lower().strip()
-#     if not query:
-#         return jsonify([])
-#
-#     matched = []
-#     for recipe in recipes:
-#         title = recipe.get('title', '').lower()
-#         ingredients = recipe.get('ingredients', '').lower()
-#         region = recipe.get('region', '').lower()
-#         subregion = recipe.get('subregion', '').lower()
-#
-#         if query in title or query in ingredients or query in region or query in subregion:
-#             try:
-#                 matched_recipe = {
-#                     'id': int(recipe.get('number', 0)),
-#                     'title': recipe.get('title', ''),
-#                     'calories': float(recipe.get('energy_kcal', 0)),
-#                     'region': recipe.get('region', ''),
-#                     'prep_time': recipe.get('preptime', '')
-#                 }
-#                 matched.append(matched_recipe)
-#             except ValueError as e:
-#                 print(f"Skipping recipe due to invalid data: {e}")
-#                 continue
-#
-#     return jsonify(matched)
-
 @app.route('/api/recipes/search', methods=['GET'])
 def search_recipes():
+    """
+    Search for recipes based on a query string.
+
+    Query Parameters:
+    -----------------
+    q : str
+        The search query (matched against title, ingredients, region, and subregion).
+    exact : str
+        Whether to enforce exact term match ('true' or 'false').
+
+    Returns:
+    --------
+    Response
+        A JSON list of matching recipes, each containing:
+        - id (int)
+        - title (str)
+        - calories (float)
+        - region (str)
+        - prep_time (str)
+        - cook_time (str)
+    """
     query = request.args.get('q', '').lower().strip()
     exact_match = request.args.get('exact', 'false').lower() == 'true'
+    return search_recipes_logic(query, exact_match)
 
-    if not query:
-        return jsonify([])
-
-    matched = []
-    for recipe in recipes:
-        title = recipe.get('title', '').lower()
-        ingredients = recipe.get('ingredients', '').lower()
-        region = recipe.get('region', '').lower()
-        subregion = recipe.get('subregion', '').lower()
-
-        match = False
-        if exact_match:
-            # Exact word match in title or ingredients only
-            terms = query.split()
-            match = all(
-                any(
-                    re.search(rf'\b{re.escape(term)}\b', field)
-                    for field in [title, ingredients]
-                )
-                for term in terms
-            )
-        else:
-            # Original partial match in any field
-            match = any(query in field for field in [title, ingredients, region, subregion])
-
-        if match:
-            try:
-                matched_recipe = {
-                    'id': int(recipe.get('number', 0)),
-                    'title': recipe.get('title', ''),
-                    'calories': float(recipe.get('energy_kcal', 0)),
-                    'region': recipe.get('region', ''),
-                    'prep_time': recipe.get('preptime', ''),
-                    'cook_time': recipe.get('cooktime', '')
-                }
-                matched.append(matched_recipe)
-            except ValueError as e:
-                print(f"Skipping recipe due to invalid data: {e}")
-                continue
-
-    return jsonify(matched)
-
-@app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
-def get_recipe(recipe_id):
-    recipe = next((r for r in recipes if int(r.get('number', 0)) == recipe_id), None)
-    if recipe:
-        return jsonify({
-            'id': int(recipe.get('number', 0)),
-            'title': recipe.get('title', ''),
-            'calories': float(recipe.get('energy_kcal', 0)),
-            'region': recipe.get('region', ''),
-            'prep_time': recipe.get('preptime', ''),
-            'ingredients': recipe.get('ingredients', ''),
-            'instructions': recipe.get('instructions', '')
-        })
-    return jsonify({'error': 'Recipe not found'}), 404
 
 @app.route("/api/replace-meal-plan-recipe", methods=["POST"])
 def replace_recipe_in_meal_plan():
+    """
+    Replace a recipe in a given meal plan with a new recipe.
+
+    Request Body:
+    -------------
+    JSON object with the following keys:
+        - meal_plan (dict): The current meal plan.
+        - recipe_id (dict): Contains the 'id' of the replacement recipe.
+        - day_index (int): Index of the day in the meal plan.
+        - recipe_index (int): Index of the recipe to replace.
+
+    Returns:
+    --------
+    Response
+        A JSON object containing:
+        - meal_plan (dict): Updated meal plan with nutrition and shopping list updates.
+        - id_replaced (int): The ID of the recipe that replaced the old one.
+    """
     data = request.json
-    meal_plan = data.get("meal_plan")
-    recipe_id = data.get("recipe_id")
-    id = recipe_id.get("id")
-    day_index = data.get("day_index")
-    recipe_index = data.get("recipe_index")
+    return replace_recipe_logic(data)
 
-    # Load recipes from database
-    recipe_df = pd.read_csv("./meal_db/meal_database.csv")
-    snack_recipes_df = recipe_df[recipe_df["meal_slot"] == "['snack']"]
 
-    # Find the old recipe at that position
-    old_recipe = meal_plan["days"][day_index]["recipes"].pop(recipe_index)
+@app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
+def get_recipe(recipe_id):
+    """
+    Retrieve detailed information for a specific recipe by ID.
 
-    # Find the new recipe by ID in your CSV
-    new_recipe_row = recipe_df.loc[recipe_df["number"] == int(id)]
+    URL Parameters:
+    ---------------
+    recipe_id : int
+        The unique identifier of the recipe.
 
-    if new_recipe_row.empty:
-        return jsonify({"error": "New recipe not found."}), 400
+    Returns:
+    --------
+    Response
+        A JSON object containing:
+        - id (int)
+        - title (str)
+        - calories (float)
+        - region (str)
+        - prep_time (str)
+        - ingredients (str)
+        - instructions (str)
 
-    new_recipe = new_recipe_row.iloc[0].to_dict()
-    new_recipe = {k: (None if pd.isnull(v) else v) for k, v in new_recipe.items()}
-
-    # Convert JSON string fields to lists if needed
-    if new_recipe["meal_slot"] == 'Snack':
-        new_recipe['instructions'] = ast.literal_eval(new_recipe['instructions'])
-        new_recipe['ingredients_with_quantities'] = ast.literal_eval(new_recipe['ingredients_with_quantities'])
-
-    new_recipe["id"] = int(new_recipe["number"])
-    new_recipe["calories"] = int(new_recipe["energy_kcal"])
-    new_recipe["prep_time"] = new_recipe["preptime"]
-
-    # Keep same meal slot as old recipe
-    new_recipe["meal_name"] = old_recipe["meal_name"]
-
-    # Remove old recipe nutrition values
-    meal_plan = update_nutrition_values(meal_plan, old_recipe, "subtract", recipe_df, snack_recipes_df)
-
-    # Insert new recipe at same position
-    meal_plan["days"][day_index]["recipes"].insert(recipe_index, new_recipe)
-
-    # Add new recipe nutrition values
-    meal_plan = update_nutrition_values(meal_plan, new_recipe, "add", recipe_df, snack_recipes_df)
-
-    # Update shopping list and nutrient info
-    time.sleep(0.1)
-    meal_plan = gen_shopping_list(meal_plan)
-    meal_plan = insert_status_nutrient_info(meal_plan)
-    time.sleep(0.1)
-
-    return jsonify({"meal_plan": meal_plan, "id_replaced": new_recipe["number"]})
+        If the recipe is not found, returns:
+        - error (str): Message indicating recipe not found
+        - HTTP status code 404
+    """
+    return get_recipe_logic(recipe_id)
