@@ -69,3 +69,45 @@ ol {
   font-style: italic;
   font-weight: bold;
 }
+
+.recipe-dialog-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  padding: 1rem 1rem 0 1rem;
+}
+
+.dialog-content {
+  flex: 1;
+  padding: 0 2rem;
+  overflow-y: auto;
+}
+
+.dialog-footer {
+  margin-top: auto;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+/* Keep existing styles, add these */
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-\[calc\(100\%-120px\)\] {
+  height: calc(100% - 120px);
+}

@@ -1021,6 +1021,7 @@ export class LandingComponent implements OnInit {
           imageUrl: this.getImageUrl(recipe.id),
           ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
           instructionsUrl: this.getInstructionsCsvUrl(recipe.id),
+          showActions: false
         },
         width: '800px',
       });
@@ -1120,75 +1121,119 @@ export class LandingComponent implements OnInit {
     return shoppingListByDate;
   }
 
-  getNutrientStatusMessage(nutrient: any): string {
-    const actual = nutrient.actual;
-    const min = nutrient.display_target_min;
-    const max = nutrient.display_target_max;
-    const name = nutrient.displayName;
+/**
+ * Generates a status message for a given nutrient, indicating whether its actual value
+ * is lower or higher than the recommended target range.
+ * 
+ * Extracts the unit from the nutrient's display name (if present inside parentheses)
+ * and formats a readable message accordingly.
+ * 
+ * @param nutrient - The nutrient object containing actual, min, max, and displayName values.
+ * @returns A formatted status message string, or an empty string if within range.
+ */
+getNutrientStatusMessage(nutrient: any): string {
+  const actual = nutrient.actual;                     // actual value from backend
+  const min = nutrient.display_target_min;            // target minimum value
+  const max = nutrient.display_target_max;            // target maximum value
+  const name = nutrient.displayName;                  // nutrient display name
 
-    if (actual < min && min != null) {
-      return `${name} is ${actual}. Lower than recommended ${min}.`;
-    } else if (actual > max && max != null) {
-      return `${name} is ${actual}. Higher than recommended ${max}.`;
-    } else {
-      return ''; // no message if within range or if no min/max available
-    }
+  // Extract unit from displayName (text inside parentheses)
+  const unitMatch = name.match(/\(([^)]+)\)/);
+  const unit = unitMatch ? unitMatch[1] : '';          // fallback to empty if no unit found
+
+  // Clean up display name by removing unit and parentheses
+  const cleanName = name.replace(/\s*\(.*?\)/, '');
+
+  // Return message depending on value status
+  if (actual < min && min != null) {
+    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
+  } else if (actual > max && max != null) {
+    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
+  } else {
+    return '';  // No message if within range or if no min/max provided
   }
+}
 
-  getOutOfRangeMessages(): string[] {
-    const messages: string[] = [];
-    const allNutrients = [
-      ...this.energy,
-      ...this.macros,
-      ...this.vitamins,
-      ...this.minerals,
-    ];
+/**
+ * Aggregates all out-of-range messages for nutrients in the current meal plan.
+ * Adds a predefined header message if any nutrient is found out of range.
+ * 
+ * Combines all nutrients (energy, macros, vitamins, minerals) into a single list for evaluation.
+ * 
+ * @returns An array of status messages for out-of-range nutrients.
+ */
+getOutOfRangeMessages(): string[] {
+  const messages: string[] = [];
 
-    allNutrients.forEach((nutrient) => {
-      const message = this.getNutrientStatusMessage(nutrient);
-      if (message) {
-        if (messages.length === 0) {
-          messages.push(this.OUT_OF_RANGE);
-        }
-        messages.push(message);
+  // Combine nutrients from all categories into one array
+  const allNutrients = [
+    ...this.energy,
+    ...this.macros,
+    ...this.vitamins,
+    ...this.minerals,
+  ];
+
+  // Check each nutrient's status message
+  allNutrients.forEach((nutrient) => {
+    const message = this.getNutrientStatusMessage(nutrient);
+    if (message) {
+      // Add header message only once when first out-of-range nutrient found
+      if (messages.length === 0) {
+        messages.push(this.OUT_OF_RANGE);
       }
-    });
+      messages.push(message);
+    }
+  });
 
-    return messages;
-  }
+  return messages;
+}
 
-  openOutOfRangeDialog(): void {
-  const messages = this.getOutOfRangeMessages().slice(1); // skip OUT_OF_RANGE header
+/**
+ * Opens a popup dialog window displaying out-of-range nutrient messages.
+ * Excludes the header message and passes only the nutrient-specific messages to the dialog component.
+ */
+openOutOfRangeDialog(): void {
+  // Skip the OUT_OF_RANGE header (first element) and pass the rest
+  const messages = this.getOutOfRangeMessages().slice(1);
+
+  // Open Angular Material dialog with messages as injected data
   this.dialog.open(OutOfRangeDialogComponent, {
     width: '600px',
     data: messages
   });
 }
-
+/**
+ * Replaces a recipe in the meal plan at the specified day and recipe position.
+ * 
+ * Calls the refresh service's replaceRecipe endpoint with the selected recipe ID,
+ * and updates the meal plan and nutrient tables on successful response.
+ * Also updates the shopping list based on the returned data.
+ * 
+ * @param dayIndex - The index of the day in the meal plan to replace the recipe in.
+ * @param recipeIndex - The index of the recipe within the day to replace.
+ * @param newRecipeId - The ID of the new recipe to insert into the meal plan.
+ */
 replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void {
   this.refresh.replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse).subscribe(
     (response) => {
       this.toast.success('Recipe replaced successfully!');
       console.log('recipe replaced (replace)', response);
+
+      // Update meal plan and nutrients table
       this.processUpdatedMealPlan(response.meal_plan);
-      
-      this.shoppingListData = response.shopping_list;
+
+      // Update shopping list from server response if available
       if (response.shopping_list) {
-          this.shoppingListData = response.shopping_list;
-          console.log(
-            'Shopping List from refreshRecipe service:',
-            this.shoppingListData
-          );
-        } else {
-          // Fallback if the service unexpectedly doesn't provide it
-          console.warn(
-            'Shopping list not provided by refresh service, transforming manually.'
-          );
-          this.shoppingListData = this.transformMealPlanToShoppingList(
-            this.mealPlanResponse
-          );
-        }
-        this.cdRef.detectChanges();
+        this.shoppingListData = response.shopping_list;
+        console.log('Shopping List from refreshRecipe service:', this.shoppingListData);
+      } else {
+        // Fallback if shopping list was not returned
+        console.warn('Shopping list not provided by refresh service, transforming manually.');
+        this.shoppingListData = this.transformMealPlanToShoppingList(this.mealPlanResponse);
+      }
+
+      // Trigger Angular change detection manually for UI updates
+      this.cdRef.detectChanges();
     },
     (error) => {
       this.toast.error('Oops, the server is too busy, try again later!');
@@ -1197,19 +1242,44 @@ replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void 
   );
 }
 
+/**
+ * Updates the meal plan and re-categorizes the nutrients for display.
+ * 
+ * @param mealPlan - The updated meal plan object returned from the backend.
+ */
 processUpdatedMealPlan(mealPlan: any): void {
   this.mealPlanResponse = this.updateMealPlan(mealPlan);
   this.categorizeNutrients();
 }
 
+/**
+ * Opens the custom Search Dialog to allow users to manually search and select a replacement recipe.
+ * 
+ * Handles subscription-level permissions for access to this feature.
+ * 
+ * @param dayIndex - The index of the day in the meal plan for the recipe to replace.
+ * @param recipeIndex - The index of the recipe within that day's meal plan.
+ */
 openSearchDialog(dayIndex: number, recipeIndex: number): void {
-  const dialogRef = this.dialog.open(SearchDialogComponent);
+  if (
+    this.userSubscriptionTypeId === 1 ||
+    this.userSubscriptionTypeId === 2 ||
+    this.userSubscriptionTypeId === 3
+  ) {
+    const dialogRef = this.dialog.open(SearchDialogComponent);
 
-  dialogRef.afterClosed().subscribe((selectedRecipe) => {
-    if (selectedRecipe?.id) {
-      this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
-    }
-  });
+    // Wait for the dialog to close and act on the selected recipe
+    dialogRef.afterClosed().subscribe((selectedRecipe) => {
+      if (selectedRecipe?.id) {
+        this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
+      }
+    });
+  } else if (this.userSubscriptionTypeId === 0) {
+    // For unsubscribed users, show upgrade prompt dialog
+    const title = 'Sign Up and Try!';
+    const message = 'To see recipe details for this plan, please sign up. No credit card or payment required.';
+    this.openDialog(title, message, '/sign-up', 'Sign Up');
+  }
 }
 
 }

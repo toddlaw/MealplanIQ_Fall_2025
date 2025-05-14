@@ -2,16 +2,18 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-out-of-range-dialog',
-  templateUrl: './out-of-range-dialog.component.html',
-  styleUrls: ['./out-of-range-dialog.component.css']
+  selector: 'app-out-of-range-dialog',                  // component selector
+  templateUrl: './out-of-range-dialog.component.html',  // template file path
+  styleUrls: ['./out-of-range-dialog.component.css']    // optional style file path
 })
 export class OutOfRangeDialogComponent {
+  // Injects dialog reference and incoming messages data when dialog is opened
   constructor(
-    public dialogRef: MatDialogRef<OutOfRangeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public messages: string[]
+    public dialogRef: MatDialogRef<OutOfRangeDialogComponent>,  // reference to dialog instance
+    @Inject(MAT_DIALOG_DATA) public messages: string[]          // array of messages passed from parent
   ) {}
 
+  // Method to close the dialog window when close button is clicked
   closeDialog(): void {
     this.dialogRef.close();
   }

@@ -28,6 +28,7 @@ interface Ingredient {
 export class RecipeDialogComponent implements OnInit {
     public parts: Part[] = [];
     public instructions: Instruction[] = [];
+    public showActions: boolean = false;
   
     constructor(
       public dialogRef: MatDialogRef<RecipeDialogComponent>,
@@ -38,9 +39,22 @@ export class RecipeDialogComponent implements OnInit {
     ngOnInit(): void {
     //   this.parseDataIntoParts(this.data.recipe.ingredients_with_quantities);
         // this.parseDataIntoInstructions(this.data.recipe.instructions);
-        this.fetchIngredients();
-        this.fetchInstructions();
-    }
+
+        this.showActions = this.data.showActions || false;
+        if (this.data.ingredientsUrl && this.data.instructionsUrl) {
+            this.fetchIngredients();
+            this.fetchInstructions();
+        } else {
+            // Handle direct data from search results
+            this.parseDataIntoParts(
+            this.data.recipe.ingredients.split('\n').map((line: string) => line.split(','))
+            );
+
+            this.parseDataIntoInstructions(
+            this.data.recipe.instructions.split('\n').map((line: string) => line.split(','))
+            );
+        }
+  }
   
     /**
      * Parses CSV data into an array of Parts, where each Part contains a header and an array of Ingredients.
@@ -146,6 +160,14 @@ export class RecipeDialogComponent implements OnInit {
     
     close(): void {
       this.dialogRef.close();
+    }
+
+    onCancel(): void {
+        this.dialogRef.close(false);
+    }
+
+    onReplace(): void {
+        this.dialogRef.close(true);
     }
 
     /**

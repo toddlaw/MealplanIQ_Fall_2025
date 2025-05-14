@@ -8,10 +8,14 @@
       (input)="onSearchChange()"
       placeholder="e.g. ham, pasta, salad..."
     />
+    <button matSuffix mat-icon-button (click)="onExactSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
   </mat-form-field>
 
   <div *ngIf="suggestedResults.length > 0">
-    <p><strong>Suggestions:</strong></p>
+    <p *ngIf="!isExactSearch"><strong>Suggestions:</strong></p>
+    <p *ngIf="isExactSearch"><strong>Search results for "{{ searchTerm }}":</strong></p>
     <mat-list>
       <mat-list-item
         *ngFor="let suggestion of suggestedResults"
@@ -32,7 +36,8 @@
   </div>
 
   <div *ngIf="searchTerm && suggestedResults.length === 0" class="text-red-500">
-    No matching recipes found.
+    <span *ngIf="isExactSearch">No results found for "{{ searchTerm }}"</span>
+    <span *ngIf="!isExactSearch">No matching recipes found.</span>
   </div>
 </mat-dialog-content>
 

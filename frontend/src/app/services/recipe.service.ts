@@ -11,7 +11,11 @@ export class RecipeService {
 
   constructor(private http: HttpClient) {}
 
-  searchRecipes(query: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/search?q=${query}`);
+  searchRecipes(query: string, exact: boolean = false): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/search?q=${query}&exact=${exact}`);
+  }
+
+  getRecipeDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 }
