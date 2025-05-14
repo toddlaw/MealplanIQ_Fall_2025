@@ -166,6 +166,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
     const aggregationMap = new Map<string, AggregationWorkData>();
 
     rawItems.forEach((item) => {
+      // ... (existing logic for populating aggregationMap - no changes here) ...
+      // (This part is from your previous correct version)
       const itemKey = `${item.category}_${item.name.toLowerCase().trim()}`;
 
       if (!aggregationMap.has(itemKey)) {
@@ -173,18 +175,16 @@ export class ShoppingListLandingPageComponent implements OnInit {
           name: item.name,
           category: item.category,
           summableVolume: {
-            // Initialize
             totalInTeaspoons: 0,
             largestUnitNormalized: null,
             largestUnitHierarchyValue: -1,
             entryCount: 0,
           },
           countable: {
-            // Initialize
             totalCount: 0,
             entryCount: 0,
           },
-          nonSummableOther: [], // Initialize
+          nonSummableOther: [],
           totalOriginalEntryCount: 0,
         });
       }
@@ -192,19 +192,14 @@ export class ShoppingListLandingPageComponent implements OnInit {
       aggData.totalOriginalEntryCount++;
 
       const numQuantity = this.parseQuantity(item.quantity);
-      const normalizedUnit = this.normalizeUnit(item.unit); // Might return 'each', 'piece', or null/undefined if no unit
+      const normalizedUnit = this.normalizeUnit(item.unit);
 
       const isVolumeUnit =
         normalizedUnit !== null &&
         UNIT_HIERARCHY.hasOwnProperty(normalizedUnit) &&
         UNIT_CONVERSION_TO_TEASPOONS.hasOwnProperty(normalizedUnit);
 
-      // Determine if it's a "countable" item
-      // Countable if:
-      // 1. numQuantity is a valid number.
-      // 2. It's NOT a recognized volume unit.
-      // 3. The normalizedUnit is one of our countable identifiers OR unit is missing (normalizedUnit is null/undefined).
-      const countableUnits = ['each', 'piece', 'unit']; // Add more if needed
+      const countableUnits = ['each', 'piece', 'unit'];
       const isCountable =
         numQuantity !== null &&
         !isVolumeUnit &&
@@ -215,7 +210,6 @@ export class ShoppingListLandingPageComponent implements OnInit {
         const quantityInTeaspoons =
           numQuantity * UNIT_CONVERSION_TO_TEASPOONS[normalizedUnit!];
         aggData.summableVolume.totalInTeaspoons += quantityInTeaspoons;
-
         const currentUnitHierarchyValue = UNIT_HIERARCHY[normalizedUnit!];
         if (
           currentUnitHierarchyValue >
@@ -226,11 +220,9 @@ export class ShoppingListLandingPageComponent implements OnInit {
           aggData.summableVolume.largestUnitNormalized = normalizedUnit;
         }
       } else if (isCountable) {
-        // Handle countable items (like eggs)
         aggData.countable.entryCount++;
-        aggData.countable.totalCount += numQuantity!; // numQuantity is confirmed not null
+        aggData.countable.totalCount += numQuantity!;
       } else {
-        // Neither a known volume unit nor a simple countable item.
         aggData.nonSummableOther.push({
           quantity: item.quantity,
           unit: item.unit,
@@ -243,20 +235,23 @@ export class ShoppingListLandingPageComponent implements OnInit {
     aggregationMap.forEach((aggData) => {
       const displayParts: string[] = [];
       const needsPrefixOverall = aggData.totalOriginalEntryCount > 1;
-      let primaryUnitForDisplay = ''; // Often empty for countable items
+      let primaryUnitForDisplay = '';
 
-      // --- 1. Process Countable Part (takes precedence if present) ---
+      let itemEffectiveNumericQuantity = 0; // To store the primary quantity for pluralization check
+      let isPrimaryQuantityDetermined = false;
+
+      // --- 1. Process Countable Part ---
       if (aggData.countable.entryCount > 0) {
-        let countableStr = aggData.countable.totalCount.toString();
+        itemEffectiveNumericQuantity = aggData.countable.totalCount;
+        isPrimaryQuantityDetermined = true;
+        let countableStr = itemEffectiveNumericQuantity.toString();
         if (needsPrefixOverall) {
-          // Prefix if multiple original entries contributed to this item name
           countableStr = `> ${countableStr}`;
         }
         displayParts.push(countableStr);
-        // primaryUnitForDisplay could be 'each' if consistently used, but often it's just the number for eggs.
       }
 
-      // --- 2. Process Summable Volume Part (if no countable sum, or if you want to combine) ---
+      // --- 2. Process Summable Volume Part ---
       if (
         aggData.countable.entryCount === 0 &&
         aggData.summableVolume.entryCount > 0 &&
@@ -269,20 +264,18 @@ export class ShoppingListLandingPageComponent implements OnInit {
         const teaspoonsPerDisplayTargetUnit =
           UNIT_CONVERSION_TO_TEASPOONS[displayTargetUnitNorm];
 
-        if (teaspoonsPerDisplayTargetUnit === 0) {
-          displayParts.push(
-            `${this.formatNumberForDisplay(
-              aggData.summableVolume.totalInTeaspoons
-            )} tsp (conv. error)`
-          );
-        } else {
+        if (teaspoonsPerDisplayTargetUnit > 0) {
+          // Avoid division by zero
           let quantityInDisplayTargetUnit =
             aggData.summableVolume.totalInTeaspoons /
             teaspoonsPerDisplayTargetUnit;
+          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit; // Store for pluralization
+          isPrimaryQuantityDetermined = true;
+
           let finalDisplayNumStr = this.formatNumberForDisplay(
             quantityInDisplayTargetUnit
           );
-          const numericValueForPlural = parseFloat(finalDisplayNumStr);
+          const numericValueForPlural = parseFloat(finalDisplayNumStr); // Use for pluralizing unit
           const unitStr =
             Math.abs(numericValueForPlural - 1) < 1e-5
               ? displayTargetUnitNorm
@@ -291,7 +284,6 @@ export class ShoppingListLandingPageComponent implements OnInit {
               : displayTargetUnitNorm + 's';
 
           let summablePartStr = `${finalDisplayNumStr} ${unitStr}`;
-          // Apply ">" if multiple volume entries were combined, OR if it's part of an overall merge
           if (
             needsPrefixForSummableVolume ||
             (needsPrefixOverall &&
@@ -302,14 +294,30 @@ export class ShoppingListLandingPageComponent implements OnInit {
           }
           displayParts.push(summablePartStr);
           if (!primaryUnitForDisplay) primaryUnitForDisplay = unitStr;
+        } else {
+          displayParts.push(
+            `${this.formatNumberForDisplay(
+              aggData.summableVolume.totalInTeaspoons
+            )} tsp (conv. error)`
+          );
         }
       }
+
       // --- 3. Process Non-Summable Other Part ---
       if (
         aggData.countable.entryCount === 0 &&
         aggData.summableVolume.entryCount === 0
       ) {
         aggData.nonSummableOther.forEach((nsEntry, index) => {
+          // Try to parse quantity for non-summable to check for pluralization, if it's simple number
+          if (!isPrimaryQuantityDetermined && index === 0) {
+            // Only for the first non-summable part
+            const nsNumQty = this.parseQuantity(nsEntry.quantity);
+            if (nsNumQty !== null) {
+              itemEffectiveNumericQuantity = nsNumQty;
+              isPrimaryQuantityDetermined = true;
+            }
+          }
           let nsPart = `${nsEntry.quantity} ${nsEntry.unit || ''}`.trim();
           if (nsPart) {
             if (needsPrefixOverall && index === 0) {
@@ -333,37 +341,39 @@ export class ShoppingListLandingPageComponent implements OnInit {
 
       let finalQuantityString = displayParts.join(', ');
 
+      // Fallback quantity string if empty
       if (!finalQuantityString && aggData.totalOriginalEntryCount > 0) {
         finalQuantityString = needsPrefixOverall
           ? '> (No valid quantity)'
           : '(No valid quantity)';
       } else if (
-        aggData.countable.entryCount > 0 &&
-        aggData.countable.totalCount === 0 &&
-        aggData.summableVolume.entryCount === 0 &&
-        aggData.nonSummableOther.length === 0
+        isPrimaryQuantityDetermined &&
+        itemEffectiveNumericQuantity < 1e-5 && // Effectively zero
+        displayParts.length === 1 &&
+        displayParts[0].startsWith('0 ')
       ) {
-        finalQuantityString = needsPrefixOverall ? '> 0' : '0'; 
-      } else if (
-        aggData.summableVolume.totalInTeaspoons < 1e-5 &&
-        aggData.summableVolume.entryCount > 0 &&
-        aggData.countable.entryCount === 0 &&
-        aggData.nonSummableOther.length === 0
+        // And shows "0 [unit]"
+        // This case was for showing "0 cups" etc. if sum was 0.
+        // It might conflict with pluralization logic if itemEffectiveNumericQuantity is 0.
+        // The pluralization check `itemEffectiveNumericQuantity - 1 > 1e-5` will handle it.
+      }
+
+      // --- Pluralize Item Name ---
+      let finalItemName = aggData.name;
+      if (
+        isPrimaryQuantityDetermined &&
+        itemEffectiveNumericQuantity - 1 > 1e-5
       ) {
-        if (aggData.summableVolume.largestUnitNormalized) {
-          const zeroUnit = aggData.summableVolume.largestUnitNormalized;
-          finalQuantityString = `0 ${
-            zeroUnit === 'pinch' ? 'pinches' : zeroUnit + 's'
-          }`;
-          if (needsPrefixOverall)
-            finalQuantityString = `> ${finalQuantityString}`;
-        } else {
-          finalQuantityString = needsPrefixOverall ? '> 0' : '0';
+        // quantity is greater than 1 (with tolerance)
+        const lowerName = aggData.name.toLowerCase();
+        if (!lowerName.endsWith('(s)') && !lowerName.endsWith('s')) {
+          finalItemName += '(s)';
         }
+        // If it ends with 's' (like "apples") or "(s)", we don't add another "(s)".
       }
 
       finalProcessedItems.push({
-        name: aggData.name,
+        name: finalItemName, // Use potentially pluralized name
         category: aggData.category,
         quantity:
           finalQuantityString ||
