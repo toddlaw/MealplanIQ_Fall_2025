@@ -21,6 +21,7 @@ import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
 import csv
 import pandas as pd
+import re
 
 from app.generate_meal_plan import insert_status_nutrient_info
 
@@ -372,9 +373,40 @@ def load_recipe_data():
 
 load_recipe_data()
 
+# @app.route('/api/recipes/search', methods=['GET'])
+# def search_recipes():
+#     query = request.args.get('q', '').lower().strip()
+#     if not query:
+#         return jsonify([])
+#
+#     matched = []
+#     for recipe in recipes:
+#         title = recipe.get('title', '').lower()
+#         ingredients = recipe.get('ingredients', '').lower()
+#         region = recipe.get('region', '').lower()
+#         subregion = recipe.get('subregion', '').lower()
+#
+#         if query in title or query in ingredients or query in region or query in subregion:
+#             try:
+#                 matched_recipe = {
+#                     'id': int(recipe.get('number', 0)),
+#                     'title': recipe.get('title', ''),
+#                     'calories': float(recipe.get('energy_kcal', 0)),
+#                     'region': recipe.get('region', ''),
+#                     'prep_time': recipe.get('preptime', '')
+#                 }
+#                 matched.append(matched_recipe)
+#             except ValueError as e:
+#                 print(f"Skipping recipe due to invalid data: {e}")
+#                 continue
+#
+#     return jsonify(matched)
+
 @app.route('/api/recipes/search', methods=['GET'])
 def search_recipes():
     query = request.args.get('q', '').lower().strip()
+    exact_match = request.args.get('exact', 'false').lower() == 'true'
+
     if not query:
         return jsonify([])
 
@@ -385,14 +417,30 @@ def search_recipes():
         region = recipe.get('region', '').lower()
         subregion = recipe.get('subregion', '').lower()
 
-        if query in title or query in ingredients or query in region or query in subregion:
+        match = False
+        if exact_match:
+            # Exact word match in title or ingredients only
+            terms = query.split()
+            match = all(
+                any(
+                    re.search(rf'\b{re.escape(term)}\b', field)
+                    for field in [title, ingredients]
+                )
+                for term in terms
+            )
+        else:
+            # Original partial match in any field
+            match = any(query in field for field in [title, ingredients, region, subregion])
+
+        if match:
             try:
                 matched_recipe = {
                     'id': int(recipe.get('number', 0)),
                     'title': recipe.get('title', ''),
                     'calories': float(recipe.get('energy_kcal', 0)),
                     'region': recipe.get('region', ''),
-                    'prep_time': recipe.get('preptime', '')
+                    'prep_time': recipe.get('preptime', ''),
+                    'cook_time': recipe.get('cooktime', '')
                 }
                 matched.append(matched_recipe)
             except ValueError as e:
@@ -400,6 +448,21 @@ def search_recipes():
                 continue
 
     return jsonify(matched)
+
+@app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
+def get_recipe(recipe_id):
+    recipe = next((r for r in recipes if int(r.get('number', 0)) == recipe_id), None)
+    if recipe:
+        return jsonify({
+            'id': int(recipe.get('number', 0)),
+            'title': recipe.get('title', ''),
+            'calories': float(recipe.get('energy_kcal', 0)),
+            'region': recipe.get('region', ''),
+            'prep_time': recipe.get('preptime', ''),
+            'ingredients': recipe.get('ingredients', ''),
+            'instructions': recipe.get('instructions', '')
+        })
+    return jsonify({'error': 'Recipe not found'}), 404
 
 @app.route("/api/replace-meal-plan-recipe", methods=["POST"])
 def replace_recipe_in_meal_plan():
@@ -452,7 +515,5 @@ def replace_recipe_in_meal_plan():
     meal_plan = gen_shopping_list(meal_plan)
     meal_plan = insert_status_nutrient_info(meal_plan)
     time.sleep(0.1)
-
-
 
     return jsonify({"meal_plan": meal_plan, "id_replaced": new_recipe["number"]})

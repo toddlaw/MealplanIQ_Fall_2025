@@ -1010,26 +1010,27 @@ export class LandingComponent implements OnInit {
       maxDate: this.startDate.get('end')!.value?.getTime(),
     };
 
-    if (
-      this.userSubscriptionTypeId === 1 ||
-      this.userSubscriptionTypeId === 2 ||
-      this.userSubscriptionTypeId === 3
-    ) {
+    // if (
+    //   this.userSubscriptionTypeId === 1 ||
+    //   this.userSubscriptionTypeId === 2 ||
+    //   this.userSubscriptionTypeId === 3
+    // ) {
       this.dialog.open(RecipeDialogComponent, {
         data: {
           recipe: recipe,
           imageUrl: this.getImageUrl(recipe.id),
           ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
           instructionsUrl: this.getInstructionsCsvUrl(recipe.id),
+          showActions: false
         },
         width: '800px',
       });
-    } else if (this.userSubscriptionTypeId === 0) {
-      const title = 'Sign Up and Try!';
-      const message =
-        'To see recipe details for this plan, please sign up.  No credit card or payment required.';
-      this.openDialog(title, message, '/sign-up', 'Sign Up');
-    }
+    // } else if (this.userSubscriptionTypeId === 0) {
+    //   const title = 'Sign Up and Try!';
+    //   const message =
+    //     'To see recipe details for this plan, please sign up.  No credit card or payment required.';
+    //   this.openDialog(title, message, '/sign-up', 'Sign Up');
+    // }
   }
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
