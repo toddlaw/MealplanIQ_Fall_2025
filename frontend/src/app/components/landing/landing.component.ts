@@ -1121,20 +1121,28 @@ export class LandingComponent implements OnInit {
     return shoppingListByDate;
   }
 
-  getNutrientStatusMessage(nutrient: any): string {
-    const actual = nutrient.actual;
-    const min = nutrient.display_target_min;
-    const max = nutrient.display_target_max;
-    const name = nutrient.displayName;
+getNutrientStatusMessage(nutrient: any): string {
+  const actual = nutrient.actual;
+  const min = nutrient.display_target_min;
+  const max = nutrient.display_target_max;
+  const name = nutrient.displayName;
 
-    if (actual < min && min != null) {
-      return `${name} is ${actual}. Lower than recommended ${min}.`;
-    } else if (actual > max && max != null) {
-      return `${name} is ${actual}. Higher than recommended ${max}.`;
-    } else {
-      return ''; // no message if within range or if no min/max available
-    }
+  // Extract unit from displayName (inside parentheses)
+  const unitMatch = name.match(/\(([^)]+)\)/);
+  const unit = unitMatch ? unitMatch[1] : ''; // fallback to empty if no unit found
+
+  // Remove unit from display name for cleaner message
+  const cleanName = name.replace(/\s*\(.*?\)/, '');
+
+  if (actual < min && min != null) {
+    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
+  } else if (actual > max && max != null) {
+    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
+  } else {
+    return ''; // no message if within range or if no min/max available
   }
+}
+
 
   getOutOfRangeMessages(): string[] {
     const messages: string[] = [];
@@ -1204,13 +1212,23 @@ processUpdatedMealPlan(mealPlan: any): void {
 }
 
 openSearchDialog(dayIndex: number, recipeIndex: number): void {
-  const dialogRef = this.dialog.open(SearchDialogComponent);
-
-  dialogRef.afterClosed().subscribe((selectedRecipe) => {
-    if (selectedRecipe?.id) {
-      this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
-    }
-  });
-}
+    // if (
+    //   this.userSubscriptionTypeId === 1 ||
+    //   this.userSubscriptionTypeId === 2 ||
+    //   this.userSubscriptionTypeId === 3
+    // ) {
+      const dialogRef = this.dialog.open(SearchDialogComponent);
+      dialogRef.afterClosed().subscribe((selectedRecipe) => {
+        if (selectedRecipe?.id) {
+          this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
+        }
+      });
+    // } else if (this.userSubscriptionTypeId === 0) {
+    //   const title = 'Sign Up and Try!';
+    //   const message =
+    //     'To see recipe details for this plan, please sign up.  No credit card or payment required.';
+    //   this.openDialog(title, message, '/sign-up', 'Sign Up');
+    // }
+  }
 
 }

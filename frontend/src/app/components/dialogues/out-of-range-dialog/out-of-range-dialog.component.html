@@ -1,10 +1,12 @@
 <h2 mat-dialog-title style="text-align: center;">Out of Range Nutrients</h2>
 
 <div mat-dialog-content>
+  <p><strong>For this meal plan...</strong></p>
   <div *ngFor="let message of messages">
     <p>{{ message }}</p>
   </div>
 </div>
+
 
 <div mat-dialog-actions style="justify-content: center;">
   <button mat-button color="primary" (click)="closeDialog()">Close</button>
