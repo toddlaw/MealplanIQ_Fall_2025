@@ -348,7 +348,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
           : '(No valid quantity)';
       } else if (
         isPrimaryQuantityDetermined &&
-        itemEffectiveNumericQuantity < 1e-5 && // Effectively zero
+        itemEffectiveNumericQuantity < 1e-5 && 
         displayParts.length === 1 &&
         displayParts[0].startsWith('0 ')
       ) {
@@ -389,6 +389,10 @@ export class ShoppingListLandingPageComponent implements OnInit {
 
     this.data.shoppingListData.forEach((dailyList) => {
       dailyList['shopping-list'].forEach((item) => {
+        if (item.name.toLowerCase().trim() === 'water') {
+          console.log(`Ignoring item: ${item.name}`); 
+          return; // Skip this item if its name is "water"
+        }
         allItems.push({
           name: item.name,
           quantity: item.quantity,
