@@ -1010,11 +1010,11 @@ export class LandingComponent implements OnInit {
       maxDate: this.startDate.get('end')!.value?.getTime(),
     };
 
-    if (
-      this.userSubscriptionTypeId === 1 ||
-      this.userSubscriptionTypeId === 2 ||
-      this.userSubscriptionTypeId === 3
-    ) {
+    // if (
+    //   this.userSubscriptionTypeId === 1 ||
+    //   this.userSubscriptionTypeId === 2 ||
+    //   this.userSubscriptionTypeId === 3
+    // ) {
       this.dialog.open(RecipeDialogComponent, {
         data: {
           recipe: recipe,
@@ -1025,12 +1025,12 @@ export class LandingComponent implements OnInit {
         },
         width: '800px',
       });
-    } else if (this.userSubscriptionTypeId === 0) {
-      const title = 'Sign Up and Try!';
-      const message =
-        'To see recipe details for this plan, please sign up.  No credit card or payment required.';
-      this.openDialog(title, message, '/sign-up', 'Sign Up');
-    }
+    // } else if (this.userSubscriptionTypeId === 0) {
+    //   const title = 'Sign Up and Try!';
+    //   const message =
+    //     'To see recipe details for this plan, please sign up.  No credit card or payment required.';
+    //   this.openDialog(title, message, '/sign-up', 'Sign Up');
+    // }
   }
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
@@ -1261,11 +1261,11 @@ processUpdatedMealPlan(mealPlan: any): void {
  * @param recipeIndex - The index of the recipe within that day's meal plan.
  */
 openSearchDialog(dayIndex: number, recipeIndex: number): void {
-  if (
-    this.userSubscriptionTypeId === 1 ||
-    this.userSubscriptionTypeId === 2 ||
-    this.userSubscriptionTypeId === 3
-  ) {
+  // if (
+  //   this.userSubscriptionTypeId === 1 ||
+  //   this.userSubscriptionTypeId === 2 ||
+  //   this.userSubscriptionTypeId === 3
+  // ) {
     const dialogRef = this.dialog.open(SearchDialogComponent);
 
     // Wait for the dialog to close and act on the selected recipe
@@ -1274,12 +1274,12 @@ openSearchDialog(dayIndex: number, recipeIndex: number): void {
         this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
       }
     });
-  } else if (this.userSubscriptionTypeId === 0) {
-    // For unsubscribed users, show upgrade prompt dialog
-    const title = 'Sign Up and Try!';
-    const message = 'To see recipe details for this plan, please sign up. No credit card or payment required.';
-    this.openDialog(title, message, '/sign-up', 'Sign Up');
-  }
+  // } else if (this.userSubscriptionTypeId === 0) {
+  //   // For unsubscribed users, show upgrade prompt dialog
+  //   const title = 'Sign Up and Try!';
+  //   const message = 'To see recipe details for this plan, please sign up. No credit card or payment required.';
+  //   this.openDialog(title, message, '/sign-up', 'Sign Up');
+  // }
 }
 
 }
