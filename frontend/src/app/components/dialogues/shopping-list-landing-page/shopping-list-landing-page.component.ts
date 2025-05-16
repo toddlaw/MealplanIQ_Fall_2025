@@ -29,6 +29,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
     'Meat Department',
     'Seafood',
     'Dairy',
+    'Deli',
     'Baking Aisle',
     'Baked Goods',
     'Junk Food',
@@ -158,7 +159,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
 
       if (!aggregationMap.has(itemKey)) {
         aggregationMap.set(itemKey, {
-          name: item.name,
+          name: item.name.toLowerCase(),
           category: item.category,
           summableVolume: {
             totalInTeaspoons: 0,
@@ -185,7 +186,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
         UNIT_HIERARCHY.hasOwnProperty(normalizedUnit) &&
         UNIT_CONVERSION_TO_TEASPOONS.hasOwnProperty(normalizedUnit);
 
-      const countableUnits = ['each', 'piece', 'unit'];
+      const countableUnits = ['each', 'piece', 'unit', 'clove'];
       const isCountable =
         numQuantity !== null &&
         !isVolumeUnit &&
@@ -230,7 +231,9 @@ export class ShoppingListLandingPageComponent implements OnInit {
       if (aggData.countable.entryCount > 0) {
         itemEffectiveNumericQuantity = aggData.countable.totalCount;
         isPrimaryQuantityDetermined = true;
-        let countableStr = itemEffectiveNumericQuantity.toString();
+        let countableStr = this.formatNumberForDisplay(
+          itemEffectiveNumericQuantity
+        );
         if (needsPrefixOverall) {
           countableStr = `${countableStr}`;
         }
@@ -239,7 +242,9 @@ export class ShoppingListLandingPageComponent implements OnInit {
 
       // --- 2. Process Summable Volume Part ---
       if (
-        aggData.countable.entryCount === 0 &&
+        (aggData.countable.entryCount === 0 ||
+          (aggData.countable.entryCount > 0 &&
+            aggData.countable.totalCount < 1e-5)) &&
         aggData.summableVolume.entryCount > 0 &&
         aggData.summableVolume.largestUnitNormalized
       ) {
@@ -255,13 +260,13 @@ export class ShoppingListLandingPageComponent implements OnInit {
           let quantityInDisplayTargetUnit =
             aggData.summableVolume.totalInTeaspoons /
             teaspoonsPerDisplayTargetUnit;
-          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit; 
+          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit;
           isPrimaryQuantityDetermined = true;
 
           let finalDisplayNumStr = this.formatNumberForDisplay(
             quantityInDisplayTargetUnit
           );
-          const numericValueForPlural = parseFloat(finalDisplayNumStr); 
+          const numericValueForPlural = parseFloat(finalDisplayNumStr);
           const unitStr =
             Math.abs(numericValueForPlural - 1) < 1e-5
               ? displayTargetUnitNorm
@@ -272,9 +277,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
           let summablePartStr = `${finalDisplayNumStr} ${unitStr}`;
           if (
             needsPrefixForSummableVolume ||
-            (needsPrefixOverall &&
-              aggData.summableVolume.entryCount === 1 &&
-              aggData.nonSummableOther.length > 0)
+            (needsPrefixOverall && displayParts.length === 0)
           ) {
             summablePartStr = `~ ${summablePartStr}`;
           }
@@ -290,10 +293,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       }
 
       // --- 3. Process Non-Summable Other Part ---
-      if (
-        aggData.countable.entryCount === 0 &&
-        aggData.summableVolume.entryCount === 0
-      ) {
+      if (aggData.nonSummableOther.length > 0 && displayParts.length === 0) {
         aggData.nonSummableOther.forEach((nsEntry, index) => {
           if (!isPrimaryQuantityDetermined && index === 0) {
             const nsNumQty = this.parseQuantity(nsEntry.quantity);
@@ -312,15 +312,6 @@ export class ShoppingListLandingPageComponent implements OnInit {
           if (!primaryUnitForDisplay && nsEntry.unit)
             primaryUnitForDisplay = nsEntry.unit;
         });
-      } else if (
-        aggData.nonSummableOther.length > 0 &&
-        (aggData.countable.entryCount > 0 ||
-          aggData.summableVolume.entryCount > 0)
-      ) {
-        aggData.nonSummableOther.forEach((nsEntry) => {
-          let nsPart = `${nsEntry.quantity} ${nsEntry.unit || ''}`.trim();
-          if (nsPart) displayParts.push(nsPart);
-        });
       }
 
       let finalQuantityString = displayParts.join(', ');
@@ -332,12 +323,12 @@ export class ShoppingListLandingPageComponent implements OnInit {
           : '(No valid quantity)';
       } else if (
         isPrimaryQuantityDetermined &&
-        itemEffectiveNumericQuantity < 1e-5 && 
+        itemEffectiveNumericQuantity < 1e-5 &&
         displayParts.length === 1 &&
         displayParts[0].startsWith('0 ')
       ) {
-        // If the only part is "0 <unit>", we can just show "0" instead
-        finalQuantityString = '0';
+        // If the only display part is "0 <unit>", we set it to "0" or "> 0"
+        finalQuantityString = displayParts[0].startsWith('>') ? '> 0' : '0';
       }
 
       // --- Pluralize Item Name ---
@@ -371,8 +362,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
 
     this.data.shoppingListData.forEach((dailyList) => {
       dailyList['shopping-list'].forEach((item) => {
-        if (item.name.toLowerCase().trim() === 'water') {
-          console.log(`Ignoring item: ${item.name}`); 
+        if (item.name.toLowerCase().trim().includes('water')) {
+          console.log(`Ignoring item: ${item.name}`);
           return; // Skip this item if its name is "water"
         }
         allItems.push({
@@ -430,7 +421,9 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'avocado',
       'baby bok choy',
       'baby spinach',
+      'banana',
       'basil leaves',
+      'beet',
       'bell pepper',
       'berries',
       'bok choy',
@@ -438,9 +431,15 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'butternut squash',
       'cabbage',
       'carrot',
+      'carrots-medium',
       'carrots',
       'cauliflower',
+      'Chopped cilantro',
+      'chives',
+      'cranberries',
+      'cucumber',
       'celery',
+      'celery stalks',
       'cherry tomatoes',
       'cilantro',
       'coconut',
@@ -449,23 +448,33 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'daikon radish',
       'eggplant',
       'fennel bulb',
+      'fresh parsley',
       'fresh thyme',
       'garlic',
       'ginger',
+      'ginger root',
       'green beans',
       'green bell pepper',
       'green onion',
+      'green onions',
+      'green pepper',
       'herb',
       'herbs',
       'jalapeno',
+      'jalapeno pepper - small',
+      'red bell pepper - medium',
+      'red onion',
       'kale',
       'leek',
       'lemon',
       'lettuce',
       'lime',
+      'lime wedges',
+      'mango',
       'mushroom',
       'napa cabbage',
       'onion',
+      'orange',
       'parsley',
       'pepper',
       'pineapple',
@@ -474,14 +483,19 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'roma tomatoes',
       'scallions',
       'spinach',
+      'strawberries',
       'sweet potato',
       'tomato',
       'turnip',
+      'white onion',
+      'white onion - large',
+      'yellow onions',
       'zucchini',
     ],
     'Meat Department': [
       'bacon',
       'beef',
+      'boneless pork shoulder',
       'chicken',
       'chicken breast',
       'chicken breast half',
@@ -504,12 +518,15 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'fish',
       'mussels',
       'salmon',
+      'sardines',
       'scallops',
       'shrimp',
       'tuna',
     ],
     Dairy: [
       'butter',
+      'buttermilk',
+      'cottage cheese',
       'cheddar cheese',
       'cream cheese',
       'feta cheese',
@@ -518,10 +535,36 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'mexican cheese',
       'milk',
       'mozzarella cheese',
+      'cheese',
       'parmesan cheese',
       'ricotta cheese',
+      'swiss cheese',
+      'whipping cream',
+      'gruyere cheese',
       'sour cream',
       'yogurt',
+    ],
+    Deli: [
+      'ham',
+      'cooked ham',
+      'prosciutto slices',
+      'prosciutto',
+      'pepperoni',
+      'turkey',
+      'sliced turkey breast',
+      'italian sausage',
+      'smoked sausage',
+      'beef brisket',
+      'queso fresco',
+      'coleslaw',
+      'dill pickles',
+      'pickled jalapenos',
+      'black olives',
+      'green olives',
+      'pasta salad',
+      'assorted meats',
+      'hard-boiled eggs',
+      'hummus',
     ],
     'Baking Aisle': [
       'all-purpose flour',
@@ -534,11 +577,19 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'cornstarch',
       'flour',
       'granulated sugar',
+      'grated parmesan cheese',
+      'molasses',
       'salt',
       'sea salt',
+      'self rising flour',
+      'sugar',
       'vanilla extract',
+      'wheat flour',
       'white sugar',
       'yeast',
+      'clove',
+      'almond extract',
+      'cornmeal',
     ],
     'Baked Goods': [
       'bagel',
@@ -549,9 +600,24 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'flour tortilla',
       'naan',
       'pita bread',
+      'whole wheat bread',
+      'whole grain bread',
+      'ciabatta bread',
       'wonton wrappers',
+      'sourdough bread',
     ],
-    'Junk Food': ['coke classic', 'chips', 'soda', 'soft drink', 'sprite'],
+    'Junk Food': [
+      'coke classic',
+      'chips',
+      'soda',
+      'soft drink',
+      'sprite',
+      'crackers',
+      'graham crackers',
+      'chocolate chips',
+      'chocolate chip',
+      'dark chocolate chips',
+    ],
     'Breakfast Aisle': [
       'cereal',
       'granola',
@@ -572,6 +638,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'canned tuna',
       'soup',
       'tomato paste',
+      'cream mushroom soup',
     ],
     Pasta: [
       'fettuccine',
@@ -580,7 +647,14 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'ramen noodles',
       'spaghetti',
     ],
-    Cooler: ['egg', 'egg white', 'eggs', 'hard-boiled eggs'],
+    Cooler: [
+      'egg',
+      'egg white',
+      'eggs',
+      'hard-boiled eggs',
+      'margerine',
+      'egg yolk',
+    ],
     'Seasoning/Spices/Sauces': [
       'adobo sauce',
       'balsamic glaze',
@@ -590,6 +664,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'cajun seasoning',
       'caesar dressing',
       'caraway seed',
+      'celery seed',
       'chili flakes',
       'chili garlic sauce',
       'chili oil',
@@ -602,10 +677,14 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'enchilada sauce',
       'fennel seed',
       'fish sauce',
+      'five-spice powder',
+      'garam masala',
       'garlic powder',
+      'guacamole',
       'gochujang',
       'hoisin sauce',
       'hot sauce',
+      'ranch dressing',
       'italian seasoning',
       'ketchup',
       'marinara sauce',
@@ -623,14 +702,15 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'salt',
       'salt pepper',
       'sesame oil',
+      'sesame seeds',
       'soy sauce',
       'sriracha',
       'taco seasoning',
+      'taco seasoning mix',
       'tamarind paste',
       'thyme',
       'tomato paste',
       'turmeric',
-      'vanilla extract',
       'vinegar',
       'white vinegar',
       'wasabi paste',
@@ -645,6 +725,9 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'vegetable oil',
       'canola oil',
       'avocado oil',
+      'nutmeg',
+      'extra virgin olive oil',
+      'white wine vinegar',
     ],
   };
 }

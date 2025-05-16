@@ -54,6 +54,8 @@ export const UNIT_NORMALIZATION_MAP: { [unit: string]: string } = {
   pieces: 'piece',
   unit: 'unit',
   units: 'unit',
+  cloves: 'clove',
+  clove: 'clove',
 };
 
 export interface AggregationWorkData {
