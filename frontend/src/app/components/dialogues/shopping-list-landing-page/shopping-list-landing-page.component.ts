@@ -3,8 +3,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ShoppingList,
   ProcessedShoppingItem,
-  UNIT_HIERARCHY,
-  UNIT_CONVERSION_TO_TEASPOONS,
+  VOLUME_UNIT_HIERARCHY,
+  VOLUME_UNIT_CONVERSION_TO_TEASPOONS,
+  WEIGHT_UNIT_HIERARCHY,
+  WEIGHT_UNIT_CONVERSION_TO_OUNCES,
+  DENSITY_OUNCES_PER_CUP,
   UNIT_NORMALIZATION_MAP,
   AggregationWorkData,
 } from './shopping-list-landing-page.interface';
@@ -58,8 +61,6 @@ export class ShoppingListLandingPageComponent implements OnInit {
       );
       this.processAndCategorizeShoppingList();
     } else {
-      console.log('Shopping list data is empty or not in the expected format.');
-      // Ensure data is initialized to avoid errors in template
       this.data = { shoppingListData: [], minDate: '', maxDate: '' };
     }
   }
@@ -144,6 +145,26 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return parseFloat(num.toFixed(2)).toString();
   }
 
+  private pluralizeUnit(unit: string, quantity: number): string {
+    if (Math.abs(quantity - 1) < 1e-5 || !unit) {
+      return unit;
+    }
+    if (unit === 'pinch') return 'pinches';
+    if (!unit.endsWith('s')) {
+      return unit + 's';
+    }
+    return unit;
+  }
+
+  private isFlourOrSugarType(itemName: string): boolean {
+    const lowerItemName = itemName.toLowerCase();
+    if (DENSITY_OUNCES_PER_CUP.hasOwnProperty(lowerItemName)) {
+      return true;
+    }
+    const keywords = ['flour', 'sugar'];
+    return keywords.some((keyword) => lowerItemName.includes(keyword));
+  }
+
   private aggregateItems(
     rawItems: {
       name: string;
@@ -155,11 +176,13 @@ export class ShoppingListLandingPageComponent implements OnInit {
     const aggregationMap = new Map<string, AggregationWorkData>();
 
     rawItems.forEach((item) => {
-      const itemKey = `${item.category}_${item.name.toLowerCase().trim()}`;
+      const lowerItemName = item.name.toLowerCase().trim();
+      const itemKey = `${item.category}_${lowerItemName}`;
+      const isFlourSugar = this.isFlourOrSugarType(lowerItemName);
 
       if (!aggregationMap.has(itemKey)) {
         aggregationMap.set(itemKey, {
-          name: item.name.toLowerCase(),
+          name: item.name,
           category: item.category,
           summableVolume: {
             totalInTeaspoons: 0,
@@ -167,12 +190,16 @@ export class ShoppingListLandingPageComponent implements OnInit {
             largestUnitHierarchyValue: -1,
             entryCount: 0,
           },
-          countable: {
-            totalCount: 0,
+          summableWeight: {
+            totalInOunces: 0,
+            largestUnitNormalized: null,
+            largestUnitHierarchyValue: -1,
             entryCount: 0,
           },
+          countable: { totalCount: 0, entryCount: 0 },
           nonSummableOther: [],
           totalOriginalEntryCount: 0,
+          isFlourOrSugar: isFlourSugar,
         });
       }
       const aggData = aggregationMap.get(itemKey)!;
@@ -181,23 +208,71 @@ export class ShoppingListLandingPageComponent implements OnInit {
       const numQuantity = this.parseQuantity(item.quantity);
       const normalizedUnit = this.normalizeUnit(item.unit);
 
+      if (numQuantity === null) {
+        aggData.nonSummableOther.push({
+          quantity: item.quantity,
+          unit: item.unit,
+        });
+        return;
+      }
+
+      // Check if the item is flour or sugar and if the unit is volume
+      if (
+        aggData.isFlourOrSugar &&
+        normalizedUnit &&
+        VOLUME_UNIT_CONVERSION_TO_TEASPOONS.hasOwnProperty(normalizedUnit) &&
+        DENSITY_OUNCES_PER_CUP[lowerItemName]
+      ) {
+        aggData.summableWeight.entryCount++;
+        const quantityInTeaspoons =
+          numQuantity * VOLUME_UNIT_CONVERSION_TO_TEASPOONS[normalizedUnit];
+        const quantityInCups =
+          quantityInTeaspoons / VOLUME_UNIT_CONVERSION_TO_TEASPOONS['cup']; // Base conversion on cups
+        const quantityInOunces =
+          quantityInCups * DENSITY_OUNCES_PER_CUP[lowerItemName];
+        aggData.summableWeight.totalInOunces += quantityInOunces;
+
+        // Determine largest weight unit (oz or lb for now)
+        if (
+          aggData.summableWeight.totalInOunces >=
+          WEIGHT_UNIT_CONVERSION_TO_OUNCES['pound']
+        ) {
+          if (
+            !aggData.summableWeight.largestUnitNormalized ||
+            WEIGHT_UNIT_HIERARCHY['pound'] >
+              aggData.summableWeight.largestUnitHierarchyValue
+          ) {
+            aggData.summableWeight.largestUnitNormalized = 'pound';
+            aggData.summableWeight.largestUnitHierarchyValue =
+              WEIGHT_UNIT_HIERARCHY['pound'];
+          }
+        } else {
+          // Default to ounce if less than a pound or if ounce is a "larger" unit than previously stored (e.g. if nothing was stored)
+          if (
+            !aggData.summableWeight.largestUnitNormalized ||
+            WEIGHT_UNIT_HIERARCHY['ounce'] >
+              aggData.summableWeight.largestUnitHierarchyValue
+          ) {
+            aggData.summableWeight.largestUnitNormalized = 'ounce';
+            aggData.summableWeight.largestUnitHierarchyValue =
+              WEIGHT_UNIT_HIERARCHY['ounce'];
+          }
+        }
+      }
+
+      // Standard Volume processing (if not primarily weight or if weight conversion failed for it)
       const isVolumeUnit =
         normalizedUnit !== null &&
-        UNIT_HIERARCHY.hasOwnProperty(normalizedUnit) &&
-        UNIT_CONVERSION_TO_TEASPOONS.hasOwnProperty(normalizedUnit);
-
-      const countableUnits = ['each', 'piece', 'unit', 'clove'];
-      const isCountable =
-        numQuantity !== null &&
-        !isVolumeUnit &&
-        (normalizedUnit === null || countableUnits.includes(normalizedUnit));
-
-      if (isVolumeUnit && numQuantity !== null) {
+        VOLUME_UNIT_HIERARCHY.hasOwnProperty(normalizedUnit) &&
+        VOLUME_UNIT_CONVERSION_TO_TEASPOONS.hasOwnProperty(normalizedUnit);
+      if (isVolumeUnit && !aggData.isFlourOrSugar) {
+        // Process as volume if NOT flour/sugar that got converted
         aggData.summableVolume.entryCount++;
         const quantityInTeaspoons =
-          numQuantity * UNIT_CONVERSION_TO_TEASPOONS[normalizedUnit!];
+          numQuantity * VOLUME_UNIT_CONVERSION_TO_TEASPOONS[normalizedUnit!];
         aggData.summableVolume.totalInTeaspoons += quantityInTeaspoons;
-        const currentUnitHierarchyValue = UNIT_HIERARCHY[normalizedUnit!];
+        const currentUnitHierarchyValue =
+          VOLUME_UNIT_HIERARCHY[normalizedUnit!];
         if (
           currentUnitHierarchyValue >
           aggData.summableVolume.largestUnitHierarchyValue
@@ -206,14 +281,49 @@ export class ShoppingListLandingPageComponent implements OnInit {
             currentUnitHierarchyValue;
           aggData.summableVolume.largestUnitNormalized = normalizedUnit;
         }
-      } else if (isCountable) {
-        aggData.countable.entryCount++;
-        aggData.countable.totalCount += numQuantity!;
-      } else {
-        aggData.nonSummableOther.push({
-          quantity: item.quantity,
-          unit: item.unit,
-        });
+      }
+      // Standard Weight processing (if item unit was oz/lb initially, or if flour/sugar was entered by weight)
+      else if (
+        normalizedUnit !== null &&
+        WEIGHT_UNIT_HIERARCHY.hasOwnProperty(normalizedUnit) &&
+        WEIGHT_UNIT_CONVERSION_TO_OUNCES.hasOwnProperty(normalizedUnit)
+      ) {
+        aggData.summableWeight.entryCount++;
+        const quantityInOunces =
+          numQuantity * WEIGHT_UNIT_CONVERSION_TO_OUNCES[normalizedUnit!];
+        aggData.summableWeight.totalInOunces += quantityInOunces;
+        const currentUnitHierarchyValue =
+          WEIGHT_UNIT_HIERARCHY[normalizedUnit!];
+        if (
+          currentUnitHierarchyValue >
+          aggData.summableWeight.largestUnitHierarchyValue
+        ) {
+          aggData.summableWeight.largestUnitHierarchyValue =
+            currentUnitHierarchyValue;
+          aggData.summableWeight.largestUnitNormalized = normalizedUnit;
+        }
+      }
+      // Countable processing
+      else {
+        const countableUnits = ['each', 'piece', 'unit', 'clove'];
+        const isCountable =
+          !isVolumeUnit &&
+          (normalizedUnit === null || countableUnits.includes(normalizedUnit));
+
+        if (isCountable) {
+          aggData.countable.entryCount++;
+          aggData.countable.totalCount += numQuantity;
+        } else if (normalizedUnit) {
+          aggData.nonSummableOther.push({
+            quantity: item.quantity,
+            unit: item.unit,
+          });
+        } else {
+          aggData.nonSummableOther.push({
+            quantity: item.quantity,
+            unit: item.unit,
+          });
+        }
       }
     });
 
@@ -223,130 +333,159 @@ export class ShoppingListLandingPageComponent implements OnInit {
       const displayParts: string[] = [];
       const needsPrefixOverall = aggData.totalOriginalEntryCount > 1;
       let primaryUnitForDisplay = '';
-
       let itemEffectiveNumericQuantity = 0;
-      let isPrimaryQuantityDetermined = false;
+      let unitToDisplay = '';
 
-      // --- 1. Process Countable Part ---
-      if (aggData.countable.entryCount > 0) {
+      // Priority: 1. Flour/Sugar as Weight, 2. Countable, 3. Other Weight, 4. Volume, 5. NonSummable
+      if (
+        aggData.isFlourOrSugar &&
+        aggData.summableWeight.entryCount > 0 &&
+        aggData.summableWeight.largestUnitNormalized
+      ) {
+        const targetWeightUnit = aggData.summableWeight.largestUnitNormalized;
+        const conversionFactor =
+          WEIGHT_UNIT_CONVERSION_TO_OUNCES[targetWeightUnit];
+        let quantityInTargetUnit =
+          aggData.summableWeight.totalInOunces / conversionFactor;
+
+        itemEffectiveNumericQuantity = quantityInTargetUnit;
+        let numStr = this.formatNumberForDisplay(quantityInTargetUnit);
+        unitToDisplay = this.pluralizeUnit(
+          targetWeightUnit,
+          quantityInTargetUnit
+        );
+        let partStr = `${numStr} ${unitToDisplay}`;
+        if (needsPrefixOverall) partStr = `~ ${partStr}`;
+        displayParts.push(partStr);
+        primaryUnitForDisplay = unitToDisplay;
+      } else if (aggData.countable.entryCount > 0) {
         itemEffectiveNumericQuantity = aggData.countable.totalCount;
-        isPrimaryQuantityDetermined = true;
         let countableStr = this.formatNumberForDisplay(
           itemEffectiveNumericQuantity
         );
-        if (needsPrefixOverall) {
-          countableStr = `${countableStr}`;
+        unitToDisplay = '';
+
+        const originalItemWithUnit = rawItems.find(
+          (ri) =>
+            ri.name.toLowerCase().trim() ===
+              aggData.name.toLowerCase().trim() &&
+            this.normalizeUnit(ri.unit) &&
+            ['clove', 'piece'].includes(this.normalizeUnit(ri.unit)!)
+        );
+
+        if (originalItemWithUnit && originalItemWithUnit.unit) {
+          const normalizedRawUnit = this.normalizeUnit(
+            originalItemWithUnit.unit
+          );
+          if (normalizedRawUnit) {
+            unitToDisplay = this.pluralizeUnit(
+              normalizedRawUnit,
+              itemEffectiveNumericQuantity
+            );
+            countableStr = `${countableStr} ${unitToDisplay}`;
+          }
+        }
+
+        if (needsPrefixOverall && !countableStr.startsWith('~ ')) {
+          countableStr = `~ ${countableStr}`;
         }
         displayParts.push(countableStr);
-      }
+        primaryUnitForDisplay = unitToDisplay;
+      } else if (
+        aggData.summableWeight.entryCount > 0 &&
+        aggData.summableWeight.largestUnitNormalized
+      ) {
+        const targetWeightUnit = aggData.summableWeight.largestUnitNormalized;
+        const conversionFactor =
+          WEIGHT_UNIT_CONVERSION_TO_OUNCES[targetWeightUnit];
+        let quantityInTargetUnit =
+          aggData.summableWeight.totalInOunces / conversionFactor;
 
-      // --- 2. Process Summable Volume Part ---
-      if (
-        (aggData.countable.entryCount === 0 ||
-          (aggData.countable.entryCount > 0 &&
-            aggData.countable.totalCount < 1e-5)) &&
+        itemEffectiveNumericQuantity = quantityInTargetUnit;
+        let numStr = this.formatNumberForDisplay(quantityInTargetUnit);
+        unitToDisplay = this.pluralizeUnit(
+          targetWeightUnit,
+          quantityInTargetUnit
+        );
+        let partStr = `${numStr} ${unitToDisplay}`;
+        if (needsPrefixOverall) partStr = `~ ${partStr}`;
+        displayParts.push(partStr);
+        primaryUnitForDisplay = unitToDisplay;
+      } else if (
         aggData.summableVolume.entryCount > 0 &&
         aggData.summableVolume.largestUnitNormalized
       ) {
-        const needsPrefixForSummableVolume =
-          aggData.summableVolume.entryCount > 1;
-        const displayTargetUnitNorm =
-          aggData.summableVolume.largestUnitNormalized;
-        const teaspoonsPerDisplayTargetUnit =
-          UNIT_CONVERSION_TO_TEASPOONS[displayTargetUnitNorm];
+        const targetVolumeUnit = aggData.summableVolume.largestUnitNormalized;
+        const conversionFactor =
+          VOLUME_UNIT_CONVERSION_TO_TEASPOONS[targetVolumeUnit];
+        let quantityInTargetUnit =
+          aggData.summableVolume.totalInTeaspoons / conversionFactor;
 
-        if (teaspoonsPerDisplayTargetUnit > 0) {
-          // Avoid division by zero
-          let quantityInDisplayTargetUnit =
-            aggData.summableVolume.totalInTeaspoons /
-            teaspoonsPerDisplayTargetUnit;
-          itemEffectiveNumericQuantity = quantityInDisplayTargetUnit;
-          isPrimaryQuantityDetermined = true;
+        itemEffectiveNumericQuantity = quantityInTargetUnit;
+        let numStr = this.formatNumberForDisplay(quantityInTargetUnit);
+        unitToDisplay = this.pluralizeUnit(
+          targetVolumeUnit,
+          quantityInTargetUnit
+        );
 
-          let finalDisplayNumStr = this.formatNumberForDisplay(
-            quantityInDisplayTargetUnit
-          );
-          const numericValueForPlural = parseFloat(finalDisplayNumStr);
-          const unitStr =
-            Math.abs(numericValueForPlural - 1) < 1e-5
-              ? displayTargetUnitNorm
-              : displayTargetUnitNorm === 'pinch'
-              ? 'pinches'
-              : displayTargetUnitNorm + 's';
-
-          let summablePartStr = `${finalDisplayNumStr} ${unitStr}`;
-          if (
-            needsPrefixForSummableVolume ||
-            (needsPrefixOverall && displayParts.length === 0)
-          ) {
-            summablePartStr = `~ ${summablePartStr}`;
-          }
-          displayParts.push(summablePartStr);
-          if (!primaryUnitForDisplay) primaryUnitForDisplay = unitStr;
-        } else {
-          displayParts.push(
-            `${this.formatNumberForDisplay(
-              aggData.summableVolume.totalInTeaspoons
-            )} tsp (conv. error)`
-          );
-        }
-      }
-
-      // --- 3. Process Non-Summable Other Part ---
-      if (aggData.nonSummableOther.length > 0 && displayParts.length === 0) {
+        let partStr = `${numStr} ${unitToDisplay}`;
+        if (needsPrefixOverall) partStr = `~ ${partStr}`;
+        displayParts.push(partStr);
+        primaryUnitForDisplay = unitToDisplay;
+      } else if (
+        aggData.nonSummableOther.length > 0 &&
+        displayParts.length === 0
+      ) {
         aggData.nonSummableOther.forEach((nsEntry, index) => {
-          if (!isPrimaryQuantityDetermined && index === 0) {
-            const nsNumQty = this.parseQuantity(nsEntry.quantity);
-            if (nsNumQty !== null) {
-              itemEffectiveNumericQuantity = nsNumQty;
-              isPrimaryQuantityDetermined = true;
+          const parsedNsQuantity = this.parseQuantity(nsEntry.quantity);
+          if (index === 0 && parsedNsQuantity !== null) {
+            itemEffectiveNumericQuantity = parsedNsQuantity;
+          }
+          unitToDisplay = '';
+          if (nsEntry.unit) {
+            const normalizedNsUnit = this.normalizeUnit(nsEntry.unit);
+            if (normalizedNsUnit) {
+              unitToDisplay = this.pluralizeUnit(
+                normalizedNsUnit,
+                parsedNsQuantity ?? 0
+              );
+            } else {
+              unitToDisplay = nsEntry.unit;
             }
           }
-          let nsPart = `${nsEntry.quantity} ${nsEntry.unit || ''}`.trim();
+
+          let nsPart = `${nsEntry.quantity} ${unitToDisplay}`.trim();
           if (nsPart) {
-            if (needsPrefixOverall && index === 0) {
-              nsPart = `~ ${nsPart}`;
-            }
+            if (needsPrefixOverall && index === 0) nsPart = `~ ${nsPart}`;
             displayParts.push(nsPart);
           }
-          if (!primaryUnitForDisplay && nsEntry.unit)
-            primaryUnitForDisplay = nsEntry.unit;
+          if (!primaryUnitForDisplay && unitToDisplay)
+            primaryUnitForDisplay = unitToDisplay;
         });
       }
 
-      let finalQuantityString = displayParts.join(', ');
+      const filteredDisplayParts = displayParts.filter(
+        (part) => part.trim().toLowerCase() !== 'n/a'
+      );
+      let finalQuantityString = filteredDisplayParts.join(', ');
 
-      // Fallback quantity string if empty
       if (!finalQuantityString && aggData.totalOriginalEntryCount > 0) {
         finalQuantityString = needsPrefixOverall
-          ? '> (No valid quantity)'
+          ? '~ (No valid quantity)'
           : '(No valid quantity)';
       } else if (
-        isPrimaryQuantityDetermined &&
         itemEffectiveNumericQuantity < 1e-5 &&
-        displayParts.length === 1 &&
-        displayParts[0].startsWith('0 ')
+        filteredDisplayParts.length === 1 &&
+        filteredDisplayParts[0].startsWith('0')
       ) {
-        // If the only display part is "0 <unit>", we set it to "0" or "> 0"
-        finalQuantityString = displayParts[0].startsWith('>') ? '> 0' : '0';
+        finalQuantityString = filteredDisplayParts[0].startsWith('~')
+          ? '~ 0'
+          : '0';
       }
 
-      // --- Pluralize Item Name ---
-      let finalItemName = aggData.name;
-      if (
-        isPrimaryQuantityDetermined &&
-        itemEffectiveNumericQuantity - 1 > 1e-5
-      ) {
-        // quantity is greater than 1 (with tolerance)
-        const lowerName = aggData.name.toLowerCase();
-        if (!lowerName.endsWith('(s)') && !lowerName.endsWith('s')) {
-          finalItemName += '(s)';
-        }
-        // If it ends with 's' (like "apples") or "(s)", we don't add another "(s)".
-      }
-
+      const finalItemName = aggData.name;
       finalProcessedItems.push({
-        name: finalItemName, // Use potentially pluralized name
+        name: finalItemName.toLowerCase(),
         category: aggData.category,
         quantity:
           finalQuantityString ||
@@ -358,15 +497,27 @@ export class ShoppingListLandingPageComponent implements OnInit {
   }
 
   private processAndCategorizeShoppingList(): void {
-    let allItems: ProcessedShoppingItem[] = [];
+    let rawItemList: {
+      name: string;
+      quantity: string | number;
+      unit?: string;
+      category: string;
+    }[] = [];
 
     this.data.shoppingListData.forEach((dailyList) => {
       dailyList['shopping-list'].forEach((item) => {
-        if (item.name.toLowerCase().trim().includes('water')) {
+        const lowerName = item.name.toLowerCase().trim();
+        if (
+          lowerName === 'water' ||
+          (lowerName.includes('water') &&
+            !lowerName.includes('watermelon') &&
+            !lowerName.includes('watercress') &&
+            !lowerName.includes('water chestnut'))
+        ) {
           console.log(`Ignoring item: ${item.name}`);
-          return; // Skip this item if its name is "water"
+          return;
         }
-        allItems.push({
+        rawItemList.push({
           name: item.name,
           quantity: item.quantity,
           unit: item.unit,
@@ -375,10 +526,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
       });
     });
 
-    // 2. Aggregate items (sum quantities for identical items)
-    const aggregatedItems = this.aggregateItems(allItems);
+    const aggregatedItems = this.aggregateItems(rawItemList);
 
-    // 3. Group aggregated items by category for display
     this.categorizedShoppingList.clear();
     aggregatedItems.forEach((item) => {
       const itemsInCategory =
@@ -387,12 +536,10 @@ export class ShoppingListLandingPageComponent implements OnInit {
       this.categorizedShoppingList.set(item.category, itemsInCategory);
     });
 
-    // Sort items within each category alphabetically by name
     this.categorizedShoppingList.forEach((items) => {
       items.sort((a, b) => a.name.localeCompare(b.name));
     });
 
-    // Determine the order of categories for display
     const presentCategories = Array.from(this.categorizedShoppingList.keys());
     this.orderedCategories = this.CATEGORY.filter((cat) =>
       presentCategories.includes(cat)
@@ -402,11 +549,10 @@ export class ShoppingListLandingPageComponent implements OnInit {
       .sort();
     this.orderedCategories.push(...remainingCategories);
 
-    console.log('Categorized Shopping List:', this.categorizedShoppingList);
-    console.log('Ordered Categories:', this.orderedCategories);
+    // console.log('Categorized Shopping List:', this.categorizedShoppingList);
+    // console.log('Ordered Categories:', this.orderedCategories);
   }
 
-  // Helper function for the template to get categories in the desired order
   public getCategories(): string[] {
     return this.orderedCategories;
   }
@@ -449,6 +595,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'eggplant',
       'fennel bulb',
       'fresh parsley',
+      'fresh asparagus',
       'fresh thyme',
       'garlic',
       'ginger',
@@ -543,6 +690,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'gruyere cheese',
       'sour cream',
       'yogurt',
+      'parmesan cheese - shredded',
     ],
     Deli: [
       'ham',
@@ -617,6 +765,10 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'chocolate chips',
       'chocolate chip',
       'dark chocolate chips',
+      'lime juice',
+      'dried cranberries',
+      'dried fruit',
+      'dried apricots',
     ],
     'Breakfast Aisle': [
       'cereal',
@@ -728,6 +880,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
       'nutmeg',
       'extra virgin olive oil',
       'white wine vinegar',
+      'freshly ground black pepper',
     ],
   };
 }
