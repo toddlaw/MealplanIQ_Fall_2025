@@ -665,6 +665,18 @@ export class LandingComponent implements OnInit {
     return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
   }
 
+  /**
+   * Gets the URL for the instructions CSV file based on the recipe's ID.
+   *
+   * @param id The unique identifier of the recipe.
+   * @returns The URL pointing to the instructions CSV file.
+   *
+   * @example
+   * const instructionsUrl = this.getInstructionsCsvUrl(456);
+   * // instructionsUrl will be "https://storage.googleapis.com/meal_planiq_instructions_files/456_instructions.csv"
+   *
+   * @author BCIT May 2025
+   */
   getInstructionsCsvUrl(id: number): string {
     return `https://storage.googleapis.com/meal_planiq_instructions_files/${id}_instructions.csv`;
   }
@@ -1021,8 +1033,8 @@ export class LandingComponent implements OnInit {
         data: {
           recipe: recipe,
           imageUrl: this.getImageUrl(recipe.id),
-          ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
-          instructionsUrl: this.getInstructionsCsvUrl(recipe.id),
+          ingredientsUrl: this.getIngredientsCsvUrl(recipe.id), // Added URL for ingredients CSV, @author BCIT May 2025
+          instructionsUrl: this.getInstructionsCsvUrl(recipe.id), // Added URL for instructions CSV, @author BCIT May 2025
           showActions: false
         },
         width: '800px',

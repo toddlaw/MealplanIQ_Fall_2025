@@ -36,6 +36,13 @@ export class RecipeDialogComponent implements OnInit {
       private http: HttpClient
     ) {}
   
+    /**
+     * Initializes the component by parsing the recipe data into parts and instructions.
+     * If URLs for ingredients and instructions are provided, fetches data from those URLs.
+     * Otherwise, parses the data directly from the recipe object.
+     *
+     * @author BCIT May 2025
+     */
     ngOnInit(): void {
     //   this.parseDataIntoParts(this.data.recipe.ingredients_with_quantities);
         // this.parseDataIntoInstructions(this.data.recipe.instructions);

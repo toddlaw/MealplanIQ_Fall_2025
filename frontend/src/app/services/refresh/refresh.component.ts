@@ -1,7 +1,7 @@
 import { Component, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./refresh.component.css'],
 })
 export class RefreshComponent {
-  private apiUrl = 'http://localhost:5000/api/refresh-meal-plan';
+  private apiUrl = `${environment.baseUrl}/api/refresh-meal-plan`;
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class RefreshComponent {
     });
   }
 
-  private apiUrl_delete = 'http://localhost:5000/api/delete-recipe';
+  private apiUrl_delete = `${environment.baseUrl}/api/delete-recipe`;
 
   deleteRecipe(recipeId: string, mealPlan: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -35,7 +35,7 @@ export class RefreshComponent {
     });
   }
 
-  private apiUrl_replace = 'http://localhost:5000/api/replace-meal-plan-recipe';
+  private apiUrl_replace = `${environment.baseUrl}/api/replace-meal-plan-recipe`;
 
   replaceRecipe(recipeId: string, dayIndex: number, recipeIndex: number, mealPlan: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
