@@ -1,3 +1,7 @@
+/**
+ * Shopping List Landing Page Component Styles
+ * @author BCIT May 2025
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

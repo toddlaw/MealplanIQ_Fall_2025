@@ -86,6 +86,8 @@ def page_not_found(e):
     Response
         - For API requests: JSON response with error message and status code 404.
         - For non-API requests: Redirect response to the homepage ('/').
+    --------
+    @author: BCIT May 2025
     """
     if request.path.startswith('/api'):
         return jsonify({'error': 'Not found'}), 404
@@ -404,6 +406,8 @@ def search_recipes():
         - region (str)
         - prep_time (str)
         - cook_time (str)
+    --------
+    @author: BCIT May 2025
     """
     query = request.args.get('q', '').lower().strip()
     exact_match = request.args.get('exact', 'false').lower() == 'true'
@@ -429,6 +433,8 @@ def replace_recipe_in_meal_plan():
         A JSON object containing:
         - meal_plan (dict): Updated meal plan with nutrition and shopping list updates.
         - id_replaced (int): The ID of the recipe that replaced the old one.
+    --------
+    @author: BCIT May 2025
     """
     data = request.json
     return replace_recipe_logic(data)
@@ -459,5 +465,7 @@ def get_recipe(recipe_id):
         If the recipe is not found, returns:
         - error (str): Message indicating recipe not found
         - HTTP status code 404
+    --------
+    @author: BCIT May 2025
     """
     return get_recipe_logic(recipe_id)

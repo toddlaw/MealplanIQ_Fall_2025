@@ -658,6 +658,8 @@ export class LandingComponent implements OnInit {
    * @example
    * const ingredientsUrl = this.getIngredientsCsvUrl(456);
    * // ingredientsUrl will be "https://storage.googleapis.com/meal_planiq_ingredients_files/456.csv"
+   * 
+   * @author BCIT May 2025
    */
   getIngredientsCsvUrl(id: number): string {
     return `https://storage.googleapis.com/meal_planiq_ingredients_files/${id}.csv`;
@@ -1045,6 +1047,14 @@ export class LandingComponent implements OnInit {
     );
   }
 
+  /**
+   * Transforms the meal plan response into a shopping list format.
+   * 
+   * @param mealPlan The meal plan response object.
+   * @returns An array of shopping lists, each containing a date and items.
+   * 
+   * @author BCIT May 2025
+   */
   transformMealPlanToShoppingList(mealPlan: any): ShoppingList[] {
     if (!mealPlan || !mealPlan.days || !Array.isArray(mealPlan.days)) {
       console.error(
@@ -1130,6 +1140,8 @@ export class LandingComponent implements OnInit {
  * 
  * @param nutrient - The nutrient object containing actual, min, max, and displayName values.
  * @returns A formatted status message string, or an empty string if within range.
+ * 
+ * @author BCIT May 2025
  */
 getNutrientStatusMessage(nutrient: any): string {
   const actual = nutrient.actual;                     // actual value from backend
@@ -1161,6 +1173,8 @@ getNutrientStatusMessage(nutrient: any): string {
  * Combines all nutrients (energy, macros, vitamins, minerals) into a single list for evaluation.
  * 
  * @returns An array of status messages for out-of-range nutrients.
+ * 
+ * @author BCIT May 2025
  */
 getOutOfRangeMessages(): string[] {
   const messages: string[] = [];
@@ -1191,6 +1205,7 @@ getOutOfRangeMessages(): string[] {
 /**
  * Opens a popup dialog window displaying out-of-range nutrient messages.
  * Excludes the header message and passes only the nutrient-specific messages to the dialog component.
+ * @author BCIT May 2025
  */
 openOutOfRangeDialog(): void {
   // Skip the OUT_OF_RANGE header (first element) and pass the rest
@@ -1212,6 +1227,8 @@ openOutOfRangeDialog(): void {
  * @param dayIndex - The index of the day in the meal plan to replace the recipe in.
  * @param recipeIndex - The index of the recipe within the day to replace.
  * @param newRecipeId - The ID of the new recipe to insert into the meal plan.
+ * 
+ * @author BCIT May 2025
  */
 replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void {
   this.refresh.replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse).subscribe(
@@ -1246,6 +1263,8 @@ replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void 
  * Updates the meal plan and re-categorizes the nutrients for display.
  * 
  * @param mealPlan - The updated meal plan object returned from the backend.
+ * 
+ * @author BCIT May 2025
  */
 processUpdatedMealPlan(mealPlan: any): void {
   this.mealPlanResponse = this.updateMealPlan(mealPlan);
@@ -1259,6 +1278,8 @@ processUpdatedMealPlan(mealPlan: any): void {
  * 
  * @param dayIndex - The index of the day in the meal plan for the recipe to replace.
  * @param recipeIndex - The index of the recipe within that day's meal plan.
+ * 
+ * @author BCIT May 2025
  */
 openSearchDialog(dayIndex: number, recipeIndex: number): void {
   // if (

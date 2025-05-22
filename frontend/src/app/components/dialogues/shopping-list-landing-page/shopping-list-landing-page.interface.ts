@@ -1,3 +1,7 @@
+/** 
+ * Shopping List Interface
+ * @author BCIT May 2025
+ */
 export interface ShoppingList {
   date: string;
   'shopping-list': {

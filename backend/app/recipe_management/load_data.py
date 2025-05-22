@@ -1,5 +1,7 @@
 """
 Handles loading recipe data from a CSV file into an in-memory global variable.
+
+@author: BCIT May 2025
 """
 
 import csv

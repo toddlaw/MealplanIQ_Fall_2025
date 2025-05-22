@@ -1,5 +1,7 @@
 """
 Provides logic for replacing a recipe in a meal plan and updating nutritional values.
+
+@author: BCIT May 2025
 """
 
 import pandas as pd

@@ -1,3 +1,8 @@
+/** 
+ * Carousel component styles
+ * @author: BCIT May 2025
+ */
+
 img {
     image-rendering: -webkit-optimize-contrast; /* Chrome, Safari */
     image-rendering: crisp-edges;               /* Firefox */

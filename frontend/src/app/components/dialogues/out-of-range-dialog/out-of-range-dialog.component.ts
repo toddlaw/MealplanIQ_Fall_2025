@@ -1,6 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Component for displaying a dialog when the user enters a value outside the allowed range.
+ * This dialog shows a list of messages indicating the issues with the input.
+ * @author BCIT May 2025
+ */
 @Component({
   selector: 'app-out-of-range-dialog',                  // component selector
   templateUrl: './out-of-range-dialog.component.html',  // template file path

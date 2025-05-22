@@ -1,3 +1,10 @@
+/**
+ * CarouselComponent is an Angular component that displays a carousel of images.
+ * It allows users to navigate through a series of images with titles and subtitles.
+ * 
+ * @author
+ */
+
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({

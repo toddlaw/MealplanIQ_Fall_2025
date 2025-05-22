@@ -1,5 +1,7 @@
 """
 Provides logic for retrieving a specific recipe's details by its ID.
+
+@author: BCIT May 2025
 """
 
 from flask import jsonify

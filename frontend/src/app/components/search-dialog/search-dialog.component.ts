@@ -4,6 +4,8 @@
  * Angular component responsible for handling recipe search functionality.
  * Allows users to search for recipes by keyword, view suggested results,
  * view detailed recipe information in a dialog, and select a recipe to replace an existing one.
+ *
+ * @author BCIT May 2025
  */
 
 import { Component } from '@angular/core';

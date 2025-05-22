@@ -1,5 +1,7 @@
 """
 Provides logic for searching recipes by title, ingredients, region, or subregion.
+
+@author: BCIT May 2025
 """
 
 import re

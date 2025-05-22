@@ -247,6 +247,8 @@ def process_recipe(recipe_df, recipe_name):
     Given a pandas dataframe of recipes creates a dictionary that contains
     all of the information for the recipe with the given name that the frontend
     expects
+    --------
+    @author: BCIT May 2025
     """
     recipe_row = recipe_df.loc[recipe_df['title'] == recipe_name]
     res = {}

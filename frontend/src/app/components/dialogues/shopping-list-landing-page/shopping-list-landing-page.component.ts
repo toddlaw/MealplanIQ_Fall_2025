@@ -1,3 +1,8 @@
+/**
+ * Shopping List Landing Page Component
+ * @author BCIT May 2025
+ */
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {

@@ -61,7 +61,8 @@ export class RecipeDialogComponent implements OnInit {
      * The first row of the CSV data is assumed to be headers and is skipped.
      * Rows starting with "Part" indicate a new section, while subsequent rows within a section are parsed as ingredients.
      * If no "Part" row is encountered initially, ingredients are grouped under an empty header.
-     *
+     * 
+     * 
      * @param csvData An array of arrays representing the CSV data, where each inner array is a row.
      *
      * @example
@@ -74,6 +75,8 @@ export class RecipeDialogComponent implements OnInit {
      * //   ["Part", "Instructions", "", ""],
      * //   ["Step 1", "Mix well", "", ""]
      * // ]
+     * 
+     * @author BCIT May 2025
      */
     parseDataIntoParts(csvData: any[]): void {
         let currentPart: Part | null = null;
@@ -136,6 +139,8 @@ export class RecipeDialogComponent implements OnInit {
      * //   ["1", "Boil the sauce"],
      * //   ["2", "Simmer for 20 minutes"]
      * // ]
+     * 
+     * @author BCIT May 2025
      */
     parseDataIntoInstructions(csvData: any[]): void {
         const dataRows = csvData.slice(1); 
@@ -173,13 +178,15 @@ export class RecipeDialogComponent implements OnInit {
     /**
      * Fetches ingredient data from a CSV file using an HTTP GET request.
      * The fetched CSV data is then parsed into the parts array using the parseDataIntoParts method.
-     *
+    
+     * 
      * @returns void
      *
      * @example
      * // Assumes this.data.ingredientsUrl is a valid URL pointing to a CSV file.
      * this.fetchIngredients();
-     * // After successful fetch, this.parts will be populated with ingredient data.
+     * // After successful fetch, this.parts will be populated with ingredient data. *
+     * @author BCIT May 2025
      */
     fetchIngredients(): void {
         this.http.get(this.data.ingredientsUrl, { responseType: 'text' }).subscribe(csv => {
@@ -198,6 +205,8 @@ export class RecipeDialogComponent implements OnInit {
      * // Assumes this.data.instructionsUrl is a valid URL pointing to a CSV file.
      * this.fetchInstructions();
      * // After successful fetch, this.instructions will be populated with instruction data.
+     * 
+     * @author BCIT May 2025
      */
     fetchInstructions(): void {
         this.http.get(this.data.instructionsUrl, { responseType: 'text' }).subscribe(csv => {
