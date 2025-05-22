@@ -11,6 +11,10 @@ export interface ShoppingList {
   }[];
 }
 
+/**
+ * Processed Shopping Item Interface
+ * @author BCIT May 2025
+ */
 export interface ProcessedShoppingItem {
   name: string;
   quantity: string | number;
@@ -18,6 +22,10 @@ export interface ProcessedShoppingItem {
   category: string;
 }
 
+/**
+ * The hierarchy of volume units and their corresponding values.
+ * @author BCIT May 2025
+ */
 export const VOLUME_UNIT_HIERARCHY: { [normalizedUnit: string]: number } = {
   cup: 4,
   tablespoon: 3,
@@ -25,6 +33,10 @@ export const VOLUME_UNIT_HIERARCHY: { [normalizedUnit: string]: number } = {
   pinch: 1,
 };
 
+/**
+ * The conversion factors for volume units to teaspoons.
+ * @author BCIT May 2025
+ */
 export const VOLUME_UNIT_CONVERSION_TO_TEASPOONS: {
   [normalizedUnit: string]: number;
 } = {
@@ -34,11 +46,20 @@ export const VOLUME_UNIT_CONVERSION_TO_TEASPOONS: {
   pinch: 1 / 16, // An approximation for a pinch (can be adjusted)
 };
 
+/**
+ * The hierarchy of weight units and their corresponding values.
+ * @author BCIT May 2025
+ */
 export const WEIGHT_UNIT_HIERARCHY: { [normalizedUnit: string]: number } = {
   pound: 2,
   ounce: 1,
 };
 
+/**
+ * The conversion factors for weight units to ounces.
+ * @author BCIT May 2025
+ * Note: 1 pound = 16 ounces
+ */
 export const WEIGHT_UNIT_CONVERSION_TO_OUNCES: {
   [normalizedUnit: string]: number;
 } = {
@@ -46,6 +67,12 @@ export const WEIGHT_UNIT_CONVERSION_TO_OUNCES: {
   pound: 16,
 };
 
+/**
+ * The density of various flour and sugar: ounces per cup.
+ * This is used to convert volume measurements to weight measurements.
+ * This map can be extended to include other ingredients as needed.
+ * @author BCIT May 2025
+ */
 export const DENSITY_OUNCES_PER_CUP: { [itemName: string]: number } = {
   'flour': 4.25,
   'all-purpose flour': 4.25,
@@ -64,6 +91,12 @@ export const DENSITY_OUNCES_PER_CUP: { [itemName: string]: number } = {
   'confectioner sugar': 4.0,
 };
 
+/**
+ * Normalization map for units.
+ * This map is used to normalize different unit representations to a standard form.
+ * For example, 'tsp', 'teaspoon', and 'teaspoons' are all normalized to 'teaspoon'.
+ * @author BCIT May 2025
+ */
 export const UNIT_NORMALIZATION_MAP: { [unit: string]: string } = {
   teaspoon: 'teaspoon',
   teaspoons: 'teaspoon',
@@ -78,7 +111,7 @@ export const UNIT_NORMALIZATION_MAP: { [unit: string]: string } = {
   cups: 'cup',
   c: 'cup',
   pinch: 'pinch',
-  pinches: 'pinch', // Normalized to 'pinch'
+  pinches: 'pinch', 
 
   ounce: 'ounce',
   ounces: 'ounce',
@@ -90,13 +123,18 @@ export const UNIT_NORMALIZATION_MAP: { [unit: string]: string } = {
 
   each: 'each',
   piece: 'piece',
-  pieces: 'piece', // Normalized to 'piece'
+  pieces: 'piece',
   unit: 'unit',
-  units: 'unit', // Normalized to 'unit'
-  cloves: 'clove', // Normalized to 'clove'
+  units: 'unit', 
+  cloves: 'clove', 
   clove: 'clove',
 };
 
+/**
+ * The map is used for unit conversion.
+ * The idea is to convert the unit to a standard form (normalizedUnit) and then use the conversion factor to convert it to a base unit (baseUnit).
+ * @author BCIT May 2025
+ */
 export interface AggregationWorkData {
   name: string;
   category: string;

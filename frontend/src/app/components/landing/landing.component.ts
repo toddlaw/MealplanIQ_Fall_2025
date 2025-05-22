@@ -472,10 +472,14 @@ export class LandingComponent implements OnInit {
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
-              //
+
+              // Populate the nutrient table when the meal plan is generated
+              // BCIT May 2025
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }
+              // Populate the shopping list when the meal plan is generated
+              // BCIT May 2025
               this.shoppingListData = this.transformMealPlanToShoppingList(
                 this.mealPlanResponse
               );

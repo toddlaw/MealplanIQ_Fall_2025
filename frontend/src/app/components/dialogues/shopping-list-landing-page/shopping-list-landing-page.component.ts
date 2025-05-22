@@ -70,12 +70,23 @@ export class ShoppingListLandingPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Normalize the unit string to a standard format.
+   * @param unitStr The unit string to normalize.
+   * @returns The normalized unit string or null if not applicable.
+   */
   private normalizeUnit(unitStr?: string): string | null {
     if (!unitStr) return null;
     const lowerUnit = unitStr.toLowerCase().trim();
     return UNIT_NORMALIZATION_MAP[lowerUnit] || lowerUnit;
   }
 
+  /**
+   * Determine the category of an item based on its name.
+   * @param itemName The name of the item.
+   * @returns The category of the item.
+   * If no category matches, it returns 'Other'.
+   */
   private determineCategory(itemName: string): string {
     const lowerItemName = itemName.toLowerCase().trim();
     for (const category of this.CATEGORY) {
@@ -95,6 +106,12 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return 'Other';
   }
 
+  /**
+   * Parse a quantity string or number into a number.
+   * It supports fractions (e.g. "1/2", "1 1/2") and decimal numbers (e.g. "0.5").
+   * @param qty The quantity to parse.
+   * @returns The parsed number or null if parsing fails.
+   */
   private parseQuantity(qty: string | number): number | null {
     if (typeof qty === 'number') return qty;
     if (typeof qty === 'string') {
@@ -132,6 +149,11 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return null; // Cannot parse
   }
 
+  /**
+   * Format a number for display, rounding to 2 decimal places if necessary.
+   * @param num The number to format.
+   * @returns The formatted string.
+   */
   private formatNumberForDisplay(num: number): string {
     if (num === Math.floor(num)) {
       // Whole number
@@ -150,6 +172,12 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return parseFloat(num.toFixed(2)).toString();
   }
 
+  /**
+   * Pluralize a unit based on the quantity.
+   * @param unit The unit to pluralize.
+   * @param quantity The quantity to check.
+   * @returns The pluralized unit.
+   */
   private pluralizeUnit(unit: string, quantity: number): string {
     if (Math.abs(quantity - 1) < 1e-5 || !unit) {
       return unit;
@@ -161,6 +189,13 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return unit;
   }
 
+  /**
+   * For the flour and sugar types, we need to check if the item is one of them.
+   * This is used to determine if we should convert volume to weight.
+   * @param itemName String
+   * @returns If the item is flour or sugar type
+   * This can be extended to include other ingredients as needed.
+   */
   private isFlourOrSugarType(itemName: string): boolean {
     const lowerItemName = itemName.toLowerCase();
     if (DENSITY_OUNCES_PER_CUP.hasOwnProperty(lowerItemName)) {
@@ -170,6 +205,12 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return keywords.some((keyword) => lowerItemName.includes(keyword));
   }
 
+  /**
+   * Aggregate items based on their name and category.
+   * It combines quantities of the same item into a single entry.
+   * @param rawItems The raw items to aggregate.
+   * @returns An array of processed shopping items.
+   */
   private aggregateItems(
     rawItems: {
       name: string;
@@ -501,6 +542,10 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return finalProcessedItems;
   }
 
+  /**
+   * Process the shopping list data and categorize items into a map.
+   * It aggregates items by their name and category, and sorts them alphabetically.
+   */
   private processAndCategorizeShoppingList(): void {
     let rawItemList: {
       name: string;
@@ -512,6 +557,8 @@ export class ShoppingListLandingPageComponent implements OnInit {
     this.data.shoppingListData.forEach((dailyList) => {
       dailyList['shopping-list'].forEach((item) => {
         const lowerName = item.name.toLowerCase().trim();
+        // Water is a common ingredient, but we want to ignore it in the shopping list.
+        // But we want to keep words that contain "water" in them, like "watermelon" and "watercress".
         if (
           lowerName === 'water' ||
           (lowerName.includes('water') &&
@@ -522,6 +569,7 @@ export class ShoppingListLandingPageComponent implements OnInit {
           console.log(`Ignoring item: ${item.name}`);
           return;
         }
+        // Add the item into the raw item list.
         rawItemList.push({
           name: item.name,
           quantity: item.quantity,
@@ -562,6 +610,12 @@ export class ShoppingListLandingPageComponent implements OnInit {
     return this.orderedCategories;
   }
 
+  /**
+   * Keywords for each category
+   * The keys are the category names and the values are arrays of ingredients, which are given by sponsor.
+   * Because the names of the ingredients are not standardized,and we have to add all the ingredients in the list. Otherwise, the ingredients will not be categorized correctly.
+   * For example, "pepper" and "red pepper flakes" should be in different categories. If we don't use exact match, they will go to the same category, which is not what we want.
+   */
   private readonly categoryKeywords: { [key: string]: string[] } = {
     Produce: [
       'acorn squash',
