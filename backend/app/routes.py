@@ -106,23 +106,30 @@ def page_not_found(e):
 def handle_signup():
     data = request.json
     user_id = data.get("user_id")
-    user_name = data.get("user_name")
-    email = data.get("email")
-    stripe_subscription_id = data.get("subscription_id")
-    stripe_customer_id = data.get("customer_id")
-    stripe_trial_end = data.get("trial_end")
     db = instantiate_database()
     try:
-        if stripe_subscription_id:
+        if data.get("subscription_id"): 
             print("trying to insert paid trial users!")
-            result = db.insert_new_user_with_paid_trial(
-                user_id, user_name, email, stripe_subscription_id, stripe_customer_id, stripe_trial_end
-            )
+            result = db.insert_new_user_with_paid_trial(data)
+            if allergies := data.get("allergies"):
+                db.update_user_allergies(user_id, allergies)
+            if liked_food := data.get("likedFoods"):
+                db.update_user_liked_foods(user_id, liked_food)
+            if disliked_food := data.get("dislikedFoods"):
+                db.update_user_disliked_foods(user_id, disliked_food)
+            if cuisines := data.get("favouriteCuisines"):
+                db.update_user_favourite_cuisines(user_id, cuisines)
+            if dc := data.get("dietaryConstraint"):
+                db.insert_or_update_user_dietary_constraint(user_id, dc)
+            if rc := data.get("religiousConstraint"):
+                db.insert_or_update_user_religious_constraint(user_id, rc)
         else:
             result = db.insert_user_and_set_default_subscription_signup(
-                user_id, user_name, email
+                user_id,
+                data.get("user_name"),
+                data.get("email")
             )
-        return result
+        return jsonify(result)
     except Exception as e:
         print(f"Failed to insert user: {str(e)}")
         return jsonify({"error": str(e)}), 500

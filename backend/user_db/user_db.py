@@ -329,7 +329,7 @@ class DatabaseManager:
         try:
             cursor.execute(create_table_sql)
             self.db.commit()
-            print("Table created successfully")
+            print("Subscription table created successfully")
 
             for subscription_type_id, subscription_type in subscription_types:
                 cursor.execute(
@@ -512,21 +512,38 @@ class DatabaseManager:
             self.db.rollback()
             return {"success": False, "msg": f"Error inserting user profile and subscription for user_id {user_id}: {str(e)}"}
 
-    def insert_new_user_with_paid_trial(self, user_id, user_name, email, stripe_subscription_id, stripe_customer_id, trial_end, last_meal_plan_date=None, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
+    def insert_new_user_with_paid_trial(self, user_data: dict):
         cursor = self.db.cursor()
 
         sql_user_profile = """
         INSERT INTO user_profile (user_id, user_name, email, gender, last_meal_plan_date, height, age, weight, activity_level, selected_unit, health_goal)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
-        values_user_profile = (user_id, user_name, email, gender, last_meal_plan_date,
-                            height, age, weight, activity_level, selected_unit, health_goal)
+        values_user_profile = (
+            user_data.get("user_id"),
+            user_data.get("user_name"),
+            user_data.get("email"),
+            user_data.get("gender"),
+            None,  # last_meal_plan_date
+            user_data.get("height"),
+            user_data.get("age"),
+            user_data.get("weight"),
+            user_data.get("activity_level"),
+            user_data.get("selected_unit"),
+            user_data.get("health_goal")
+        )
 
         sql_subscription = """
         INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, stripe_customer_id, subscription_expiry_date)
         VALUES (%s, %s, %s, %s, %s);
         """
-        values_subscription = (user_id, 2, stripe_subscription_id, stripe_customer_id, trial_end) 
+        values_subscription = (
+            user_data.get("user_id"),
+            2, # paid trial subscription status
+            user_data.get("subscription_id"),
+            user_data.get("customer_id"),
+            user_data.get("trial_end")
+        )
 
         try:
             cursor.execute(sql_user_profile, values_user_profile)
