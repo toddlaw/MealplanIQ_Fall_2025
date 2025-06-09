@@ -537,37 +537,6 @@ class DatabaseManager:
             self.db.rollback()
             return {"success": False, "msg": f"DB Error: {str(e)}"}
 
-
-    # def insert_user_profile(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
-    #     cursor = self.db.cursor()
-    #     sql = """
-    #     INSERT INTO user_profile (user_id, user_name, email, gender, height, age, weight, activity_level, selected_unit, health_goal)
-    #     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-    #     """
-    #     values = (user_id, user_name, email, gender, height, age, weight, activity_level, selected_unit, health_goal)
-    #     try:
-    #         cursor.execute(sql, values)
-    #         self.db.commit()
-    #         print("User profile inserted successfully.")
-    #     except pymysql.Error as e:
-    #         self.db.rollback()
-    #         print(f"Error inserting user profile: {e}")
-
-    # def insert_default_subscription(self, user_id):
-    #     cursor = self.db.cursor()
-    #     # Assuming '3' is the subscription_type_id for 'free_trial' as per your populate_table_sql
-    #     sql = """
-    #     INSERT INTO user_subscription (user_id, subscription_type_id, subscription_stripe_id, subscription_expiry_date)
-    #     VALUES (%s, 3, NULL, NULL);
-    #     """
-    #     try:
-    #         cursor.execute(sql, (user_id,))
-    #         self.db.commit()
-    #         print("Default free trial subscription added successfully for user_id:", user_id)
-    #     except pymysql.Error as e:
-    #         self.db.rollback()
-    #         print(f"Error inserting default subscription for user_id {user_id}: {e}")
-
     def update_user_profile(self, user_id, gender, height, age, weight, activity_level, selected_unit, health_goal):
         cursor = self.db.cursor()
         sql = """
