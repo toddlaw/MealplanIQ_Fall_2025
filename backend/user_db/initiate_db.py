@@ -20,9 +20,11 @@ class DatabaseSchemaManager:
         self.create_user_allergies()
         self.create_user_liked_food()
         self.create_user_disliked_food()
+        self.create_snack_preferences_table()
 
         self.create_and_populate_subscription_status_table()
         self.create_user_subscription_table()
+        self.populate_snack_preferences_table()
 
         print("===== All tables created successfully =====")
 
@@ -295,46 +297,101 @@ class DatabaseSchemaManager:
             self.db.rollback()
             print(f"Error creating user subscription table: {e}")
 
+    def create_snack_preferences_table(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS snack_preferences (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(20) UNIQUE
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("Snack preferences table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating snack preferences table: {e}")
+        finally:
+            cursor.close()
+
 
     # ------------------ Look-up tables ------------------
 
-    def create_and_populate_subscription_status_table(self):
-            cursor = self.db.cursor()
-            create_table_sql = """
-            CREATE TABLE IF NOT EXISTS subscription_status (
-                subscription_type_id INT PRIMARY KEY,
-                subscription_type VARCHAR(255) NOT NULL
-            );
-            """
-            subscription_types = [
-                (1, 'free_trial'),
-                (2, 'paid_trial'),
-                (3, 'monthly_subscription'),
-                (4, 'quarterly_subscription'),
-                (5, 'yearly_subscription')
-            ]
-            try:
-                cursor.execute(create_table_sql)
-                self.db.commit()
-                print("Subscription table created successfully")
+    def populate_snack_preferences_table(self):
+        cursor = self.db.cursor()
+        snacks = [
+            'berries',
+            'cracker',
+            'dried_fruit',
+            'fruit',
+            'nuts',
+            'snack_bars',
+            'trail_mix',
+            'veggies_and_dips',
+            'yoghurt'
+        ]
 
-                for subscription_type_id, subscription_type in subscription_types:
-                    cursor.execute(
-                        "SELECT subscription_type_id FROM subscription_status WHERE subscription_type_id = %s", (subscription_type_id,))
-                    result = cursor.fetchone()
-                    if not result:
-                        cursor.execute("INSERT INTO subscription_status (subscription_type_id, subscription_type) VALUES (%s, %s)", (
-                            subscription_type_id, subscription_type))
+        try:
+            for snack in snacks:
+                cursor.execute(
+                    "SELECT name FROM snack_preferences WHERE name = %s", (snack,)
+                )
+                result = cursor.fetchone()
+                if not result:
+                    try:
+                        cursor.execute(
+                            "INSERT INTO snack_preferences (name) VALUES (%s)", (snack,)
+                        )
                         self.db.commit()
-                        print(
-                            f"Subscription status {subscription_type} added successfully.")
-                    else:
-                        print(
-                            f"Subscription status {subscription_type} already exists.")
+                        print(f"{snack} added successfully.")
+                    except pymysql.Error as e:
+                        self.db.rollback()
+                        print(f"Error adding snack preference {snack}: {e}")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error in database operation: {e}")
+        finally:
+            cursor.close()
 
-            except pymysql.Error as e:
-                self.db.rollback()
-                print(f"Error in database operation: {e}")
+
+
+
+    def create_and_populate_subscription_status_table(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS subscription_status (
+            subscription_type_id INT PRIMARY KEY,
+            subscription_type VARCHAR(255) NOT NULL
+        );
+        """
+        subscription_types = [
+            (1, 'free_trial'),
+            (2, 'paid_trial'),
+            (3, 'monthly_subscription'),
+            (4, 'quarterly_subscription'),
+            (5, 'yearly_subscription')
+        ]
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("Subscription table created successfully")
+            for subscription_type_id, subscription_type in subscription_types:
+                cursor.execute(
+                    "SELECT subscription_type_id FROM subscription_status WHERE subscription_type_id = %s", (subscription_type_id,))
+                result = cursor.fetchone()
+                if not result:
+                    cursor.execute("INSERT INTO subscription_status (subscription_type_id, subscription_type) VALUES (%s, %s)", (
+                        subscription_type_id, subscription_type))
+                    self.db.commit()
+                    print(
+                        f"Subscription status {subscription_type} added successfully.")
+                else:
+                    print(
+                        f"Subscription status {subscription_type} already exists.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error in database operation: {e}")
 
 
 
