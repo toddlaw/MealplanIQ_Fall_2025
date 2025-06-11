@@ -15,6 +15,7 @@ scheduler.start()
 db = DatabaseManager.connect_to_database()
 schema_manager = DatabaseSchemaManager(db)
 schema_manager.create_all_tables()
+schema_manager.populate_dictionary_tables()
 
 CORS(app)
 from app import routes
