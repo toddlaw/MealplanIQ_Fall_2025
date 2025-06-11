@@ -20,11 +20,16 @@ class DatabaseSchemaManager:
         self.create_user_allergies()
         self.create_user_liked_food()
         self.create_user_disliked_food()
-        self.create_snack_preferences_table()
+        self.create_snacks_table()
+        self.create_breakfasts_table()
+        self.create_user_breakfast_preferences()
+        self.create_user_snack_preferences()
+    
+        # self.create_mealplans_table()
 
         self.create_and_populate_subscription_status_table()
         self.create_user_subscription_table()
-        self.populate_snack_preferences_table()
+        
 
         print("===== All tables created successfully =====")
 
@@ -36,8 +41,9 @@ class DatabaseSchemaManager:
         self.populate_favourite_cuisines_table()
         self.populate_liked_food_table()
         self.populate_disliked_food_table()
+        self.populate_snacks_table()
+        self.populate_breakfasts_table()
         print("===== Dictionary tables populated successfully =====")
-
 
     def create_user_profile_table(self):
         cursor = self.db.cursor()
@@ -297,10 +303,10 @@ class DatabaseSchemaManager:
             self.db.rollback()
             print(f"Error creating user subscription table: {e}")
 
-    def create_snack_preferences_table(self):
+    def create_snacks_table(self):
         cursor = self.db.cursor()
         create_table_sql = """
-        CREATE TABLE IF NOT EXISTS snack_preferences (
+        CREATE TABLE IF NOT EXISTS snacks (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(20) UNIQUE
         );
@@ -315,10 +321,154 @@ class DatabaseSchemaManager:
         finally:
             cursor.close()
 
+    def create_user_snack_preferences(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS user_snack_preferences (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            user_id INTEGER,
+            snack_id INTEGER,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(snack_id) REFERENCES snacks(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("user_snack_preferences table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating user_snack_preferences table: {e}")
+        finally:
+            cursor.close()       
+
+    def create_user_breakfast_preferences(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS user_breakfast_preferences (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            user_id INTEGER,
+            breakfast_id INTEGER,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(breakfast_id) REFERENCES breakfasts(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("user_breakfast_preferences table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating user_breakfast_preferences table: {e}")
+        finally:
+            cursor.close()
+
+
+    # Create breakfast look-up table(ENUM)
+    def create_breakfasts_table(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS breakfasts (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(20) UNIQUE
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("Breakfast preferences table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating breakfast preferences table: {e}")
+        finally:
+            cursor.close()
+
+    def create_mealplans_table(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS user_meal_plans (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            user_id INTEGER,
+            created_at DATE,
+            used_at DATE,
+            PRIMARY KEY(id),
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("user_meal_plans table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating user_meal_plans table: {e}")
+        finally:
+            cursor.close()
+
+    def create_breafasts_table(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS user_meal_plans (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            user_id INTEGER,
+            created_at DATE,
+            used_at DATE,
+            PRIMARY KEY(id),
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("user_meal_plans table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating user_meal_plans table: {e}")
+        finally:
+            cursor.close()
+
 
     # ------------------ Look-up tables ------------------
 
-    def populate_snack_preferences_table(self):
+    def populate_breakfasts_table(self):
+        cursor = self.db.cursor()
+        breakfast_items = [
+            'bagels',
+            'cereal',
+            'coffee',
+            'cream of wheat',
+            'hashbrowns',
+            'juice',
+            'oatmeal',
+            'pancake',
+            'toast',
+            'waffles'
+        ]
+
+        try:
+            for item in breakfast_items:
+                cursor.execute(
+                    "SELECT name FROM breakfasts WHERE name = %s", (item,)
+                )
+                result = cursor.fetchone()
+                if not result:
+                    try:
+                        cursor.execute(
+                            "INSERT INTO breakfasts (name) VALUES (%s)", (item,)
+                        )
+                        self.db.commit()
+                        print(f"{item} added successfully.")
+                    except pymysql.Error as e:
+                        self.db.rollback()
+                        print(f"Error adding breakfast preference {item}: {e}")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error in database operation: {e}")
+        finally:
+            cursor.close()
+
+
+    def populate_snacks_table(self):
         cursor = self.db.cursor()
         snacks = [
             'berries',
@@ -335,13 +485,13 @@ class DatabaseSchemaManager:
         try:
             for snack in snacks:
                 cursor.execute(
-                    "SELECT name FROM snack_preferences WHERE name = %s", (snack,)
+                    "SELECT name FROM snacks WHERE name = %s", (snack,)
                 )
                 result = cursor.fetchone()
                 if not result:
                     try:
                         cursor.execute(
-                            "INSERT INTO snack_preferences (name) VALUES (%s)", (snack,)
+                            "INSERT INTO snacks (name) VALUES (%s)", (snack,)
                         )
                         self.db.commit()
                         print(f"{snack} added successfully.")
