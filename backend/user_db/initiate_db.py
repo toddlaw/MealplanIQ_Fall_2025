@@ -20,12 +20,16 @@ class DatabaseSchemaManager:
         self.create_user_allergies()
         self.create_user_liked_food()
         self.create_user_disliked_food()
-        self.create_snacks_table()
-        self.create_breakfasts_table()
+        self.create_snacks()
+        self.create_breakfasts()
         self.create_user_breakfast_preferences()
         self.create_user_snack_preferences()
     
-        # self.create_mealplans_table()
+        self.create_meal_plans()
+        self.create_meal_plan_breakfasts()
+        self.create_meal_plan_lunches()
+        self.create_meal_plan_snacks()
+        self.create_meal_plan_dinners()
 
         self.create_and_populate_subscription_status_table()
         self.create_user_subscription_table()
@@ -303,7 +307,7 @@ class DatabaseSchemaManager:
             self.db.rollback()
             print(f"Error creating user subscription table: {e}")
 
-    def create_snacks_table(self):
+    def create_snacks(self):
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS snacks (
@@ -326,9 +330,9 @@ class DatabaseSchemaManager:
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_snack_preferences (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id INTEGER,
+            user_id VARCHAR(255),
             snack_id INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(user_id) REFERENCES user_profile(user_id),
             FOREIGN KEY(snack_id) REFERENCES snacks(id)
         );
         """
@@ -347,9 +351,9 @@ class DatabaseSchemaManager:
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_breakfast_preferences (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id INTEGER,
+            user_id VARCHAR(255),
             breakfast_id INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(user_id) REFERENCES user_profile(user_id),
             FOREIGN KEY(breakfast_id) REFERENCES breakfasts(id)
         );
         """
@@ -365,7 +369,7 @@ class DatabaseSchemaManager:
 
 
     # Create breakfast look-up table(ENUM)
-    def create_breakfasts_table(self):
+    def create_breakfasts(self):
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS breakfasts (
@@ -383,16 +387,15 @@ class DatabaseSchemaManager:
         finally:
             cursor.close()
 
-    def create_mealplans_table(self):
+    def create_meal_plans(self):
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_meal_plans (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id INTEGER,
+            user_id VARCHAR(255),
             created_at DATE,
             used_at DATE,
-            PRIMARY KEY(id),
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
         );
         """
         try:
@@ -405,16 +408,97 @@ class DatabaseSchemaManager:
         finally:
             cursor.close()
 
+    def create_meal_plan_breakfasts(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS meal_plan_breakfasts (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            meal_plan_id INTEGER,
+            item_id INTEGER,
+            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("meal_plan_breakfasts table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating meal_plan_breakfasts table: {e}")
+        finally:
+            cursor.close()
+
+    def create_meal_plan_lunches(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS meal_plan_lunches (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            meal_plan_id INTEGER,
+            item_id INTEGER,
+            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("meal_plan_lunches table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating meal_plan_lunches table: {e}")
+        finally:
+            cursor.close()
+
+    def create_meal_plan_snacks(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS meal_plan_snacks (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            meal_plan_id INTEGER,
+            item_id INTEGER,
+            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("meal_plan_snacks table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating meal_plan_snacks table: {e}")
+        finally:
+            cursor.close()
+
+    def create_meal_plan_dinners(self):
+        cursor = self.db.cursor()
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS meal_plan_dinners (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            meal_plan_id INTEGER,
+            item_id INTEGER,
+            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
+        );
+        """
+        try:
+            cursor.execute(create_table_sql)
+            self.db.commit()
+            print("meal_plan_dinners table created successfully.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error creating meal_plan_dinners table: {e}")
+        finally:
+            cursor.close()
+
+
     def create_breafasts_table(self):
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_meal_plans (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id INTEGER,
+            user_id VARCHAR(255),
             created_at DATE,
             used_at DATE,
             PRIMARY KEY(id),
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
         );
         """
         try:
