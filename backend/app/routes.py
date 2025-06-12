@@ -111,18 +111,6 @@ def handle_signup():
         if data.get("subscription_id"): 
             print("trying to insert paid trial users!")
             result = db.insert_new_user_with_paid_trial(data)
-            if allergies := data.get("allergies"):
-                db.update_user_allergies(user_id, allergies)
-            if liked_food := data.get("likedFoods"):
-                db.update_user_liked_foods(user_id, liked_food)
-            if disliked_food := data.get("dislikedFoods"):
-                db.update_user_disliked_foods(user_id, disliked_food)
-            if cuisines := data.get("favouriteCuisines"):
-                db.update_user_favourite_cuisines(user_id, cuisines)
-            if dc := data.get("dietaryConstraint"):
-                db.insert_or_update_user_dietary_constraint(user_id, dc)
-            if rc := data.get("religiousConstraint"):
-                db.insert_or_update_user_religious_constraint(user_id, rc)
         else:
             result = db.insert_user_and_set_default_subscription_signup(
                 user_id,
@@ -167,6 +155,7 @@ def receive_data():
     user_data = extract_user_profile_data_from_json(data, user_id)
     extract_data = extract_data_from_json(data)
     # db.update_user_profile(**user_data)
+    print("EXTRACTED DATA:", extract_data)
     process_user_data(db, user_id, extract_data)
 
     try:

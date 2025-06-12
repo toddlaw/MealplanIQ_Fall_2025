@@ -78,7 +78,25 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             return {"success": False, "msg": f"Error inserting user profile and subscription for user_id {user_id}: {str(e)}"}
-
+        
+    def _insert_additional_user_info(self, user_id: str, user_data: dict):
+        if allergies := user_data.get("allergies"):
+            self.update_user_allergies(user_id, allergies)
+        if liked_food := user_data.get("likedFoods"):
+            self.update_user_liked_foods(user_id, liked_food)
+        if disliked_food := user_data.get("dislikedFoods"):
+            self.update_user_disliked_foods(user_id, disliked_food)
+        if cuisines := user_data.get("favouriteCuisines"):
+            self.update_user_favourite_cuisines(user_id, cuisines)
+        if dc := user_data.get("dietaryConstraint"):
+            self.insert_or_update_user_dietary_constraint(user_id, dc)
+        if rc := user_data.get("religiousConstraint"):
+            self.insert_or_update_user_religious_constraint(user_id, rc)
+        if snacks := user_data.get("snacks"):
+            self.update_user_prefered_snacks(user_id, snacks)
+        if breakfasts := user_data.get("breakfasts"):
+            self.update_user_prefered_breakfasts(user_id, breakfasts)
+            
     def insert_new_user_with_paid_trial(self, user_data: dict):
         cursor = self.db.cursor()
 
@@ -115,6 +133,7 @@ class DatabaseManager:
         try:
             cursor.execute(sql_user_profile, values_user_profile)
             cursor.execute(sql_subscription, values_subscription)
+            self._insert_additional_user_info(user_data.get("user_id"), user_data)
             self.db.commit()
             return {"success": True, "message": "User profile and paid subscription created successfully."}
         except pymysql.Error as e:
@@ -428,7 +447,13 @@ class DatabaseManager:
                 "weight": result[4],
                 "activity_level": result[5],
                 "gender": result[6],
-                "selected_unit": result[7]
+                "selected_unit": result[7],
+                "allergies": self.retrieve_user_allergies(user_id),
+                "likedFoods": self.retrieve_user_liked_food(user_id),
+                "dislikedFoods": self.retrieve_user_disliked_food(user_id),
+                "favouriteCuisines": self.retrieve_user_favourite_cuisines(user_id),
+                "dietaryConstraint": self.retrieve_user_dieatary_constraints(user_id),
+                "religiousConstraint": self.retrieve_user_religious_constraints(user_id)
             }
             user_profile_json = json.dumps(user_profile)
             return user_profile_json
@@ -477,6 +502,8 @@ class DatabaseManager:
             print(f"Error adding user allergies: {e}")
 
     def get_liked_food_ids(self, liked_food_names):
+        if not liked_food_names:
+            return []
         cursor = self.db.cursor()
         format_strings = ','.join(['%s'] * len(liked_food_names))
         sql = f"SELECT id, name FROM liked_food WHERE name IN ({format_strings})"
@@ -591,8 +618,82 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error adding user favourite cuisines: {e}")
+            
+    def get_snack_ids(self, snack_names):
+        if not snack_names:
+            return []
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(snack_names))
+        sql = f"SELECT id, name FROM snacks WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(snack_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def update_user_prefered_snacks(self, user_id, snacks):
+        snack_ids = self.get_snack_ids(snacks)
+        cursor = self.db.cursor()
+        delete_sql = "DELETE FROM user_snack_preferences WHERE user_id = %s"
+        try:
+            cursor.execute(delete_sql, (user_id,))
+            self.db.commit()
+            print("Existing user snack preference data removed.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error removing user snack preference: {e}")
+            return
 
+        values = [(user_id, snack_ids[snack])
+                  for snack in snacks if snack in snack_ids]
+        insert_sql = "INSERT INTO user_snack_preferences (user_id, snack_id) VALUES (%s, %s)"
+        try:
+            if values:
+                cursor.executemany(insert_sql, values)
+                self.db.commit()
+                print("User favourite snack items added successfully.")
+            else:
+                print("No valid snack provided for insertion.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user favourite snack items: {e}")
+            
+    def get_breakfast_ids(self, breakfast_names):
+        if not breakfast_names:
+            return []
+        cursor = self.db.cursor()
+        format_strings = ','.join(['%s'] * len(breakfast_names))
+        sql = f"SELECT id, name FROM breakfasts WHERE name IN ({format_strings})"
+        cursor.execute(sql, tuple(breakfast_names))
+        result = cursor.fetchall()
+        return {name: id for id, name in result}
+    
+    def update_user_prefered_breakfasts(self, user_id, breakfasts):
+        breakfast_ids = self.get_breakfast_ids(breakfasts)
+        cursor = self.db.cursor()
+        delete_sql = "DELETE FROM user_breakfast_preferences WHERE user_id = %s"
+        try:
+            cursor.execute(delete_sql, (user_id,))
+            self.db.commit()
+            print("Existing user snack preference data removed.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error removing user snack preference: {e}")
+            return
 
+        values = [(user_id, breakfast_ids[breakfast])
+                  for breakfast in breakfasts if breakfast in breakfast_ids]
+        insert_sql = "INSERT INTO user_breakfast_preferences (user_id, breakfast_id) VALUES (%s, %s)"
+        try:
+            if values:
+                cursor.executemany(insert_sql, values)
+                self.db.commit()
+                print("User favourite breakfast items added successfully.")
+            else:
+                print("No valid breakfast item provided for insertion.")
+        except pymysql.Error as e:
+            self.db.rollback()
+            print(f"Error adding user favourite breakfast items: {e}")
+            
+            
 # ----------------- Retrieve user data -----------------
 
     def retrieve_user_profile_json(self, user_id):
@@ -644,8 +745,8 @@ class DatabaseManager:
         WHERE udc.user_id = %s;
         """
         cursor.execute(sql, (user_id,))
-        result = cursor.fetchall()
-        return [row[0] for row in result]
+        result = cursor.fetchone()
+        return result[0].lower() if result else None
 
     def retrieve_user_health_goal(self, user_id):
         cursor = self.db.cursor()
@@ -663,8 +764,8 @@ class DatabaseManager:
         WHERE urc.user_id = %s;
         """
         cursor.execute(sql, (user_id,))
-        result = cursor.fetchall()
-        return [row[0] for row in result]
+        result = cursor.fetchone()
+        return result[0].lower() if result else None
 
     def retrieve_user_liked_food(self, user_id):
         cursor = self.db.cursor()
