@@ -98,18 +98,9 @@
                   </div>
 
                   <div class="grid justify-items-end pr-5">
-                    <mat-button-toggle-group>
-                      <mat-button-toggle
-                        value=""
-                        (click)="setSelectedUnit('metric')"
-                        checked
-                        >Metric
-                      </mat-button-toggle>
-                      <mat-button-toggle
-                        value=""
-                        (click)="setSelectedUnit('imperial')"
-                        >Imperial
-                      </mat-button-toggle>
+                    <mat-button-toggle-group [(ngModel)]="selectedUnit" name="unit" (change)="setSelectedUnit($event.value)">
+                      <mat-button-toggle [value]="'metric'">Metric</mat-button-toggle>
+                      <mat-button-toggle [value]="'imperial'">Imperial</mat-button-toggle>
                     </mat-button-toggle-group>
                   </div>
                 </div>
@@ -278,9 +269,9 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let likedFood of likedFoodsList"
-                    [value]="likedFood"
+                    [value]="likedFood.value"
                   >
-                    {{ likedFood }}
+                    {{ likedFood.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -304,8 +295,8 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let dislikedFoods of dislikedFoodsList"
-                    [value]="dislikedFoods"
-                    >{{ dislikedFoods }}</mat-option
+                    [value]="dislikedFoods.value"
+                    >{{ dislikedFoods.viewValue }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -327,8 +318,8 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let cuisine of cuisinesList"
-                    [value]="cuisine"
-                    >{{ cuisine }}</mat-option
+                    [value]="cuisine.value"
+                    >{{ cuisine.viewValue }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -350,9 +341,9 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let allergy of allergiesList"
-                    [value]="allergy"
+                    [value]="allergy.value"
                   >
-                    {{ allergy }}
+                    {{ allergy.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -373,8 +364,8 @@
                       {{ breakfasts.value?.length === 2 ? "other" : "others" }})
                     </span>
                   </mat-select-trigger>
-                  <mat-option *ngFor="let food of breakfastList" [value]="food">
-                    {{ food }}
+                  <mat-option *ngFor="let food of breakfastList" [value]="food.value">
+                    {{ food.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -394,8 +385,8 @@
                       {{ snacks.value?.length === 2 ? "other" : "others" }})
                     </span>
                   </mat-select-trigger>
-                  <mat-option *ngFor="let food of snackList" [value]="food">
-                    {{ food }}
+                  <mat-option *ngFor="let food of snackList" [value]="food.value">
+                    {{ food.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

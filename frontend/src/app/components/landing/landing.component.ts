@@ -224,13 +224,20 @@ export class LandingComponent implements OnInit {
             'uid'
           )}`
         )
-        .subscribe((data: any) => {
-          this.people[0].age = data.age;
-          this.people[0].weight = data.weight;
-          this.people[0].height = data.height;
-          this.people[0].gender = data.gender;
-          this.people[0].activityLevel = data.activity_level;
-          this.selectedUnit = data.selected_unit || 'metric';
+        .subscribe((user_data: any) => {
+          this.people[0].age = user_data.age;
+          this.people[0].weight = user_data.weight;
+          this.people[0].height = user_data.height;
+          this.people[0].gender = user_data.gender;
+          this.people[0].activityLevel = user_data.activity_level;
+          this.selectedUnit = user_data.selected_unit || 'metric';
+          this.likedFoods.setValue(user_data.likedFoods || []);
+          this.dislikedFoods.setValue(user_data.dislikedFoods || []);
+          this.cuisines.setValue(user_data.favouriteCuisines || []);
+          this.allergies.setValue(user_data.allergies || []);
+          this.selectedDietaryConstraint = user_data.dietaryConstraint || 'none';
+          this.selectedReligiousConstraint = user_data.religiousConstraint || 'none';
+
           // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
           this.mealPlanResponse.days.forEach(
             (day: { recipes: { meal_name: string }[] }) => {
@@ -438,10 +445,6 @@ export class LandingComponent implements OnInit {
     localStorage.setItem('minDate', String(data.minDate));
     localStorage.setItem('maxDate', String(data.maxDate));
 
-    if (!data.likedFoods) {
-      data.likedFoods = 'None';
-    }
-
     if (!data.minDate || !data.maxDate) {
       this.toast.error('Please select both start date and end date!');
     } else if (!this.people) {
@@ -450,7 +453,8 @@ export class LandingComponent implements OnInit {
       if (
         this.PAID_SUBSCRIPTION_TYPES.includes(this.userSubscriptionTypeId) ||
         (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) || // non-signed user
-        (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
+        (this.userSubscriptionTypeId === 1 ) // TODO: Replace this line with the one below before production
+        // (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
       ) {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
