@@ -261,7 +261,7 @@
                   name="likedFoods"
                 >
                   <mat-select-trigger>
-                    {{likedFoods.value?.[0] || ''}}
+                    {{ getViewValue(likedFoods.value?.[0] || '', likedFoodsList) }}
                     <span *ngIf="(likedFoods.value?.length || 0) > 1">
                       (+{{ (likedFoods.value?.length || 0) - 1 }}
                       {{ likedFoods.value?.length === 2 ? "other" : "others" }})
@@ -285,7 +285,7 @@
                 </mat-label>
                 <mat-select [formControl]="dislikedFoods" multiple>
                   <mat-select-trigger>
-                    {{dislikedFoods.value?.[0] || ''}}
+                    {{ getViewValue(dislikedFoods.value?.[0] || '', dislikedFoodsList) }}
                     <span *ngIf="(dislikedFoods.value?.length || 0) > 1">
                       (+{{ (dislikedFoods.value?.length || 0) - 1 }}
                       {{
@@ -310,7 +310,7 @@
                 </mat-label>
                 <mat-select [formControl]="cuisines" multiple>
                   <mat-select-trigger>
-                    {{cuisines.value?.[0] || ''}}
+                    {{ getViewValue(cuisines.value?.[0] || '', cuisinesList) }}
                     <span *ngIf="(cuisines.value?.length || 0) > 1">
                       (+{{ (cuisines.value?.length || 0) - 1 }}
                       {{ cuisines.value?.length === 2 ? "other" : "others" }})
@@ -333,7 +333,7 @@
                 </mat-label>
                 <mat-select [formControl]="allergies" multiple>
                   <mat-select-trigger>
-                    {{ allergies.value?.[0] || ''}}
+                    {{ getViewValue(allergies.value?.[0] || '', allergiesList) }}
                     <span *ngIf="(allergies.value?.length || 0) > 1">
                       (+{{ (allergies.value?.length || 0) - 1 }}
                       {{ allergies.value?.length === 2 ? "other" : "others" }})
@@ -358,7 +358,7 @@
                 </mat-label>
                 <mat-select [formControl]="breakfasts" multiple>
                   <mat-select-trigger>
-                    {{ breakfasts.value?.[0] || ''}}
+                    {{ getViewValue(breakfasts.value?.[0] || '', breakfastList) }}
                     <span *ngIf="(breakfasts.value?.length || 0) > 1">
                       (+{{ (breakfasts.value?.length || 0) - 1 }}
                       {{ breakfasts.value?.length === 2 ? "other" : "others" }})
@@ -379,7 +379,7 @@
                 </mat-label>
                 <mat-select [formControl]="snacks" multiple>
                   <mat-select-trigger>
-                    {{ snacks.value?.[0] || ''}}
+                    {{ getViewValue(snacks.value?.[0] || '', snackList) }}
                     <span *ngIf="(snacks.value?.length || 0) > 1">
                       (+{{ (snacks.value?.length || 0) - 1 }}
                       {{ snacks.value?.length === 2 ? "other" : "others" }})

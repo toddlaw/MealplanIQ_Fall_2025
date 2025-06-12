@@ -1323,4 +1323,15 @@ openSearchDialog(dayIndex: number, recipeIndex: number): void {
   // }
 }
 
+  /**
+    Returns the user-friendly label (viewValue) for a given value
+
+    @param value - The internal value to match (e.g., 'egg')
+    @param list - The list of options with value and viewValue pairs
+    @returns The corresponding viewValue (e.g., 'Eggs') or the original value if not found
+  */
+  getViewValue(value: string, list: { value: string; viewValue: string }[]): string {
+    return list.find(item => item.value === value)?.viewValue || value;
+  }
+
 }
