@@ -517,16 +517,16 @@ class DatabaseSchemaManager:
     def populate_breakfasts_table(self):
         cursor = self.db.cursor()
         breakfast_items = [
-            'bagels',
+            'bagel',
             'cereal',
             'coffee',
             'cream of wheat',
-            'hashbrowns',
+            'hashbrown',
             'juice',
             'oatmeal',
             'pancake',
             'toast',
-            'waffles'
+            'waffle'
         ]
 
         try:
@@ -557,13 +557,13 @@ class DatabaseSchemaManager:
         snacks = [
             'berries',
             'cracker',
-            'dried_fruit',
+            'dried fruit',
             'fruit',
-            'nuts',
-            'snack_bars',
-            'trail_mix',
-            'veggies_and_dips',
-            'yoghurt'
+            'nut',
+            'snack bar',
+            'trail mix',
+            'veggies and dips',
+            'yogurt'
         ]
 
         try:
@@ -631,7 +631,7 @@ class DatabaseSchemaManager:
 
     def populate_dietary_constraints_table(self):
         cursor = self.db.cursor()
-        constraints = ['None', 'Vegetarian', 'Vegan', 'Pescatarian']
+        constraints = ['none', 'vegetarian', 'vegan', 'pescatarian']
         for constraint in constraints:
             cursor.execute(
                 "SELECT name FROM dietary_constraints WHERE name = %s", (constraint,))
@@ -649,7 +649,7 @@ class DatabaseSchemaManager:
 
     def populate_religious_constraints_table(self):
         cursor = self.db.cursor()
-        constraints = ['None', 'Halal', 'Kosher']
+        constraints = ['none', 'halal', 'kosher']
         for constraint in constraints:
             cursor.execute(
                 "SELECT name FROM religious_constraints WHERE name = %s", (constraint,))
@@ -668,8 +668,8 @@ class DatabaseSchemaManager:
 
     def populate_allergies_table(self):
         cursor = self.db.cursor()
-        allergies = ['None', 'Peanut', 'Gluten', 'Dairy', 'Grain', 'Seafood',
-                     'Sesame', 'Shellfish', 'Soy', 'Egg', 'Sulfite', 'Tree Nut', 'Wheat']
+        allergies = ['peanut', 'gluten', 'dairy', 'grain', 'seafood',
+                     'sesame', 'shellfish', 'soy', 'egg', 'sulfite', 'tree nut', 'wheat']
         for allergy in allergies:
             cursor.execute(
                 "SELECT name FROM allergies WHERE name = %s", (allergy,))
@@ -687,8 +687,7 @@ class DatabaseSchemaManager:
 
     def populate_favourite_cuisines_table(self):
         cursor = self.db.cursor()
-        cuisines = ['None', 'American', 'Italian', 'Mexican',
-                    'Japanese', 'Indian', 'Greek', 'Chinese']
+        cuisines = ['american', 'chinese', 'japanese', 'korean', 'french', 'italian', 'mexican']
         for cuisine in cuisines:
             cursor.execute(
                 "SELECT name FROM favourite_cuisines WHERE name = %s", (cuisine,))
@@ -704,8 +703,7 @@ class DatabaseSchemaManager:
 
     def populate_liked_food_table(self):
         cursor = self.db.cursor()
-        liked_foods = ['None', 'Pizza', 'Burger',
-                       'Pasta', 'Sushi', 'Salad', 'Ice Cream']
+        liked_foods = ['pizza', 'burger', 'pasta', 'sushi', 'salad']
         for food in liked_foods:
             cursor.execute(
                 "SELECT name FROM liked_food WHERE name = %s", (food,))
@@ -723,8 +721,7 @@ class DatabaseSchemaManager:
 
     def populate_disliked_food_table(self):
         cursor = self.db.cursor()
-        disliked_foods = ['None', 'Anchovies', 'Olives',
-                          'Cilantro', 'Blue Cheese', 'Liver', 'Tofu']
+        disliked_foods = ['anchovies', 'olive', 'cilantro', 'blue cheese', 'liver', 'tofu']
         for food in disliked_foods:
             # Check if the food already exists
             cursor.execute(
