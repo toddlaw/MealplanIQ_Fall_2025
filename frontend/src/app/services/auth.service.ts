@@ -30,9 +30,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    localStorage.removeItem('uid');
-    // localStorage.removeItem('email');
-    localStorage.removeItem('data');
+    localStorage.clear();
     return from(this.auth.signOut());
   }
 }
