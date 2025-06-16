@@ -1,5 +1,5 @@
 export interface ProfileUser {
-  uid: string;
+  uid?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
@@ -7,6 +7,16 @@ export interface ProfileUser {
   phone?: string;
   address?: string;
   photoURL?: string;
-  age?: string;
-  weight?: string;
+  gender?: string;
+  age?: number;
+  weight?: number;
+  height?: number;
+  selectedUnit?: string;
+  activityLevel?: string;
+  likedFoods?: string[];
+  dislikedFoods?: string[];
+  favouriteCuisines?: string[];
+  allergies?: string[];
+  religiousConstraint?: string;
+  dietaryConstraint?: string;
 }

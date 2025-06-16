@@ -188,15 +188,15 @@ class DatabaseManager:
             self.db.rollback()
             print(f"Error updating user profile: {e}")
 
-    def update_user_profile_from_dashboard(self, user_name, email, age,  gender, height, weight, activity_level, user_id):
+    def update_user_profile_from_dashboard(self, user_name, email, age,  gender, height, weight, activity_level, health_goal, selected_unit, user_id):
         cursor = self.db.cursor()
         sql = """
         UPDATE user_profile
-        SET user_name = %s, gender = %s, height = %s, age = %s, weight = %s, activity_level = %s, email = %s
+        SET user_name = %s, gender = %s, height = %s, age = %s, weight = %s, activity_level = %s, email = %s, health_goal = %s, selected_unit = %s
         WHERE user_id = %s;
         """
         values = (user_name, gender, height, age,
-                  weight, activity_level, email, user_id)
+                  weight, activity_level, email, health_goal, selected_unit, user_id)
         try:
             cursor.execute(sql, values)
             self.db.commit()
@@ -434,12 +434,12 @@ class DatabaseManager:
 
     def get_user_landing_page_profile(self, user_id):
         cursor = self.db.cursor()
-        sql = "SELECT user_name, email, age, height, weight, activity_level, gender, selected_unit FROM user_profile WHERE user_id = %s"
+        sql = "SELECT user_name, email, age, height, weight, activity_level, gender, selected_unit, health_goal FROM user_profile WHERE user_id = %s"
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
 
         if result:
-            user_profile = {
+            profile = {
                 "user_name": result[0],
                 "email": result[1],
                 "age": result[2],
@@ -448,14 +448,20 @@ class DatabaseManager:
                 "activity_level": result[5],
                 "gender": result[6],
                 "selected_unit": result[7],
+                "health_goal": result[8]
+            }
+            preference = {
                 "allergies": self.retrieve_user_allergies(user_id),
                 "likedFoods": self.retrieve_user_liked_food(user_id),
                 "dislikedFoods": self.retrieve_user_disliked_food(user_id),
                 "favouriteCuisines": self.retrieve_user_favourite_cuisines(user_id),
                 "dietaryConstraint": self.retrieve_user_dieatary_constraints(user_id),
-                "religiousConstraint": self.retrieve_user_religious_constraints(user_id)
+                "religiousConstraint": self.retrieve_user_religious_constraints(user_id),
+                "snacks": self.retrieve_user_snack_preferences(user_id),
+                "breakfasts": self.retrieve_user_breakfast_preferences(user_id)
             }
-            user_profile_json = json.dumps(user_profile)
+            user_info = {"profile": profile, "preference": preference}
+            user_profile_json = json.dumps(user_info)
             return user_profile_json
         else:
             return None
@@ -809,6 +815,30 @@ class DatabaseManager:
         SELECT a.name
         FROM allergies a
         JOIN user_allergies ua ON a.id = ua.allergy_id
+        WHERE ua.user_id = %s;
+        """
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchall()
+        return [row[0] for row in result]
+    
+    def retrieve_user_snack_preferences(self, user_id):
+        cursor = self.db.cursor()
+        sql = """
+        SELECT a.name
+        FROM snacks a
+        JOIN user_snack_preferences ua ON a.id = ua.snack_id
+        WHERE ua.user_id = %s;
+        """
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchall()
+        return [row[0] for row in result]
+    
+    def retrieve_user_breakfast_preferences(self, user_id):
+        cursor = self.db.cursor()
+        sql = """
+        SELECT a.name
+        FROM breakfasts a
+        JOIN user_breakfast_preferences ua ON a.id = ua.breakfast_id
         WHERE ua.user_id = %s;
         """
         cursor.execute(sql, (user_id,))

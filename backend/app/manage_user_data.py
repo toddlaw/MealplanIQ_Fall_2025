@@ -24,7 +24,9 @@ def extract_data_from_json(data):
         'disliked_foods': data.get('dislikedFoods'),
         'favourite_cuisines': data.get('favouriteCuisines'),
         'religious_constraint': data.get('religiousConstraint'),
-        'dietary_constraint': data.get('dietaryConstraint')
+        'dietary_constraint': data.get('dietaryConstraint'),
+        'snacks': data.get('snacks'),
+        'breakfasts': data.get('breakfasts')
     }
 
 
@@ -39,7 +41,8 @@ def process_user_data(db, user_id, extract_data):
         user_id, extract_data['religious_constraint'])
     db.insert_or_update_user_dietary_constraint(
         user_id, extract_data['dietary_constraint'])
-
+    db.update_user_prefered_snacks(user_id, extract_data['snacks'])
+    db.update_user_prefered_breakfasts(user_id, extract_data['breakfasts'])
 
 def create_data_input_for_auto_gen_meal_plan(db, user_id):
     dietary_constraints = db.retrieve_user_dieatary_constraints(user_id)

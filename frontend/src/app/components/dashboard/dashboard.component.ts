@@ -5,12 +5,13 @@ import { ShoppingList } from '../dialogues/shopping-list/shopping-list.interface
 import { ShoppingListComponent } from './../dialogues/shopping-list/shopping-list.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
-import { activityLevels, genders } from '../landing/form-values';
+import { activityLevels, genders, healthGoals } from '../landing/form-values';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GeneratePopUpComponent } from '../dialogues/generate-pop-up/generate-pop-up.component';
 import { NutritionChartComponent } from '../dialogues/nutrition-chart/nutrition-chart.component';
 import { environment } from 'src/environments/environment';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ import { environment } from 'src/environments/environment';
 export class DashboardComponent implements OnInit {
   user: any;
   userName: string = '';
+  email: string = '';
   selected_unit: string = '';
   subscriptionType: string | null = null;
   hasSubscription: boolean = false;
@@ -77,6 +79,14 @@ export class DashboardComponent implements OnInit {
       value: '',
       options: activityLevels,
     },
+    {
+      name: 'Health Goal',
+      placeholder: 'Select your health goal',
+      type: 'health_goal',
+      error: '',
+      value: '',
+      options: healthGoals,
+    },
   ];
 
   shoppingListData: ShoppingList[] = [
@@ -120,49 +130,37 @@ export class DashboardComponent implements OnInit {
     private overlay: Overlay,
     private router: Router,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private usersService: UsersService,
+    private toast: HotToastService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.showSubscriptionStatus();
-    await this.getProfileData();
-    await this.sendProfileData();
+    this.usersService.loadCachedUserProfile();
+    this.usersService.profile$.subscribe((user) => {
+      if (user) {
+        this.prefillProfileInfo(user);
+      }
+    });
   }
 
-  async getProfileData() {
-    try {
-      const data: any = await this.http
-        .get(
-          `${environment.baseUrl}/api/landing/profile/${localStorage.getItem(
-            'uid'
-          )}`
-        )
-        .toPromise();
-
-      console.log('data is:', data);
-      this.user = data;
-      this.prefillProfileInfo(this.user);
-      this.userName = this.user.user_name;
-      this.selected_unit = this.user.selected_unit;
-    } catch (error) {
-      console.error(error);
-    }
-  }
   async sendProfileData() {
     const userId = localStorage.getItem('uid');
-    console.log('uid got:', userId);
     if (!userId) {
       console.error('User ID not found');
       return;
     }
     const profileData = this.Profile_info.reduce((acc, info) => {
-      acc[info.type] = info.value;
+      acc[info.type] = info.value ?? '';
       return acc;
-    }, {} as { [key: string]: string | null });
+    }, {} as { [key: string]: string | number | null });
     if (userId) {
       profileData['user_id'] = userId;
+      profileData['selected_unit'] = JSON.parse(
+        localStorage.getItem('userProfile') || '{}'
+      ).selected_unit;
     }
-
     console.log('profiledata is:', profileData);
 
     try {
@@ -173,7 +171,8 @@ export class DashboardComponent implements OnInit {
           profileData
         )
         .toPromise();
-      console.log('Profile updated successfully:', response);
+      console.log(response);
+      this.usersService.updateLocalUserProfile(profileData);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -181,11 +180,13 @@ export class DashboardComponent implements OnInit {
 
   prefillProfileInfo(data: any) {
     this.Profile_info = this.Profile_info.map((info) => {
-      if (data[info.type]) {
-        return { ...info, value: data[info.type] };
-      }
-      return info;
+      return {
+        ...info,
+        value: data[info.type] ?? info.value,
+      };
     });
+    this.userName = data.user_name;
+    this.selected_unit = data.selected_unit;
   }
 
   getSuffix(type: string): string {
@@ -270,41 +271,39 @@ export class DashboardComponent implements OnInit {
   }
 
   showSubscriptionStatus(): void {
-  const subscriptionTypeId = localStorage.getItem('subscription_type_id');
+    const subscriptionTypeId = localStorage.getItem('subscription_type_id');
 
-  switch (subscriptionTypeId) {
-    case '1': // free trial
-      this.hasSubscription = false;
-      this.subscriptionType = 'none';
-      break;
-    case '2': // paid trial
-      this.hasSubscription = true;
-      this.subscriptionType = 'trial';
-      break;
-    case '3':
-      this.hasSubscription = true;
-      this.subscriptionType = 'monthly';
-      break;
-    case '4':
-      this.hasSubscription = true;
-      this.subscriptionType = 'quarterly';
-      break;
-    case '5':
-      this.hasSubscription = true;
-      this.subscriptionType = 'yearly';
-      break;
-    default:
-      this.hasSubscription = false;
-      this.subscriptionType = null;
-      break;
+    switch (subscriptionTypeId) {
+      case '1': // free trial
+        this.hasSubscription = false;
+        this.subscriptionType = 'none';
+        break;
+      case '2': // paid trial
+        this.hasSubscription = true;
+        this.subscriptionType = 'trial';
+        break;
+      case '3':
+        this.hasSubscription = true;
+        this.subscriptionType = 'monthly';
+        break;
+      case '4':
+        this.hasSubscription = true;
+        this.subscriptionType = 'quarterly';
+        break;
+      case '5':
+        this.hasSubscription = true;
+        this.subscriptionType = 'yearly';
+        break;
+      default:
+        this.hasSubscription = false;
+        this.subscriptionType = null;
+        break;
+    }
   }
-}
-
 
   logout() {
     this.authService.logout().subscribe(() => {
-      localStorage.removeItem('email');
-      localStorage.removeItem('uid');
+      this.toast.success('You have been logged out.');
       this.router.navigate(['/']);
     });
   }
