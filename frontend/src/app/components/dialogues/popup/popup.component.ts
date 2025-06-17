@@ -38,11 +38,10 @@ export class PopupComponent implements OnInit {
       return;
     }
 
-    const stored = localStorage.getItem('subscription_type_id');
+    const stored = JSON.parse(localStorage.getItem('userProfile') || '{}').subscription_type_id;
     this.userSubscriptionTypeId = stored ? Number(stored) : 0;
 
     this.checkPopupStatus();
-    console.log('subscription type ID:', this.userSubscriptionTypeId);
   }
 
   checkPopupStatus() {

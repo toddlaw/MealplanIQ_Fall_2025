@@ -30,7 +30,14 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    localStorage.clear();
+    // Remove item respectively to save acceptedTac
+    localStorage.removeItem("email")
+    localStorage.removeItem("uid")
+    localStorage.removeItem("userProfile")
+    localStorage.removeItem("userPreference")
+    localStorage.removeItem("minDate")
+    localStorage.removeItem("maxDate")
+    localStorage.removeItem("subscription_type_id")
     return from(this.auth.signOut());
   }
 }

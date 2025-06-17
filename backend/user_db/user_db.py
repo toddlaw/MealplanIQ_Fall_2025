@@ -448,7 +448,8 @@ class DatabaseManager:
                 "activity_level": result[5],
                 "gender": result[6],
                 "selected_unit": result[7],
-                "health_goal": result[8]
+                "health_goal": result[8],
+                "subscription_type_id": self.retrieve_user_subscription_type_id(user_id)
             }
             preference = {
                 "allergies": self.retrieve_user_allergies(user_id),
@@ -863,6 +864,16 @@ class DatabaseManager:
         result = cursor.fetchall()
         return result
 
+    def retrieve_user_subscription_type_id(self, user_id):
+        cursor = self.db.cursor()
+        sql = """
+        SELECT subscription_type_id
+        FROM user_subscription
+        WHERE user_id = %s
+        """
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return result[0] if result else None
 
 # ------------------- Validate User ----------------------
 

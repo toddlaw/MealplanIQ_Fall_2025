@@ -73,8 +73,8 @@ export class LandingComponent implements OnInit {
   formatDate(date: string): string {
     const [year, month, day] = date.split('-').map(Number);
     const localDate = new Date(year, month - 1, day);
-    console.log('Original Date:', date);
-    console.log('Local Date (Corrected):', localDate.toLocaleString());
+    // console.log('Original Date:', date);
+    // console.log('Local Date (Corrected):', localDate.toLocaleString());
 
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -196,24 +196,12 @@ export class LandingComponent implements OnInit {
     });
 
     if (localStorage.getItem('uid')) {
-      try {
-        const response: any = await this.http
-          .get(
-            `${
-              environment.baseUrl
-            }/api/subscription_type_id/${localStorage.getItem('uid')}`
-          )
-          .toPromise();
-        if (response.subscription_type_id) {
-          localStorage.setItem(
-            'subscription_type_id',
-            response.subscription_type_id
-          ); // 1: free trial, 2: paid trial, 3: monthly, 4: quarterly, 5: yearly
-          this.userSubscriptionTypeId = response.subscription_type_id;
-        }
-      } catch (error) {
-        console.error('Error:', error);
+      // 1: free trial, 2: paid trial, 3: monthly, 4: quarterly, 5: yearly
+      const parsed = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      if (!parsed) {
+        this.userSubscriptionTypeId = 1;
       }
+      this.userSubscriptionTypeId = parsed.subscription_type_id;
     } else {
       this.userSubscriptionTypeId = 0;
     }
@@ -223,16 +211,18 @@ export class LandingComponent implements OnInit {
       this.usersService.loadCachedUserProfile();
       this.usersService.profile$.subscribe((user) => {
         if (user) {
-          this.people[0].age = Number(user.age);
-          this.people[0].weight = Number(user.weight);
-          this.people[0].height = Number(user.height);
-          this.people[0].gender = user.gender;
-          this.people[0].activityLevel = user.activity_level;
+          this.people[0].age = Number(user.age) || undefined;
+          this.people[0].weight = Number(user.weight) || undefined;
+          this.people[0].height = Number(user.height) || undefined;
+          this.people[0].gender = user.gender || undefined;
+          this.people[0].activityLevel = user.activity_level || undefined;
           this.selectedUnit = user.selected_unit || 'metric';
-          this.selectedHealthGoal = user.health_goal;
-          this.selectedHealthGoalIndex = this.healthGoals.findIndex(
-            (goal) => goal.value === user.health_goal
-          );
+          if (user.health_goal) {
+            this.selectedHealthGoal = user.health_goal;
+            this.selectedHealthGoalIndex = this.healthGoals.findIndex(
+              (goal) => goal.value === user.health_goal
+            );
+          }
         }
       });
       this.usersService.preference$.subscribe((user) => {
@@ -1376,7 +1366,8 @@ export class LandingComponent implements OnInit {
       activity_level: data.people[0].activityLevel,
       health_goal: data.healthGoal,
       selected_unit: data.selectedUnit,
-      user_id: localStorage.getItem('uid')
+      user_id: localStorage.getItem('uid'),
+      subscription_type_id: this.userSubscriptionTypeId,
     };
 
     const localPreference = {

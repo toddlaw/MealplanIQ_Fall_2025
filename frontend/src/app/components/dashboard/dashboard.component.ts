@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   email: string = '';
   selected_unit: string = '';
   subscriptionType: string | null = null;
+  subscriptionTypeId: number | null = null;
   hasSubscription: boolean = false;
 
   Profile_info = [
@@ -32,14 +33,14 @@ export class DashboardComponent implements OnInit {
       placeholder: 'Enter your name',
       type: 'user_name',
       error: '',
-      value: '',
+      value: null,
     },
     {
       name: 'Email',
       placeholder: 'Enter your email',
       type: 'email',
       error: '',
-      value: '',
+      value: null,
       readonly: true,
     },
     {
@@ -47,14 +48,14 @@ export class DashboardComponent implements OnInit {
       placeholder: 'Enter your age',
       type: 'age',
       error: '',
-      value: '',
+      value: null,
     },
     {
       name: 'Gender',
       placeholder: 'Select your gender',
       type: 'gender',
       error: '',
-      value: '',
+      value: null,
       options: genders,
     },
     {
@@ -62,21 +63,21 @@ export class DashboardComponent implements OnInit {
       placeholder: 'Enter your height',
       type: 'height',
       error: '',
-      value: '',
+      value: null,
     },
     {
       name: 'Weight',
       placeholder: 'Enter your weight',
       type: 'weight',
       error: '',
-      value: '',
+      value: null,
     },
     {
       name: 'Activity Level',
       placeholder: 'Select your activity level',
       type: 'activity_level',
       error: '',
-      value: '',
+      value: null,
       options: activityLevels,
     },
     {
@@ -84,7 +85,7 @@ export class DashboardComponent implements OnInit {
       placeholder: 'Select your health goal',
       type: 'health_goal',
       error: '',
-      value: '',
+      value: null,
       options: healthGoals,
     },
   ];
@@ -136,13 +137,13 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.showSubscriptionStatus();
     this.usersService.loadCachedUserProfile();
     this.usersService.profile$.subscribe((user) => {
       if (user) {
         this.prefillProfileInfo(user);
       }
     });
+    this.showSubscriptionStatus();
   }
 
   async sendProfileData() {
@@ -151,15 +152,22 @@ export class DashboardComponent implements OnInit {
       console.error('User ID not found');
       return;
     }
+
+    const hasEmptyField = this.Profile_info.some(
+      (info) => info.value === null || info.value === ''
+    )
+    if (hasEmptyField) {
+      this.toast.error("Please fill out all fields before saving.")
+      return
+    }
+
     const profileData = this.Profile_info.reduce((acc, info) => {
       acc[info.type] = info.value ?? '';
       return acc;
     }, {} as { [key: string]: string | number | null });
     if (userId) {
       profileData['user_id'] = userId;
-      profileData['selected_unit'] = JSON.parse(
-        localStorage.getItem('userProfile') || '{}'
-      ).selected_unit;
+      profileData['selected_unit'] = JSON.parse(localStorage.getItem('userProfile') || '{}').selected_unit ?? 'imperial'
     }
     console.log('profiledata is:', profileData);
 
@@ -172,9 +180,12 @@ export class DashboardComponent implements OnInit {
         )
         .toPromise();
       console.log(response);
+      this.toast.success('Your profile has saved.');
+      profileData['subscription_type_id'] = this.subscriptionTypeId;
       this.usersService.updateLocalUserProfile(profileData);
     } catch (error) {
       console.error('Error updating profile:', error);
+      this.toast.error("Something's wrong!");
     }
   }
 
@@ -187,13 +198,14 @@ export class DashboardComponent implements OnInit {
     });
     this.userName = data.user_name;
     this.selected_unit = data.selected_unit;
+    this.subscriptionTypeId = JSON.parse(localStorage.getItem('userProfile') || '{}').subscription_type_id ?? '1';
   }
 
   getSuffix(type: string): string {
     if (type === 'weight') {
-      return this.selected_unit === 'imperial' ? 'lbs' : 'kg';
+      return this.selected_unit === 'metric' ? 'kg' : 'lbs';
     } else if (type === 'height') {
-      return this.selected_unit === 'imperial' ? 'in' : 'cm';
+      return this.selected_unit === 'metric' ? 'cm' : 'in';
     }
     return '';
   }
@@ -221,12 +233,11 @@ export class DashboardComponent implements OnInit {
 
   manageSubscription() {
     const user_id = localStorage.getItem('uid');
-    const subscription_type_id = localStorage.getItem('subscription_type_id');
-    const validSubscribedTypes = ['2', '3', '4', '5'];
+    const validSubscribedTypes = [2, 3, 4, 5];
 
     if (
-      !subscription_type_id ||
-      !validSubscribedTypes.includes(subscription_type_id)
+      !this.subscriptionTypeId ||
+      !validSubscribedTypes.includes(this.subscriptionTypeId)
     ) {
       this.openDialog(
         "You're currently not subscribed.",
@@ -271,26 +282,24 @@ export class DashboardComponent implements OnInit {
   }
 
   showSubscriptionStatus(): void {
-    const subscriptionTypeId = localStorage.getItem('subscription_type_id');
-
-    switch (subscriptionTypeId) {
-      case '1': // free trial
+    switch (this.subscriptionTypeId) {
+      case 1: // free trial
         this.hasSubscription = false;
         this.subscriptionType = 'none';
         break;
-      case '2': // paid trial
+      case 2: // paid trial
         this.hasSubscription = true;
         this.subscriptionType = 'trial';
         break;
-      case '3':
+      case 3:
         this.hasSubscription = true;
         this.subscriptionType = 'monthly';
         break;
-      case '4':
+      case 4:
         this.hasSubscription = true;
         this.subscriptionType = 'quarterly';
         break;
-      case '5':
+      case 5:
         this.hasSubscription = true;
         this.subscriptionType = 'yearly';
         break;
