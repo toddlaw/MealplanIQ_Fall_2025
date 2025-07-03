@@ -44,7 +44,8 @@ def process_user_data(db, user_id, extract_data):
     db.update_user_prefered_snacks(user_id, extract_data['snacks'])
     db.update_user_prefered_breakfasts(user_id, extract_data['breakfasts'])
 
-def create_data_input_for_auto_gen_meal_plan(db, user_id):
+# Return the dictionary that is used as input for gen_meal_plan for email scheduler
+def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date):
     dietary_constraints = db.retrieve_user_dieatary_constraints(user_id)
     if not dietary_constraints:
         dietary_constraint = None
@@ -67,7 +68,7 @@ def create_data_input_for_auto_gen_meal_plan(db, user_id):
     disliked_foods = db.retrieve_user_disliked_food(user_id)
     favourite_cuisines = db.retrieve_user_favourite_cuisines(user_id)
     allergies = db.retrieve_user_allergies(user_id)
-    min_date = _get_min_and_max_date_from_the_last_date(db, user_id)[0]
+    min_date = start_date
     max_date = _get_min_and_max_date_from_the_last_date(db, user_id)[1]
     included_recipes = []
     excluded_recipes = []
