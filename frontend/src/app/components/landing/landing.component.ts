@@ -450,7 +450,7 @@ export class LandingComponent implements OnInit {
       if (
         this.PAID_SUBSCRIPTION_TYPES.includes(this.userSubscriptionTypeId) ||
         (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) || // non-signed user
-        this.userSubscriptionTypeId === 1 // TODO: Replace this line with the one below before production
+        (this.userSubscriptionTypeId === 1)
         // (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
       ) {
         this.element.nativeElement.style.display = 'block';
