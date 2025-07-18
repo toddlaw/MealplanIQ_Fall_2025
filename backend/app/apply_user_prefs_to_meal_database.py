@@ -27,7 +27,8 @@ def apply_user_prefs(fav_cuisines, diet_contraint, religious_constraint, liked_f
         lambda row: calculate_scores(row, fav_cuisines, diet_restrictions, religious_restrictions, liked_foods, disliked_foods,
                                      restrictions_for_allergies),
         axis=1)
-    print("-----------returned recipes", recipes)
+    # print("-----------returned recipes before removing 0 fit-to-preference score\n", recipes)
+    # recipes = recipes[recipes['score'] > 0]
 
     return recipes
 
@@ -103,10 +104,10 @@ def get_diet_restrictions(diet_constraint):
     """
     diet_restrictions = {
         'vegan': ['beef', 'chicken', 'pork', 'bacon', 'ham', 'lamb', 'goat', 'turkey', 'pigeon', 'rabbit', 'squirrel', 'camel',
-                  'deer', 'kangaroo' 'salmon', 'fish', 'tuna', 'lobster', 'crab', 'oyster', 'mussel', 'scallop', 'shrimp', 'egg',
-                  'milk', 'cheese', 'yogurt', 'cream', 'butter'],
+                  'deer', 'kangaroo' 'salmon', 'fish', 'tuna', 'lobster', 'crab', 'oyster', 'mussel', 'scallop', 'shrimp', 'egg', 
+                  'eggs', 'egg yolk', 'egg white', 'milk', 'cheese', 'yogurt', 'cream', 'butter'],
         'pescatarian': ['beef', 'chicken', 'pork', 'bacon', 'ham', 'lamb', 'goat', 'turkey', 'pigeon', 'rabbit', 'squirrel',
-                        'camel', 'deer', 'kangaroo', 'egg', 'milk', 'cheese', 'yogurt', 'cream', 'butter'],
+                        'camel', 'deer', 'kangaroo', 'egg', 'eggs', 'egg yolk', 'egg white', 'milk', 'cheese', 'yogurt', 'cream', 'butter'],
         'vegetarian': ['pigeon', 'lobster', 'oyster', 'kangaroo', 'shrimp', 'ham', 'turkey', 'beef', 'lamb', 'camel', 'squirrel',
                        'chicken', 'salmon', 'fish', 'bacon', 'goat', 'deer', 'pork', 'crab', 'butter', 'mussel', 'tuna', 'rabbit',
                        'scallop'],
@@ -146,7 +147,7 @@ def get_restrictions_for_allergies(allergies):
         'tree nut': ['almond', 'almonds', 'cashew', 'cashews', 'chestnut', 'chestnuts', 'hazelnut', 'hazelnuts', 'macadamia',
                      'macadamias', 'pecan', 'pecans', 'pine nut', 'pine nuts', 'pistachio', 'pistachios', 'walnut', 'walnuts'],
         'dairy': ['milk', 'cheese', 'yogurt', 'cream', 'butter'],
-        'egg': ['egg', 'eggs'],
+        'egg': ['egg', 'eggs', 'egg yolk', 'egg white'],
         'gluten': ['wheat', 'bread', 'pasta', 'noodles', 'noodle', 'couscous', 'cereal', 'flour', 'breadcrumbs', 'breadcrumbs'
                    'cracker', 'crackers'],
         'grain': ['wheat', 'barley', 'rye', 'rice', 'oats', 'oat' 'corn', 'bread', 'pasta', 'noodles', 'couscous', 'cereal',
