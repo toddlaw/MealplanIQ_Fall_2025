@@ -31,7 +31,7 @@ SERVICE_ACCOUNT_INFO = json.loads(SERVICE_ACCOUNT_JSON)
 
 credentials = service_account.Credentials.from_service_account_info(
   SERVICE_ACCOUNT_INFO,
-  scopes=['https://mail.google.com/'],
+  scopes=['https://www.googleapis.com/auth/gmail.send'],
   subject=os.getenv('SENDER_EMAIL')
 )
 
@@ -69,7 +69,7 @@ def send_weekly_email_by_google_scheduler(db):
 
 def create_and_send_maizzle_email_test(response, user_id, db):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
-    to_email = db.retrieve_user_email(user_id)
+    to_email = "ekska21@gmail.com"
     user_name = db.retrieve_user_name(user_id)
 
     root_path = app.root_path
