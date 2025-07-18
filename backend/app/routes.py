@@ -169,10 +169,11 @@ def receive_data():
                     "traceback": error_traceback}
         print(f"Failed to generate meal plan: {str(e)}\nTraceback: {error_traceback}")
 
-    try:
-        create_and_send_maizzle_email_test(response, user_id, db)
-    except Exception as e:
-        print(f"Failed to send email: {str(e)}")
+    if user_id is not None:
+        try:
+            create_and_send_maizzle_email_test(response, user_id, db)
+        except Exception as e:
+            print(f"Failed to send email: {str(e)}")
     return jsonify(response)
 
 
