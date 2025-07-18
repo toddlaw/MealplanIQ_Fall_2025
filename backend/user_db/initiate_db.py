@@ -26,10 +26,7 @@ class DatabaseSchemaManager:
         self.create_user_snack_preferences()
     
         self.create_meal_plans()
-        self.create_meal_plan_breakfasts()
-        self.create_meal_plan_lunches()
-        self.create_meal_plan_snacks()
-        self.create_meal_plan_dinners()
+        self.create_nutrition_plans()
 
         self.create_and_populate_subscription_status_table()
         self.create_user_subscription_table()
@@ -395,6 +392,12 @@ class DatabaseSchemaManager:
             user_id VARCHAR(255),
             created_at DATE,
             used_at DATE,
+            breakfast INTEGER[],
+            snack_1 INTEGER,
+            lunch INTEGER[],
+            snack_2 INTEGER,
+            dinner INTEGER[],
+            snack_3 INTEGER,
             FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
         );
         """
@@ -408,106 +411,81 @@ class DatabaseSchemaManager:
         finally:
             cursor.close()
 
-    def create_meal_plan_breakfasts(self):
+    def create_nutrition_plans(self):
         cursor = self.db.cursor()
         create_table_sql = """
-        CREATE TABLE IF NOT EXISTS meal_plan_breakfasts (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            meal_plan_id INTEGER,
-            item_id INTEGER,
-            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
+        CREATE TABLE user_weekly_nutrition (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            start_date DATE NOT NULL,
+            end_date DATE NOT NULL,
+
+            energy_kcal_actual FLOAT,
+            energy_kcal_target FLOAT,
+            fiber_g_actual FLOAT,
+            fiber_g_target FLOAT,
+            carbohydrates_g_actual FLOAT,
+            carbohydrates_g_target FLOAT,
+            protein_g_actual FLOAT,
+            protein_g_target FLOAT,
+            fats_g_actual FLOAT,
+            fats_g_target FLOAT,
+            calcium_mg_actual FLOAT,
+            calcium_mg_target FLOAT,
+            sodium_mg_actual FLOAT,
+            sodium_mg_target FLOAT,
+            copper_mg_actual FLOAT,
+            copper_mg_target FLOAT,
+            fluoride_mg_actual FLOAT,
+            fluoride_mg_target FLOAT,
+            iron_mg_actual FLOAT,
+            iron_mg_target FLOAT,
+            magnesium_mg_actual FLOAT,
+            magnesium_mg_target FLOAT,
+            manganese_mg_actual FLOAT,
+            manganese_mg_target FLOAT,
+            potassium_mg_actual FLOAT,
+            potassium_mg_target FLOAT,
+            selenium_ug_actual FLOAT,
+            selenium_ug_target FLOAT,
+            zinc_mg_actual FLOAT,
+            zinc_mg_target FLOAT,
+            vitamin_a_iu_actual FLOAT,
+            vitamin_a_iu_target FLOAT,
+            thiamin_mg_actual FLOAT,
+            thiamin_mg_target FLOAT,
+            riboflavin_mg_actual FLOAT,
+            riboflavin_mg_target FLOAT,
+            niacin_mg_actual FLOAT,
+            niacin_mg_target FLOAT,
+            vitamin_b5_mg_actual FLOAT,
+            vitamin_b5_mg_target FLOAT,
+            vitamin_b6_mg_actual FLOAT,
+            vitamin_b6_mg_target FLOAT,
+            vitamin_b12_ug_actual FLOAT,
+            vitamin_b12_ug_target FLOAT,
+            folate_ug_actual FLOAT,
+            folate_ug_target FLOAT,
+            vitamin_c_mg_actual FLOAT,
+            vitamin_c_mg_target FLOAT,
+            vitamin_d_iu_actual FLOAT,
+            vitamin_d_iu_target FLOAT,
+            vitamin_e_mg_actual FLOAT,
+            vitamin_e_mg_target FLOAT,
+            choline_mg_mg_actual FLOAT,
+            choline_mg_mg_target FLOAT,
+            vitamin_k_ug_actual FLOAT,
+            vitamin_k_ug_target FLOAT,
         );
+
         """
         try:
             cursor.execute(create_table_sql)
             self.db.commit()
-            print("meal_plan_breakfasts table created successfully.")
+            print("user_weekly_nutrition table created successfully.")
         except pymysql.Error as e:
             self.db.rollback()
-            print(f"Error creating meal_plan_breakfasts table: {e}")
-        finally:
-            cursor.close()
-
-    def create_meal_plan_lunches(self):
-        cursor = self.db.cursor()
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS meal_plan_lunches (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            meal_plan_id INTEGER,
-            item_id INTEGER,
-            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
-        );
-        """
-        try:
-            cursor.execute(create_table_sql)
-            self.db.commit()
-            print("meal_plan_lunches table created successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error creating meal_plan_lunches table: {e}")
-        finally:
-            cursor.close()
-
-    def create_meal_plan_snacks(self):
-        cursor = self.db.cursor()
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS meal_plan_snacks (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            meal_plan_id INTEGER,
-            item_id INTEGER,
-            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
-        );
-        """
-        try:
-            cursor.execute(create_table_sql)
-            self.db.commit()
-            print("meal_plan_snacks table created successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error creating meal_plan_snacks table: {e}")
-        finally:
-            cursor.close()
-
-    def create_meal_plan_dinners(self):
-        cursor = self.db.cursor()
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS meal_plan_dinners (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            meal_plan_id INTEGER,
-            item_id INTEGER,
-            FOREIGN KEY(meal_plan_id) REFERENCES user_meal_plans(id)
-        );
-        """
-        try:
-            cursor.execute(create_table_sql)
-            self.db.commit()
-            print("meal_plan_dinners table created successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error creating meal_plan_dinners table: {e}")
-        finally:
-            cursor.close()
-
-
-    def create_breafasts_table(self):
-        cursor = self.db.cursor()
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS user_meal_plans (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id VARCHAR(255),
-            created_at DATE,
-            used_at DATE,
-            PRIMARY KEY(id),
-            FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
-        );
-        """
-        try:
-            cursor.execute(create_table_sql)
-            self.db.commit()
-            print("user_meal_plans table created successfully.")
-        except pymysql.Error as e:
-            self.db.rollback()
-            print(f"Error creating user_meal_plans table: {e}")
+            print(f"Error creating user_weekly_nutrition table: {e}")
         finally:
             cursor.close()
 
