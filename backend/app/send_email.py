@@ -17,10 +17,14 @@ from app.generate_meal_plan import (
 )
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 from email.mime.text import MIMEText
-from flask import Flask, render_template_string
+from flask import Flask, render_template, render_template_string
 import subprocess
 import json
 import time
+from app.shopping_list_utils import (
+    transform_meal_plan_to_shopping_list,
+    process_and_categorize_shopping_list
+)
 
 from user_db.user_db import instantiate_database
 
@@ -77,10 +81,21 @@ def create_and_send_maizzle_email_test(response, user_id, db):
     templates_path = os.path.join(root_path, "emailTemplates")
     subject = f"Your personalized Meal Plan is Ready, {user_name}!"
     response["user_name"] = user_name
+    
+    # Transform & aggregate raw shopping list data
+    raw_list = transform_meal_plan_to_shopping_list(response)
+    ordered_categories, categorized_map = process_and_categorize_shopping_list(raw_list)
 
     with app.app_context():
+        shopping_list_template = render_template_string(
+            open(templates_path + "/shoppingList.html").read(), 
+            ordered_categories=ordered_categories,
+            categorized_map=categorized_map
+        )
+        
         email_template = render_template_string(
-            open(templates_path + "/content.html").read(), **response
+            open(templates_path + "/content.html").read(), **response,
+            shopping_list_html=shopping_list_template
         )
 
         message = create_message(
