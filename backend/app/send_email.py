@@ -1,6 +1,7 @@
 import os
 import base64
 import datetime
+from datetime import datetime, timedelta
 from sched import scheduler
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -65,17 +66,21 @@ def send_message(service, user_id, message):
 
 
 def send_weekly_email_by_google_scheduler(db):
-    today = datetime.datetime.today().strftime("%A")
-    user_ids_emails = db.retrieve_user_id_and_emails_by_last_meal_plan_date(today)
-    for user_id, email in user_ids_emails:
-        create_and_send_maizzle_email_test(db, user_id)
+    today = datetime.today()
+    start_date = today + timedelta(days=1)
+    end_date = start_date + timedelta(days=6)
+
+    start_str = start_date.strftime('%Y-%m-%d')
+    end_str = end_date.strftime('%Y-%m-%d')
+
+def send_daily_email_by_google_scheduler(db):
+    today = datetime.today()
+    start_str = today.strftime('%Y-%m-%d')
 
 
-def create_and_send_maizzle_email_test(response, user_id, db):
+def create_and_send_maizzle_weekly_email_test(response, user_name, start_date, end_date):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = "ohjeoung5224@gmail.com"
-    user_name = db.retrieve_user_name(user_id)
-
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
@@ -95,6 +100,41 @@ def create_and_send_maizzle_email_test(response, user_id, db):
         
         email_template = render_template_string(
             open(templates_path + "/content.html").read(), **response,
+            shopping_list_html=shopping_list_template
+        )
+
+        message = create_message(
+            sender_email, to_email, subject, email_template, True
+        )
+        msg = send_message(service_gmail, "me", message)
+        print(msg)
+
+
+def create_and_send_maizzle_daily_email_test(response, user_name, sent_date):
+    sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
+    to_email = "ohjeoung5224@gmail.com"
+
+    root_path = app.root_path
+
+    templates_path = os.path.join(root_path, "emailTemplates")
+    subject = f"Your personalized Meal Plan is Ready, {user_name}!"
+    response["user_name"] = user_name
+    
+    # Transform & aggregate raw shopping list data
+    raw_list = transform_meal_plan_to_shopping_list(response)
+    ordered_categories, categorized_map = process_and_categorize_shopping_list(raw_list)
+
+    with app.app_context():
+        shopping_list_template = render_template_string(
+            open(templates_path + "/shoppingList.html").read(), 
+            ordered_categories=ordered_categories,
+            categorized_map=categorized_map
+        )
+        
+        email_template = render_template_string(
+            open(templates_path + "/daily.html").read(), 
+            **response,
+            sent_date=sent_date,
             shopping_list_html=shopping_list_template
         )
 
