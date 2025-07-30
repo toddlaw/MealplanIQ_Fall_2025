@@ -110,13 +110,13 @@
                             ">
                           Checkout your meal plan
                           <br />
-                          for {{ days[0].date_weekday }}
+                          for {{ sent_date }}
                         </p>
                         <div role="separator" class="sm-leading-8" style="line-height: 64px">
                           &zwj;
                         </div>
                         <div>
-                          <a href="http://localhost:4200//meal-plan" style="
+                          <a href="http://localhost:4200/meal-plan?date={{sent_date}}" style="
                                 display: inline-block;
                                 border-radius: 4px;
                                 background-color: #88a56f;
@@ -152,7 +152,7 @@
               <tr style="color: #000000">
                 <td>
                   <h2 style="margin-top: 96px; text-align: center">
-                    Your meal plan for {{ days[0].date_weekday }} to {{ days[-1].date_weekday }}
+                    Your meal plan for {{ sent_date }}
                   </h2>
                 </td>
               </tr>
