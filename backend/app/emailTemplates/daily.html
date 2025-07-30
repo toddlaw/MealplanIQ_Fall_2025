@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="supported-color-schemes" />
+  <title>MealPanIQ Weekly Update</title>
+  <style>
+    @media (max-width: 600px) {
+      .sm-w-1 {
+        width: 4px !important;
+      }
+
+      .sm-w-full {
+        width: 100% !important;
+      }
+
+      .sm-px-0 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+
+      .sm-px-4 {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+
+      .sm-px-6 {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+      }
+
+      .sm-text-2xl {
+        font-size: 24px !important;
+      }
+
+      .sm-text-sm {
+        font-size: 14px !important;
+      }
+
+      .sm-leading-10 {
+        line-height: 40px !important;
+      }
+
+      .sm-leading-8 {
+        line-height: 32px !important;
+      }
+    }
+  </style>
+</head>
+
+<body style="
+      margin: 0;
+      width: 100%;
+      background-color: #fcf8f2;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      word-break: break-word;
+    ">
+
+  <div role="article" aria-roledescription="email" aria-label="MealPanIQ Weekly Update" lang="en">
+    <div class="sm-px-4" style="
+          font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+            sans-serif;
+        ">
+      <table align="center" cellpadding="0" cellspacing="0" role="none">
+        <tr>
+          <td style="width: 650px; max-width: 100%">
+            <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
+              <!-- content start -->
+
+              <!-- banner start -->
+
+              <tr>
+                <td style="
+                      border-radius: 4px;
+                      background-size: cover;
+                      background-position: top;
+                      background-repeat: no-repeat;
+                      text-align: left;
+                      background-image: url('https://images.unsplash.com/photo-1505682750263-f3f9e519c565?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                    ">
+                  <!--[if mso]>
+    <v:rect stroke="f" fillcolor="none" style="width: 600px" xmlns:v="urn:schemas-microsoft-com:vml">
+    <v:fill type="frame" src="undefined" />
+    <v:textbox inset="0,0,0,0" style="mso-fit-shape-to-text: true"><div><![endif]-->
+                  <div role="separator" class="sm-leading-8" style="line-height: 64px">
+                    &zwj;
+                  </div>
+                  <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
+                    <tr>
+                      <td class="sm-w-1" style="width: 8px"></td>
+                      <td style="width: 80%">
+                        <h1 class="sm-text-2xl sm-leading-10" style="
+                              margin: 0 0 16px;
+                              font-size: 36px;
+                              color: #ffffff;
+                            ">
+                          Hi {{ user_name }}!
+                        </h1>
+                        <p class="sm-text-sm" style="
+                              margin: 0;
+                              font-size: 16px;
+                              line-height: 24px;
+                              color: #ffffff;
+                            ">
+                          Checkout your meal plan
+                          <br />
+                          for {{ days[0].date_weekday }}
+                        </p>
+                        <div role="separator" class="sm-leading-8" style="line-height: 64px">
+                          &zwj;
+                        </div>
+                        <div>
+                          <a href="https://mealplaniq-may-2024.uw.r.appspot.com" style="
+                                display: inline-block;
+                                border-radius: 4px;
+                                background-color: #88a56f;
+                                padding: 16px 24px;
+                                font-size: 16px;
+                                font-weight: 600;
+                                line-height: 1;
+                                color: #ffffff;
+                                text-decoration: none;
+                              ">
+                            <!--[if mso]>
+                                <i
+                                  style="
+                                    mso-font-width: 150%;
+                                    mso-text-raise: 30px;
+                                  "
+                                  hidden
+                                  >&emsp;</i
+                                >
+                              <![endif]-->
+                            <span style="mso-text-raise: 16px">
+                              Read more &rarr;
+                            </span>
+                            <!--[if mso]>
+                                <i hidden style="mso-font-width: 150%"
+                                  >&emsp;&#8203;</i
+                                >
+                              <![endif]-->
+                          </a>
+                        </div>
+                      </td>
+                      <td class="sm-w-1" style="width: 8px"></td>
+                    </tr>
+                  </table>
+                  <div role="separator" class="sm-leading-8" style="line-height: 64px">
+                    &zwj;
+                  </div>
+                  <!--[if mso]></div></v:textbox></v:rect><![endif]-->
+                </td>
+              </tr>
+              <tr role="separator">
+                <td style="line-height: 32px">&zwj;</td>
+              </tr>
+
+              <!-- banner end -->
+
+              <!-- meal plan start -->
+              <tr style="color: #000000">
+                <td>
+                  <h2 style="margin-top: 96px; text-align: center">
+                    Your meal plan for {{ days[0].date_weekday }} to {{ days[-1].date_weekday }}
+                  </h2>
+                </td>
+              </tr>
+
+              {% for day in days %}
+
+              <tr>
+                <td style="padding: 0; text-align: left; color: #000000">
+                  <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
+                    <tr>
+                      <td>
+                        <h3 style="font-size: 18px">
+                          {{ day.date_weekday }}
+                        </h3>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
+                          <tr>
+                            {% for recipe in day.recipes %}
+
+                            <td class="sm-px-0 sm-w-full" style="
+                                  display: inline-block;
+                                  padding-bottom: 16px;
+                                  padding-left: 32px;
+                                  width: 44%;
+                                  vertical-align: top;
+                                ">
+                              <table style="
+                                    width: 100%;
+                                    border-radius: 4px;
+                                    border-width: 1px;
+                                    background-color: #ffffff;
+                                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                                  " cellpadding="0" cellspacing="0" role="none">
+                                <tr>
+                                  <td style="
+                                        padding: 16px 16px 0;
+                                        text-align: center;
+                                      ">
+                                    <!-- <img
+                                        src="https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/{{ recipe.id }}.jpg"
+                                        alt="Image"
+                                        style="
+                                          max-width: 100%;
+                                          vertical-align: middle;
+                                          line-height: 1;
+                                          width: 100%;
+                                          text-align: center;
+                                        "
+                                      /> -->
+                                    <img
+                                      src="https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/{{ recipe.id }}.jpg"
+                                      alt="Image" style="
+                                          max-width: 100%;
+                                          vertical-align: middle;
+                                          line-height: 1;
+                                          width: 100%;
+                                          text-align: center;
+                                        " />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="
+                                        padding: 0 16px 16px;
+                                        font-size: 16px;
+                                        line-height: 8px;
+                                      ">
+                                    <h3 style="
+                                          font-size: 16px;
+                                          font-weight: 600;
+                                          display: -webkit-box;
+                                          -webkit-line-clamp: 2;
+                                          -webkit-box-orient: vertical;
+                                          overflow: hidden;
+                                          text-overflow: ellipsis;
+                                          line-height: 20px;
+                                        ">
+                                      {{ recipe.title }}
+                                    </h3>
+                                    <p style="
+                                          margin-bottom: 8px;
+                                          font-size: 14px;
+                                          line-height: 0;
+                                          color: #939393;
+                                          margin-top: -5px;
+                                        ">
+                                      {{ recipe.meal_name }}
+                                    </p>
+                                    <p style="
+                                          margin-top: 28px;
+                                          font-size: 16px;
+                                          line-height: 12px;
+                                        ">
+                                      Energy: {{ recipe.calories }} calories
+                                    </p>
+                                    <p style="
+                                          font-size: 16px;
+                                          line-height: 12px;
+                                        ">
+                                      Cuisine: {{ recipe.region }}
+                                    </p>
+
+                                    {% if recipe.prep_time %}
+                                    <p style="
+                                          font-size: 16px;
+                                          line-height: 12px;
+                                        ">
+                                      Prep time: {{ recipe.prep_time }}
+                                    </p>
+                                    {% else %}
+                                    <p style="
+                                          font-size: 16px;
+                                          line-height: 12px;
+                                        ">
+                                      Prep time: NA
+                                    </p>
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+
+                            {% endfor %}
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              {% endfor %}
+
+              <!-- meal plan end -->
+    </div>
+    <!-- footer start -->
+    <tr role="separator">
+      <td class="sm-leading-8" style="line-height: 64px">&zwj;</td>
+    </tr>
+    <tr>
+      <td class="sm-px-6" style="
+                      border-radius: 4px;
+                      background-color: #ffffff;
+                      padding: 16px 48px;
+                      text-align: center;
+                      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+                        0 1px 2px -1px rgba(0, 0, 0, 0.1);
+                    ">
+        <p style="
+                        margin: 0;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #939393;
+                      ">
+          <a href="https://mealplaniq-may-2024.uw.r.appspot.com" style="color: #88a56f">MealPlanIQ</a>
+          &copy; 2024 Galapagos Technologies Incorporated. <br />
+          All Rights Reserved.
+        </p>
+      </td>
+    </tr>
+    <tr role="separator">
+      <td style="line-height: 32px">&zwj;</td>
+    </tr>
+    <!-- footer ends -->
+    </table>
+    </td>
+    </tr>
+    </table>
+  </div>
+  </div>
+</body>
+
+</html>
