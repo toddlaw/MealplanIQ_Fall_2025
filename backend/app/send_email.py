@@ -73,7 +73,7 @@ def send_weekly_email_by_google_scheduler(db):
 
 def create_and_send_maizzle_email_test(response, user_id, db):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
-    to_email = "ekska21@gmail.com"
+    to_email = "ohjeoung5224@gmail.com"
     user_name = db.retrieve_user_name(user_id)
 
     root_path = app.root_path
