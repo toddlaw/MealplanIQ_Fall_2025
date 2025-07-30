@@ -59,6 +59,7 @@ import { IntroComponent } from './components/landing/intro/intro.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
 import { OutOfRangeDialogComponent } from './components/dialogues/out-of-range-dialog/out-of-range-dialog.component';
+import { MealPlanComponent } from './components/meal-plan/meal-plan.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { OutOfRangeDialogComponent } from './components/dialogues/out-of-range-d
     ForgotPasswordComponent,
     SearchDialogComponent,
     OutOfRangeDialogComponent,
+    MealPlanComponent,
   ],
   imports: [
     BrowserModule,
