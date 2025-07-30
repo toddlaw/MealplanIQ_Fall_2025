@@ -7,7 +7,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_email_test
+from app.send_email import create_and_send_maizzle_daily_email_test
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -145,18 +145,30 @@ def get_user_landing_page_profile(user_id):
     result = db.get_user_landing_page_profile(user_id)
     return result
 
+@app.route("/api/daily_email")
+def daily_meal_plan():
+    pass
+
+@app.route("/api/weekly_email")
+def weekly_meal_plan():
+    # Get the start date when this function is called by google scheduler
+        # ex) start date = today, end date = today + 7
+    # Create 7 days meal plan, passing db instance to argument
+        # ex) send_weekly_email_by_google_scheduler(db)
+    # pass the response and dates to create email function
+        # Currently, create_and_send_maizzle_weekly_email_test(response, user_id, db) in send_email.py
+    pass
+
 
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json
-    print("get data from frontend", data)
     db = instantiate_database()
     user_id = data["user_id"]  
     if user_id is not None:
         user_data = extract_user_profile_data_from_json(data, user_id)
         extract_data = extract_data_from_json(data)
         db.update_user_profile(**user_data)
-        print("EXTRACTED DATA:", extract_data)
         process_user_data(db, user_id, extract_data)
     else:
         print("Skipped user info storing")
@@ -171,7 +183,7 @@ def receive_data():
 
     if user_id is not None:
         try:
-            create_and_send_maizzle_email_test(response, user_id, db)
+            create_and_send_maizzle_daily_email_test(response, "Julie", "2025-07-30")
         except Exception as e:
             print(f"Failed to send email: {str(e)}")
     return jsonify(response)
