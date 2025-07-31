@@ -392,11 +392,11 @@ class DatabaseSchemaManager:
             user_id VARCHAR(255),
             created_at DATE,
             used_at DATE,
-            breakfast INTEGER[],
+            breakfast JSON,
             snack_1 INTEGER,
-            lunch INTEGER[],
+            lunch JSON,
             snack_2 INTEGER,
-            dinner INTEGER[],
+            dinner JSON,
             snack_3 INTEGER,
             FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
         );
@@ -475,7 +475,7 @@ class DatabaseSchemaManager:
             choline_mg_mg_actual FLOAT,
             choline_mg_mg_target FLOAT,
             vitamin_k_ug_actual FLOAT,
-            vitamin_k_ug_target FLOAT,
+            vitamin_k_ug_target FLOAT
         );
 
         """
