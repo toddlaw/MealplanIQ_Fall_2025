@@ -78,7 +78,7 @@ def send_daily_email_by_google_scheduler(db):
     start_str = today.strftime('%Y-%m-%d')
 
 
-def create_and_send_maizzle_weekly_email_test(response, user_name, start_date, end_date):
+def create_and_send_maizzle_weekly_email_test(response, user_id, start_date, end_date):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = "ohjeoung5224@gmail.com"
     root_path = app.root_path
@@ -99,8 +99,11 @@ def create_and_send_maizzle_weekly_email_test(response, user_name, start_date, e
         )
         
         email_template = render_template_string(
-            open(templates_path + "/content.html").read(), **response,
-            shopping_list_html=shopping_list_template
+            open(templates_path + "/weekly.html").read(), 
+            start_date=start_date,
+            end_date=end_date,
+            shopping_list_html=shopping_list_template,
+            **response
         )
 
         message = create_message(
