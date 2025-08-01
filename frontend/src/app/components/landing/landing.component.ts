@@ -470,34 +470,19 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              // console.log('Raw Response:', response);
-
               console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
 
-              // Populate the nutrient table when the meal plan is generated
-              // BCIT May 2025
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }
-              // Populate the shopping list when the meal plan is generated
-              // BCIT May 2025
               this.shoppingListData = this.transformMealPlanToShoppingList(
                 this.mealPlanResponse
               );
               this.cdRef.detectChanges();
-              // this.getShoppingListFromBackend().subscribe(
-              //   (secondResponse) => {
-              //     console.log('Fetched Shopping List: ', secondResponse);
-              //     this.shoppingListData = secondResponse;
-              //   },
-              //   (error) => {
-              //     console.error(error);
-              //   }
-              // );
 
               const numDays = this.getNumDays(this.mealPlanResponse);
               for (let i = 0; i < numDays; i++) {
@@ -508,10 +493,6 @@ export class LandingComponent implements OnInit {
                 );
                 this.selectedOptions.push(new Array(3).fill('keep'));
               }
-
-              // this.snackExpandedStates = new Array(
-              //   this.mealPlanResponse.snacks.length
-              // ).fill(false);
 
               this.includeAllRecipes(this.mealPlanResponse.days);
             },
@@ -557,7 +538,6 @@ export class LandingComponent implements OnInit {
             'Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.';
           this.openDialog(title, message, '/sign-up', 'Sign Up');
         } else {
-          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
           this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'none';
           this.element.nativeElement.style.display = 'none';
