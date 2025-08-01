@@ -106,13 +106,13 @@
                             ">
                           Checkout your meal plan
                           <br />
-                          for the next 7 days!
+                          for the next 7 days! {{ start_date }} to {{ end_date }}
                         </p>
                         <div role="separator" class="sm-leading-8" style="line-height: 64px">
                           &zwj;
                         </div>
                         <div>
-                          <a href="https://yourdomain.com/meal-plan?date={}"style="
+                          <a href="http://localhost:4200/meal-plan?start_date={{start_date}}&end_date={{end_date}}"style="
                                 display: inline-block;
                                 border-radius: 4px;
                                 background-color: #88a56f;
