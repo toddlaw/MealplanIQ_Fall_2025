@@ -7,7 +7,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_daily_email_test
+from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -170,6 +170,12 @@ def receive_data():
         extract_data = extract_data_from_json(data)
         db.update_user_profile(**user_data)
         process_user_data(db, user_id, extract_data)
+
+        min_date = datetime.datetime.fromtimestamp(data["minDate"] / 1000.0, datetime.timezone.utc)
+        max_date = datetime.datetime.fromtimestamp(data["maxDate"] / 1000.0, datetime.timezone.utc)
+
+        formatted_min_date = min_date.strftime("%Y/%m/%d")
+        formatted_max_date = max_date.strftime("%Y/%m/%d")
     else:
         print("Skipped user info storing")
     try:
@@ -183,7 +189,7 @@ def receive_data():
 
     if user_id is not None:
         try:
-            create_and_send_maizzle_daily_email_test(response, "Julie", "2025-07-30")
+            create_and_send_maizzle_weekly_email_test(response, "Julie", start_date=formatted_min_date, end_date=formatted_max_date)
         except Exception as e:
             print(f"Failed to send email: {str(e)}")
     return jsonify(response)
