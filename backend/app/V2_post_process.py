@@ -129,31 +129,56 @@ def sort_by_tags(processed_recipe, days):
         else:
             multi_slot_items.append((meal_dict, meal_slots))
 
+
     for meal_dict, meal_slots in single_slot_items:
+        
+        print("meal_slots in single slot_items", meal_slots)
+        raw_slots = meal_dict.get("meal_slot")
+
+            # 문자열이면 파싱
+        if isinstance(raw_slots, str):
+            try:
+                meal_slots = ast.literal_eval(raw_slots)
+            except Exception:
+                meal_slots = []  # fallback
+        else:
+            meal_slots = raw_slots
+
         if 'breakfast' in meal_slots and len(breakfast_recipes) < max_breakfast:
             meal_dict["meal_name"] = "Breakfast"
             breakfast_recipes.append(meal_dict)
-        elif 'lunch' in meal_slots:
-            meal_dict["meal_name"] = "Lunch"
+        if 'snack' in meal_slots and len(snack_recipes) < max_snack:
+            meal_dict["meal_name"] = "Snack"
+            snack_recipes.append(meal_dict)
+        elif 'lunch' in meal_slots and len(lunch_recipes) < max_lunch:
+            meal_dict["meal_name"] = "Lunch "
             lunch_recipes.append(meal_dict)
         elif 'main' in meal_slots and len(main_recipes) < max_main:
             meal_dict["meal_name"] = "Main"
             main_recipes.append(meal_dict)
-        elif 'side' in meal_slots and len(side_recipes) < max_side:
-            meal_dict["meal_name"] = "Side"
-            side_recipes.append(meal_dict)
         elif 'snack' in meal_slots and len(snack_recipes) < max_snack:
             meal_dict["meal_name"] = "Snack"
             snack_recipes.append(meal_dict)
+        elif 'side' in meal_slots and len(side_recipes) < max_side:
+            meal_dict["meal_name"] = "Side"
+            side_recipes.append(meal_dict)
+
 
     for meal_dict, meal_slots in multi_slot_items:
+        print("meal_slots in multi_slot_items", meal_slots)
         placed = False
+
 
         if 'lunch' in meal_slots and len(lunch_recipes) < max_lunch:
             meal_dict["meal_name"] = "Lunch"
             lunch_recipes.append(meal_dict)
             placed = True
 
+        if 'breakfast' in meal_slots and len(breakfast_recipes) < max_breakfast:
+            meal_dict["meal_name"] = "Breakfast"
+            breakfast_recipes.append(meal_dict)
+            placed = True
+
         elif 'main' in meal_slots and len(main_recipes) < max_main:
             meal_dict["meal_name"] = "Main"
             main_recipes.append(meal_dict)
@@ -162,21 +187,16 @@ def sort_by_tags(processed_recipe, days):
         elif 'snack' in meal_slots and len(snack_recipes) < max_snack:
             meal_dict["meal_name"] = "Snack"
             snack_recipes.append(meal_dict)
-            placed = True
 
         elif 'side' in meal_slots and len(side_recipes) < max_side:
             meal_dict["meal_name"] = "Side"
             side_recipes.append(meal_dict)
             placed = True
 
-        elif 'breakfast' in meal_slots and len(breakfast_recipes) < max_breakfast:
-            meal_dict["meal_name"] = "Breakfast"
-            breakfast_recipes.append(meal_dict)
-            placed = True
-
         if not placed:
-            print("⚠️ Couldn't place:", meal_dict, "slots:", meal_slots)
-    
+            meal_dict["meal_name"] = "Snack"
+            snack_recipes.append(meal_dict)
+
     result_groups = []
     for i in range(int(num_days)):
         current_group = []
