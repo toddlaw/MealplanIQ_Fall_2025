@@ -1,1 +1,381 @@
-<p>meal-plan works!</p>
+<div
+    class="container mx-auto flex flex-col items-center justify-center min-h-screen"
+    #start
+  >
+<div class="text-center">
+  <button
+    mat-raised-button
+    class="bg-secondary text-white hover:bg-primary"
+    (click)="openShoppingListDialog()"
+  >
+    Open Shopping List
+  </button>
+</div>
+<br />
+
+<div *ngFor="let day of mealPlanResponse.days; index as i" class="recipe-day" [ngClass]="{ 'no-top-margin': i === 0 }">
+  <h2>{{ formatDate(day.date) }} - {{ getDayOfWeek(day.date) }}</h2>
+
+  <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <ng-container *ngFor="let recipe of day.recipes; index as j">
+      <mat-card *ngIf="recipe && !recipe.deleted; else emptyCard" class="meal-card w-full h-full p-4 flex flex-col justify-between">
+        <mat-card-title>{{ recipe.title }}</mat-card-title>
+        <mat-card-subtitle style="font-size: 1.2rem">{{ recipe.meal_name }}</mat-card-subtitle>
+
+        <div class="flex flex-row justify-between items-start mt-4">
+          <div class="w-1/3">
+            <ng-container *ngIf="recipe.id !== null; else defaultMeanImg">
+              <img
+                [src]="getImageUrl(recipe.id)"
+                alt="Image"
+                class="text-center"
+                style="width: 80%; height: auto; border-radius: 15px"
+              />
+            </ng-container>
+            <ng-template #defaultMeanImg>
+              <img src="assets/images/meal-placeholder.png" alt="Image" class="text-center" />
+            </ng-template>
+          </div>
+
+          <div class="w-2/3 ml-2.5">
+            <mat-card-content class="p-4">
+              <p>Energy: {{ recipe.calories | number:'1.0-0' }} calories</p>
+              <p>Cuisine: {{ recipe.region }}</p>
+              <p>Prep time: {{ recipe.prep_time }}</p>
+            </mat-card-content>
+          </div>
+        </div>
+
+        <mat-card-footer class="w-full pt-5">
+          <div class="flex flex-wrap justify-between items-center px-6 gap-2">
+            <button class="button bg-secondary hover:bg-primary text-white px-5 py-2 rounded-lg" (click)="openRecipeDialog(recipe)">
+              Recipe
+            </button>
+          </div>
+        </mat-card-footer>
+      </mat-card>
+
+      <ng-template #emptyCard>
+        <mat-card class="meal-card w-full h-full p-4 flex flex-col justify-between">
+          <span class="text-gray-500">Deleted Recipe</span>
+        </mat-card>
+      </ng-template>
+    </ng-container>
+  </div>
+  <br /><br />
+</div>
+
+<!-- Nutrition Table Card -->
+    <div class="container py-5 px-10">
+        <div>
+          <!-- group nutrient table into four cards -->
+          <mat-card>
+            <mat-card-header
+              (click)="expanded = !expanded"
+              class="cursor-pointer"
+            >
+              <mat-card-title>Nutrition Information</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content *ngIf="expanded">
+              <mat-accordion [multi]="true">
+                <!-- Energy section -->
+                <mat-expansion-panel [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>Energy</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <table
+                    mat-table
+                    [dataSource]="energy"
+                    class="w-full text-sm shadow-sm rounded text-center"
+                    align="center"
+                  >
+                    <ng-container matColumnDef="nutrientName">
+                      <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        class="header-text-left"
+                      >
+                        Energy
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-left">
+                        {{ element.nutrientName | titlecase }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="target">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Target
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="'blue-text'"
+                      >
+                        {{
+                          element.display_target_min &&
+                          element.display_target_max
+                            ? element.display_target_min +
+                              " - " +
+                              element.display_target_max
+                            : element.display_target_min
+                            ? element.display_target_min + "-"
+                            : "-" + element.display_target_max
+                        }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="actual">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Your Meal Plan
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="{
+                          'out-of-range':
+                            element.actual < element.display_target_min ||
+                            element.actual > element.display_target_max,
+                          'in-range':
+                            element.actual >= element.display_target_min &&
+                            element.actual <= element.display_target_max
+                        }"
+                      >
+                        {{ element.actual }}
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                  </table>
+                </mat-expansion-panel>
+                <!-- Macros Section -->
+                <mat-expansion-panel [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>Macros</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <table
+                    mat-table
+                    [dataSource]="macros"
+                    class="w-full text-sm shadow-sm rounded text-center"
+                    align="center"
+                  >
+                    <ng-container matColumnDef="nutrientName">
+                      <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        class="header-text-left"
+                      >
+                        Nutrient
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-left">
+                        {{ element.displayName }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="target">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Target
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="'blue-text'"
+                      >
+                        {{
+                          element.display_target_min &&
+                          element.display_target_max
+                            ? element.display_target_min +
+                              " - " +
+                              element.display_target_max
+                            : element.display_target_min
+                            ? element.display_target_min + " - "
+                            : "-" + element.display_target_max
+                        }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actual">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Your Meal Plan
+                      </th>
+                      <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="{
+                          'out-of-range':
+                            element.actual < element.display_target_min ||
+                            element.actual > element.display_target_max,
+                          'in-range':
+                            element.actual >= element.display_target_min &&
+                            element.actual <= element.display_target_max
+                        }"
+                      >
+                        {{ element.actual }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                  </table>
+                </mat-expansion-panel>
+
+                <!-- Vitamins Section -->
+                <mat-expansion-panel [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>Vitamins</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <table
+                    mat-table
+                    [dataSource]="vitamins"
+                    class="w-full text-sm shadow-sm rounded text-center"
+                    align="center"
+                  >
+                    <ng-container matColumnDef="nutrientName">
+                      <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        class="header-text-left"
+                      >
+                        Nutrient
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-left">
+                        {{ element.displayName }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="target">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Target
+                      </th>
+                      <!-- <td mat-cell *matCellDef="let element"> {{ element.display_target }} </td> -->
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="'blue-text'"
+                      >
+                        {{
+                          element.display_target_min &&
+                          element.display_target_max
+                            ? element.display_target_min +
+                              " - " +
+                              element.display_target_max
+                            : element.display_target_min
+                            ? element.display_target_min + " - "
+                            : "-" + element.display_target_max
+                        }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actual">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Your Meal Plan
+                      </th>
+                      <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="{
+                          'out-of-range':
+                            element.actual < element.display_target_min ||
+                            element.actual > element.display_target_max,
+                          'in-range':
+                            element.actual >= element.display_target_min &&
+                            element.actual <= element.display_target_max
+                        }"
+                      >
+                        {{ element.actual }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                  </table>
+                </mat-expansion-panel>
+
+                <!-- Minerals Section -->
+                <mat-expansion-panel [expanded]="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>Minerals</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <table
+                    mat-table
+                    [dataSource]="minerals"
+                    class="w-full text-sm shadow-sm rounded text-center"
+                    align="center"
+                  >
+                    <ng-container matColumnDef="nutrientName">
+                      <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        class="header-text-left"
+                      >
+                        Nutrient
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-left">
+                        {{ element.displayName }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="target">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Target
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="'blue-text'"
+                      >
+                        {{
+                          element.display_target_min &&
+                          element.display_target_max
+                            ? element.display_target_min +
+                              " - " +
+                              element.display_target_max
+                            : element.display_target_min
+                            ? element.display_target_min + " - "
+                            : "-" + element.display_target_max
+                        }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actual">
+                      <th mat-header-cell *matHeaderCellDef class="header-cell">
+                        Your Meal Plan
+                      </th>
+                      <!-- <td mat-cell *matCellDef="let element"> {{ element.actual }} </td> -->
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="{
+                          'out-of-range':
+                            element.actual < element.display_target_min ||
+                            element.actual > element.display_target_max,
+                          'in-range':
+                            element.actual >= element.display_target_min &&
+                            element.actual <= element.display_target_max
+                        }"
+                      >
+                        {{ element.actual }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        </div>
