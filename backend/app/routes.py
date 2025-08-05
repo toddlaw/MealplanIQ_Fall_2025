@@ -1,5 +1,3 @@
-import time
-
 from app import app
 from app.calculate_bmi import bmi_calculator_function
 from flask import redirect, request, jsonify, send_from_directory
@@ -7,7 +5,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test
+from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test, send_weekly_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -157,9 +155,14 @@ def weekly_meal_plan():
         # ex) send_weekly_email_by_google_scheduler(db)
     # pass the response and dates to create email function
         # Currently, create_and_send_maizzle_weekly_email_test(response, user_id, db) in send_email.py
-    pass
-
-
+    db = instantiate_database()
+    try:
+        send_weekly_email_by_google_scheduler(db)
+        return jsonify({"status": "success"}), 200
+    except Exception as e:
+        print(f"Error in weekly email route: {e}")
+        return jsonify({"status": "fail"})
+    
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json

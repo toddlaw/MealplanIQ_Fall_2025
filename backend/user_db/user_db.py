@@ -1,3 +1,4 @@
+import datetime
 import os
 import pymysql
 from dotenv import load_dotenv
@@ -375,6 +376,108 @@ class DatabaseManager:
         except pymysql.Error as e:
             self.db.rollback()
             print(f"Error inserting user disliked food: {e}")
+            
+    import json
+
+    # 1일치만 테스용
+    # def insert_user_meal_plan(self, user_id, response, start_date, end_date=None):
+    #     cursor = self.db.cursor()
+    #     try:
+    #         day = response["days"][0] 
+
+    #         used_at = start_date
+
+    #         breakfast_ids = [int(r["id"]) for r in day["recipes"] if r["meal_name"] == 'Breakfast']
+    #         lunch_ids = [int(r["id"]) for r in day["recipes"] if r["meal_name"] == 'Lunch']
+    #         dinner_ids = [
+    #             int(r["id"])
+    #             for r in day["recipes"]
+    #             if r["meal_name"] in ("Dinner", "Main", "Side")
+    #         ]
+            
+    #         snack_ids = [r["id"] for r in day["recipes"] if r["meal_name"] == "Snack"]
+    #         snack1_id = snack_ids[0] if len(snack_ids) > 0 else None
+    #         snack2_id = snack_ids[1] if len(snack_ids) > 1 else None
+    #         snack3_id = snack_ids[2] if len(snack_ids) > 2 else None
+            
+    #         query = """
+    #             INSERT INTO user_meal_plans (
+    #                 user_id, created_at, used_at,
+    #                 breakfast, snack_1, lunch, snack_2, dinner, snack_3
+    #             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    #         """
+    #         cursor.execute(query, (
+    #             user_id,
+    #             start_date.date(),
+    #             used_at.date(),
+    #             json.dumps(breakfast_ids),
+    #             snack1_id,
+    #             json.dumps(lunch_ids),
+    #             snack2_id,
+    #             json.dumps(dinner_ids),
+    #             snack3_id
+    #         ))
+
+    #         self.db.commit()
+
+    #     except Exception as e:
+    #         self.db.rollback()
+    #         print(f"[ERROR] Inserting single-day meal plan for user {user_id}: {e}")
+
+    #     finally:
+    #         cursor.close()
+      
+    def insert_user_meal_plan(self, user_id, response, start_date, end_date):
+        cursor = self.db.cursor()
+        days = response["days"]
+        try:
+            for i, day in enumerate(days):
+                used_at = start_date + datetime.timedelta(days=i)
+                
+                breakfast_ids = [int(r["id"]) for r in day["recipes"] if r["meal_name"] == 'Breakfast']
+                lunch_ids = [int(r["id"]) for r in day["recipes"] if r["meal_name"] == 'Lunch']
+                dinner_ids = [
+                    int(r["id"])
+                    for r in day["recipes"]
+                    if r["meal_name"] in ("Dinner", "Main", "Side")
+                ]
+                
+                snack_ids = [r["id"] for r in day["recipes"] if r["meal_name"] == "Snack"]
+                snack1_id = snack_ids[0] if len(snack_ids) > 0 else None
+                snack2_id = snack_ids[1] if len(snack_ids) > 1 else None
+                snack3_id = snack_ids[2] if len(snack_ids) > 2 else None
+                
+                query = """
+                    INSERT INTO user_meal_plans (
+                        user_id, created_at, used_at,
+                        breakfast, snack_1, lunch, snack_2, dinner, snack_3
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE
+                        breakfast = VALUES(breakfast),
+                        snack_1 = VALUES(snack_1),
+                        lunch = VALUES(lunch),
+                        snack_2 = VALUES(snack_2),
+                        dinner = VALUES(dinner),
+                        snack_3 = VALUES(snack_3)
+                """
+                cursor.execute(query, (
+                    user_id,
+                    start_date.date(),
+                    used_at.date(),
+                    json.dumps(breakfast_ids),
+                    snack1_id,
+                    json.dumps(lunch_ids),
+                    snack2_id,
+                    json.dumps(dinner_ids),
+                    snack3_id
+                ))
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            print(f"Error inserting meal plan for user {user_id}: {e}")
+        finally:
+            cursor.close()
+
 
     # ------------------- Update data -------------------
     def update_user_last_date_plan_profile(self, user_id, last_meal_plan_date):
@@ -466,6 +569,23 @@ class DatabaseManager:
             return user_profile_json
         else:
             return None
+        
+    def get_all_subscribed_users(self):
+        """
+        Returns a list of user_ids who have a valid paid subscription
+        """
+        cursor = self.db.cursor()
+        query = """
+            SELECT user_id
+            FROM user_subscription
+            WHERE subscription_type_id IS NOT NULL
+            AND subscription_type_id != 1
+            AND subscription_stripe_id IS NOT NULL
+        """
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        return [row[0] for row in results]
 
     # ------------------- look up table functions -------------------
 

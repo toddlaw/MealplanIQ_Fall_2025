@@ -45,7 +45,7 @@ def process_user_data(db, user_id, extract_data):
     db.update_user_prefered_breakfasts(user_id, extract_data['breakfasts'])
 
 # Return the dictionary that is used as input for gen_meal_plan for email scheduler
-def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date):
+def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date):
     dietary_constraints = db.retrieve_user_dieatary_constraints(user_id)
     if not dietary_constraints:
         dietary_constraint = None
@@ -59,22 +59,23 @@ def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date):
 
     people = [profile_data]
     selected_unit = db.retrieve_user_selected_unit(user_id)
-    dietary_constraint = db.retrieve_user_dieatary_constraints(user_id)[
-        0].lower()
+    dietary_constraint = db.retrieve_user_dieatary_constraints(user_id) or "none"
     health_goal = db.retrieve_user_health_goal(user_id)
-    religious_constraint = db.retrieve_user_religious_constraints(user_id)[
-        0].lower()
+    religious_constraint = db.retrieve_user_religious_constraints(user_id) or "none"
     liked_foods = db.retrieve_user_liked_food(user_id)
     disliked_foods = db.retrieve_user_disliked_food(user_id)
     favourite_cuisines = db.retrieve_user_favourite_cuisines(user_id)
     allergies = db.retrieve_user_allergies(user_id)
-    min_date = start_date
-    max_date = _get_min_and_max_date_from_the_last_date(db, user_id)[1]
+    snacks = db.retrieve_user_snack_preferences(user_id)
+    breakfasts = db.retrieve_user_breakfast_preferences(user_id)
+    min_date = int(start_date.timestamp() * 1000)
+    max_date = int(end_date.timestamp() * 1000)
     included_recipes = []
     excluded_recipes = []
     return {
         'people': people,
         'selectedUnit': selected_unit,
+        'user_id': user_id,
         'dietaryConstraint': dietary_constraint,
         'healthGoal': health_goal,
         'religiousConstraint': religious_constraint,
@@ -84,6 +85,8 @@ def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date):
         'allergies': allergies,
         'minDate': min_date,
         'maxDate': max_date,
+        'snacks': snacks,
+        'breakfasts': breakfasts,
         'includedRecipes': included_recipes,
         'excludedRecipes': excluded_recipes
     }
