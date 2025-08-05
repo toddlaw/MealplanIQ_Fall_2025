@@ -8,6 +8,8 @@ import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import {sampleMealPlanData } from '../../moc/sampleMealPlan';
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
+import { MealPlanService } from '../../services/meal-plan.service';
+import { user } from 'rxfire/auth';
 
 @Component({
   selector: 'app-meal-plan',
@@ -17,6 +19,7 @@ import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-l
 export class MealPlanComponent implements OnInit {
   mealPlanResponse: any = {};
   shoppingListData: any[] = [];
+  selectedDate: string = '';
   energy: any[] = [];
   macros: any[] = [];
   vitamins: any[] = [];
@@ -26,11 +29,13 @@ export class MealPlanComponent implements OnInit {
   start_date: any;
   end_date: any;
   nutrientSections: Record<string, any[]> = {};
+  path: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private toast: HotToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private mealPlanService: MealPlanService
   ) {}
 
   ngOnInit(): void {
@@ -40,13 +45,28 @@ export class MealPlanComponent implements OnInit {
       this.end_date = params['end_date'] || null;
     });
 
-    this.mealPlanResponse = sampleMealPlanData
+    const user_id = localStorage.getItem('uid') || null;
 
-    this.shoppingListData = this.transformMealPlanToShoppingList(
-                this.mealPlanResponse
+    console.log(this.start_date, this.end_date, user_id)
+
+    this.path = `meal-plans-for-user/${user_id}/${this.start_date}_to_${this.end_date}`;
+
+
+    this.mealPlanService.getMealPlan(this.path).subscribe({
+      next: (data) => {
+        this.mealPlanResponse = data;
+        console.log("fetch data from cloud", this.mealPlanResponse)
+        this.shoppingListData = this.transformMealPlanToShoppingList(
+            this.mealPlanResponse
               );
+        this.categorizeNutrients()
+      },
+      error: (err) => console.error('Error:', err)
+    });
 
-    this.categorizeNutrients()
+
+
+    
 
     // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
     this.mealPlanResponse.days.forEach(
