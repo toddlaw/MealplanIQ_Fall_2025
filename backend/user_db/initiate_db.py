@@ -389,15 +389,16 @@ class DatabaseSchemaManager:
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_meal_plans (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            user_id VARCHAR(255),
-            created_at DATE,
-            used_at DATE,
+            user_id VARCHAR(255) NOT NULL,
+            created_at DATE NOT NULL,
+            used_at DATE NOT NULL,
             breakfast JSON,
             snack_1 INTEGER,
             lunch JSON,
             snack_2 INTEGER,
             dinner JSON,
             snack_3 INTEGER,
+            UNIQUE KEY unique_user_date_combo (user_id, created_at, used_at),
             FOREIGN KEY(user_id) REFERENCES user_profile(user_id)
         );
         """
