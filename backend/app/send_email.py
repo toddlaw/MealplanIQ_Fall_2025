@@ -16,7 +16,9 @@ from app.generate_meal_plan import (
     gen_meal_plan,
     process_type_normal,
 )
+from app.mealplan_service import upload_mealplan_json_to_gcs
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
+
 from email.mime.text import MIMEText
 from flask import Flask, render_template, render_template_string
 import subprocess
@@ -69,18 +71,36 @@ def send_weekly_email_by_google_scheduler(db):
     today = datetime.today()
     start_date = today + timedelta(days=1)
     end_date = start_date + timedelta(days=6)
-
     start_str = start_date.strftime('%Y-%m-%d')
     end_str = end_date.strftime('%Y-%m-%d')
+    
+    # user_ids = db.get_all_subscribed_users()
+    # for user_id in user_ids:
+    user_id = "DzuxKUqNmHeQ8Ug7fb1a7v4kmD12"
+    try:
+        data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
+        response = gen_meal_plan(data)
+        print(f"User meal plan generated: {user_id}")
+        db.insert_user_meal_plan(user_id, response, start_date, end_date)
+        
+        path = f"meal-plans-for-user/{user_id}/{start_str}_to_{end_str}.json"
+        upload_mealplan_json_to_gcs(response, path)
+        
+        user_name = db.retrieve_user_name(user_id)
+        user_email = db.retrieve_user_email(user_id)
+        create_and_send_maizzle_weekly_email_test(response, user_name, user_email)
+        print(f"Email has sent successfully: {user_id}")
+    except Exception as e:
+        print(f"ERROR!! Failed to process user {user_id}: {e}")
 
 def send_daily_email_by_google_scheduler(db):
     today = datetime.today()
     start_str = today.strftime('%Y-%m-%d')
 
 
-def create_and_send_maizzle_weekly_email_test(response, user_name, start_date, end_date):
+def create_and_send_maizzle_weekly_email_test(response, user_name, user_email, start_date, end_date):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
-    to_email = "ohjeoung5224@gmail.com"
+    to_email = user_email
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
