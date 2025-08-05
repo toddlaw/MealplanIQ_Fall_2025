@@ -437,8 +437,6 @@ export class LandingComponent implements OnInit {
     //   data.maxDate = data.minDate;
     // }
 
-    console.log(data.maxDate);
-    console.log(data.minDate);
     localStorage.setItem('minDate', String(data.minDate));
     localStorage.setItem('maxDate', String(data.maxDate));
 
@@ -470,7 +468,6 @@ export class LandingComponent implements OnInit {
           })
           .subscribe(
             (response) => {
-              console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
@@ -680,7 +677,6 @@ export class LandingComponent implements OnInit {
    * @param id The id of the recipe to be replaced
    */
   refreshRecipe(id: string) {
-    console.log(this.mealPlanResponse);
     this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
         this.toast.success('Recipe refreshed successfully!');
