@@ -14,7 +14,17 @@
 </div>
 <br />
 
-<div *ngFor="let day of mealPlanResponse.days; index as i" class="recipe-day" [ngClass]="{ 'no-top-margin': i === 0 }">
+<mat-form-field appearance="fill">
+  <mat-label>Select Date</mat-label>
+  <mat-select [(value)]="selectedDate" (selectionChange)="filterByDate()">
+    <mat-option value="">All Days</mat-option>
+    <mat-option *ngFor="let day of mealPlanResponse.days" [value]="day.date">
+      {{ formatDate(day.date) }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div *ngFor="let day of filteredDays; index as i" class="recipe-day" [ngClass]="{ 'no-top-margin': i === 0 }">
   <h2>{{ formatDate(day.date) }} - {{ getDayOfWeek(day.date) }}</h2>
 
   <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

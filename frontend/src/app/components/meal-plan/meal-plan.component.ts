@@ -19,7 +19,6 @@ import { user } from 'rxfire/auth';
 export class MealPlanComponent implements OnInit {
   mealPlanResponse: any = {};
   shoppingListData: any[] = [];
-  selectedDate: string = '';
   energy: any[] = [];
   macros: any[] = [];
   vitamins: any[] = [];
@@ -30,6 +29,8 @@ export class MealPlanComponent implements OnInit {
   end_date: any;
   nutrientSections: Record<string, any[]> = {};
   path: string = '';
+  selectedDate: string = '';           // for dropdown
+  filteredDays: any[] = [];   
 
   constructor(
     private route: ActivatedRoute,
@@ -46,10 +47,26 @@ export class MealPlanComponent implements OnInit {
     });
 
     const user_id = localStorage.getItem('uid') || null;
-
-    console.log(this.start_date, this.end_date, user_id)
-
     this.path = `meal-plans-for-user/${user_id}/${this.start_date}_to_${this.end_date}`;
+
+    const cachedData = this.loadMealPlanFromLocalStorage();
+
+     if (cachedData) {
+    console.log("✅ Loaded from localStorage");
+    this.mealPlanResponse = cachedData;
+    this.afterMealPlanLoad();
+  } else {
+    this.mealPlanService.getMealPlan(this.path).subscribe({
+      next: (data) => {
+        this.mealPlanResponse = data;
+        console.log("Fetched from cloud", this.mealPlanResponse);
+        this.saveMealPlanToLocalStorage(data, this.end_date); 
+        this.afterMealPlanLoad();
+      },
+      error: (err) => console.error('Error:', err)
+    });
+  }
+
 
 
     this.mealPlanService.getMealPlan(this.path).subscribe({
@@ -88,9 +105,65 @@ export class MealPlanComponent implements OnInit {
         );
       }
     );
+  }
 
-    
-    
+    saveMealPlanToLocalStorage(response: any, endDate: string) {
+    const expirationDate = new Date(endDate);
+    const cachedItem = {
+      data: response,
+      expiresAt: expirationDate.getTime(), // timestamp
+    };
+    localStorage.setItem('mealPlan', JSON.stringify(cachedItem));
+  }
+
+    loadMealPlanFromLocalStorage(): any | null {
+    const cached = localStorage.getItem('mealPlan');
+    if (!cached) return null;
+
+    const parsed = JSON.parse(cached);
+    const now = Date.now();
+
+    if (parsed.expiresAt && parsed.expiresAt > now) {
+      return parsed.data;
+    } else {
+      localStorage.removeItem('mealPlan'); 
+      return null;
+    }
+  }
+
+
+filterByDate() {
+  const allDays = this.mealPlanResponse.days;
+  this.filteredDays = this.selectedDate
+    ? allDays.filter((day: any) => day.date === this.selectedDate)
+    : allDays;
+}
+  
+
+  afterMealPlanLoad() {
+    this.shoppingListData = this.transformMealPlanToShoppingList(this.mealPlanResponse);
+    this.categorizeNutrients();
+
+     const allDays = this.mealPlanResponse.days;
+
+       if (this.start_date === this.end_date) {
+    this.selectedDate = this.start_date;
+  }
+
+    this.filteredDays = this.selectedDate
+    ? allDays.filter((day: any) => day.date === this.selectedDate)
+    : allDays;
+
+
+      if (this.start_date === this.end_date) {
+    const filteredDay = this.mealPlanResponse.days.find(
+      (day: any) => day.date === this.start_date
+    );
+    if (filteredDay) {
+      this.mealPlanResponse.days = [filteredDay]; 
+    }
+  }
+
   }
 
     transformMealPlanToShoppingList(mealPlan: any): ShoppingList[] {
