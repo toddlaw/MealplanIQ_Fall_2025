@@ -30,6 +30,7 @@ from app.shopping_list_utils import (
 )
 
 from user_db.user_db import instantiate_database
+from app.moc.sampleMealPlans import data as sampleMealPlans
 
 app = Flask(__name__)
 
@@ -97,13 +98,15 @@ def send_daily_email_by_google_scheduler(db):
     today = datetime.today()
     start_str = today.strftime('%Y-%m-%d')
 
-def create_and_send_maizzle_weekly_email_test(response, user_name, user_email, start_date, end_date):
+
+def create_and_send_maizzle_weekly_email_test(response=None, user_name="Julie", start_date=None, end_date=None):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
     subject = f"Your personalized Meal Plan is Ready, {user_name}!"
+    response = sampleMealPlans
     response["user_name"] = user_name
     
     # Transform & aggregate raw shopping list data
