@@ -77,7 +77,7 @@ def send_weekly_email_by_google_scheduler(db):
     
     # user_ids = db.get_all_subscribed_users()
     # for user_id in user_ids:
-    user_id = "DzuxKUqNmHeQ8Ug7fb1a7v4kmD12"
+    user_id = "PrPcSS722AaZzXdV8blC5dAMxa73"
     try:
         data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
         response = gen_meal_plan(data)
@@ -89,7 +89,7 @@ def send_weekly_email_by_google_scheduler(db):
         
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        create_and_send_maizzle_weekly_email_test(response, user_name, user_email, start_str, end_str)
+        create_and_send_maizzle_weekly_email_test(response, user_email, user_name, start_str, end_str)
         print(f"Email has sent successfully: {user_id}")
     except Exception as e:
         print(f"ERROR!! Failed to process user {user_id}: {e}")
@@ -99,7 +99,9 @@ def send_daily_email_by_google_scheduler(db):
     start_str = today.strftime('%Y-%m-%d')
 
 
-def create_and_send_maizzle_weekly_email_test(response=None, user_name="Julie", start_date=None, end_date=None):
+
+
+def create_and_send_maizzle_weekly_email_test(response, user_email, user_name="Julie", start_date=None, end_date=None):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     root_path = app.root_path
