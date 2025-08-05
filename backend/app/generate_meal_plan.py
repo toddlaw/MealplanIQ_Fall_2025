@@ -146,14 +146,10 @@ def gen_meal_plan(data):
     formatted_min_date = min_date.strftime("%Y/%m/%d")
     formatted_max_date = max_date.strftime("%Y/%m/%d")
 
-    print("Min date:", formatted_min_date)
-    print("Max date:", formatted_max_date)
 
     # Calculating the difference in days
     difference = max_date - min_date
     days = difference.days + 1
-
-    print("Difference in days:", days)
 
     if "nutrient" in diet_info["nutrients"]:
         list_of_excluded_nutrients = list(
@@ -176,7 +172,6 @@ def gen_meal_plan(data):
         exclude=data["excludedRecipes"],
         include=data["includedRecipes"],
     )
-    print("optimized_results1", optimized_results)
 
     # optimized_snacks = []
     # print('11-22-3', optimized_snacks)
@@ -191,8 +186,7 @@ def gen_meal_plan(data):
     response = post_process_results(
         recipes_with_scores, optimized_results, min_date, days
     )
-    print("response1:", response)
-    print("=============")
+
     # response = process_type_normal(response)
     # print("response6:", response)
     response = insert_status_nutrient_info(response)
