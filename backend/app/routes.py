@@ -1,11 +1,11 @@
 from app import app
 from app.calculate_bmi import bmi_calculator_function
-from flask import redirect, request, jsonify, send_from_directory
+from flask import make_response, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test, send_weekly_email_by_google_scheduler
+from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test, send_daily_email_by_google_scheduler, send_weekly_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -14,6 +14,7 @@ from app.payment_stripe import (
     create_customer_portal_by_id
 )
 from app.manage_user_data import *
+from app.mealplan_service import download_mealplan_json_from_gcs
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
@@ -53,6 +54,15 @@ def index(path):
 @app.route("/static")
 def static_files():
     return send_from_directory("static", "index.html")
+
+
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE,OPTIONS"
+    return response
+
 
 
 # redirect 404 to root URL
@@ -98,6 +108,7 @@ def page_not_found(e):
 #         return "Unauthorized", 403
 #     db = instantiate_database()
 #     send_weekly_email_by_google_scheduler(db)
+
 
 
 @app.route("/signup", methods=["POST"])
@@ -150,12 +161,6 @@ def daily_meal_plan():
 
 @app.route("/api/weekly_email")
 def weekly_meal_plan():
-    # Get the start date when this function is called by google scheduler
-        # ex) start date = today, end date = today + 7
-    # Create 7 days meal plan, passing db instance to argument
-        # ex) send_weekly_email_by_google_scheduler(db)
-    # pass the response and dates to create email function
-        # Currently, create_and_send_maizzle_weekly_email_test(response, user_id, db) in send_email.py
     db = instantiate_database()
     try:
         send_weekly_email_by_google_scheduler(db)
@@ -163,6 +168,31 @@ def weekly_meal_plan():
     except Exception as e:
         print(f"Error in weekly email route: {e}")
         return jsonify({"status": "fail"})
+    
+@app.route('/api/mealplan/meal-plans-for-user/<user_id>/<date_range>', methods=["GET", "OPTIONS"])
+def get_mealplan(user_id, date_range):
+    print(f"[GET MEALPLAN] User ID: {user_id}, Date Range: {date_range}")
+
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        return response, 204
+
+    try:
+        full_path = f"meal-plans-for-user/{user_id}/{date_range}"
+        data = download_mealplan_json_from_gcs(full_path)
+        response = jsonify(data)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch meal plan: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+
+
     
 @app.route("/api", methods=["POST"])
 def receive_data():
@@ -194,7 +224,7 @@ def receive_data():
 
     if user_id is not None:
         try:
-            create_and_send_maizzle_weekly_email_test("Julie", start_date=formatted_min_date, end_date=formatted_max_date)
+            send_weekly_email_by_google_scheduler(db)
         except Exception as e:
             print(f"Failed to send email: {str(e)}")
     return jsonify(response)
