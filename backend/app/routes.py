@@ -145,7 +145,8 @@ def get_user_landing_page_profile(user_id):
 
 @app.route("/api/daily_email")
 def daily_meal_plan():
-    pass
+    send_daily_email_by_google_scheduler()
+    
 
 @app.route("/api/weekly_email")
 def weekly_meal_plan():
@@ -179,11 +180,12 @@ def receive_data():
 
         formatted_min_date = min_date.strftime("%Y/%m/%d")
         formatted_max_date = max_date.strftime("%Y/%m/%d")
+        
     else:
         print("Skipped user info storing")
     try:
-        print("data sent to gen_meal_plan", data)
         response = gen_meal_plan(data)
+        print("=====Final Data======", response)
     except Exception as e:
         error_traceback = traceback.format_exc()
         response = {"error": str(e),
@@ -192,7 +194,7 @@ def receive_data():
 
     if user_id is not None:
         try:
-            create_and_send_maizzle_weekly_email_test(response, "Julie", start_date=formatted_min_date, end_date=formatted_max_date)
+            create_and_send_maizzle_weekly_email_test("Julie", start_date=formatted_min_date, end_date=formatted_max_date)
         except Exception as e:
             print(f"Failed to send email: {str(e)}")
     return jsonify(response)
