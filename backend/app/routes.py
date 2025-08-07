@@ -143,13 +143,6 @@ def weekly_meal_plan():
 def get_mealplan(user_id, date_range):
     print(f"[GET MEALPLAN] User ID: {user_id}, Date Range: {date_range}")
 
-    if request.method == "OPTIONS":
-        response = make_response()
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        return response, 204
-
     try:
         full_path = f"meal-plans-for-user/{user_id}/{date_range}"
         data = download_mealplan_json_from_gcs(full_path)
