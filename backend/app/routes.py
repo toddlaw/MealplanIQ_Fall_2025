@@ -56,26 +56,6 @@ def static_files():
     return send_from_directory("static", "index.html")
 
 
-@app.after_request
-def apply_cors(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE,OPTIONS"
-    return response
-
-
-
-# redirect 404 to root URL
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     print(request.path)
-#     return redirect("/")
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     if request.path.startswith('/api'):
-#         return jsonify({'error': 'Not found'}), 404
-#     return redirect("/")
-
 @app.errorhandler(404)
 def page_not_found(e):
     """
@@ -100,16 +80,6 @@ def page_not_found(e):
     if request.path.startswith('/api'):
         return jsonify({'error': 'Not found'}), 404
     return redirect("/")
-
-
-# @app.route("/schedule-email", methods=["GET"])
-# def schedule_email():
-#     if request.headers.get("X-Appengine-Cron") != "true":
-#         return "Unauthorized", 403
-#     db = instantiate_database()
-#     send_weekly_email_by_google_scheduler(db)
-
-
 
 @app.route("/signup", methods=["POST"])
 def handle_signup():
@@ -190,10 +160,6 @@ def get_mealplan(user_id, date_range):
         print(f"[ERROR] Failed to fetch meal plan: {e}")
         return jsonify({"error": str(e)}), 500
 
-
-
-
-    
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json
@@ -222,11 +188,11 @@ def receive_data():
                     "traceback": error_traceback}
         print(f"Failed to generate meal plan: {str(e)}\nTraceback: {error_traceback}")
 
-    if user_id is not None:
-        try:
-            send_weekly_email_by_google_scheduler(db)
-        except Exception as e:
-            print(f"Failed to send email: {str(e)}")
+    # if user_id is not None:
+    #     try:
+    #         send_weekly_email_by_google_scheduler(db)
+    #     except Exception as e:
+    #         print(f"Failed to send email: {str(e)}")
     return jsonify(response)
 
 
