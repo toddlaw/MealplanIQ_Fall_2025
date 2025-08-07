@@ -77,7 +77,7 @@ def send_weekly_email_by_google_scheduler(db):
     
     # user_ids = db.get_all_subscribed_users()
     # for user_id in user_ids:
-    user_id = "PrPcSS722AaZzXdV8blC5dAMxa73"
+    user_id = "59JNe2o0WGdwxfmQrbGN4pbF4jk2"
     try:
         data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
         response = gen_meal_plan(data)
