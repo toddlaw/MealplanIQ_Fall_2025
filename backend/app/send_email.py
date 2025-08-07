@@ -16,11 +16,11 @@ from app.generate_meal_plan import (
     gen_meal_plan,
     process_type_normal,
 )
-from app.mealplan_service import upload_mealplan_json_to_gcs
+from app.mealplan_service import download_mealplan_json_from_gcs, upload_mealplan_json_to_gcs
 from app.manage_user_data import create_data_input_for_auto_gen_meal_plan
 
 from email.mime.text import MIMEText
-from flask import Flask, render_template, render_template_string
+from flask import Flask, jsonify, render_template, render_template_string
 import subprocess
 import json
 import time
@@ -31,6 +31,8 @@ from app.shopping_list_utils import (
 
 from user_db.user_db import instantiate_database
 from app.moc.sampleMealPlans import data as sampleMealPlans
+from concurrent.futures import ThreadPoolExecutor
+
 
 app = Flask(__name__)
 
@@ -66,9 +68,30 @@ def send_message(service, user_id, message):
     except Exception as e:
         print("An error occurred: %s" % e)
         return None
+    
+# multi-threading test code
+# def send_email_by_google_scheduler(db, is_daily=False):
+#     user_ids = db.get_all_subscribed_users()  
 
+#     def job(user_id):
+#         if is_daily:
+#             process_daily_email_for_user(user_id)
+#         else:
+#             process_weekly_email_for_user(user_id, db)
 
-def send_weekly_email_by_google_scheduler(db):
+#     with ThreadPoolExecutor(max_workers=5) as executor:
+#         executor.map(job, user_ids)
+
+def send_email_by_google_scheduler(db, is_daily=False):
+    user_ids = db.get_all_subscribed_users()  
+
+    for user_id in user_ids:
+        if is_daily:
+            process_daily_email_for_user(user_id)
+        else:
+            process_weekly_email_for_user(user_id, db)
+
+def process_weekly_email_for_user(user_id, db):
     today = datetime.today()
     start_date = today + timedelta(days=1)
     end_date = start_date + timedelta(days=6)
@@ -77,11 +100,10 @@ def send_weekly_email_by_google_scheduler(db):
     
     # user_ids = db.get_all_subscribed_users()
     # for user_id in user_ids:
-    user_id = "59JNe2o0WGdwxfmQrbGN4pbF4jk2"
+    # user_id = "59JNe2o0WGdwxfmQrbGN4pbF4jk2"
     try:
         data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
         response = gen_meal_plan(data)
-        print(f"User meal plan generated: {user_id}")
         db.insert_user_meal_plan(user_id, response, start_date, end_date)
         
         path = f"meal-plans-for-user/{user_id}/{start_str}_to_{end_str}.json"
@@ -89,19 +111,29 @@ def send_weekly_email_by_google_scheduler(db):
         
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        create_and_send_maizzle_weekly_email_test(response, user_email, user_name, start_str, end_str)
+        create_and_send_maizzle_email(response, user_email, user_name, start_str, end_str)
         print(f"Email has sent successfully: {user_id}")
     except Exception as e:
         print(f"ERROR!! Failed to process user {user_id}: {e}")
 
-def send_daily_email_by_google_scheduler(db):
+def process_daily_email_for_user(db, user_id):
     today = datetime.today()
     start_str = today.strftime('%Y-%m-%d')
+    
+    try:
+        full_path = f"meal-plans-for-user/{user_id}/{start_str}"
+        data = download_mealplan_json_from_gcs(full_path)
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch meal plan: {e}")
+        return jsonify({"error": str(e)}), 500
+    else:
+        json_data = jsonify(data)
+        response = json_data.days
+        user_name = db.retrieve_user_name(user_id)
+        user_email = db.retrieve_user_email(user_id)
+        create_and_send_maizzle_email(response, user_email, user_name, start_str, start_str)
 
-
-
-
-def create_and_send_maizzle_weekly_email_test(response, user_email, user_name="Julie", start_date=None, end_date=None):
+def create_and_send_maizzle_email(response, user_email, user_name="Julie", start_date=None, end_date=None):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     root_path = app.root_path
@@ -127,7 +159,6 @@ def create_and_send_maizzle_weekly_email_test(response, user_email, user_name="J
             start_date=start_date,
             end_date=end_date,
             shopping_list_html=shopping_list_template,
-            **response
         )
 
         message = create_message(
