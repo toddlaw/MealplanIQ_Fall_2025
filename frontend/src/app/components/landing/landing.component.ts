@@ -111,6 +111,7 @@ export class LandingComponent implements OnInit {
 
   @ViewChild('peoplePanel') peoplePanel!: MatExpansionPanel;
   @ViewChild('peopleForm') peopleForm!: NgForm;
+  @ViewChild('peopleFormEl') peopleFormEl!: ElementRef;
   @ViewChild('scrollToMe') element!: ElementRef;
   @ViewChild('start') start!: ElementRef;
   @ViewChild('errorDiv') errorDiv!: ElementRef;
@@ -379,6 +380,15 @@ export class LandingComponent implements OnInit {
   showTermsAndConditions() {
     // make sure the form is valid
     if (this.peopleForm.invalid) {
+      this.toast.warning(
+        'Please complete all required fields to generate meal plans!'
+      );
+      setTimeout(() => {
+        this.peopleFormEl?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }, 0);
       return;
     }
 
@@ -1333,7 +1343,8 @@ export class LandingComponent implements OnInit {
 
   updateLocalStorage(data: any): void {
     const localProfile = {
-      user_name: JSON.parse(localStorage.getItem('userProfile') || '{}').user_name,
+      user_name: JSON.parse(localStorage.getItem('userProfile') || '{}')
+        .user_name,
       email: localStorage.getItem('email'),
       age: data.people[0].age,
       weight: data.people[0].weight,

@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
       (info) => info.value === null || info.value === ''
     )
     if (hasEmptyField) {
-      this.toast.error("Please fill out all fields before saving.")
+      this.toast.warning("Please fill out all fields before saving.")
       return
     }
 

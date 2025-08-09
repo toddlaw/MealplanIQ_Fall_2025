@@ -29,7 +29,7 @@
       <div
         class="container flex flex-wrap items-center justify-center text-center"
       >
-        <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
+        <form #peopleForm="ngForm" #peopleFormEl (ngSubmit)="showTermsAndConditions()">
           <div class="grid-rows">
             <div
               class="grid-cols-4 p-8 flex flex-wrap justify-center items-center"
