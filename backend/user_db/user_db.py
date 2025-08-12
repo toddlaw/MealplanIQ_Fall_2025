@@ -572,15 +572,20 @@ class DatabaseManager:
         
     def get_all_subscribed_users(self):
         """
-        Returns a list of user_ids who have a valid paid subscription
+        Returns a list of user_ids who have a valid subscription
         """
         cursor = self.db.cursor()
         query = """
-            SELECT user_id
-            FROM user_subscription
-            WHERE subscription_type_id IS NOT NULL
-            AND subscription_type_id != 1
-            AND subscription_stripe_id IS NOT NULL
+            SELECT us.user_id
+            FROM user_subscription AS us
+            JOIN user_profile AS up 
+                ON up.user_id = us.user_id
+            WHERE
+                us.subscription_type_id IS NOT NULL
+                AND (
+                    us.subscription_type_id <> 1
+                OR (us.subscription_type_id = 1 AND up.health_goal = 'lose_weight')
+                )
         """
         cursor.execute(query)
         results = cursor.fetchall()
