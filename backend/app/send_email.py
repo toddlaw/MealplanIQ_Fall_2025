@@ -84,23 +84,28 @@ def send_message(service, user_id, message):
 
 def send_email_by_google_scheduler(db, is_daily=False):
     user_ids = db.get_all_subscribed_users()  
+    
+    if not user_ids:
+        result = {
+            "status": "skip",
+            "reason": "no subscribed users exist",
+        }
+        return result, 200
 
     for user_id in user_ids:
         if is_daily:
-            process_daily_email_for_user(user_id)
+            result, code = process_daily_email_for_user(db, user_id)
         else:
-            process_weekly_email_for_user(user_id, db)
+            result, code = process_weekly_email_for_user(db, user_id)
+    return result, code
 
-def process_weekly_email_for_user(user_id, db):
+def process_weekly_email_for_user(db, user_id):
     today = datetime.today()
     start_date = today + timedelta(days=1)
     end_date = start_date + timedelta(days=6)
     start_str = start_date.strftime('%Y-%m-%d')
     end_str = end_date.strftime('%Y-%m-%d')
-    
-    # user_ids = db.get_all_subscribed_users()
-    # for user_id in user_ids:
-    # user_id = "59JNe2o0WGdwxfmQrbGN4pbF4jk2"
+
     try:
         data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
         response = gen_meal_plan(data)
@@ -111,29 +116,63 @@ def process_weekly_email_for_user(user_id, db):
         
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        create_and_send_maizzle_email(response, user_email, user_name, start_str, end_str)
-        print(f"Email has sent successfully: {user_id}")
+        gmail_response = create_and_send_maizzle_email(response, user_email, user_name, start_str, end_str)
+        return {
+            "status": "success",
+            "user_id": user_id,
+            "user_email": user_email,
+            "gmail_response": gmail_response,
+            "start_date": start_str,
+            "end_date": end_str
+        }, 200
     except Exception as e:
-        print(f"ERROR!! Failed to process user {user_id}: {e}")
+        return {
+            "status": "fail",
+            "user_id": user_id,
+            "error": str(e)
+        }, 500
 
 def process_daily_email_for_user(db, user_id):
     today = datetime.today()
     start_str = today.strftime('%Y-%m-%d')
     
+    # Get meal plan data from Google Cloud Storage
     try:
         full_path = f"meal-plans-for-user/{user_id}/{start_str}"
         data = download_mealplan_json_from_gcs(full_path)
     except Exception as e:
-        print(f"[ERROR] Failed to fetch meal plan: {e}")
-        return jsonify({"error": str(e)}), 500
-    else:
+        return {
+            "status": "fail",
+            "stage": "fetch",
+            "user_id": user_id,
+            "date": start_str,
+            "error": str(e),
+        }, 500
+    
+    # Send daily email
+    try:
         json_data = jsonify(data)
         response = json_data.days
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        create_and_send_maizzle_email(response, user_email, user_name, start_str, start_str)
+        gmail_response = create_and_send_maizzle_email(response, user_email, user_name, start_str, start_str)
+        return {
+            "status": "success",
+            "user_id": user_id,
+            "user_email": user_email,
+            "date": start_str,
+            "gmail_response": gmail_response
+        }, 200
+    except Exception as e:
+        return {
+            "status": "fail",
+            "stage": "send",
+            "user_id": user_id,
+            "date": start_str,
+            "error": str(e),
+        }, 500
 
-def create_and_send_maizzle_email(response, user_email, user_name="Julie", start_date=None, end_date=None):
+def create_and_send_maizzle_email(response, user_email, user_name, start_date=None, end_date=None):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     root_path = app.root_path
@@ -166,6 +205,7 @@ def create_and_send_maizzle_email(response, user_email, user_name="Julie", start
         )
         msg = send_message(service_gmail, "me", message)
         print(msg)
+    return msg
 
 
 def create_and_send_maizzle_daily_email_test(response, user_name, sent_date):

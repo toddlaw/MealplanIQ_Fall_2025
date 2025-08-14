@@ -5,7 +5,7 @@ from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_daily_email_test, create_and_send_maizzle_weekly_email_test, send_daily_email_by_google_scheduler, send_weekly_email_by_google_scheduler
+from app.send_email import send_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -126,18 +126,23 @@ def get_user_landing_page_profile(user_id):
 
 @app.route("/api/daily_email")
 def daily_meal_plan():
-    send_daily_email_by_google_scheduler()
-    
+    db = instantiate_database()
+    try:
+        result, code = send_email_by_google_scheduler(db, True)
+        return jsonify(result), code
+    except Exception as e:
+        print(f"Error in daily email route: {e}")
+        return jsonify({"status": "fail", "error": str(e)}), 500
 
 @app.route("/api/weekly_email")
 def weekly_meal_plan():
     db = instantiate_database()
     try:
-        send_weekly_email_by_google_scheduler(db)
-        return jsonify({"status": "success"}), 200
+        result, code = send_email_by_google_scheduler(db, False)
+        return jsonify(result), code
     except Exception as e:
         print(f"Error in weekly email route: {e}")
-        return jsonify({"status": "fail"})
+        return jsonify({"status": "fail", "error": str(e)}), 500
     
 @app.route('/api/mealplan/meal-plans-for-user/<user_id>/<date_range>', methods=["GET", "OPTIONS"])
 def get_mealplan(user_id, date_range):
