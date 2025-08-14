@@ -47,6 +47,12 @@ credentials = service_account.Credentials.from_service_account_info(
 
 service_gmail = build("gmail", "v1", credentials=credentials)
 
+today = datetime.today()
+start_date = today + timedelta(days=1)
+end_date = start_date + timedelta(days=6)
+today_str = today.strftime('%Y-%m-%d')
+start_str = start_date.strftime('%Y-%m-%d')
+end_str = end_date.strftime('%Y-%m-%d')
 
 # add is_html parameter to create_message function with html content
 def create_message(sender, to, subject, message_text, is_html=True):
@@ -123,12 +129,6 @@ def send_email_by_google_scheduler(db, is_daily=False):
     }, 207 if failed_results else 200
 
 def process_weekly_email_for_user(db, user_id):
-    today = datetime.today()
-    start_date = today + timedelta(days=1)
-    end_date = start_date + timedelta(days=6)
-    start_str = start_date.strftime('%Y-%m-%d')
-    end_str = end_date.strftime('%Y-%m-%d')
-
     try:
         data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
         response = gen_meal_plan(data)
@@ -156,42 +156,57 @@ def process_weekly_email_for_user(db, user_id):
         }, 500
 
 def process_daily_email_for_user(db, user_id):
-    today = datetime.today()
-    start_str = today.strftime('%Y-%m-%d')
-    
-    # Get meal plan data from Google Cloud Storage
+    tomorrow = today + timedelta(days=1)
+    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+
+    # Get meal plan data from GCS
     try:
-        full_path = f"meal-plans-for-user/{user_id}/{start_str}"
+        full_path = f"meal-plans-for-user/{user_id}/{start_str}_to_{end_str}.json"
         data = download_mealplan_json_from_gcs(full_path)
     except Exception as e:
         return {
             "status": "fail",
             "stage": "fetch",
             "user_id": user_id,
-            "date": start_str,
+            "date": today_str,
             "error": str(e),
         }, 500
     
     # Send daily email
     try:
-        json_data = jsonify(data)
-        response = json_data.days
+        matched_day = None
+        for day in data.get("days", []):
+            if day.get("date") == tomorrow_str:
+                matched_day = day
+                break
+            
+        if not matched_day:
+            return {
+                "status": "fail",
+                "stage": "filter",
+                "user_id": user_id,
+                "date": today_str,
+                "error": f"No meal plan found for {tomorrow_str}",
+            }, 404
+
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        gmail_response = create_and_send_maizzle_email(response, user_email, user_name, start_str, start_str)
+        gmail_response = create_and_send_maizzle_daily_email_test({"days": [matched_day]}, user_email, user_name, tomorrow_str)
+
         return {
             "status": "success",
             "user_id": user_id,
             "user_email": user_email,
-            "date": start_str,
+            "date": tomorrow_str,
             "gmail_response": gmail_response
         }, 200
+
     except Exception as e:
         return {
             "status": "fail",
             "stage": "send",
             "user_id": user_id,
-            "date": start_str,
+            "date": tomorrow_str,
             "error": str(e),
         }, 500
 
@@ -230,15 +245,17 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
         print(msg)
     return msg
 
-
-def create_and_send_maizzle_daily_email_test(response, user_name, sent_date):
+def create_and_send_maizzle_daily_email_test(response, user_email, user_name, sent_date):
+    print(response)
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
-    to_email = "ohjeoung5224@gmail.com"
-
+    to_email = user_email
+    
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
-    subject = f"Your personalized Meal Plan is Ready, {user_name}!"
+
+    subject = f"{user_name}, check out your meal plan for {response['days'][0]['date_weekday']}!"
+    
     response["user_name"] = user_name
     
     # Transform & aggregate raw shopping list data
@@ -264,3 +281,5 @@ def create_and_send_maizzle_daily_email_test(response, user_name, sent_date):
         )
         msg = send_message(service_gmail, "me", message)
         print(msg)
+
+    return msg
