@@ -91,13 +91,36 @@ def send_email_by_google_scheduler(db, is_daily=False):
             "reason": "no subscribed users exist",
         }
         return result, 200
-
+    
+    success_results = []
+    failed_results = []
+    
     for user_id in user_ids:
         if is_daily:
             result, code = process_daily_email_for_user(db, user_id)
         else:
             result, code = process_weekly_email_for_user(db, user_id)
-    return result, code
+            
+        if result.get("status") == 'success':
+            success_results.append({
+                "code": code,
+                "result": result
+            })
+        else:
+            failed_results.append({
+                "code": code,
+                "result": result
+            })
+            
+    final_status = "partial_fail" if failed_results else "success"
+    return {
+        "status": final_status,
+        "total_users": len(user_ids),
+        "success_count": len(success_results),
+        "fail_count": len(failed_results),
+        "succes": success_results,
+        "fail": failed_results
+    }, 207 if failed_results else 200
 
 def process_weekly_email_for_user(db, user_id):
     today = datetime.today()
