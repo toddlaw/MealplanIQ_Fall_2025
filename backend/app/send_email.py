@@ -233,6 +233,7 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
         
         email_template = render_template_string(
             open(templates_path + "/weekly.html").read(), 
+            **response,
             start_date=start_date,
             end_date=end_date,
             shopping_list_html=shopping_list_template,
