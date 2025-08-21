@@ -1,5 +1,9 @@
 import pandas as pd
 
+from app.calculate_energy import energy_calculator_function
+from app.adjust_nutritional_requirements import adjust_nutrients
+from app.retrieve_diet import get_diet_plan
+
 def calculate_macros(large_calories, people):
     """
     Called in ./backend/app/generate_meal_plan.py.
@@ -159,3 +163,53 @@ def distribute_nutrients(macros, micros):
     }
 
     return distributed_nutrients
+
+def create_nutrition_requirements_payload(data: dict) -> dict:
+    """
+    Create a nutrition requirements payload for the /api/get-nutrition-requirements endpoint.
+
+    Args:
+        data (dict): A dictionary containing user input values (age, bmi, gender, ...)
+    Returns:
+        dict: A dictionary with calculated nutrition requirements:
+            - "energy_lower" (float): Lower bound of daily energy requirement.
+            - "energy_upper" (float): Upper bound of daily energy requirement.
+            - "macros" (dict): Macronutrient breakdown (e.g., protein, fats, carbs).
+            - "micros" (dict): Micronutrient recommendations.
+    """
+    age = data.get("age")
+    bmi = data.get("bmi")
+    gender = data.get("gender")
+    weight = data.get("weight")
+    height = data.get("height")
+    activityLevel = data.get("activityLevel")
+    healthGoal = data.get('healthGoal')
+    
+    if None in [age, bmi, gender, weight, height, activityLevel]:
+        raise ValueError("Missing one or more required fields")
+    
+    energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
+    
+    people = [{
+        "age": age,
+        "gender": gender,
+        "weight": weight,     # kg
+        "height": height,     # cm
+        "activityLevel": activityLevel,
+        "bmi": bmi,
+        "healthGoal": healthGoal,
+    }]
+    
+    macros = calculate_macros(energy, people)
+    micros = calculate_micros(people)
+    diet_info = get_diet_plan(data["healthGoal"])
+    
+    adjust_nutrients(macros, micros, diet_info["plan"], people)
+        
+    base_energy = macros["large_calories"]  
+    energy_lower_bound = base_energy * 0.95
+    energy_upper_bound = base_energy * 1.05
+
+    data = { "energy_lower": energy_lower_bound, "energy_upper": energy_upper_bound, "macros": macros, "micros": micros }
+    
+    return data

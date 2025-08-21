@@ -4,7 +4,7 @@ from flask import make_response, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
-from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
+from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, create_nutrition_requirements_payload, read_micro_nutrients_file
 from app.send_email import send_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
@@ -277,45 +277,10 @@ def get_nutrition_requirements():
         data = request.get_json(force=True, silent=True)
         if not data:
             return jsonify({"error": "Invalid JSON"}), 400
-        age = data.get("age")
-        bmi = data.get("bmi")
-        gender = data.get("gender")
-        weight = data.get("weight")
-        height = data.get("height")
-        activityLevel = data.get("activityLevel")
-        healthGoal = data.get('healthGoal')
-
-        if None in [age, bmi, gender, weight, height, activityLevel]:
-            return jsonify({"error": "Missing required fields"}), 400
-
-        energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
-        
-        people = [{
-            "age": age,
-            "gender": gender,
-            "weight": weight,     # kg
-            "height": height,     # cm
-            "activityLevel": activityLevel,
-            "bmi": bmi,
-            "healthGoal": healthGoal,
-        }]
-        
-        LOWER_RANGE = 0.95
-        UPPER_RANGE = 1.05
-        
-        macros = calculate_macros(energy, people)
-        micros = calculate_micros(people)
-        
-        diet_info = get_diet_plan(data["healthGoal"])
-        adjust_nutrients(macros, micros, diet_info["plan"], people)
-        
-        base_energy = macros["large_calories"]  
-        energy_lower_bound = base_energy * LOWER_RANGE
-        energy_upper_bound = base_energy * UPPER_RANGE
-
-        data = { "energy_lower": energy_lower_bound, "energy_upper": energy_upper_bound, "macros": macros, "micros": micros }
-        return jsonify(data), 200
-
+        payload = create_nutrition_requirements_payload(data)
+        return jsonify(payload), 200
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
