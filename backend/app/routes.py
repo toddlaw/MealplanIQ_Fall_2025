@@ -15,6 +15,8 @@ from app.payment_stripe import (
 )
 from app.manage_user_data import *
 from app.mealplan_service import download_mealplan_json_from_gcs
+from app.adjust_nutritional_requirements import adjust_nutrients
+from app.retrieve_diet import get_diet_plan
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
@@ -275,22 +277,43 @@ def get_nutrition_requirements():
         data = request.get_json(force=True, silent=True)
         if not data:
             return jsonify({"error": "Invalid JSON"}), 400
-
         age = data.get("age")
         bmi = data.get("bmi")
         gender = data.get("gender")
         weight = data.get("weight")
         height = data.get("height")
         activityLevel = data.get("activityLevel")
+        healthGoal = data.get('healthGoal')
 
         if None in [age, bmi, gender, weight, height, activityLevel]:
             return jsonify({"error": "Missing required fields"}), 400
 
         energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
-        macros = calculate_macros(energy, [data])
-        micros = calculate_micros([data])
+        
+        people = [{
+            "age": age,
+            "gender": gender,
+            "weight": weight,     # kg
+            "height": height,     # cm
+            "activityLevel": activityLevel,
+            "bmi": bmi,
+            "healthGoal": healthGoal,
+        }]
+        
+        LOWER_RANGE = 0.95
+        UPPER_RANGE = 1.05
+        
+        macros = calculate_macros(energy, people)
+        micros = calculate_micros(people)
+        
+        diet_info = get_diet_plan(data["healthGoal"])
+        adjust_nutrients(macros, micros, diet_info["plan"], people)
+        
+        base_energy = macros["large_calories"]  
+        energy_lower_bound = base_energy * LOWER_RANGE
+        energy_upper_bound = base_energy * UPPER_RANGE
 
-        data = { "energy": energy[0], "macros": macros, "micros": micros }
+        data = { "energy_lower": energy_lower_bound, "energy_upper": energy_upper_bound, "macros": macros, "micros": micros }
         return jsonify(data), 200
 
     except Exception as e:
