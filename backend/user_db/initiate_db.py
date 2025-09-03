@@ -50,9 +50,10 @@ class DatabaseSchemaManager:
         cursor = self.db.cursor()
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS user_profile (
-            user_id VARCHAR(255) PRIMARY KEY,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id VARCHAR(255) UNIQUE,
             user_name VARCHAR(255),
-            email VARCHAR(255),
+            email VARCHAR(255) NOT NULL UNIQUE,
             gender VARCHAR(255),
             last_meal_plan_date BIGINT,
             height DOUBLE,

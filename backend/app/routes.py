@@ -86,10 +86,14 @@ def page_not_found(e):
 @app.route("/signup", methods=["POST"])
 def handle_signup():
     data = request.json
+    print("received data: ", data)
     user_id = data.get("user_id")
     db = instantiate_database()
     try:
-        if data.get("subscription_id"): 
+        if user_id is None:
+            print("Trying to add an initial data without user ID")
+            result = db.insert_new_user_without_uid(data)
+        elif data.get("subscription_id"): 
             print("trying to insert paid trial users!")
             result = db.insert_new_user_with_paid_trial(data)
         else:
@@ -473,3 +477,13 @@ def get_recipe(recipe_id):
     @author: BCIT May 2025
     """
     return get_recipe_logic(recipe_id)
+
+@app.route("/check-email", methods=["POST"])
+def handle_check_email():
+    email = request.json
+    if not email:
+        return {"error": "email required"}, 400
+    db = instantiate_database()
+    row = db.check_user_email_existence(email)
+    print(bool(row))
+    return {"exists": bool(row)}, 200

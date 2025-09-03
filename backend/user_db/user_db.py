@@ -141,6 +141,33 @@ class DatabaseManager:
             self.db.rollback()
             return {"success": False, "msg": f"DB Error: {str(e)}"}
 
+    def insert_new_user_without_uid(self, user_data: dict):
+        cursor = self.db.cursor()
+
+        sql_user_profile = """
+        INSERT INTO user_profile (email, age, gender, height, weight, activity_level, selected_unit, health_goal)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+        """
+        values_user_profile = (
+            user_data.get("email"),
+            user_data.get("age"),
+            user_data.get("gender"),
+            user_data.get("height"),
+            user_data.get("weight"),
+            user_data.get("activity_level"),
+            user_data.get("selected_unit"),
+            user_data.get("health_goal")
+        )
+        try:
+            cursor.execute(sql_user_profile, values_user_profile)
+            self.db.commit()
+            print("Done inserting new user without id")
+            return {"success": True, "message": "User profile and created successfully."}
+        except pymysql.Error as e:
+            print("Failed to insert new user without id")
+            self.db.rollback()
+            return {"success": False, "msg": f"Error inserting user profile for user {email}: {str(e)}"}
+        
 
     # def insert_user_profile(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
     #     cursor = self.db.cursor()
@@ -1006,6 +1033,13 @@ class DatabaseManager:
         cursor = self.db.cursor()
         sql = "SELECT user_id FROM user_profile WHERE user_id = %s"
         cursor.execute(sql, (user_id,))
+        result = cursor.fetchone()
+        return True if result else False
+    
+    def check_user_email_existence(self, email):
+        cursor = self.db.cursor()
+        sql = "SELECT * FROM user_profile WHERE email = %s"
+        cursor.execute(sql, (email,))
         result = cursor.fetchone()
         return True if result else False
 
