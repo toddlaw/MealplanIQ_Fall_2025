@@ -102,21 +102,17 @@ class DatabaseManager:
         cursor = self.db.cursor()
 
         sql_user_profile = """
-        INSERT INTO user_profile (user_id, user_name, email, gender, last_meal_plan_date, height, age, weight, activity_level, selected_unit, health_goal)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            UPDATE user_profile
+            SET
+                user_id = %s,
+                user_name = %s
+            WHERE email = %s
         """
+        
         values_user_profile = (
             user_data.get("user_id"),
             user_data.get("user_name"),
-            user_data.get("email"),
-            user_data.get("gender"),
-            None,  # last_meal_plan_date
-            user_data.get("height"),
-            user_data.get("age"),
-            user_data.get("weight"),
-            user_data.get("activity_level"),
-            user_data.get("selected_unit"),
-            user_data.get("health_goal")
+            user_data.get("email")
         )
 
         sql_subscription = """
@@ -166,7 +162,7 @@ class DatabaseManager:
         except pymysql.Error as e:
             print("Failed to insert new user without id")
             self.db.rollback()
-            return {"success": False, "msg": f"Error inserting user profile for user {email}: {str(e)}"}
+            return {"success": False, "msg": f"Error inserting user profile for user {user_data.get('email')}: {str(e)}"}
         
 
     # def insert_user_profile(self, user_id, user_name, email, gender=None, height=None, age=None, weight=None, activity_level=None, selected_unit=None, health_goal=None):
