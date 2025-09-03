@@ -105,13 +105,27 @@ class DatabaseManager:
             UPDATE user_profile
             SET
                 user_id = %s,
-                user_name = %s
+                user_name = %s,
+                age = %s,
+                gender = %s,
+                height = %s,
+                weight = %s,
+                activity_level = %s,
+                selected_unit = %s,
+                health_goal = %s
             WHERE email = %s
         """
         
         values_user_profile = (
             user_data.get("user_id"),
             user_data.get("user_name"),
+            user_data.get("age"),
+            user_data.get("gender"),
+            user_data.get("height"),
+            user_data.get("weight"),
+            user_data.get("activity_level"),
+            user_data.get("selected_unit"),
+            user_data.get("health_goal"),
             user_data.get("email")
         )
 
@@ -1025,10 +1039,10 @@ class DatabaseManager:
 
 # ------------------- Validate User ----------------------
 
-    def check_user_id_existence(self, user_id):
+    def check_user_id_existence_by_email(self, email):
         cursor = self.db.cursor()
-        sql = "SELECT user_id FROM user_profile WHERE user_id = %s"
-        cursor.execute(sql, (user_id,))
+        sql = "SELECT 1 FROM user_profile WHERE email = %s AND user_ID IS NOT NULL LIMIT 1"
+        cursor.execute(sql, (email,))
         result = cursor.fetchone()
         return True if result else False
     

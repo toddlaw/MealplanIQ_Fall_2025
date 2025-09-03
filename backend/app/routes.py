@@ -484,6 +484,8 @@ def handle_check_email():
     if not email:
         return {"error": "email required"}, 400
     db = instantiate_database()
-    row = db.check_user_email_existence(email)
-    print(bool(row))
-    return {"exists": bool(row)}, 200
+    exists = db.check_user_email_existence(email)
+    if exists:
+        has_user_id = db.check_user_id_existence_by_email(email)
+        return {"exists": bool(exists), "has_user_id": bool(has_user_id)}, 200
+    return {"exists": bool(exists)}, 200
