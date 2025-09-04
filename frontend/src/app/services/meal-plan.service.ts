@@ -11,7 +11,7 @@ export class MealPlanService {
   static getMealPlan(path: string): any {
     throw new Error('Method not implemented.');
   }
-  private baseUrl = `${environment.baseUrl}`;
+  private baseUrl = `${environment.baseUrl}/api/mealplan`;
   // private baseUrl = 'http://localhost:5000/api/mealplan'; 
   constructor(private http: HttpClient) {}
 
