@@ -31,6 +31,7 @@ export class MealPlanComponent implements OnInit {
   path: string = '';
   selectedDate: string = '';           // for dropdown
   filteredDays: any[] = [];   
+  originalDays: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -133,10 +134,9 @@ export class MealPlanComponent implements OnInit {
 
 
 filterByDate() {
-  const allDays = this.mealPlanResponse.days;
   this.filteredDays = this.selectedDate
-    ? allDays.filter((day: any) => day.date === this.selectedDate)
-    : allDays;
+    ? this.originalDays.filter((d: any) => d.date === this.selectedDate)
+    : this.originalDays;
 }
   
 
@@ -145,6 +145,8 @@ filterByDate() {
     this.categorizeNutrients();
 
      const allDays = this.mealPlanResponse.days;
+     this.originalDays = Array.isArray(this.mealPlanResponse?.days) ? [...this.mealPlanResponse.days] : [];
+
 
        if (this.start_date === this.end_date) {
     this.selectedDate = this.start_date;
