@@ -18,7 +18,7 @@
   <mat-label>Select Date</mat-label>
   <mat-select [(value)]="selectedDate" (selectionChange)="filterByDate()">
     <mat-option value="">All Days</mat-option>
-    <mat-option *ngFor="let day of mealPlanResponse.days" [value]="day.date">
+    <mat-option *ngFor="let day of originalDays" [value]="day.date">
       {{ formatDate(day.date) }}
     </mat-option>
   </mat-select>
