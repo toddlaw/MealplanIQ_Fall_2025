@@ -34,9 +34,8 @@ ALLOWED = [
 CORS(
     app,
     resources={r"/*": {"origins": ALLOWED}},
-    allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type"],
     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    supports_credentials=True,  
 )
 
 # serve static files
