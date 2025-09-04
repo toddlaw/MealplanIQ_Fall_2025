@@ -1,8 +1,9 @@
 import os
 import base64
 import datetime
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from sched import scheduler
+from zoneinfo import ZoneInfo
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -47,12 +48,23 @@ credentials = service_account.Credentials.from_service_account_info(
 
 service_gmail = build("gmail", "v1", credentials=credentials)
 
-today = datetime.today()
-start_date = today + timedelta(days=1)
-end_date = start_date + timedelta(days=6)
-today_str = today.strftime('%Y-%m-%d')
-start_str = start_date.strftime('%Y-%m-%d')
-end_str = end_date.strftime('%Y-%m-%d')
+TZ = ZoneInfo("America/Los_Angeles")  
+
+now = datetime.now(TZ)        
+today = now.date()           
+start_date = today + timedelta(days=1)  
+end_date   = start_date + timedelta(days=6) 
+
+today_str = today.strftime("%Y-%m-%d")
+start_str = start_date.strftime("%Y-%m-%d")
+end_str   = end_date.strftime("%Y-%m-%d")
+
+# today = datetime.today()
+# start_date = today + timedelta(days=1)
+# end_date = start_date + timedelta(days=6)
+# today_str = today.strftime('%Y-%m-%d')
+# start_str = start_date.strftime('%Y-%m-%d')
+# end_str = end_date.strftime('%Y-%m-%d')
 
 # add is_html parameter to create_message function with html content
 def create_message(sender, to, subject, message_text, is_html=True):
@@ -156,8 +168,7 @@ def process_weekly_email_for_user(db, user_id):
         }, 500
 
 def process_daily_email_for_user(db, user_id):
-    tomorrow = today + timedelta(days=1)
-    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+    tomorrow_str = start_date.strftime('%Y-%m-%d')
 
     # Get meal plan data from GCS
     try:
@@ -209,14 +220,24 @@ def process_daily_email_for_user(db, user_id):
             "date": tomorrow_str,
             "error": str(e),
         }, 500
-
+# weekly
 def create_and_send_maizzle_email(response, user_email, user_name, start_date=None, end_date=None):
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     root_path = app.root_path
 
+    start_d = date.fromisoformat(start_date)  
+    end_d = date.fromisoformat(end_date)
+
     templates_path = os.path.join(root_path, "emailTemplates")
-    subject = f"Your personalized Meal Plan is Ready, {user_name}!"
+    # if start_date == end_date:
+    #     subject = f"Your personalized Meal Plan For tomorrow {start_d.weekday()} is Ready, {user_name}!"
+    subject = f"Your personalized Meal Plan For tomorrow {start_d.weekday()} is Ready, {user_name}!"
+    # else:
+    #     # subject = f"Your weekly meal plan for {start_d.strftime('%b %d')} to {end_d.strftime('%b %d')}, {user_name}!"
+    #     subject = "Next week’s meal plan is ready!"
+
+    # subject = f"Your personalized Meal Plan is Ready, {user_name}!"
     response = sampleMealPlans
     response["user_name"] = user_name
     
@@ -245,17 +266,18 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
         msg = send_message(service_gmail, "me", message)
         print(msg)
     return msg
-
+#daily
 def create_and_send_maizzle_daily_email_test(response, user_email, user_name, sent_date):
-    print(response)
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     
     root_path = app.root_path
 
     templates_path = os.path.join(root_path, "emailTemplates")
+    start_d = date.fromisoformat(sent_date)
 
-    subject = f"{user_name}, check out your meal plan for {response['days'][0]['date_weekday']}!"
+    # subject for daily email
+    subject = f"Your personalized Meal Plan For tomorrow {start_d.strftime('%A')  } is Ready, {user_name}!"
     
     response["user_name"] = user_name
     
@@ -274,6 +296,7 @@ def create_and_send_maizzle_daily_email_test(response, user_email, user_name, se
             open(templates_path + "/daily.html").read(), 
             **response,
             sent_date=sent_date,
+            formatted_date=start_d.strftime('%A'),
             shopping_list_html=shopping_list_template
         )
 
