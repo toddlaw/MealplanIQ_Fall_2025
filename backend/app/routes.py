@@ -15,47 +15,32 @@ from app.payment_stripe import (
 )
 from app.manage_user_data import *
 from app.mealplan_service import download_mealplan_json_from_gcs
-from app.adjust_nutritional_requirements import adjust_nutrients
-from app.retrieve_diet import get_diet_plan
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
 from app.recipe_management.search import search_recipes_logic
 from app.recipe_management.replace import replace_recipe_logic
 from app.recipe_management.get_recipe import get_recipe_logic
+import os
 
-# from app.send_email import send_weekly_email_by_google_scheduler
 
-# Enable CORS for all domains on all routes
-CORS(app, resources={r"/*": {"origins": "*"}})
+ALLOWED = [
+    "https://www.mealplaniq.com",
+    "https://mealplaniq.com",
+    "http://localhost:4200", 
+    "https://mealplaniq-questionnaire-45646449510.us-central1.run.app",
+]
+
+CORS(
+    app,
+    resources={r"/*": {"origins": ALLOWED}},
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    supports_credentials=True,  
+)
 
 # serve static files
 import traceback
-
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def index(path):
-    if path:
-        return send_from_directory("static", path)
-    else:
-        return send_from_directory("static", "index.html")
-
-
-@app.route("/static/splash")
-@app.route("/static/mission")
-@app.route("/static/philosophy")
-@app.route("/static/approach")
-@app.route("/static/technology")
-@app.route("/static/leadership")
-@app.route("/static/timeline")
-@app.route("/static/contact")
-@app.route("/static/login")
-@app.route("/static/sign-up")
-@app.route("/static/profile")
-@app.route("/static")
-def static_files():
-    return send_from_directory("static", "index.html")
 
 
 @app.errorhandler(404)
@@ -86,14 +71,10 @@ def page_not_found(e):
 @app.route("/signup", methods=["POST"])
 def handle_signup():
     data = request.json
-    print("received data: ", data)
     user_id = data.get("user_id")
     db = instantiate_database()
     try:
-        if user_id is None:
-            print("Trying to add an initial data without user ID")
-            result = db.insert_new_user_without_uid(data)
-        elif data.get("subscription_id"): 
+        if data.get("subscription_id"): 
             print("trying to insert paid trial users!")
             result = db.insert_new_user_with_paid_trial(data)
         else:
@@ -106,16 +87,6 @@ def handle_signup():
     except Exception as e:
         print(f"Failed to insert user: {str(e)}")
         return jsonify({"error": str(e)}), 500
-    
-@app.route("/api/<path:path>", methods=["OPTIONS"])
-def handle_preflight(path):
-    response = jsonify({"status": "preflight OK"})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return response
-
-
 
 @app.route("/api/profile/<user_id>")
 def get_user_profile(user_id):
@@ -477,15 +448,3 @@ def get_recipe(recipe_id):
     @author: BCIT May 2025
     """
     return get_recipe_logic(recipe_id)
-
-@app.route("/check-email", methods=["POST"])
-def handle_check_email():
-    email = request.json
-    if not email:
-        return {"error": "email required"}, 400
-    db = instantiate_database()
-    exists = db.check_user_email_existence(email)
-    if exists:
-        has_user_id = db.check_user_id_existence_by_email(email)
-        return {"exists": bool(exists), "has_user_id": bool(has_user_id)}, 200
-    return {"exists": bool(exists)}, 200
