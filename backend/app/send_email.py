@@ -48,13 +48,12 @@ credentials = service_account.Credentials.from_service_account_info(
 
 service_gmail = build("gmail", "v1", credentials=credentials)
 
-TZ = ZoneInfo("America/Los_Angeles")  
+TZ = ZoneInfo("America/Los_Angeles")
 
 now = datetime.now(TZ)        
+start_date = now + timedelta(days=1)
+end_date = start_date + timedelta(days=6)      
 today = now.date()           
-start_date = today + timedelta(days=1)  
-end_date   = start_date + timedelta(days=6) 
-
 today_str = today.strftime("%Y-%m-%d")
 start_str = start_date.strftime("%Y-%m-%d")
 end_str   = end_date.strftime("%Y-%m-%d")
@@ -232,10 +231,11 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
     templates_path = os.path.join(root_path, "emailTemplates")
     # if start_date == end_date:
     #     subject = f"Your personalized Meal Plan For tomorrow {start_d.weekday()} is Ready, {user_name}!"
-    subject = f"Your personalized Meal Plan For tomorrow {start_d.weekday()} is Ready, {user_name}!"
+    # subject = f"Your personalized Meal Plan For tomorrow {start_d.weekday()} is Ready, {user_name}!"
     # else:
     #     # subject = f"Your weekly meal plan for {start_d.strftime('%b %d')} to {end_d.strftime('%b %d')}, {user_name}!"
     #     subject = "Next week’s meal plan is ready!"
+    subject = f"Your weekly meal plan for {start_d.strftime('%b %d')} to {end_d.strftime('%b %d')}, {user_name}!"
 
     # subject = f"Your personalized Meal Plan is Ready, {user_name}!"
     response = sampleMealPlans
