@@ -1,13 +1,11 @@
-import time
-
 from app import app
 from app.calculate_bmi import bmi_calculator_function
-from flask import redirect, request, jsonify, send_from_directory
+from flask import make_response, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
-from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
-from app.send_email import create_and_send_maizzle_email_test
+from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, create_nutrition_requirements_payload, read_micro_nutrients_file
+from app.send_email import send_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
     handle_subscription_deleted,
@@ -16,57 +14,33 @@ from app.payment_stripe import (
     create_customer_portal_by_id
 )
 from app.manage_user_data import *
+from app.mealplan_service import download_mealplan_json_from_gcs
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
 from app.recipe_management.search import search_recipes_logic
 from app.recipe_management.replace import replace_recipe_logic
 from app.recipe_management.get_recipe import get_recipe_logic
+import os
 
-# from app.send_email import send_weekly_email_by_google_scheduler
 
-# Enable CORS for all domains on all routes
-CORS(app, resources={r"/*": {"origins": "*"}})
+ALLOWED = [
+    "https://www.mealplaniq.com",
+    "https://mealplaniq.com",
+    "http://localhost:4200", 
+    "https://mealplaniq-questionnaire-45646449510.us-central1.run.app",
+]
+
+CORS(
+    app,
+    resources={r"/*": {"origins": ALLOWED}},
+    allow_headers=["Content-Type"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+)
 
 # serve static files
 import traceback
 
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def index(path):
-    if path:
-        return send_from_directory("static", path)
-    else:
-        return send_from_directory("static", "index.html")
-
-
-@app.route("/static/splash")
-@app.route("/static/mission")
-@app.route("/static/philosophy")
-@app.route("/static/approach")
-@app.route("/static/technology")
-@app.route("/static/leadership")
-@app.route("/static/timeline")
-@app.route("/static/contact")
-@app.route("/static/login")
-@app.route("/static/sign-up")
-@app.route("/static/profile")
-@app.route("/static")
-def static_files():
-    return send_from_directory("static", "index.html")
-
-
-# redirect 404 to root URL
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     print(request.path)
-#     return redirect("/")
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     if request.path.startswith('/api'):
-#         return jsonify({'error': 'Not found'}), 404
-#     return redirect("/")
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -93,49 +67,25 @@ def page_not_found(e):
         return jsonify({'error': 'Not found'}), 404
     return redirect("/")
 
-
-# @app.route("/schedule-email", methods=["GET"])
-# def schedule_email():
-#     if request.headers.get("X-Appengine-Cron") != "true":
-#         return "Unauthorized", 403
-#     db = instantiate_database()
-#     send_weekly_email_by_google_scheduler(db)
-
-
 @app.route("/signup", methods=["POST"])
 def handle_signup():
     data = request.json
     user_id = data.get("user_id")
-    user_name = data.get("user_name")
-    email = data.get("email")
-    stripe_subscription_id = data.get("subscription_id")
-    stripe_customer_id = data.get("customer_id")
-    stripe_trial_end = data.get("trial_end")
     db = instantiate_database()
     try:
-        if stripe_subscription_id:
+        if data.get("subscription_id"): 
             print("trying to insert paid trial users!")
-            result = db.insert_new_user_with_paid_trial(
-                user_id, user_name, email, stripe_subscription_id, stripe_customer_id, stripe_trial_end
-            )
+            result = db.insert_new_user_with_paid_trial(data)
         else:
             result = db.insert_user_and_set_default_subscription_signup(
-                user_id, user_name, email
+                user_id,
+                data.get("user_name"),
+                data.get("email")
             )
-        return result
+        return jsonify(result)
     except Exception as e:
         print(f"Failed to insert user: {str(e)}")
         return jsonify({"error": str(e)}), 500
-    
-@app.route("/api/<path:path>", methods=["OPTIONS"])
-def handle_preflight(path):
-    response = jsonify({"status": "preflight OK"})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return response
-
-
 
 @app.route("/api/profile/<user_id>")
 def get_user_profile(user_id):
@@ -150,31 +100,73 @@ def get_user_landing_page_profile(user_id):
     result = db.get_user_landing_page_profile(user_id)
     return result
 
+@app.route("/api/daily_email")
+def daily_meal_plan():
+    db = instantiate_database()
+    try:
+        result, code = send_email_by_google_scheduler(db, True)
+        return jsonify(result), code
+    except Exception as e:
+        print(f"Error in daily email route: {e}")
+        return jsonify({"status": "fail", "error": str(e)}), 500
+
+@app.route("/api/weekly_email")
+def weekly_meal_plan():
+    db = instantiate_database()
+    try:
+        result, code = send_email_by_google_scheduler(db, False)
+        return jsonify(result), code
+    except Exception as e:
+        print(f"Error in weekly email route: {e}")
+        return jsonify({"status": "fail", "error": str(e)}), 500
+    
+@app.route('/api/mealplan/meal-plans-for-user/<user_id>/<date_range>', methods=["GET", "OPTIONS"])
+def get_mealplan(user_id, date_range):
+    print(f"[GET MEALPLAN] User ID: {user_id}, Date Range: {date_range}")
+
+    try:
+        full_path = f"meal-plans-for-user/{user_id}/{date_range}"
+        data = download_mealplan_json_from_gcs(full_path)
+        response = jsonify(data)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch meal plan: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api", methods=["POST"])
 def receive_data():
     data = request.json
-    print("get data from frontend", data)
     db = instantiate_database()
-    user_id = data["user_id"]
-    user_data = extract_user_profile_data_from_json(data, user_id)
-    extract_data = extract_data_from_json(data)
-    # db.update_user_profile(**user_data)
-    process_user_data(db, user_id, extract_data)
+    user_id = data["user_id"]  
+    if user_id is not None:
+        user_data = extract_user_profile_data_from_json(data, user_id)
+        extract_data = extract_data_from_json(data)
+        db.update_user_profile(**user_data)
+        process_user_data(db, user_id, extract_data)
 
+        min_date = datetime.datetime.fromtimestamp(data["minDate"] / 1000.0, datetime.timezone.utc)
+        max_date = datetime.datetime.fromtimestamp(data["maxDate"] / 1000.0, datetime.timezone.utc)
+
+        formatted_min_date = min_date.strftime("%Y/%m/%d")
+        formatted_max_date = max_date.strftime("%Y/%m/%d")
+        
+    else:
+        print("Skipped user info storing")
     try:
-        print("data sent to gen_meal_plan", data)
         response = gen_meal_plan(data)
+        print("=====Final Data======", response)
     except Exception as e:
         error_traceback = traceback.format_exc()
         response = {"error": str(e),
                     "traceback": error_traceback}
         print(f"Failed to generate meal plan: {str(e)}\nTraceback: {error_traceback}")
 
-    try:
-        create_and_send_maizzle_email_test(response, user_id, db)
-    except Exception as e:
-        print(f"Failed to send email: {str(e)}")
+    # if user_id is not None:
+    #     try:
+    #         send_weekly_email_by_google_scheduler(db)
+    #     except Exception as e:
+    #         print(f"Failed to send email: {str(e)}")
     return jsonify(response)
 
 
@@ -259,24 +251,10 @@ def get_nutrition_requirements():
         data = request.get_json(force=True, silent=True)
         if not data:
             return jsonify({"error": "Invalid JSON"}), 400
-
-        age = data.get("age")
-        bmi = data.get("bmi")
-        gender = data.get("gender")
-        weight = data.get("weight")
-        height = data.get("height")
-        activityLevel = data.get("activityLevel")
-
-        if None in [age, bmi, gender, weight, height, activityLevel]:
-            return jsonify({"error": "Missing required fields"}), 400
-
-        energy = [energy_calculator_function(age, bmi, gender, weight, height, activityLevel)]  
-        macros = calculate_macros(energy, [data])
-        micros = calculate_micros([data])
-
-        data = { "energy": energy[0], "macros": macros, "micros": micros }
-        return jsonify(data), 200
-
+        payload = create_nutrition_requirements_payload(data)
+        return jsonify(payload), 200
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

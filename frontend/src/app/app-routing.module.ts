@@ -20,6 +20,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PopupComponent } from './components/dialogues/popup/popup.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { MealPlanComponent } from './components/meal-plan/meal-plan.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToLanding = () => redirectLoggedInTo(['']);
@@ -75,6 +76,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+  },
+  {
+    path: 'meal-plan',
+    component: MealPlanComponent,
   }
 ];
 

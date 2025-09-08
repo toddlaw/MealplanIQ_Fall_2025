@@ -24,7 +24,9 @@ def extract_data_from_json(data):
         'disliked_foods': data.get('dislikedFoods'),
         'favourite_cuisines': data.get('favouriteCuisines'),
         'religious_constraint': data.get('religiousConstraint'),
-        'dietary_constraint': data.get('dietaryConstraint')
+        'dietary_constraint': data.get('dietaryConstraint'),
+        'snacks': data.get('snacks'),
+        'breakfasts': data.get('breakfasts')
     }
 
 
@@ -39,9 +41,11 @@ def process_user_data(db, user_id, extract_data):
         user_id, extract_data['religious_constraint'])
     db.insert_or_update_user_dietary_constraint(
         user_id, extract_data['dietary_constraint'])
+    db.update_user_prefered_snacks(user_id, extract_data['snacks'])
+    db.update_user_prefered_breakfasts(user_id, extract_data['breakfasts'])
 
-
-def create_data_input_for_auto_gen_meal_plan(db, user_id):
+# Return the dictionary that is used as input for gen_meal_plan for email scheduler
+def create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date):
     dietary_constraints = db.retrieve_user_dieatary_constraints(user_id)
     if not dietary_constraints:
         dietary_constraint = None
@@ -55,22 +59,23 @@ def create_data_input_for_auto_gen_meal_plan(db, user_id):
 
     people = [profile_data]
     selected_unit = db.retrieve_user_selected_unit(user_id)
-    dietary_constraint = db.retrieve_user_dieatary_constraints(user_id)[
-        0].lower()
+    dietary_constraint = db.retrieve_user_dieatary_constraints(user_id) or "none"
     health_goal = db.retrieve_user_health_goal(user_id)
-    religious_constraint = db.retrieve_user_religious_constraints(user_id)[
-        0].lower()
+    religious_constraint = db.retrieve_user_religious_constraints(user_id) or "none"
     liked_foods = db.retrieve_user_liked_food(user_id)
     disliked_foods = db.retrieve_user_disliked_food(user_id)
     favourite_cuisines = db.retrieve_user_favourite_cuisines(user_id)
     allergies = db.retrieve_user_allergies(user_id)
-    min_date = _get_min_and_max_date_from_the_last_date(db, user_id)[0]
-    max_date = _get_min_and_max_date_from_the_last_date(db, user_id)[1]
+    snacks = db.retrieve_user_snack_preferences(user_id)
+    breakfasts = db.retrieve_user_breakfast_preferences(user_id)
+    min_date = int(start_date.timestamp() * 1000)
+    max_date = int(end_date.timestamp() * 1000)
     included_recipes = []
     excluded_recipes = []
     return {
         'people': people,
         'selectedUnit': selected_unit,
+        'user_id': user_id,
         'dietaryConstraint': dietary_constraint,
         'healthGoal': health_goal,
         'religiousConstraint': religious_constraint,
@@ -80,6 +85,8 @@ def create_data_input_for_auto_gen_meal_plan(db, user_id):
         'allergies': allergies,
         'minDate': min_date,
         'maxDate': max_date,
+        'snacks': snacks,
+        'breakfasts': breakfasts,
         'includedRecipes': included_recipes,
         'excludedRecipes': excluded_recipes
     }

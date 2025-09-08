@@ -16,14 +16,6 @@
       class="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg"
       id="homepage-landing"
     >
-      <!-- <h1 class="text-red">
-      MealPlanIQ is currently in beta and we are working to make it better! We
-      appreciate your patience.
-    </h1> -->
-      <!-- <h1>
-      Fighting cancer, heart disease, or diabetes? Want to lose weight or gain
-      muscle?
-    </h1> -->
       <p>
         <i>MealPlan IQ</i> combines a registered dietician's advice with your
         preferences and restrictions to generate
@@ -37,7 +29,7 @@
       <div
         class="container flex flex-wrap items-center justify-center text-center"
       >
-        <form #peopleForm="ngForm" (ngSubmit)="showTermsAndConditions()">
+        <form #peopleForm="ngForm" #peopleFormEl (ngSubmit)="showTermsAndConditions()">
           <div class="grid-rows">
             <div
               class="grid-cols-4 p-8 flex flex-wrap justify-center items-center"
@@ -98,18 +90,9 @@
                   </div>
 
                   <div class="grid justify-items-end pr-5">
-                    <mat-button-toggle-group>
-                      <mat-button-toggle
-                        value=""
-                        (click)="setSelectedUnit('metric')"
-                        checked
-                        >Metric
-                      </mat-button-toggle>
-                      <mat-button-toggle
-                        value=""
-                        (click)="setSelectedUnit('imperial')"
-                        >Imperial
-                      </mat-button-toggle>
+                    <mat-button-toggle-group [(ngModel)]="selectedUnit" name="unit" (change)="setSelectedUnit($event.value)">
+                      <mat-button-toggle [value]="'metric'">Metric</mat-button-toggle>
+                      <mat-button-toggle [value]="'imperial'">Imperial</mat-button-toggle>
                     </mat-button-toggle-group>
                   </div>
                 </div>
@@ -270,7 +253,7 @@
                   name="likedFoods"
                 >
                   <mat-select-trigger>
-                    {{likedFoods.value?.[0] || ''}}
+                    {{ getViewValue(likedFoods.value?.[0] || '', likedFoodsList) }}
                     <span *ngIf="(likedFoods.value?.length || 0) > 1">
                       (+{{ (likedFoods.value?.length || 0) - 1 }}
                       {{ likedFoods.value?.length === 2 ? "other" : "others" }})
@@ -278,9 +261,9 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let likedFood of likedFoodsList"
-                    [value]="likedFood"
+                    [value]="likedFood.value"
                   >
-                    {{ likedFood }}
+                    {{ likedFood.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -294,7 +277,7 @@
                 </mat-label>
                 <mat-select [formControl]="dislikedFoods" multiple>
                   <mat-select-trigger>
-                    {{dislikedFoods.value?.[0] || ''}}
+                    {{ getViewValue(dislikedFoods.value?.[0] || '', dislikedFoodsList) }}
                     <span *ngIf="(dislikedFoods.value?.length || 0) > 1">
                       (+{{ (dislikedFoods.value?.length || 0) - 1 }}
                       {{
@@ -304,8 +287,8 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let dislikedFoods of dislikedFoodsList"
-                    [value]="dislikedFoods"
-                    >{{ dislikedFoods }}</mat-option
+                    [value]="dislikedFoods.value"
+                    >{{ dislikedFoods.viewValue }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -319,7 +302,7 @@
                 </mat-label>
                 <mat-select [formControl]="cuisines" multiple>
                   <mat-select-trigger>
-                    {{cuisines.value?.[0] || ''}}
+                    {{ getViewValue(cuisines.value?.[0] || '', cuisinesList) }}
                     <span *ngIf="(cuisines.value?.length || 0) > 1">
                       (+{{ (cuisines.value?.length || 0) - 1 }}
                       {{ cuisines.value?.length === 2 ? "other" : "others" }})
@@ -327,8 +310,8 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let cuisine of cuisinesList"
-                    [value]="cuisine"
-                    >{{ cuisine }}</mat-option
+                    [value]="cuisine.value"
+                    >{{ cuisine.viewValue }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -342,7 +325,7 @@
                 </mat-label>
                 <mat-select [formControl]="allergies" multiple>
                   <mat-select-trigger>
-                    {{ allergies.value?.[0] || ''}}
+                    {{ getViewValue(allergies.value?.[0] || '', allergiesList) }}
                     <span *ngIf="(allergies.value?.length || 0) > 1">
                       (+{{ (allergies.value?.length || 0) - 1 }}
                       {{ allergies.value?.length === 2 ? "other" : "others" }})
@@ -350,9 +333,9 @@
                   </mat-select-trigger>
                   <mat-option
                     *ngFor="let allergy of allergiesList"
-                    [value]="allergy"
+                    [value]="allergy.value"
                   >
-                    {{ allergy }}
+                    {{ allergy.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -367,14 +350,14 @@
                 </mat-label>
                 <mat-select [formControl]="breakfasts" multiple>
                   <mat-select-trigger>
-                    {{ breakfasts.value?.[0] || ''}}
+                    {{ getViewValue(breakfasts.value?.[0] || '', breakfastList) }}
                     <span *ngIf="(breakfasts.value?.length || 0) > 1">
                       (+{{ (breakfasts.value?.length || 0) - 1 }}
                       {{ breakfasts.value?.length === 2 ? "other" : "others" }})
                     </span>
                   </mat-select-trigger>
-                  <mat-option *ngFor="let food of breakfastList" [value]="food">
-                    {{ food }}
+                  <mat-option *ngFor="let food of breakfastList" [value]="food.value">
+                    {{ food.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -388,14 +371,14 @@
                 </mat-label>
                 <mat-select [formControl]="snacks" multiple>
                   <mat-select-trigger>
-                    {{ snacks.value?.[0] || ''}}
+                    {{ getViewValue(snacks.value?.[0] || '', snackList) }}
                     <span *ngIf="(snacks.value?.length || 0) > 1">
                       (+{{ (snacks.value?.length || 0) - 1 }}
                       {{ snacks.value?.length === 2 ? "other" : "others" }})
                     </span>
                   </mat-select-trigger>
-                  <mat-option *ngFor="let food of snackList" [value]="food">
-                    {{ food }}
+                  <mat-option *ngFor="let food of snackList" [value]="food.value">
+                    {{ food.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -505,17 +488,7 @@
             All nutrients are within the recommended ranges!
           </div>
           <br>
-
-        <!-- recipe change option -->
-        <!-- <button
-        mat-raised-button
-        color="primary"
-        class="get-full-meal-plan-button"
-        (click)="getFullMealPlan()"
-      >
-        Get full meal plan
-      </button> -->
-
+          
         <app-popup></app-popup>
 
         <div class="text-center">

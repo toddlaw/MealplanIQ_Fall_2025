@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
   user$ = this.authService.currentUser$;
@@ -20,8 +20,6 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.logout().subscribe(() => {
-      localStorage.removeItem('email');
-      localStorage.removeItem('uid');
       this.toast.success('You have been logged out.');
 
       setTimeout(() => {
@@ -32,7 +30,7 @@ export class NavbarComponent implements OnInit {
 
   goToGenerateMealPlan() {
     this.router.navigate(['/generate'], {
-      queryParams: { guest: 'true' }
+      queryParams: { guest: 'true' },
     });
   }
 

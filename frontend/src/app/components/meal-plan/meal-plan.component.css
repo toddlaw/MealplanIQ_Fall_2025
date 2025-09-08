@@ -1,0 +1,95 @@
+.health-goal-button {
+  width: 80px;
+  height: 90px;
+  cursor: pointer;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.health-goal-text {
+  display: inline-block;
+  width: 50px;
+}
+
+.meal-card {
+  width: 100%;
+  height: 100%;
+  margin: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.header-cell {
+  background-color: #8CB173;
+  color: white;
+  text-align: center;
+  /* font-weight: bold; */
+  font-size: 16px;
+}
+
+.header-text-left {
+  background-color: #8CB173;
+  color: white;
+  text-align: left;
+  /* font-weight: bold; */
+  font-size: 16px;
+}
+
+.out-of-range {
+  color: red;
+  font-weight: bold;
+}
+
+#deleted-card {
+  padding: 20px;
+  background-color: #f0f0f0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #888;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.in-range {
+  color: green;
+  font-weight: bold;
+}
+
+.text-left {
+  text-align: left;
+}
+
+th.text-left {
+  padding-left: 10px;
+}
+
+th[mat-header-cell],
+td[mat-cell] {
+  width: 33%;
+
+}
+
+.mat-table {
+  table-layout: fixed;
+
+}
+
+mat-panel-title {
+  font-size: 19px;
+
+}
+
+
+.blue-text {
+  color: rgb(46, 52, 212);
+  font-weight: bold;
+}
+
+::ng-deep .out-of-range-alert {
+  color: #dc2626;
+}

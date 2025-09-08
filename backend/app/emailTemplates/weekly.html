@@ -104,15 +104,15 @@
                               line-height: 24px;
                               color: #ffffff;
                             ">
-                          Checkout your meal plan
+                          Ready for next week? Your plan’s here.
                           <br />
-                          for the next 7 days!
+                          {{ start_date }} - {{ end_date }}
                         </p>
                         <div role="separator" class="sm-leading-8" style="line-height: 64px">
                           &zwj;
                         </div>
                         <div>
-                          <a href="https://mealplaniq-may-2024.uw.r.appspot.com" style="
+                          <a href="https://www.mealplaniq.com/meal-plan?start_date={{start_date}}&amp;end_date={{end_date}}"style="
                                 display: inline-block;
                                 border-radius: 4px;
                                 background-color: #88a56f;
@@ -123,24 +123,9 @@
                                 color: #ffffff;
                                 text-decoration: none;
                               ">
-                            <!--[if mso]>
-                                <i
-                                  style="
-                                    mso-font-width: 150%;
-                                    mso-text-raise: 30px;
-                                  "
-                                  hidden
-                                  >&emsp;</i
-                                >
-                              <![endif]-->
                             <span style="mso-text-raise: 16px">
                               Read more &rarr;
                             </span>
-                            <!--[if mso]>
-                                <i hidden style="mso-font-width: 150%"
-                                  >&emsp;&#8203;</i
-                                >
-                              <![endif]-->
                           </a>
                         </div>
                       </td>
@@ -158,137 +143,6 @@
               </tr>
 
               <!-- banner end -->
-
-              <!-- meal plan start -->
-              <tr style="color: #000000">
-                <td>
-                  <h2 style="margin-top: 96px; text-align: center">
-                    Your meal plan for {{ days[0].date_weekday }} to {{ days[-1].date_weekday }}
-                  </h2>
-                </td>
-              </tr>
-
-              {% for day in days %}
-
-              <tr>
-                <td style="padding: 0; text-align: left; color: #000000">
-                  <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
-                    <tr>
-                      <td>
-                        <h3 style="font-size: 18px">
-                          {{ day.date_weekday }}
-                        </h3>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <table style="width: 100%" cellpadding="0" cellspacing="0" role="none">
-                          <tr>
-                            {% for recipe in day.recipes %}
-
-                            <td class="sm-px-0 sm-w-full" style="
-                                  display: inline-block;
-                                  padding-bottom: 16px;
-                                  padding-left: 32px;
-                                  width: 44%;
-                                  vertical-align: top;
-                                ">
-                              <table style="
-                                    width: 100%;
-                                    border-radius: 4px;
-                                    border-width: 1px;
-                                    background-color: #ffffff;
-                                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-                                  " cellpadding="0" cellspacing="0" role="none">
-                                <tr>
-                                  <td style="
-                                        padding: 16px 16px 0;
-                                        text-align: center;
-                                      ">
-                                    <img
-                                      src="https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/{{ recipe.id }}.jpg"
-                                      alt="Image" style="
-                                          max-width: 100%;
-                                          vertical-align: middle;
-                                          line-height: 1;
-                                          width: 100%;
-                                          text-align: center;
-                                        " />
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td style="
-                                        padding: 0 16px 16px;
-                                        font-size: 16px;
-                                        line-height: 8px;
-                                      ">
-                                    <h3 style="
-                                          font-size: 16px;
-                                          font-weight: 600;
-                                          display: -webkit-box;
-                                          -webkit-line-clamp: 2;
-                                          -webkit-box-orient: vertical;
-                                          overflow: hidden;
-                                          text-overflow: ellipsis;
-                                          line-height: 20px;
-                                        ">
-                                      {{ recipe.title }}
-                                    </h3>
-                                    <p style="
-                                          margin-bottom: 8px;
-                                          font-size: 14px;
-                                          line-height: 0;
-                                          color: #939393;
-                                          margin-top: -5px;
-                                        ">
-                                      {{ recipe.meal_name }}
-                                    </p>
-                                    <p style="
-                                          margin-top: 28px;
-                                          font-size: 16px;
-                                          line-height: 12px;
-                                        ">
-                                      Energy: {{ recipe.calories }} calories
-                                    </p>
-                                    <p style="
-                                          font-size: 16px;
-                                          line-height: 12px;
-                                        ">
-                                      Cuisine: {{ recipe.region }}
-                                    </p>
-
-                                    {% if recipe.prep_time %}
-                                    <p style="
-                                          font-size: 16px;
-                                          line-height: 12px;
-                                        ">
-                                      Prep time: {{ recipe.prep_time }}
-                                    </p>
-                                    {% else %}
-                                    <p style="
-                                          font-size: 16px;
-                                          line-height: 12px;
-                                        ">
-                                      Prep time: NA
-                                    </p>
-                                    {% endif %}
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-
-                            {% endfor %}
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-
-              {% endfor %}
-
-              <!-- meal plan end -->
 
               <!-- shopping list starts here-->
               <tr style="color: #000000">

@@ -14,6 +14,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
+import { UsersService } from 'src/app/services/users.service';
 // import { UsersService } from 'src/app/services/users.service';
 
 export function passwordsMatchValidator(): ValidatorFn {
@@ -53,7 +54,8 @@ export class SignUpComponent implements OnInit {
     private router: Router,
     private toast: HotToastService,
     private http: HttpClient,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {}
@@ -87,8 +89,11 @@ export class SignUpComponent implements OnInit {
         .toPromise();
       console.log(userCredential);
       if (userCredential && userCredential.user) {
+        localStorage.clear();
         localStorage.setItem('uid', userCredential.user.uid);
         localStorage.setItem('email', email);
+        localStorage.setItem('subscription_type_id', "1");
+        localStorage.setItem('userProfile', JSON.stringify({ subscription_type_id: 1 }));
       }
 
       const data = {
@@ -102,13 +107,17 @@ export class SignUpComponent implements OnInit {
           .post(`${environment.baseUrl}/signup`, data)
           .toPromise();
         console.log(response);
-        this.toast.observe({
-          success: 'Congrats! You are all signed up',
-          error: `Error: an error occurs during login`,
-        }); // Show success toast
+        this.toast.success('Congrats! You are all signed up');
       } catch (error) {
         console.error(error);
+        this.toast.error('Error: an error occurred during signup');
       }
+
+      this.usersService.updateLocalUserProfile({
+        user_name: name,
+        email: email,
+        subscription_type_id: 1
+      });
 
       this.router.navigate(['/']);
     } catch (Error) {

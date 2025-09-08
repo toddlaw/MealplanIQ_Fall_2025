@@ -84,6 +84,10 @@
                       text-align: left;
                       background-image: url('https://images.unsplash.com/photo-1505682750263-f3f9e519c565?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
                     ">
+                  <!--[if mso]>
+    <v:rect stroke="f" fillcolor="none" style="width: 600px" xmlns:v="urn:schemas-microsoft-com:vml">
+    <v:fill type="frame" src="undefined" />
+    <v:textbox inset="0,0,0,0" style="mso-fit-shape-to-text: true"><div><![endif]-->
                   <div role="separator" class="sm-leading-8" style="line-height: 64px">
                     &zwj;
                   </div>
@@ -104,15 +108,13 @@
                               line-height: 24px;
                               color: #ffffff;
                             ">
-                          Checkout your meal plan
-                          <br />
-                          for the next 7 days!
+                            Make {{ formatted_date }} healthier—ready?            
                         </p>
                         <div role="separator" class="sm-leading-8" style="line-height: 64px">
                           &zwj;
                         </div>
                         <div>
-                          <a href="https://mealplaniq-may-2024.uw.r.appspot.com" style="
+                          <a href="https://www.mealplaniq.com/meal-plan?start_date={{ sent_date }}&end_date={{ sent_date }}" style="
                                 display: inline-block;
                                 border-radius: 4px;
                                 background-color: #88a56f;
@@ -123,24 +125,9 @@
                                 color: #ffffff;
                                 text-decoration: none;
                               ">
-                            <!--[if mso]>
-                                <i
-                                  style="
-                                    mso-font-width: 150%;
-                                    mso-text-raise: 30px;
-                                  "
-                                  hidden
-                                  >&emsp;</i
-                                >
-                              <![endif]-->
                             <span style="mso-text-raise: 16px">
                               Read more &rarr;
                             </span>
-                            <!--[if mso]>
-                                <i hidden style="mso-font-width: 150%"
-                                  >&emsp;&#8203;</i
-                                >
-                              <![endif]-->
                           </a>
                         </div>
                       </td>
@@ -163,7 +150,7 @@
               <tr style="color: #000000">
                 <td>
                   <h2 style="margin-top: 96px; text-align: center">
-                    Your meal plan for {{ days[0].date_weekday }} to {{ days[-1].date_weekday }}
+                    Your meal plan for {{ sent_date }}
                   </h2>
                 </td>
               </tr>
@@ -205,6 +192,17 @@
                                         padding: 16px 16px 0;
                                         text-align: center;
                                       ">
+                                    <!-- <img
+                                        src="https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/{{ recipe.id }}.jpg"
+                                        alt="Image"
+                                        style="
+                                          max-width: 100%;
+                                          vertical-align: middle;
+                                          line-height: 1;
+                                          width: 100%;
+                                          text-align: center;
+                                        "
+                                      /> -->
                                     <img
                                       src="https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/{{ recipe.id }}.jpg"
                                       alt="Image" style="
@@ -289,97 +287,6 @@
               {% endfor %}
 
               <!-- meal plan end -->
-
-              <!-- shopping list starts here-->
-              <tr style="color: #000000">
-                <td>
-                  <h2 style="margin-top: 96px; text-align: center">
-                    Shopping List
-                  </h2>
-                </td>
-              </tr>
-              <div role="shopping-list" aria-roledescription="pdf" aria-label="Weekly Meal Plan - MealPlanIQ" lang="en"
-                style="text-align: center; position: relative">
-                {{ shopping_list_html | safe }}
-              </div>
-
-
-              <!-- nutritional report start -->
-
-              <tr style="color: #000000">
-                <td>
-                  <h2 style="margin-top: 96px; text-align: center">
-                    Nutritional Report
-                  </h2>
-                </td>
-              </tr>
-
-              <tr>
-                <table align="center" style="
-                      width: 100%;
-                      overflow: hidden;
-                      border-radius: 4px;
-                      background-color: #ffffff;
-                      text-align: center;
-                      color: #000000;
-                      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-                    " cellpadding="0" cellspacing="0" role="none">
-                  <thead>
-                    <tr style="background-color: #c4d2b7; line-height: 3rem">
-                      <th></th>
-                      <th>Target</th>
-                      <th>Actual</th>
-                    </tr>
-                  </thead>
-                  <tbody style="font-size: 14px">
-                    {% for item in tableData %}
-                    <tr>
-                      <td style="padding: 4px 12px">
-                        <p>{{ item.nutrientName }}</p>
-                      </td>
-                      <td style="padding: 4px 12px">
-                        <p style="
-                              display: inline-block;
-                              border-radius: 4px;
-                              padding: 4px;
-                              font-size: 14px;
-                              font-weight: 600;
-                              color: #48a2ff;
-                            ">
-                          {{ item.display_target }}
-                        </p>
-                      </td>
-                      <td style="padding: 4px 20px 4px 12px">
-                        {% if item.status == 'success' %}
-                        <p style="
-                              display: inline-block;
-                              border-radius: 4px;
-                              padding: 0 4px;
-                              font-size: 14px;
-                              font-weight: 600;
-                              color: #00b120;
-                            ">
-                          {{ item.actual }}
-                        </p>
-                        {% else %}
-                        <p style="
-                              display: inline-block;
-                              border-radius: 4px;
-                              padding: 0 4px;
-                              font-size: 14px;
-                              font-weight: 600;
-                              color: #f0754f;
-                            ">
-                          {{ item.actual }}
-                        </p>
-                        {% endif %}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </tr>
-              <!-- nutritional report ends -->
     </div>
     <!-- footer start -->
     <tr role="separator">

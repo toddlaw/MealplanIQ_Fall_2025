@@ -6,6 +6,12 @@ import {
   Vegetarian,
   HealthGoal,
   Religious,
+  Allergy,
+  LikedFood,
+  DislikedFood,
+  Cuisine,
+  Breakfast,
+  Snack,
 } from './interfaces';
 
 export const units: Unit[] = [
@@ -47,72 +53,71 @@ export const religiousConstraints: Religious[] = [
   { value: 'kosher', viewValue: 'Kosher' },
 ];
 
-export const likedFoodsList = [
-  'Pizza',
-  'Burger',
-  'Sushi',
-  'Pasta',
-  'Salad',
-  'Ice Cream',
+export const likedFoodsList: LikedFood[] = [
+  { value: 'pizza', viewValue: 'Pizza' },
+  { value: 'burger', viewValue: 'Burgers' },
+  { value: 'sushi', viewValue: 'Sushi' },
+  { value: 'pasta', viewValue: 'Pasta' },
+  { value: 'salad', viewValue: 'Salads' },
 ];
 
-export const dislikedFoodsList = [
-  'Anchovies',
-  'Olives',
-  'Cilantro',
-  'Blue Cheese',
-  'Liver',
-  'Tofu',
+export const dislikedFoodsList: DislikedFood[] = [
+  { value: 'anchovies', viewValue: 'Anchovies' },
+  { value: 'olive', viewValue: 'Olives' },
+  { value: 'cilantro', viewValue: 'Cilantro' },
+  { value: 'blue cheese', viewValue: 'Blue Cheese' },
+  { value: 'liver', viewValue: 'Liver' },
+  { value: 'tofu', viewValue: 'Tofu' },
 ];
 
-export const cuisinesList = [
-  'American',
-  'Italian',
-  'Mexican',
-  'Japanese',
-  'Indian',
-  'Greek',
-  'Chinese',
+export const cuisinesList: Cuisine[] = [
+  { value: 'american', viewValue: 'American' },
+  { value: 'chinese', viewValue: 'Chinese' },
+  { value: 'japanese', viewValue: 'Japanese' },
+  { value: 'korean', viewValue: 'Korean' },
+  { value: 'french', viewValue: 'French' },
+  { value: 'italian', viewValue: 'Italian' },
+  { value: 'mexican', viewValue: 'Mexican' },
 ];
 
-export const allergiesList = [
-  'Dairy',
-  'Egg',
-  'Gluten',
-  'Grain',
-  'Peanut',
-  'Seafood',
-  'Sesame',
-  'Shellfish',
-  'Soy',
-  'Sulfite',
-  'Tree Nut',
-  'Wheat',
+export const allergiesList: Allergy[] = [
+  { value: 'dairy', viewValue: 'Dairy' },
+  { value: 'egg', viewValue: 'Eggs' },
+  { value: 'gluten', viewValue: 'Gluten' },
+  { value: 'grain', viewValue: 'Grain' },
+  { value: 'peanut', viewValue: 'Peanut' },
+  { value: 'seafood', viewValue: 'Seafood' },
+  { value: 'sesame', viewValue: 'Sesame' },
+  { value: 'shellfish', viewValue: 'Shellfish' },
+  { value: 'soy', viewValue: 'Soy' },
+  { value: 'sulfite', viewValue: 'Sulfite' },
+  { value: 'tree nut', viewValue: 'Tree Nuts' },
+  { value: 'wheat', viewValue: 'Wheat' },
 ];
 
-export const breakfastList = [
-  'Bagel',
-  'Cereal',
-  'Coffee',
-  'Cream of Wheat',
-  'Hashbrowns',
-  'Juice',
-  'Oatmeal',
-  'Pancakes',
-  'Toast',
-  'Waffles',
+export const breakfastList: Breakfast[] = [
+  { value: 'bagel', viewValue: 'Bagels' },
+  { value: 'cereal', viewValue: 'Cereal' },
+  { value: 'coffee', viewValue: 'Coffee' },
+  { value: 'cream of wheat', viewValue: 'Cream of Wheat' },
+  { value: 'hashbrown', viewValue: 'Hashbrowns' },
+  { value: 'juice', viewValue: 'Juice' },
+  { value: 'oatmeal', viewValue: 'Oatmeal' },
+  { value: 'pancake', viewValue: 'Pancakes' },
+  { value: 'toast', viewValue: 'Toast' },
+  { value: 'waffle', viewValue: 'Waffles' },
 ];
 
-export const snackList = [
-  'Berries',
-  'Crackers',
-  'Dried Fruit',
-  'Fruit',
-  'Nuts',
-  'Snack Bars',
-  'Trail Mix',
-  'Veggies & Dip',
-  'Yohgurt',
+export const snackList: Snack[] = [
+  { value: 'berries', viewValue: 'Berries' },
+  { value: 'cracker', viewValue: 'Crackers' },
+  { value: 'dried fruit', viewValue: 'Dried Fruit' },
+  { value: 'fruit', viewValue: 'Fruit' },
+  { value: 'nut', viewValue: 'Nuts' },
+  { value: 'snack bar', viewValue: 'Snack Bars' },
+  { value: 'trail mix', viewValue: 'Trail Mix' },
+  { value: 'veggies and dips', viewValue: 'Veggies & Dip' },
+  { value: 'yogurt', viewValue: 'Yohgurt' },
 ];
 
 const today = new Date();

@@ -41,6 +41,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import { OutOfRangeDialogComponent } from '../dialogues/out-of-range-dialog/out-of-range-dialog.component';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-landing',
@@ -64,15 +65,16 @@ export class LandingComponent implements OnInit {
     private refresh: RefreshComponent,
     private zone: NgZone,
     private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private usersService: UsersService
   ) {}
 
   // change date format to e.g. September 14, 2024
   formatDate(date: string): string {
     const [year, month, day] = date.split('-').map(Number);
     const localDate = new Date(year, month - 1, day);
-    console.log('Original Date:', date);
-    console.log('Local Date (Corrected):', localDate.toLocaleString());
+    // console.log('Original Date:', date);
+    // console.log('Local Date (Corrected):', localDate.toLocaleString());
 
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -109,6 +111,7 @@ export class LandingComponent implements OnInit {
 
   @ViewChild('peoplePanel') peoplePanel!: MatExpansionPanel;
   @ViewChild('peopleForm') peopleForm!: NgForm;
+  @ViewChild('peopleFormEl') peopleFormEl!: ElementRef;
   @ViewChild('scrollToMe') element!: ElementRef;
   @ViewChild('start') start!: ElementRef;
   @ViewChild('errorDiv') errorDiv!: ElementRef;
@@ -139,17 +142,17 @@ export class LandingComponent implements OnInit {
   isFromHamburger: boolean = false;
 
   people: {
-    age: number | null;
-    weight: number | null;
-    height: number | null;
-    gender: string | null;
-    activityLevel: string | null;
+    age?: number | null;
+    weight?: number | null;
+    height?: number | null;
+    gender?: string | null;
+    activityLevel?: string | null;
   }[] = Array.from({ length: this.MIN_PEOPLE }, () => ({
-    age: null,
-    weight: null,
-    height: null,
-    gender: null,
-    activityLevel: null,
+    age: undefined,
+    weight: undefined,
+    height: undefined,
+    gender: undefined,
+    activityLevel: undefined,
   }));
 
   readonly displayedColumns: string[] = ['nutrientName', 'target', 'actual'];
@@ -175,12 +178,12 @@ export class LandingComponent implements OnInit {
   selectedDietaryConstraint: string = vegetarians[0].value;
   selectedHealthGoal: string = healthGoals[3].value; // Initialize to make the fourth item active by default
   selectedReligiousConstraint: string = religiousConstraints[0].value;
-  likedFoods = new FormControl('');
-  dislikedFoods = new FormControl('');
-  cuisines = new FormControl('');
-  allergies = new FormControl('');
-  breakfasts = new FormControl('');
-  snacks = new FormControl('');
+  likedFoods = new FormControl<string[]>([]);
+  dislikedFoods = new FormControl<string[]>([]);
+  cuisines = new FormControl<string[]>([]);
+  allergies = new FormControl<string[]>([]);
+  breakfasts = new FormControl<string[]>([]);
+  snacks = new FormControl<string[]>([]);
   expandedStates: boolean[][] = [];
   snackExpandedStates: boolean[] = [];
 
@@ -194,65 +197,67 @@ export class LandingComponent implements OnInit {
     });
 
     if (localStorage.getItem('uid')) {
-      try {
-        const response: any = await this.http
-          .get(
-            `${
-              environment.baseUrl
-            }/api/subscription_type_id/${localStorage.getItem('uid')}`
-          )
-          .toPromise();
-        if (response.subscription_type_id) {
-          localStorage.setItem(
-            'subscription_type_id',
-            response.subscription_type_id
-          ); // 1: free trial, 2: paid trial, 3: monthly, 4: quarterly, 5: yearly
-          this.userSubscriptionTypeId = response.subscription_type_id;
-        }
-      } catch (error) {
-        console.error('Error:', error);
+      // 1: free trial, 2: paid trial, 3: monthly, 4: quarterly, 5: yearly
+      const parsed = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      if (!parsed) {
+        this.userSubscriptionTypeId = 1;
       }
+      this.userSubscriptionTypeId = parsed.subscription_type_id;
     } else {
       this.userSubscriptionTypeId = 0;
     }
     console.log('subscription type ID:' + this.userSubscriptionTypeId);
-    // prefill the profile info for logged in user
+    // Prefill the profile info for logged in user
     if (localStorage.getItem('uid')) {
-      this.http
-        .get(
-          `${environment.baseUrl}/api/landing/profile/${localStorage.getItem(
-            'uid'
-          )}`
-        )
-        .subscribe((data: any) => {
-          this.people[0].age = data.age;
-          this.people[0].weight = data.weight;
-          this.people[0].height = data.height;
-          this.people[0].gender = data.gender;
-          this.people[0].activityLevel = data.activity_level;
-          this.selectedUnit = data.selected_unit || 'metric';
-          // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
-          this.mealPlanResponse.days.forEach(
-            (day: { recipes: { meal_name: string }[] }) => {
-              day.recipes.sort(
-                (a: { meal_name: string }, b: { meal_name: string }) => {
-                  const mealOrder = [
-                    'Breakfast',
-                    'Snack',
-                    'Lunch',
-                    'Snack',
-                    'Dinner',
-                    'Snack',
-                  ];
-                  return (
-                    mealOrder.indexOf(a.meal_name) -
-                    mealOrder.indexOf(b.meal_name)
-                  );
-                }
+      this.usersService.loadCachedUserProfile();
+      this.usersService.profile$.subscribe((user) => {
+        if (user) {
+          this.people[0].age = Number(user.age) || undefined;
+          this.people[0].weight = Number(user.weight) || undefined;
+          this.people[0].height = Number(user.height) || undefined;
+          this.people[0].gender = user.gender || undefined;
+          this.people[0].activityLevel = user.activity_level || undefined;
+          this.selectedUnit = user.selected_unit || 'metric';
+          if (user.health_goal) {
+            this.selectedHealthGoal = user.health_goal;
+            this.selectedHealthGoalIndex = this.healthGoals.findIndex(
+              (goal) => goal.value === user.health_goal
+            );
+          }
+        }
+      });
+      this.usersService.preference$.subscribe((user) => {
+        if (user) {
+          this.snacks.setValue(user.snacks || []);
+          this.breakfasts.setValue(user.breakfasts || []);
+          this.likedFoods.setValue(user.likedFoods || []);
+          this.dislikedFoods.setValue(user.dislikedFoods || []);
+          this.cuisines.setValue(user.favouriteCuisines || []);
+          this.allergies.setValue(user.allergies || []);
+          this.selectedDietaryConstraint = user.dietaryConstraint || 'none';
+          this.selectedReligiousConstraint = user.religiousConstraint || 'none';
+        }
+      });
+      // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
+      this.mealPlanResponse.days.forEach(
+        (day: { recipes: { meal_name: string }[] }) => {
+          day.recipes.sort(
+            (a: { meal_name: string }, b: { meal_name: string }) => {
+              const mealOrder = [
+                'Breakfast',
+                'Snack',
+                'Lunch',
+                'Snack',
+                'Dinner',
+                'Snack',
+              ];
+              return (
+                mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name)
               );
             }
           );
-        });
+        }
+      );
     }
   }
 
@@ -375,6 +380,15 @@ export class LandingComponent implements OnInit {
   showTermsAndConditions() {
     // make sure the form is valid
     if (this.peopleForm.invalid) {
+      this.toast.warning(
+        'Please complete all required fields to generate meal plans!'
+      );
+      setTimeout(() => {
+        this.peopleFormEl?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }, 0);
       return;
     }
 
@@ -433,14 +447,8 @@ export class LandingComponent implements OnInit {
     //   data.maxDate = data.minDate;
     // }
 
-    console.log(data.maxDate);
-    console.log(data.minDate);
     localStorage.setItem('minDate', String(data.minDate));
     localStorage.setItem('maxDate', String(data.maxDate));
-
-    if (!data.likedFoods) {
-      data.likedFoods = 'None';
-    }
 
     if (!data.minDate || !data.maxDate) {
       this.toast.error('Please select both start date and end date!');
@@ -450,7 +458,8 @@ export class LandingComponent implements OnInit {
       if (
         this.PAID_SUBSCRIPTION_TYPES.includes(this.userSubscriptionTypeId) ||
         (this.userSubscriptionTypeId === 0 && data.maxDate === data.minDate) || // non-signed user
-        (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
+        (this.userSubscriptionTypeId === 1)
+        // (this.userSubscriptionTypeId === 1 && data.maxDate === data.minDate) // free trial user
       ) {
         this.element.nativeElement.style.display = 'block';
         this.element.nativeElement.scrollIntoView({
@@ -460,39 +469,27 @@ export class LandingComponent implements OnInit {
         });
         this.showSpinner = true;
         this.searchClicked = true;
+
+        const updateResult = this.updateLocalStorage(data);
+
         this.http
           .post(`${environment.baseUrl}/api`, data, {
             responseType: 'text',
           })
           .subscribe(
             (response) => {
-              // console.log('Raw Response:', response);
-              console.log(response); //here we have the nutrient data
               this.element.nativeElement.style.display = 'none';
               this.errorDiv.nativeElement.style.display = 'none';
               this.showSpinner = false;
               this.mealPlanResponse = JSON.parse(response);
 
-              // Populate the nutrient table when the meal plan is generated
-              // BCIT May 2025
               if (this.mealPlanResponse.tableData) {
                 this.categorizeNutrients();
               }
-              // Populate the shopping list when the meal plan is generated
-              // BCIT May 2025
               this.shoppingListData = this.transformMealPlanToShoppingList(
                 this.mealPlanResponse
               );
               this.cdRef.detectChanges();
-              // this.getShoppingListFromBackend().subscribe(
-              //   (secondResponse) => {
-              //     console.log('Fetched Shopping List: ', secondResponse);
-              //     this.shoppingListData = secondResponse;
-              //   },
-              //   (error) => {
-              //     console.error(error);
-              //   }
-              // );
 
               const numDays = this.getNumDays(this.mealPlanResponse);
               for (let i = 0; i < numDays; i++) {
@@ -503,10 +500,6 @@ export class LandingComponent implements OnInit {
                 );
                 this.selectedOptions.push(new Array(3).fill('keep'));
               }
-
-              // this.snackExpandedStates = new Array(
-              //   this.mealPlanResponse.snacks.length
-              // ).fill(false);
 
               this.includeAllRecipes(this.mealPlanResponse.days);
             },
@@ -552,7 +545,6 @@ export class LandingComponent implements OnInit {
             'Multi-day plans require a subscription. Sign up and try it now for only $5/month. Cancel anytime.';
           this.openDialog(title, message, '/sign-up', 'Sign Up');
         } else {
-          // this.toast.error('Unsubscribed users can only generate a meal plan for one day!');
           this.showSpinner = false;
           this.errorDiv.nativeElement.style.display = 'none';
           this.element.nativeElement.style.display = 'none';
@@ -662,7 +654,7 @@ export class LandingComponent implements OnInit {
    * @example
    * const ingredientsUrl = this.getIngredientsCsvUrl(456);
    * // ingredientsUrl will be "https://storage.googleapis.com/meal_planiq_ingredients_files/456.csv"
-   * 
+   *
    * @author BCIT May 2025
    */
   getIngredientsCsvUrl(id: number): string {
@@ -695,7 +687,6 @@ export class LandingComponent implements OnInit {
    * @param id The id of the recipe to be replaced
    */
   refreshRecipe(id: string) {
-    console.log(this.mealPlanResponse);
     this.refresh.refreshRecipe(id, this.mealPlanResponse).subscribe(
       (response) => {
         this.toast.success('Recipe refreshed successfully!');
@@ -1033,16 +1024,16 @@ export class LandingComponent implements OnInit {
     //   this.userSubscriptionTypeId === 2 ||
     //   this.userSubscriptionTypeId === 3
     // ) {
-      this.dialog.open(RecipeDialogComponent, {
-        data: {
-          recipe: recipe,
-          imageUrl: this.getImageUrl(recipe.id),
-          ingredientsUrl: this.getIngredientsCsvUrl(recipe.id), // Added URL for ingredients CSV, @author BCIT May 2025
-          instructionsUrl: this.getInstructionsCsvUrl(recipe.id), // Added URL for instructions CSV, @author BCIT May 2025
-          showActions: false
-        },
-        width: '800px',
-      });
+    this.dialog.open(RecipeDialogComponent, {
+      data: {
+        recipe: recipe,
+        imageUrl: this.getImageUrl(recipe.id),
+        ingredientsUrl: this.getIngredientsCsvUrl(recipe.id), // Added URL for ingredients CSV, @author BCIT May 2025
+        instructionsUrl: this.getInstructionsCsvUrl(recipe.id), // Added URL for instructions CSV, @author BCIT May 2025
+        showActions: false,
+      },
+      width: '800px',
+    });
     // } else if (this.userSubscriptionTypeId === 0) {
     //   const title = 'Sign Up and Try!';
     //   const message =
@@ -1065,10 +1056,10 @@ export class LandingComponent implements OnInit {
 
   /**
    * Transforms the meal plan response into a shopping list format.
-   * 
+   *
    * @param mealPlan The meal plan response object.
    * @returns An array of shopping lists, each containing a date and items.
-   * 
+   *
    * @author BCIT May 2025
    */
   transformMealPlanToShoppingList(mealPlan: any): ShoppingList[] {
@@ -1138,7 +1129,7 @@ export class LandingComponent implements OnInit {
 
       if (dailyItems.length > 0) {
         shoppingListByDate.push({
-          date: day.date, 
+          date: day.date,
           'shopping-list': dailyItems,
         });
       }
@@ -1147,162 +1138,179 @@ export class LandingComponent implements OnInit {
     return shoppingListByDate;
   }
 
-/**
- * Generates a status message for a given nutrient, indicating whether its actual value
- * is lower or higher than the recommended target range.
- * 
- * Extracts the unit from the nutrient's display name (if present inside parentheses)
- * and formats a readable message accordingly.
- * 
- * @param nutrient - The nutrient object containing actual, min, max, and displayName values.
- * @returns A formatted status message string, or an empty string if within range.
- * 
- * @author BCIT May 2025
- */
-getNutrientStatusMessage(nutrient: any): string {
-  const actual = nutrient.actual;                     // actual value from backend
-  const min = nutrient.display_target_min;            // target minimum value
-  const max = nutrient.display_target_max;            // target maximum value
-  const name = nutrient.displayName;                  // nutrient display name
+  /**
+   * Generates a status message for a given nutrient, indicating whether its actual value
+   * is lower or higher than the recommended target range.
+   *
+   * Extracts the unit from the nutrient's display name (if present inside parentheses)
+   * and formats a readable message accordingly.
+   *
+   * @param nutrient - The nutrient object containing actual, min, max, and displayName values.
+   * @returns A formatted status message string, or an empty string if within range.
+   *
+   * @author BCIT May 2025
+   */
+  getNutrientStatusMessage(nutrient: any): string {
+    const actual = nutrient.actual; // actual value from backend
+    const min = nutrient.display_target_min; // target minimum value
+    const max = nutrient.display_target_max; // target maximum value
+    const name = nutrient.displayName; // nutrient display name
 
-  // Extract unit from displayName (text inside parentheses)
-  const unitMatch = name.match(/\(([^)]+)\)/);
-  const unit = unitMatch ? unitMatch[1] : '';          // fallback to empty if no unit found
+    // Extract unit from displayName (text inside parentheses)
+    const unitMatch = name.match(/\(([^)]+)\)/);
+    const unit = unitMatch ? unitMatch[1] : ''; // fallback to empty if no unit found
 
-  // Clean up display name by removing unit and parentheses
-  const cleanName = name.replace(/\s*\(.*?\)/, '');
+    // Clean up display name by removing unit and parentheses
+    const cleanName = name.replace(/\s*\(.*?\)/, '');
 
-  // Return message depending on value status
-  if (actual < min && min != null) {
-    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
-  } else if (actual > max && max != null) {
-    return `${cleanName} is ${actual}${unit ? ' ' + unit : ''}, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
-  } else {
-    return '';  // No message if within range or if no min/max provided
+    // Return message depending on value status
+    if (actual < min && min != null) {
+      return `${cleanName} is ${actual}${
+        unit ? ' ' + unit : ''
+      }, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
+    } else if (actual > max && max != null) {
+      return `${cleanName} is ${actual}${
+        unit ? ' ' + unit : ''
+      }, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
+    } else {
+      return ''; // No message if within range or if no min/max provided
+    }
   }
-}
 
-/**
- * Aggregates all out-of-range messages for nutrients in the current meal plan.
- * Adds a predefined header message if any nutrient is found out of range.
- * 
- * Combines all nutrients (energy, macros, vitamins, minerals) into a single list for evaluation.
- * 
- * @returns An array of status messages for out-of-range nutrients.
- * 
- * @author BCIT May 2025
- */
-getOutOfRangeMessages(): string[] {
-  const messages: string[] = [];
+  /**
+   * Aggregates all out-of-range messages for nutrients in the current meal plan.
+   * Adds a predefined header message if any nutrient is found out of range.
+   *
+   * Combines all nutrients (energy, macros, vitamins, minerals) into a single list for evaluation.
+   *
+   * @returns An array of status messages for out-of-range nutrients.
+   *
+   * @author BCIT May 2025
+   */
+  getOutOfRangeMessages(): string[] {
+    const messages: string[] = [];
 
-  // Combine nutrients from all categories into one array
-  const allNutrients = [
-    ...this.energy,
-    ...this.macros,
-    ...this.vitamins,
-    ...this.minerals,
-  ];
+    // Combine nutrients from all categories into one array
+    const allNutrients = [
+      ...this.energy,
+      ...this.macros,
+      ...this.vitamins,
+      ...this.minerals,
+    ];
 
-  // Check each nutrient's status message
-  allNutrients.forEach((nutrient) => {
-    const message = this.getNutrientStatusMessage(nutrient);
-    if (message) {
-      // Add header message only once when first out-of-range nutrient found
-      if (messages.length === 0) {
-        messages.push(this.OUT_OF_RANGE);
+    // Check each nutrient's status message
+    allNutrients.forEach((nutrient) => {
+      const message = this.getNutrientStatusMessage(nutrient);
+      if (message) {
+        // Add header message only once when first out-of-range nutrient found
+        if (messages.length === 0) {
+          messages.push(this.OUT_OF_RANGE);
+        }
+        messages.push(message);
       }
-      messages.push(message);
-    }
-  });
+    });
 
-  return messages;
-}
+    return messages;
+  }
 
-/**
- * Opens a popup dialog window displaying out-of-range nutrient messages.
- * Excludes the header message and passes only the nutrient-specific messages to the dialog component.
- * @author BCIT May 2025
- */
-openOutOfRangeDialog(): void {
-  // Skip the OUT_OF_RANGE header (first element) and pass the rest
-  const messages = this.getOutOfRangeMessages().slice(1);
+  /**
+   * Opens a popup dialog window displaying out-of-range nutrient messages.
+   * Excludes the header message and passes only the nutrient-specific messages to the dialog component.
+   * @author BCIT May 2025
+   */
+  openOutOfRangeDialog(): void {
+    // Skip the OUT_OF_RANGE header (first element) and pass the rest
+    const messages = this.getOutOfRangeMessages().slice(1);
 
-  // Open Angular Material dialog with messages as injected data
-  this.dialog.open(OutOfRangeDialogComponent, {
-    width: '600px',
-    data: messages
-  });
-}
-/**
- * Replaces a recipe in the meal plan at the specified day and recipe position.
- * 
- * Calls the refresh service's replaceRecipe endpoint with the selected recipe ID,
- * and updates the meal plan and nutrient tables on successful response.
- * Also updates the shopping list based on the returned data.
- * 
- * @param dayIndex - The index of the day in the meal plan to replace the recipe in.
- * @param recipeIndex - The index of the recipe within the day to replace.
- * @param newRecipeId - The ID of the new recipe to insert into the meal plan.
- * 
- * @author BCIT May 2025
- */
-replaceRecipe(dayIndex: number, recipeIndex: number, newRecipeId: string): void {
-  this.refresh.replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse).subscribe(
-    (response) => {
-      this.toast.success('Recipe replaced successfully!');
-      console.log('recipe replaced (replace)', response);
+    // Open Angular Material dialog with messages as injected data
+    this.dialog.open(OutOfRangeDialogComponent, {
+      width: '600px',
+      data: messages,
+    });
+  }
+  /**
+   * Replaces a recipe in the meal plan at the specified day and recipe position.
+   *
+   * Calls the refresh service's replaceRecipe endpoint with the selected recipe ID,
+   * and updates the meal plan and nutrient tables on successful response.
+   * Also updates the shopping list based on the returned data.
+   *
+   * @param dayIndex - The index of the day in the meal plan to replace the recipe in.
+   * @param recipeIndex - The index of the recipe within the day to replace.
+   * @param newRecipeId - The ID of the new recipe to insert into the meal plan.
+   *
+   * @author BCIT May 2025
+   */
+  replaceRecipe(
+    dayIndex: number,
+    recipeIndex: number,
+    newRecipeId: string
+  ): void {
+    this.refresh
+      .replaceRecipe(newRecipeId, dayIndex, recipeIndex, this.mealPlanResponse)
+      .subscribe(
+        (response) => {
+          this.toast.success('Recipe replaced successfully!');
+          console.log('recipe replaced (replace)', response);
 
-      // Update meal plan and nutrients table
-      this.processUpdatedMealPlan(response.meal_plan);
+          // Update meal plan and nutrients table
+          this.processUpdatedMealPlan(response.meal_plan);
 
-      // Update shopping list from server response if available
-      if (response.shopping_list) {
-        this.shoppingListData = response.shopping_list;
-        console.log('Shopping List from refreshRecipe service:', this.shoppingListData);
-      } else {
-        // Fallback if shopping list was not returned
-        console.warn('Shopping list not provided by refresh service, transforming manually.');
-        this.shoppingListData = this.transformMealPlanToShoppingList(this.mealPlanResponse);
-      }
+          // Update shopping list from server response if available
+          if (response.shopping_list) {
+            this.shoppingListData = response.shopping_list;
+            console.log(
+              'Shopping List from refreshRecipe service:',
+              this.shoppingListData
+            );
+          } else {
+            // Fallback if shopping list was not returned
+            console.warn(
+              'Shopping list not provided by refresh service, transforming manually.'
+            );
+            this.shoppingListData = this.transformMealPlanToShoppingList(
+              this.mealPlanResponse
+            );
+          }
 
-      // Trigger Angular change detection manually for UI updates
-      this.cdRef.detectChanges();
-    },
-    (error) => {
-      this.toast.error('Oops, the server is too busy, try again later!');
-      console.error('error', error);
-    }
-  );
-}
+          // Trigger Angular change detection manually for UI updates
+          this.cdRef.detectChanges();
+        },
+        (error) => {
+          this.toast.error('Oops, the server is too busy, try again later!');
+          console.error('error', error);
+        }
+      );
+  }
 
-/**
- * Updates the meal plan and re-categorizes the nutrients for display.
- * 
- * @param mealPlan - The updated meal plan object returned from the backend.
- * 
- * @author BCIT May 2025
- */
-processUpdatedMealPlan(mealPlan: any): void {
-  this.mealPlanResponse = this.updateMealPlan(mealPlan);
-  this.categorizeNutrients();
-}
+  /**
+   * Updates the meal plan and re-categorizes the nutrients for display.
+   *
+   * @param mealPlan - The updated meal plan object returned from the backend.
+   *
+   * @author BCIT May 2025
+   */
+  processUpdatedMealPlan(mealPlan: any): void {
+    this.mealPlanResponse = this.updateMealPlan(mealPlan);
+    this.categorizeNutrients();
+  }
 
-/**
- * Opens the custom Search Dialog to allow users to manually search and select a replacement recipe.
- * 
- * Handles subscription-level permissions for access to this feature.
- * 
- * @param dayIndex - The index of the day in the meal plan for the recipe to replace.
- * @param recipeIndex - The index of the recipe within that day's meal plan.
- * 
- * @author BCIT May 2025
- */
-openSearchDialog(dayIndex: number, recipeIndex: number): void {
-  // if (
-  //   this.userSubscriptionTypeId === 1 ||
-  //   this.userSubscriptionTypeId === 2 ||
-  //   this.userSubscriptionTypeId === 3
-  // ) {
+  /**
+   * Opens the custom Search Dialog to allow users to manually search and select a replacement recipe.
+   *
+   * Handles subscription-level permissions for access to this feature.
+   *
+   * @param dayIndex - The index of the day in the meal plan for the recipe to replace.
+   * @param recipeIndex - The index of the recipe within that day's meal plan.
+   *
+   * @author BCIT May 2025
+   */
+  openSearchDialog(dayIndex: number, recipeIndex: number): void {
+    // if (
+    //   this.userSubscriptionTypeId === 1 ||
+    //   this.userSubscriptionTypeId === 2 ||
+    //   this.userSubscriptionTypeId === 3
+    // ) {
     const dialogRef = this.dialog.open(SearchDialogComponent);
 
     // Wait for the dialog to close and act on the selected recipe
@@ -1311,12 +1319,56 @@ openSearchDialog(dayIndex: number, recipeIndex: number): void {
         this.replaceRecipe(dayIndex, recipeIndex, selectedRecipe);
       }
     });
-  // } else if (this.userSubscriptionTypeId === 0) {
-  //   // For unsubscribed users, show upgrade prompt dialog
-  //   const title = 'Sign Up and Try!';
-  //   const message = 'To see recipe details for this plan, please sign up. No credit card or payment required.';
-  //   this.openDialog(title, message, '/sign-up', 'Sign Up');
-  // }
-}
+    // } else if (this.userSubscriptionTypeId === 0) {
+    //   // For unsubscribed users, show upgrade prompt dialog
+    //   const title = 'Sign Up and Try!';
+    //   const message = 'To see recipe details for this plan, please sign up. No credit card or payment required.';
+    //   this.openDialog(title, message, '/sign-up', 'Sign Up');
+    // }
+  }
 
+  /**
+    Returns the user-friendly label (viewValue) for a given value
+
+    @param value - The internal value to match (e.g., 'egg')
+    @param list - The list of options with value and viewValue pairs
+    @returns The corresponding viewValue (e.g., 'Eggs') or the original value if not found
+  */
+  getViewValue(
+    value: string,
+    list: { value: string; viewValue: string }[]
+  ): string {
+    return list.find((item) => item.value === value)?.viewValue || value;
+  }
+
+  updateLocalStorage(data: any): void {
+    const localProfile = {
+      user_name: JSON.parse(localStorage.getItem('userProfile') || '{}')
+        .user_name,
+      email: localStorage.getItem('email'),
+      age: data.people[0].age,
+      weight: data.people[0].weight,
+      height: data.people[0].height,
+      gender: data.people[0].gender,
+      activity_level: data.people[0].activityLevel,
+      health_goal: data.healthGoal,
+      selected_unit: data.selectedUnit,
+      user_id: localStorage.getItem('uid'),
+      subscription_type_id: this.userSubscriptionTypeId,
+    };
+
+    const localPreference = {
+      likedFoods: data.likedFoods,
+      dislikedFoods: data.dislikedFoods,
+      favouriteCuisines: data.favouriteCuisines,
+      allergies: data.allergies,
+      snacks: data.snacks,
+      breakfasts: data.breakfasts,
+      dietaryConstraint: data.dietaryConstraint,
+      religiousConstraint: data.religiousConstraint,
+    };
+
+    this.usersService.updateLocalUserPreference(localPreference);
+    this.usersService.updateLocalUserProfile(localProfile);
+  }
 }

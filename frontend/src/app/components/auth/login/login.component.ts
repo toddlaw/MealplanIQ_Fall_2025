@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-// import { UsersService } from 'src/app/services/users.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
     private toast: HotToastService,
     private router: Router,
     private fb: NonNullableFormBuilder, // private usersService: UsersService
-    private http: HttpClient
+    private http: HttpClient,
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {}
@@ -55,19 +56,18 @@ export class LoginComponent implements OnInit {
       .subscribe((userCredential) => {
         const { user } = userCredential; // Extracting user information from UserCredential
         if (user) {
-          localStorage.setItem('email', user.email);
+          localStorage.setItem('email', user.email || '');
           localStorage.setItem('uid', user.uid);
-          const data = {
-            user_id: user.uid,
-            user_email: user.email,
-          };
-          // this.http.post('http://127.0.0.1:5000/login', data).subscribe({
-          //   next: (response) => {
-          //     console.log(response);
-          //   },
-          // });
-          
-          this.router.navigate(['/dashboard']);
+
+          this.usersService.fetchAndStoreUserProfile(user.uid).subscribe({
+            next: () => {
+              this.router.navigate(['/dashboard']);
+            },
+            error: (err) => {
+              console.error('Failed to fetch user profile:', err);
+              this.router.navigate(['/dashboard']);
+            },
+          });
         } else {
           console.error('User is null');
         }

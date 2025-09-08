@@ -4,6 +4,8 @@ import ast
 import json
 import pandas as pd
 
+from app.mealplan_service import read_recipe_assets_from_gcs
+
 
 # add optimized_snacks as input
 def post_process_results(recipe_df, optimized_results, optimized_snacks, min_date, days):
@@ -405,6 +407,17 @@ def process_recipe(recipe_df, recipe_name):
         recipe_dict['ingredients_with_quantities'] = []
         for row in content:
             recipe_dict['ingredients_with_quantities'].append(row)
+
+    #
+     # retrive instructions from bucket => make sure to use this for production stage
+#     instructions, ingredients = read_recipe_assets_from_gcs(
+#     str(recipe_dict["id"]),
+#     bucket_name="meal-plan-data",         
+#     base_prefix="meal_db"                 
+# )
+
+#     recipe_dict['instructions'] = instructions
+#     recipe_dict['ingredients_with_quantities'] = ingredients        
 
     for key, value in recipe_dict.items():
         res[key] = f"{value}"
