@@ -4,7 +4,7 @@ import ast
 import json
 import pandas as pd
 
-from backend.app.mealplan_service import read_recipe_assets_from_gcs
+from app.mealplan_service import read_recipe_assets_from_gcs
 
 
 # add optimized_snacks as input
