@@ -1,6 +1,6 @@
 import os
 import base64
-import datetime
+import datetime as dt
 from datetime import date, datetime, timedelta
 from sched import scheduler
 from zoneinfo import ZoneInfo
@@ -33,7 +33,7 @@ from app.shopping_list_utils import (
 from user_db.user_db import instantiate_database
 from app.moc.sampleMealPlans import data as sampleMealPlans
 from concurrent.futures import ThreadPoolExecutor
-
+from app.utils.time_utils import pt_midnight_utc_ms
 
 app = Flask(__name__)
 
@@ -48,22 +48,15 @@ credentials = service_account.Credentials.from_service_account_info(
 
 service_gmail = build("gmail", "v1", credentials=credentials)
 
-TZ = ZoneInfo("America/Los_Angeles")
+PT = ZoneInfo("America/Los_Angeles")
 
-now = datetime.now(TZ)        
+now = datetime.now(PT)        
 start_date = now + timedelta(days=1)
 end_date = start_date + timedelta(days=6)      
 today = now.date()           
 today_str = today.strftime("%Y-%m-%d")
 start_str = start_date.strftime("%Y-%m-%d")
 end_str   = end_date.strftime("%Y-%m-%d")
-
-# today = datetime.today()
-# start_date = today + timedelta(days=1)
-# end_date = start_date + timedelta(days=6)
-# today_str = today.strftime('%Y-%m-%d')
-# start_str = start_date.strftime('%Y-%m-%d')
-# end_str = end_date.strftime('%Y-%m-%d')
 
 # add is_html parameter to create_message function with html content
 def create_message(sender, to, subject, message_text, is_html=True):
@@ -101,7 +94,7 @@ def send_message(service, user_id, message):
 
 def send_email_by_google_scheduler(db, is_daily=False):
     user_ids = db.get_all_subscribed_users()  
-    
+    print("all subscribed users are retrieved", user_ids)
     if not user_ids:
         result = {
             "status": "skip",
@@ -141,11 +134,24 @@ def send_email_by_google_scheduler(db, is_daily=False):
 
 def process_weekly_email_for_user(db, user_id):
     try:
-        data = create_data_input_for_auto_gen_meal_plan(db, user_id, start_date, end_date)
+        s = start_date
+        e = end_date
+
+        s_dt = s.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
+        e_dt = e.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        data = create_data_input_for_auto_gen_meal_plan(db, user_id, s_dt, e_dt)
+        data["minDate"] = pt_midnight_utc_ms(s_dt.date())
+        data["maxDate"] = pt_midnight_utc_ms(e.date())
+
+        print("data in process weekly email is created!!!")
         response = gen_meal_plan(data)
-        db.insert_user_meal_plan(user_id, response, start_date, end_date)
+        db.insert_user_meal_plan(user_id, response, s_dt, e_dt)
+
+        start_str_local = s.strftime("%Y-%m-%d")
+        end_str_local   = e.strftime("%Y-%m-%d")
         
-        path = f"meal-plans-for-user/{user_id}/{start_str}_to_{end_str}.json"
+        path = f"meal-plans-for-user/{user_id}/{start_str_local}_to_{end_str_local}.json"
         upload_mealplan_json_to_gcs(response, path)
         
         user_name = db.retrieve_user_name(user_id)
