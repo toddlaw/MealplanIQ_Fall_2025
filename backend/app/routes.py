@@ -447,3 +447,15 @@ def get_recipe(recipe_id):
     @author: BCIT May 2025
     """
     return get_recipe_logic(recipe_id)
+
+@app.route("/check-email", methods=["POST"])
+def handle_check_email():
+    email = request.json
+    if not email:
+        return {"error": "email required"}, 400
+    db = instantiate_database()
+    exists = db.check_user_email_existence(email)
+    if exists:
+        has_user_id = db.check_user_id_existence_by_email(email)
+        return {"exists": bool(exists), "has_user_id": bool(has_user_id)}, 200
+    return {"exists": bool(exists)}, 200

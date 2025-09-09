@@ -19,6 +19,7 @@ import { user } from 'rxfire/auth';
 export class MealPlanComponent implements OnInit {
   mealPlanResponse: any = {};
   shoppingListData: any[] = [];
+  selectedDate: string = '';
   energy: any[] = [];
   macros: any[] = [];
   vitamins: any[] = [];
@@ -28,8 +29,7 @@ export class MealPlanComponent implements OnInit {
   start_date: any;
   end_date: any;
   nutrientSections: Record<string, any[]> = {};
-  path: string = '';
-  selectedDate: string = '';           // for dropdown
+  path: string = '';    
   filteredDays: any[] = [];   
   originalDays: any[] = [];
 
