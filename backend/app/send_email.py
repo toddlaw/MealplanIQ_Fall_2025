@@ -33,7 +33,7 @@ from app.shopping_list_utils import (
 from user_db.user_db import instantiate_database
 from app.moc.sampleMealPlans import data as sampleMealPlans
 from concurrent.futures import ThreadPoolExecutor
-from app.utils.time_utils import pt_midnight_utc_ms
+from app.utils.time_utils import get_week_range, pt_midnight_utc_ms
 
 app = Flask(__name__)
 
@@ -50,13 +50,13 @@ service_gmail = build("gmail", "v1", credentials=credentials)
 
 PT = ZoneInfo("America/Los_Angeles")
 
-now = datetime.now(PT)        
-start_date = now + timedelta(days=1)
-end_date = start_date + timedelta(days=6)      
-today = now.date()           
-today_str = today.strftime("%Y-%m-%d")
-start_str = start_date.strftime("%Y-%m-%d")
-end_str   = end_date.strftime("%Y-%m-%d")
+# now = datetime.now(PT)        
+# start_date = now + timedelta(days=1)
+# end_date = start_date + timedelta(days=6)      
+# today = now.date()           
+# today_str = today.strftime("%Y-%m-%d")
+# start_str = start_date.strftime("%Y-%m-%d")
+# end_str   = end_date.strftime("%Y-%m-%d")
 
 # add is_html parameter to create_message function with html content
 def create_message(sender, to, subject, message_text, is_html=True):
@@ -121,8 +121,11 @@ def send_email_by_google_scheduler(db, is_daily=False):
 
 def process_weekly_email_for_user(db, user_id):
     try:
-        s = start_date
-        e = end_date
+        dates = get_week_range()
+        s = dates["start_date"]
+        e = dates["end_date"]
+        start_str = dates["start_str"]
+        end_str = dates["end_str"]
 
         s_dt = s.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
         e_dt = e.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -160,7 +163,12 @@ def process_weekly_email_for_user(db, user_id):
         }, 500
 
 def process_daily_email_for_user(db, user_id):
+    dates = get_week_range()
+    start_date = dates["start_date"]
     tomorrow_str = start_date.strftime('%Y-%m-%d')
+    start_str = dates["start_str"]
+    end_str = dates["end_str"]
+    today_str = dates["today_str"]
 
     # Get meal plan data from GCS
     try:
