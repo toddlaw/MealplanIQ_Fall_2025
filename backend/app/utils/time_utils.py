@@ -12,8 +12,8 @@ def pt_midnight_utc_ms(d: dt.date) -> int:
 def get_week_range():
     PT = ZoneInfo("America/Los_Angeles")
     now = dt.now(PT)
-    start_date = now + dt.timedelta(days=1)        # 내일부터 시작
-    end_date = start_date + dt.timedelta(days=6)   # 1주치
+    start_date = now + dt.timedelta(days=1)       
+    end_date = start_date + dt.timedelta(days=6)   
     today = now.date()
 
     return {
