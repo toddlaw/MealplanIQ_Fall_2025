@@ -4,11 +4,7 @@ from flask import make_response, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from app.generate_meal_plan import gen_meal_plan, gen_shopping_list
 from app.calculate_energy import energy_calculator_function
-<<<<<<< HEAD
 from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, create_nutrition_requirements_payload, read_micro_nutrients_file
-=======
-from app.calculate_nutritional_requirements import calculate_macros, calculate_micros, read_micro_nutrients_file
->>>>>>> 607bfd5 (Return detailed result and http status from email scheduler route)
 from app.send_email import send_email_by_google_scheduler
 from app.payment_stripe import (
     handle_checkout_session_completed,
