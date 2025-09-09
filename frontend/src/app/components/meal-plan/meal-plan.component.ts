@@ -19,7 +19,6 @@ import { user } from 'rxfire/auth';
 export class MealPlanComponent implements OnInit {
   mealPlanResponse: any = {};
   shoppingListData: any[] = [];
-  selectedDate: string = '';
   energy: any[] = [];
   macros: any[] = [];
   vitamins: any[] = [];
@@ -32,6 +31,7 @@ export class MealPlanComponent implements OnInit {
   path: string = '';    
   filteredDays: any[] = [];   
   originalDays: any[] = [];
+  selectedDate: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -149,7 +149,7 @@ filterByDate() {
 
 
        if (this.start_date === this.end_date) {
-    this.selectedDate = this.start_date;
+        this.selectedDate = this.start_date;
   }
 
     this.filteredDays = this.selectedDate
