@@ -78,19 +78,6 @@ def send_message(service, user_id, message):
     except Exception as e:
         print("An error occurred: %s" % e)
         return None
-    
-# multi-threading test code
-# def send_email_by_google_scheduler(db, is_daily=False):
-#     user_ids = db.get_all_subscribed_users()  
-
-#     def job(user_id):
-#         if is_daily:
-#             process_daily_email_for_user(user_id)
-#         else:
-#             process_weekly_email_for_user(user_id, db)
-
-#     with ThreadPoolExecutor(max_workers=5) as executor:
-#         executor.map(job, user_ids)
 
 def send_email_by_google_scheduler(db, is_daily=False):
     user_ids = db.get_all_subscribed_users()  
@@ -244,7 +231,6 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
     subject = f"Your weekly meal plan for {start_d.strftime('%b %d')} to {end_d.strftime('%b %d')}, {user_name}!"
 
     # subject = f"Your personalized Meal Plan is Ready, {user_name}!"
-    response = sampleMealPlans
     response["user_name"] = user_name
     
     # Transform & aggregate raw shopping list data
