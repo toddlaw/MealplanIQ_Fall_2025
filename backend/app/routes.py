@@ -73,7 +73,10 @@ def handle_signup():
     user_id = data.get("user_id")
     db = instantiate_database()
     try:
-        if data.get("subscription_id"): 
+        if user_id is None:
+            print("Trying to add an initial data without user ID")
+            result = db.insert_new_user_without_uid(data)
+        elif data.get("subscription_id"): 
             print("trying to insert paid trial users!")
             result = db.insert_new_user_with_paid_trial(data)
         else:
