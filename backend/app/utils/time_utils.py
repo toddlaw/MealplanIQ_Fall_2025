@@ -11,9 +11,9 @@ def pt_midnight_utc_ms(d: dt.date) -> int:
 
 def get_week_range():
     PT = ZoneInfo("America/Los_Angeles")
-    now = dt.now(PT)
-    start_date = now + dt.timedelta(days=1)       
-    end_date = start_date + dt.timedelta(days=6)   
+    now = dt.datetime.now(PT)
+    start_date = now + dt.timedelta(days=1)
+    end_date   = start_date + dt.timedelta(days=6)
     today = now.date()
     start_dt = start_date.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
     end_dt = end_date.astimezone(PT).replace(hour=0, minute=0, second=0, microsecond=0)
