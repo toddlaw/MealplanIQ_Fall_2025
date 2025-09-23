@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -21,9 +21,11 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private toast: HotToastService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: NonNullableFormBuilder, // private usersService: UsersService
     private http: HttpClient,
     private usersService: UsersService
+
   ) {}
 
   ngOnInit(): void {}
@@ -71,8 +73,8 @@ export class LoginComponent implements OnInit {
         } else {
           console.error('User is null');
         }
-
-        this.router.navigate(['/dashboard']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+          this.router.navigateByUrl(returnUrl); 
       });
   }
   showPassword = false;
