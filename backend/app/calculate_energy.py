@@ -12,6 +12,7 @@ def energy_calculator_function(age, bmi, gender, weight, height, activity_level)
     :return: total daily energy intake
     """
     height_m = height / 100.0
+    result = 0
     if 18.5 < bmi <= 25 and 9 <= age <= 18 and gender == 'Male':
         if activity_level == 'Sedentary':
             pal = 1.0
