@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ShoppingListLandingPageComponent } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.component';
 import { startDate } from '../landing/form-values';
@@ -9,7 +9,7 @@ import { SearchDialogComponent } from '../search-dialog/search-dialog.component'
 import {sampleMealPlanData } from '../../moc/sampleMealPlan';
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
 import { MealPlanService } from '../../services/meal-plan.service';
-import { user } from 'rxfire/auth';
+
 
 @Component({
   selector: 'app-meal-plan',
@@ -35,6 +35,7 @@ export class MealPlanComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private toast: HotToastService,
     private dialog: MatDialog,
     private mealPlanService: MealPlanService
@@ -48,6 +49,14 @@ export class MealPlanComponent implements OnInit {
     });
 
     const user_id = localStorage.getItem('uid') || null;
+
+    if (!user_id) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url } 
+      });
+      return;
+    }
+
     this.path = `meal-plans-for-user/${user_id}/${this.start_date}_to_${this.end_date}`;
 
     const cachedData = this.loadMealPlanFromLocalStorage();
