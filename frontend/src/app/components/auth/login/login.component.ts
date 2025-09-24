@@ -63,7 +63,8 @@ export class LoginComponent implements OnInit {
 
           this.usersService.fetchAndStoreUserProfile(user.uid).subscribe({
             next: () => {
-              this.router.navigate(['/dashboard']);
+              const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+              this.router.navigateByUrl(returnUrl); 
             },
             error: (err) => {
               console.error('Failed to fetch user profile:', err);
@@ -73,8 +74,7 @@ export class LoginComponent implements OnInit {
         } else {
           console.error('User is null');
         }
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-          this.router.navigateByUrl(returnUrl); 
+        
       });
   }
   showPassword = false;
