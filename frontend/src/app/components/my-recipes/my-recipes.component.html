@@ -1,0 +1,32 @@
+<div class="wrap">
+    <h1>My Recipes</h1>
+
+    <mat-card class="list-card">
+        <ng-container *ngIf="(recipes$ | async) as recipes">
+            <mat-list>
+                <mat-list-item *ngFor="let r of recipes">
+                    <div class="row">
+                        <div class="title">{{ r.title }}</div>
+                        <div class="actions">
+                            <button mat-stroked-button color="primary" (click)="edit(r)">
+                                <mat-icon>edit</mat-icon>
+                                <span class="btn-text">Edit</span>
+                            </button>
+                            <button mat-stroked-button color="warn" (click)="delete(r)">
+                                <mat-icon>delete</mat-icon>
+                                <span class="btn-text">Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+
+            <div class="add-row">
+                <button mat-raised-button color="primary" (click)="addNew()">
+                    <mat-icon>add</mat-icon>
+                    Add New Recipe
+                </button>
+            </div>
+        </ng-container>
+    </mat-card>
+</div>
