@@ -9,6 +9,7 @@ import { SearchDialogComponent } from '../search-dialog/search-dialog.component'
 import {sampleMealPlanData } from '../../moc/sampleMealPlan';
 import { ShoppingList } from '../dialogues/shopping-list-landing-page/shopping-list-landing-page.interface';
 import { MealPlanService } from '../../services/meal-plan.service';
+import { weekSpanFor } from '../../utils/date';
 
 
 @Component({
@@ -32,6 +33,8 @@ export class MealPlanComponent implements OnInit {
   filteredDays: any[] = [];   
   originalDays: any[] = [];
   selectedDate: any;
+  plan_end_date: string = '';
+  plan_start_date: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +53,13 @@ export class MealPlanComponent implements OnInit {
 
     const user_id = localStorage.getItem('uid') || null;
 
+    if (this.start_date == this.end_date) {
+        const today = new Date();
+        const { start, end } = weekSpanFor(today, 6); 
+        this.plan_start_date = start;
+        this.plan_end_date = end;
+    } 
+
     if (!user_id) {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url } 
@@ -57,7 +67,7 @@ export class MealPlanComponent implements OnInit {
       return;
     }
 
-    this.path = `meal-plans-for-user/${user_id}/${this.start_date}_to_${this.end_date}`;
+    this.path = `meal-plans-for-user/${user_id}/${this.plan_start_date}_to_${this.plan_end_date}`;
 
     const cachedData = this.loadMealPlanFromLocalStorage();
 
@@ -70,7 +80,7 @@ export class MealPlanComponent implements OnInit {
       next: (data) => {
         this.mealPlanResponse = data;
         console.log("Fetched from cloud", this.mealPlanResponse);
-        this.saveMealPlanToLocalStorage(data, this.end_date); 
+        this.saveMealPlanToLocalStorage(data, this.plan_end_date); 
         this.afterMealPlanLoad();
       },
       error: (err) => console.error('Error:', err)
@@ -116,6 +126,9 @@ export class MealPlanComponent implements OnInit {
       }
     );
   }
+
+
+
 
     saveMealPlanToLocalStorage(response: any, endDate: string) {
     const expirationDate = new Date(endDate);
