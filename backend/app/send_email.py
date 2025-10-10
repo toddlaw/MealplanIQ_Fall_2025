@@ -202,7 +202,7 @@ def process_daily_email_for_user(db, user_id):
 
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        gmail_response = create_and_send_maizzle_daily_email_test({"days": [matched_day]}, user_email, user_name, tomorrow_str)
+        gmail_response = create_and_send_maizzle_daily_email_test(data.days["tomorrow_str"], user_email, user_name, tomorrow_str)
 
         return {
             "status": "success",
