@@ -1,0 +1,57 @@
+{
+    "fight_cancer": {
+        "nutrients": {
+        },
+        "recommended_cooking_method": {
+        }
+    },
+
+    "fight_diabetes": {
+        "nutrients": {
+            "carbohydrates" : "50-60% of daily calorie intake",
+            "fats": "20-30% of daily calorie intake"
+        },
+        "recommended_cooking_method": {
+            "fry": "limit",
+            "fried": "limit",
+            "steam": "preferred"
+        }
+    },
+
+    "fight_heart_disease": {
+        "nutrients": {
+            "carbohydrates" : "50-60% of daily calorie intake",
+            "fats": "20-30% of daily calorie intake"
+        },
+        "recommended_cooking_method": {
+            "fry": "limit",
+            "fried": "limit",
+            "steam": "preferred"
+        }
+    },
+
+    "lose_weight": {
+        "nutrients": {
+            "carbohydrates" : "50-60% of daily calorie intake",
+            "fats": "20-30% of daily calorie intake"
+        },
+        "recommended_cooking_method": {
+            "fry": "limit",
+            "fried": "limit",
+            "steam": "preferred"
+        }
+    },
+
+    "build_muscle": {
+        "nutrients": {
+            "carbohydrates" : "50-60% of daily calorie intake",
+            "fats": "20-30% of daily calorie intake"
+        },
+        "recommended_cooking_method": {
+            "fry": "limit",
+            "fried": "limit",
+            "steam": "preferred"
+        }
+    }
+}
+

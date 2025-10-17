@@ -1,0 +1,41 @@
+{
+  "user_id": "u123",
+  "goal": "fight_cancer",
+  "horizon_weeks": 104,
+  "catalog_version": "2025.10.0"
+}
+
+1. Put users into queue (when they sign up)
+2. user_id/goal/horizon_weeks(/catalog_version) pass to prompt
+3. Call agents with tools:
+
+get_user_profile(user_id)
+
+get_unique_static_list(goal, category)
+OR
+get_common_static_list(goal, category)
+OR
+build_dynamic_list(user_id, goal, category) // recipe
+
+create_query(...)
+
+sequence_weeks(...)
+
+save_plan_rows(rows)
+Fill that into plan table
+
+def handle_job(msg):
+    user_id = msg["user_id"]
+    goal = msg["goal"]
+    horizon = msg["horizon_weeks"]
+    catalog_version = msg.get("catalog_version")
+
+    prompt = f"""
+    Create a {horizon}-week plan for user_id={user_id}, goal={goal}.
+    1) call sequence_weeks;
+    2) for nutrient/ingredient use get_static_list(goal, type, catalog_version) with no-repeat & cooldown;
+    3) for recipe/physical_health call build_dynamic_list(user_id, goal, type) and pick one;
+    4) for each (type, topic_id) call create_query(...);
+    5) call save_plan_rows([...]) to persist to DB.
+    """
+    response = gemini_model.generate_content(prompt, tools=TOOLS)
