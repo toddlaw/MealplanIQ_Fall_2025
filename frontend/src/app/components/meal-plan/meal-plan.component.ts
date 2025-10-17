@@ -52,18 +52,21 @@ export class MealPlanComponent implements OnInit {
 
     const user_id = localStorage.getItem('uid') || null;
 
-    if (this.start_date == this.end_date) {
-        const today = new Date();
-        const { start, end } = weekSpanFor(today, 6); 
-        this.plan_start_date = start;
-        this.plan_end_date = end;
-    } 
-
     if (!user_id) {
       this.router.navigate(['/login'], {
         queryParams: { returnUrl: this.router.url } 
       });
       return;
+    }
+
+    if (this.start_date == this.end_date) {
+        const today = new Date();
+        const { start, end } = weekSpanFor(today, 6); 
+        this.plan_start_date = start;
+        this.plan_end_date = end;
+    } else {
+        this.plan_start_date = this.start_date,
+        this.plan_end_date = this.end_date
     }
 
     this.path = `meal-plans-for-user/${user_id}/${this.plan_start_date}_to_${this.plan_end_date}`;
@@ -78,74 +81,7 @@ export class MealPlanComponent implements OnInit {
       },
       error: (err) => console.error('Error:', err)
     });
-
-
-
-
-    this.mealPlanService.getMealPlan(this.path).subscribe({
-      next: (data) => {
-        this.mealPlanResponse = data;
-        console.log("fetch data from cloud", this.mealPlanResponse)
-        this.shoppingListData = this.transformMealPlanToShoppingList(
-            this.mealPlanResponse
-              );
-        this.categorizeNutrients()
-      },
-      error: (err) => console.error('Error:', err)
-    });
-
-
-
-    
-
-    // change The order of meals: should be Breakfast, Snack, Lunch, Snack, Dinner, Snack
-    this.mealPlanResponse.days.forEach(
-      (day: { recipes: { meal_name: string }[] }) => {
-        day.recipes.sort(
-          (a: { meal_name: string }, b: { meal_name: string }) => {
-            const mealOrder = [
-              'Breakfast',
-              'Snack',
-              'Lunch',
-              'Snack',
-              'Dinner',
-              'Snack',
-            ];
-            return (
-              mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name)
-            );
-          }
-        );
-      }
-    );
   }
-
-
-
-
-  //   saveMealPlanToLocalStorage(response: any, endDate: string) {
-  //   const expirationDate = new Date(endDate);
-  //   const cachedItem = {
-  //     data: response,
-  //     expiresAt: expirationDate.getTime(), // timestamp
-  //   };
-  //   localStorage.setItem('mealPlan', JSON.stringify(cachedItem));
-  // }
-
-  //   loadMealPlanFromLocalStorage(): any | null {
-  //   const cached = localStorage.getItem('mealPlan');
-  //   if (!cached) return null;
-
-  //   const parsed = JSON.parse(cached);
-  //   const now = Date.now();
-
-  //   if (parsed.expiresAt && parsed.expiresAt > now) {
-  //     return parsed.data;
-  //   } else {
-  //     localStorage.removeItem('mealPlan'); 
-  //     return null;
-  //   }
-  // }
 
 
 filterByDate() {
@@ -154,7 +90,6 @@ filterByDate() {
     : this.originalDays;
 }
   
-
   afterMealPlanLoad() {
     this.shoppingListData = this.transformMealPlanToShoppingList(this.mealPlanResponse);
     this.categorizeNutrients();
@@ -180,6 +115,16 @@ filterByDate() {
       this.mealPlanResponse.days = [filteredDay]; 
     }
   }
+
+    this.mealPlanResponse.days.forEach(
+    (day: { recipes: { meal_name: string }[] }) => {
+      if (!Array.isArray(day.recipes)) return;
+      const mealOrder = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner', 'Snack'];
+      day.recipes.sort(
+        (a, b) => mealOrder.indexOf(a.meal_name) - mealOrder.indexOf(b.meal_name)
+      );
+    }
+  );
 
   }
 
