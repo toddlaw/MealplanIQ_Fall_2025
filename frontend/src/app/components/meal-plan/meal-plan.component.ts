@@ -61,12 +61,19 @@ export class MealPlanComponent implements OnInit {
 
     if (this.start_date == this.end_date) {
         const today = new Date();
-        const { start, end } = weekSpanFor(today, 6); 
+        const WEEK_START_WEEKDAY = 6; // 5 = Friday
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const END_WEEKDAY = (WEEK_START_WEEKDAY + 6) % 7;
+        const base_date = today.getDay() === END_WEEKDAY ? tomorrow : today;
+
+        const { start, end } = weekSpanFor(base_date, 5); 
         this.plan_start_date = start;
         this.plan_end_date = end;
     } else {
-        this.plan_start_date = this.start_date,
-        this.plan_end_date = this.end_date
+        this.plan_start_date = this.start_date;
+        this.plan_end_date = this.end_date;
     }
 
     this.path = `meal-plans-for-user/${user_id}/${this.plan_start_date}_to_${this.plan_end_date}`;
@@ -111,6 +118,7 @@ filterByDate() {
     const filteredDay = this.mealPlanResponse.days.find(
       (day: any) => day.date === this.start_date
     );
+
     if (filteredDay) {
       this.mealPlanResponse.days = [filteredDay]; 
     }
