@@ -1,8 +1,10 @@
 # time_utils.py
 import datetime as dt
 from zoneinfo import ZoneInfo
+from datetime import timedelta
 
 PT = ZoneInfo("America/Los_Angeles")
+WEEK_START_WEEKDAY = 5
 
 def pt_midnight_utc_ms(d: dt.date) -> int:
     pt_dt = dt.datetime(d.year, d.month, d.day, 0, 0, 0, tzinfo=PT)
@@ -30,3 +32,9 @@ def get_week_range():
         "start_dt": start_dt,
         "end_dt": end_dt
     }
+
+def week_span_for(date_obj):
+    delta = (date_obj.weekday() - WEEK_START_WEEKDAY) % 7
+    start_date = date_obj - timedelta(days=delta)    
+    end_date   = start_date + timedelta(days=6)    
+    return start_date, end_date
