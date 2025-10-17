@@ -253,7 +253,7 @@ filterByDate() {
   }
 
   getDayOfWeek(date: string): string {
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday', 'Sunday'];
 
     const localDate = new Date(date);
     return days[localDate.getDay()];
