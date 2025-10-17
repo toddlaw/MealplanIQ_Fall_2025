@@ -33,7 +33,7 @@ from app.shopping_list_utils import (
 from user_db.user_db import instantiate_database
 from app.moc.sampleMealPlans import data as sampleMealPlans
 from concurrent.futures import ThreadPoolExecutor
-from app.utils.time_utils import get_week_range, pt_midnight_utc_ms
+from app.utils.time_utils import get_week_range, pt_midnight_utc_ms, week_span_for
 
 app = Flask(__name__)
 
@@ -49,14 +49,6 @@ credentials = service_account.Credentials.from_service_account_info(
 service_gmail = build("gmail", "v1", credentials=credentials)
 
 PT = ZoneInfo("America/Los_Angeles")
-
-# now = datetime.now(PT)        
-# start_date = now + timedelta(days=1)
-# end_date = start_date + timedelta(days=6)      
-# today = now.date()           
-# today_str = today.strftime("%Y-%m-%d")
-# start_str = start_date.strftime("%Y-%m-%d")
-# end_str   = end_date.strftime("%Y-%m-%d")
 
 # add is_html parameter to create_message function with html content
 def create_message(sender, to, subject, message_text, is_html=True):
@@ -80,44 +72,59 @@ def send_message(service, user_id, message):
         return None
 
 def send_email_by_google_scheduler(db, is_daily=False):
-    user_ids = db.get_all_subscribed_users()  
+    user_ids = db.get_all_subscribed_users()
     print("all subscribed users are retrieved", user_ids)
+
     if not user_ids:
         result = {
             "status": "skip",
             "reason": "no subscribed users exist",
         }
         return result, 200
-    
+
     success_results = []
     failed_results = []
-    
+
     for user_id in user_ids:
-        if is_daily:
-            result, code = process_daily_email_for_user(db, user_id)
-        else:
-            result, code = process_weekly_email_for_user(db, user_id)
-            
-        if result.get("status") == 'success':
-            success_results.append({
-                "code": code,
-                "result": result
-            })
-        else:
+        try:
+            if is_daily:
+                result, code = process_daily_email_for_user(db, user_id)
+            else:
+                result, code = process_weekly_email_for_user(db, user_id)
+
+            if result.get("status") == 'success':
+                success_results.append({
+                    "code": code,
+                    "result": result,
+                })
+            else:
+                failed_results.append({
+                    "code": code,
+                    "result": result,
+                })
+
+        except Exception as e:
+            print(f"[ERROR] user_id={user_id} failed: {e}")
             failed_results.append({
-                "code": code,
-                "result": result
+                "code": 500,
+                "result": {
+                    "status": "error",
+                    "user_id": user_id,
+                    "reason": str(e),
+                },
             })
-            
+            continue
+
     final_status = "partial_fail" if failed_results else "success"
     return {
         "status": final_status,
         "total_users": len(user_ids),
         "success_count": len(success_results),
         "fail_count": len(failed_results),
-        "succes": success_results,
-        "fail": failed_results
+        "success": success_results,
+        "fail": failed_results,
     }, 207 if failed_results else 200
+
 
 def process_weekly_email_for_user(db, user_id):
     try:
@@ -163,25 +170,41 @@ def process_weekly_email_for_user(db, user_id):
         }, 500
 
 def process_daily_email_for_user(db, user_id):
-    dates = get_week_range()
-    start_date = dates["start_date"]
-    tomorrow_str = start_date.strftime('%Y-%m-%d')
-    start_str = dates["start_str"]
-    end_str = dates["end_str"]
-    today_str = dates["today_str"]
+    today = dt.datetime.now(PT).date()
+    tomorrow = today + dt.timedelta(days=1)
+    WEEK_START_WEEKDAY = 5 
 
-    # Get meal plan data from GCS
+    END_WEEKDAY = (WEEK_START_WEEKDAY + 6) % 7
+    base_date = tomorrow if today.weekday() == END_WEEKDAY else today
+
+    start_date, end_date = week_span_for(base_date)
+
+    start_str = start_date.strftime("%Y-%m-%d")
+    end_str   = end_date.strftime("%Y-%m-%d")
+    tomorrow_str = tomorrow.strftime("%Y-%m-%d")
+
+
     try:
         full_path = f"meal-plans-for-user/{user_id}/{start_str}_to_{end_str}.json"
         data = download_mealplan_json_from_gcs(full_path)
+    except FileNotFoundError:
+        print(f"[INFO] No meal plan found for user {user_id}, skipping.")
+        return {
+                "status": "fail",
+                "stage": "filter",
+                "user_id": user_id,
+                "date": tomorrow_str,
+                "error": f"No meal plan found for user {user_id}, skipping"
+            }, 404
+
     except Exception as e:
         return {
-            "status": "fail",
-            "stage": "fetch",
-            "user_id": user_id,
-            "date": today_str,
-            "error": str(e),
-        }, 500
+                "status": "fail",
+                "stage": "filter",
+                "user_id": user_id,
+                "date": tomorrow_str,
+                "error": f"[ERROR] Unexpected error for user {user_id}: {e}"
+            }, 404
     
     # Send daily email
     try:
@@ -196,13 +219,15 @@ def process_daily_email_for_user(db, user_id):
                 "status": "fail",
                 "stage": "filter",
                 "user_id": user_id,
-                "date": today_str,
+                "date": tomorrow_str,
                 "error": f"No meal plan found for {tomorrow_str}",
             }, 404
 
+        print(f"[INFO] matched_day is {matched_day}.")
+
         user_name = db.retrieve_user_name(user_id)
         user_email = db.retrieve_user_email(user_id)
-        gmail_response = create_and_send_maizzle_daily_email_test(data.days["tomorrow_str"], user_email, user_name, tomorrow_str)
+        gmail_response = create_and_send_maizzle_daily_email_test(matched_day, user_email, user_name, tomorrow_str)
 
         return {
             "status": "success",
@@ -268,6 +293,7 @@ def create_and_send_maizzle_email(response, user_email, user_name, start_date=No
     return msg
 #daily
 def create_and_send_maizzle_daily_email_test(response, user_email, user_name, sent_date):
+    print("[DEBUG] Daily email sending started")
     sender_email = "MealPlanIQ <{}>".format(os.getenv("SENDER_EMAIL"))
     to_email = user_email
     
@@ -277,7 +303,7 @@ def create_and_send_maizzle_daily_email_test(response, user_email, user_name, se
     start_d = date.fromisoformat(sent_date)
 
     # subject for daily email
-    subject = f"Your personalized Meal Plan For tomorrow {start_d.strftime('%A')  } is Ready, {user_name}!"
+    subject = f"Your personalized Meal Plan For tomorrow {start_d.strftime('%A')} is Ready, {user_name}!"
     
     response["user_name"] = user_name
     
