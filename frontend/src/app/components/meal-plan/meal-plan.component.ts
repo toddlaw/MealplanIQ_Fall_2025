@@ -61,14 +61,12 @@ export class MealPlanComponent implements OnInit {
 
     if (this.start_date == this.end_date) {
         const today = new Date();
-        const WEEK_START_WEEKDAY = 6; // 5 = Friday
+        const WEEK_START_WEEKDAY = 6;
+
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
-        const END_WEEKDAY = (WEEK_START_WEEKDAY + 6) % 7;
-        const base_date = today.getDay() === END_WEEKDAY ? tomorrow : today;
-
-        const { start, end } = weekSpanFor(base_date, 5); 
+        const { start, end } = weekSpanFor(tomorrow, WEEK_START_WEEKDAY);
         this.plan_start_date = start;
         this.plan_end_date = end;
     } else {
@@ -265,18 +263,12 @@ filterByDate() {
   readonly startDate = startDate;
 
   getImageUrl(id: number): string {
-    const path = `https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/${id}.jpg`;
-    //const path = `../../../assets/images/meal-plan-images/default_meal_picture.png`;
+  return `https://storage.googleapis.com/mealplaniq-may-2024-recipe-images/${id}.jpg`;
+}
+  onImgError(ev: Event) {
+  (ev.target as HTMLImageElement).src = this.defaultImgPath;
+}
 
-    // check if the image exists
-    const img = new Image();
-    img.src = path;
-    if (img.complete) {
-      return path;
-    } else {
-      return this.defaultImgPath;
-    }
-  }
 
   openRecipeDialog(recipe: any): void {
     const data = {
