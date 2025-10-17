@@ -38,6 +38,9 @@
             <ng-container *ngIf="recipe.id !== null; else defaultMeanImg">
               <img
                 [src]="getImageUrl(recipe.id)"
+                (error)="onImgError($event)"
+                loading="lazy"
+                decoding="async"
                 alt="Image"
                 class="text-center"
                 style="width: 80%; height: auto; border-radius: 15px"
