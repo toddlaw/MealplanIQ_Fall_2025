@@ -67,7 +67,7 @@ export class CarouselComponent implements OnInit {
     },
     {
       file_name: 'assets/images/placeholders/carousel10.jpg',
-      title: 'selecting food for you want to eat',
+      title: 'selecting food you want to eat',
       subtitle: '',
     },
     {
