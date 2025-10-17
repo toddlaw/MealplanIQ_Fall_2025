@@ -1,5 +1,5 @@
-export function weekSpanFor(date: Date, weekStart: number = 6): { start: string; end: string } {
-  const d = stripTime(date);
+export function weekSpanFor(baseDate: Date, weekStart: number = 6): { start: string; end: string } {
+  const d = stripTime(baseDate);
   const day = d.getDay();
   const delta = (day - weekStart + 7) % 7;
 
