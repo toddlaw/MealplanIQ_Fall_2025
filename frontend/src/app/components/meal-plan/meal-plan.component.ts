@@ -45,7 +45,6 @@ export class MealPlanComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // take Query from
     this.route.queryParams.subscribe((params) => {
       this.start_date = params['start_date'] || null;
       this.end_date = params['end_date'] || null;
@@ -69,23 +68,17 @@ export class MealPlanComponent implements OnInit {
 
     this.path = `meal-plans-for-user/${user_id}/${this.plan_start_date}_to_${this.plan_end_date}`;
 
-    const cachedData = this.loadMealPlanFromLocalStorage();
+    // const cachedData = this.loadMealPlanFromLocalStorage();
 
-     if (cachedData) {
-    console.log("✅ Loaded from localStorage");
-    this.mealPlanResponse = cachedData;
-    this.afterMealPlanLoad();
-  } else {
     this.mealPlanService.getMealPlan(this.path).subscribe({
       next: (data) => {
         this.mealPlanResponse = data;
         console.log("Fetched from cloud", this.mealPlanResponse);
-        this.saveMealPlanToLocalStorage(data, this.plan_end_date); 
         this.afterMealPlanLoad();
       },
       error: (err) => console.error('Error:', err)
     });
-  }
+
 
 
 
@@ -130,29 +123,29 @@ export class MealPlanComponent implements OnInit {
 
 
 
-    saveMealPlanToLocalStorage(response: any, endDate: string) {
-    const expirationDate = new Date(endDate);
-    const cachedItem = {
-      data: response,
-      expiresAt: expirationDate.getTime(), // timestamp
-    };
-    localStorage.setItem('mealPlan', JSON.stringify(cachedItem));
-  }
+  //   saveMealPlanToLocalStorage(response: any, endDate: string) {
+  //   const expirationDate = new Date(endDate);
+  //   const cachedItem = {
+  //     data: response,
+  //     expiresAt: expirationDate.getTime(), // timestamp
+  //   };
+  //   localStorage.setItem('mealPlan', JSON.stringify(cachedItem));
+  // }
 
-    loadMealPlanFromLocalStorage(): any | null {
-    const cached = localStorage.getItem('mealPlan');
-    if (!cached) return null;
+  //   loadMealPlanFromLocalStorage(): any | null {
+  //   const cached = localStorage.getItem('mealPlan');
+  //   if (!cached) return null;
 
-    const parsed = JSON.parse(cached);
-    const now = Date.now();
+  //   const parsed = JSON.parse(cached);
+  //   const now = Date.now();
 
-    if (parsed.expiresAt && parsed.expiresAt > now) {
-      return parsed.data;
-    } else {
-      localStorage.removeItem('mealPlan'); 
-      return null;
-    }
-  }
+  //   if (parsed.expiresAt && parsed.expiresAt > now) {
+  //     return parsed.data;
+  //   } else {
+  //     localStorage.removeItem('mealPlan'); 
+  //     return null;
+  //   }
+  // }
 
 
 filterByDate() {
