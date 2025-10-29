@@ -53,7 +53,6 @@ function deepClone<T>(x: T): T { return JSON.parse(JSON.stringify(x)); }
         MatCardModule,
         MatListModule,
         MatDialogModule,
-        EditRecipeDialogComponent
     ],
     templateUrl: './my-recipes.component.html',
     styleUrls: ['./my-recipes.component.css']
