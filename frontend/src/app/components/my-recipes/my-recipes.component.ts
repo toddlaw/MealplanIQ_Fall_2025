@@ -10,6 +10,11 @@ import { environment } from '../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { EditRecipeDialogComponent, EditRecipeData } from './edit-recipe-dialog.component';
 
+import { Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
+import { UsersService } from 'src/app/services/users.service';
+
+
 export interface Ingredient {
     name: string;
     amount?: number;
@@ -56,6 +61,9 @@ function deepClone<T>(x: T): T { return JSON.parse(JSON.stringify(x)); }
 export class MyRecipesComponent {
     private dialog = inject(MatDialog);
     private http = inject(HttpClient);
+    private router = inject(Router);
+    private toast = inject(HotToastService);
+    private usersService = inject(UsersService);
 
 
     // Once we can upload files to these buckets, we can use these functions to get the URLs.
@@ -70,14 +78,31 @@ export class MyRecipesComponent {
 
     // stream of recipes for the template
     recipes$ = new BehaviorSubject<Recipe[]>([]);
+    // show/hide content to avoid flicker if user isn’t logged in
+    authorized$ = new BehaviorSubject<boolean>(false);
 
     ngOnInit() {
-        // if you want "all users" recipes:
-        const url = `${environment.baseUrl}/api/recipes`;
+        this.usersService.loadCachedUserProfile();
+        this.usersService.profile$.subscribe(() => { /* use if needed */ });
 
-        // if/when you want a single user's recipes:
-        // const uid = localStorage.getItem('uid') ?? 'gubzy_01';
-        // const url = `${environment.baseUrl}/api/recipes?user_id=${encodeURIComponent(uid)}`;
+        const uid = localStorage.getItem('uid');
+        if (!uid) {
+            this.toast.warning('Please log in to continue.');
+            this.authorized$.next(false);
+            // In case we want to navigate elsewhere -- dashboard exhibits behaviour where you can still access the dashboard
+            this.router.navigate(['/']);
+            return;
+        }
+
+        this.authorized$.next(true);
+
+
+        // // if you want "all users" recipes:
+        // const url = `${environment.baseUrl}/api/recipes`;
+        // Once depracated delete 
+
+
+        const url = `${environment.baseUrl}/api/recipes?user_id=${encodeURIComponent(uid)}`;
 
         this.http.get<any[]>(url).subscribe({
             next: (rows) => {
@@ -99,6 +124,7 @@ export class MyRecipesComponent {
                     return;
                 }
                 // seed for first-time run if API fails
+                // leave in for now, just in case updated table does not work correctly
                 const seed: Recipe[] = [
                     {
                         id: this.newId(),
@@ -123,6 +149,7 @@ export class MyRecipesComponent {
     }
 
     addNew() {
+        // send to questionnaire instead
         const ref = this.dialog.open(EditRecipeDialogComponent, {
             width: '720px',
             data: {
@@ -157,6 +184,7 @@ export class MyRecipesComponent {
     }
 
     delete(recipe: Recipe) {
+        // Update with query to db so as to delete custom recipe from db as well
         if (!confirm(`Delete "${recipe.title}"?`)) return;
         const next = this.recipes$.value.filter(r => r.id !== recipe.id);
         saveRecipes(next);
