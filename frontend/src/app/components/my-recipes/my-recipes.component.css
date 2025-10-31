@@ -1,0 +1,36 @@
+.wrap {
+    max-width: 900px;
+    margin: 24px auto;
+    padding: 0 12px;
+}
+
+.list-card {
+    padding: 8px 0;
+}
+
+.row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.title {
+    font-size: 16px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.add-row {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+.btn-text {
+    margin-left: 6px;
+}
