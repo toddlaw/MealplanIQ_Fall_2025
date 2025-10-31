@@ -679,11 +679,11 @@
                         *matCellDef="let element"
                         [ngClass]="{
                           'out-of-range':
-                            element.actual < element.display_target_min ||
-                            element.actual > element.display_target_max,
+                            (element.display_target_min != null && element.actual < element.display_target_min) ||
+                            (element.display_target_max != null && element.actual > element.display_target_max),
                           'in-range':
-                            element.actual >= element.display_target_min &&
-                            element.actual <= element.display_target_max
+                            (element.display_target_min == null || element.actual >= element.display_target_min) &&
+                            (element.display_target_max == null || element.actual <= element.display_target_max)
                         }"
                       >
                         {{ element.actual }}
@@ -752,11 +752,11 @@
                         *matCellDef="let element"
                         [ngClass]="{
                           'out-of-range':
-                            element.actual < element.display_target_min ||
-                            element.actual > element.display_target_max,
+                            (element.display_target_min != null && element.actual < element.display_target_min) ||
+                            (element.display_target_max != null && element.actual > element.display_target_max),
                           'in-range':
-                            element.actual >= element.display_target_min &&
-                            element.actual <= element.display_target_max
+                            (element.display_target_min == null || element.actual >= element.display_target_min) &&
+                            (element.display_target_max == null || element.actual <= element.display_target_max)
                         }"
                       >
                         {{ element.actual }}
@@ -828,11 +828,11 @@
                         *matCellDef="let element"
                         [ngClass]="{
                           'out-of-range':
-                            element.actual < element.display_target_min ||
-                            element.actual > element.display_target_max,
+                            (element.display_target_min != null && element.actual < element.display_target_min) ||
+                            (element.display_target_max != null && element.actual > element.display_target_max),
                           'in-range':
-                            element.actual >= element.display_target_min &&
-                            element.actual <= element.display_target_max
+                            (element.display_target_min == null || element.actual >= element.display_target_min) &&
+                            (element.display_target_max == null || element.actual <= element.display_target_max)
                         }"
                       >
                         {{ element.actual }}
@@ -903,11 +903,11 @@
                         *matCellDef="let element"
                         [ngClass]="{
                           'out-of-range':
-                            element.actual < element.display_target_min ||
-                            element.actual > element.display_target_max,
+                            (element.display_target_min != null && element.actual < element.display_target_min) ||
+                            (element.display_target_max != null && element.actual > element.display_target_max),
                           'in-range':
-                            element.actual >= element.display_target_min &&
-                            element.actual <= element.display_target_max
+                            (element.display_target_min == null || element.actual >= element.display_target_min) &&
+                            (element.display_target_max == null || element.actual <= element.display_target_max)
                         }"
                       >
                         {{ element.actual }}
