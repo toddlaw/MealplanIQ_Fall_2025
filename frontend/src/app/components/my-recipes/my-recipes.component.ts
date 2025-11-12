@@ -80,6 +80,9 @@ export class MyRecipesComponent {
     // show/hide content to avoid flicker if user isn’t logged in
     authorized$ = new BehaviorSubject<boolean>(false);
 
+
+    trackById = (_: number, r: Recipe) => r.id;
+
     ngOnInit() {
         this.usersService.loadCachedUserProfile();
         this.usersService.profile$.subscribe(() => { /* use if needed */ });
@@ -94,25 +97,74 @@ export class MyRecipesComponent {
         }
 
         this.authorized$.next(true);
+        this.fetchRecipes();
 
+        // const url = `${environment.baseUrl}/api/recipes?user_id=${encodeURIComponent(uid)}`;
 
-        // // if you want "all users" recipes:
-        // const url = `${environment.baseUrl}/api/recipes`;
-        // Once depracated delete 
+        // this.http.get<any[]>(url).subscribe({
+        //     next: (rows) => {
+        //         // Map API rows to your Recipe interface
+        //         const mapped: Recipe[] = rows.map(r => ({
+        //             id: String(r.id ?? r.number ?? r.title),
+        //             title: r.title,
+        //             ingredients: r.ingredients ?? [],  
+        //             instructions: r.instructions ?? []
+        //         }));
+        //         saveRecipes(mapped);       // cache locally
+        //         this.recipes$.next(mapped);
+        //     },
+        //     error: (err) => {
+        //         console.error('Failed to fetch recipes from API, using seed data', err);
+        //         const existing = loadRecipes();
+        //         if (existing.length) {
+        //             this.recipes$.next(existing);
+        //             return;
+        //         }
+        //         // seed for first-time run if API fails
+        //         // leave in for now, just in case updated table does not work correctly
+        //         const seed: Recipe[] = [
+        //             {
+        //                 id: this.newId(),
+        //                 title: 'My Grilled Chicken Sandwich',
+        //                 ingredients: [
+        //                     { name: 'Chicken breasts', amount: 0.5, unit: 'lb' },
+        //                     { name: 'Bread', amount: 2, unit: 'slices', note: 'toasted' },
+        //                     { name: 'Butter', amount: 2, unit: 'tbsp' },
+        //                     { name: 'Salt', note: 'to taste' }
+        //                 ],
+        //                 instructions: [
+        //                     'Cook chicken and cut into slices',
+        //                     'Toast bread then butter',
+        //                     'Place chicken on bread and sprinkle salt'
+        //                 ]
+        //             }
+        //         ];
+        //         saveRecipes(seed);
+        //         this.recipes$.next(seed);
+        //     }
+        // });
+    }
 
+    /**
+ * GET recipes for the current user and map to UI model.
+ * Reused on load and after server-side imports/creates.
+ */
+    fetchRecipes() {
+        const uid = localStorage.getItem('uid');
+        if (!uid) return;
 
         const url = `${environment.baseUrl}/api/recipes?user_id=${encodeURIComponent(uid)}`;
 
         this.http.get<any[]>(url).subscribe({
             next: (rows) => {
-                // Map API rows to your Recipe interface
                 const mapped: Recipe[] = rows.map(r => ({
                     id: String(r.id ?? r.number ?? r.title),
                     title: r.title,
-                    ingredients: r.ingredients ?? [],   // API sends [], but this keeps it safe
+                    // placeholders returned by API ensure these exist
+                    ingredients: r.ingredients ?? [],
                     instructions: r.instructions ?? []
                 }));
-                saveRecipes(mapped);       // optional: cache locally
+                saveRecipes(mapped);       // cache locally
                 this.recipes$.next(mapped);
             },
             error: (err) => {
@@ -122,8 +174,6 @@ export class MyRecipesComponent {
                     this.recipes$.next(existing);
                     return;
                 }
-                // seed for first-time run if API fails
-                // leave in for now, just in case updated table does not work correctly
                 const seed: Recipe[] = [
                     {
                         id: this.newId(),
@@ -149,24 +199,31 @@ export class MyRecipesComponent {
 
     addNew() {
         // send to questionnaire instead
-        const ref = this.dialog.open(EditRecipeDialogComponent, {
-            width: '720px',
-            data: {
-                mode: 'create',
-                recipe: {
-                    id: this.newId(),
-                    title: 'Untitled Recipe',
-                    ingredients: [],
-                    instructions: []
-                }
-            } as EditRecipeData
-        });
-        ref.afterClosed().subscribe((result?: Recipe) => {
-            if (!result) return;
-            const next = [...this.recipes$.value, result];
-            saveRecipes(next);
-            this.recipes$.next(next);
-        });
+        // const ref = this.dialog.open(EditRecipeDialogComponent, {
+        //     width: '720px',
+        //     data: {
+        //         mode: 'create',
+        //         recipe: {
+        //             id: this.newId(),
+        //             title: 'Untitled Recipe',
+        //             ingredients: [],
+        //             instructions: []
+        //         }
+        //     } as EditRecipeData
+        // });
+        // ref.afterClosed().subscribe((result?: Recipe) => {
+        //     if (!result) return;
+        //     const next = [...this.recipes$.value, result];
+        //     saveRecipes(next);
+        //     this.recipes$.next(next);
+        // });
+
+
+
+        
+        // window.location.href = environment.addRecipeQuestionnaire
+        const uid = localStorage.getItem('uid');
+        window.location.href = `http://localhost:4201?uid=${uid}`;
     }
 
     edit(recipe: Recipe) {
@@ -189,6 +246,49 @@ export class MyRecipesComponent {
         saveRecipes(next);
         this.recipes$.next(next);
     }
+
+    /**
+   * NEW: Ask the backend to import a CSV that already lives on the server,
+   * then refresh the list. Defaults to 'example.csv' but you can pass another name.
+   *
+   * Requires Flask route: POST /api/recipes/import/:user_id  body: { filename }
+   */
+    importFromServerCsv(filename = 'example.csv') {
+        const uid = localStorage.getItem('uid');
+        if (!uid) { this.toast.warning('Please log in'); return; }
+
+        if (this._busy) return;
+        this._busy = true;
+
+        const url = `${environment.baseUrl}/api/recipes/import/${encodeURIComponent(uid)}`;
+        this.http.post<{ ok: boolean; mode?: 'update' | 'skip'; skipped?: boolean; user_id?: string; number?: number; error?: string }>(
+            url,
+            { filename, mode: 'update' },
+            { headers: { 'Content-Type': 'application/json' } }
+        ).subscribe({
+            next: (res) => {
+                if (res?.ok && res?.skipped) {
+                    this.toast.info(`Skipped: recipe #${res.number} already exists for this user.`);
+                } else if (res?.ok) {
+                    this.toast.success(`Imported recipe #${res.number}.`);
+                } else {
+                    this.toast.warning(res?.error || 'Import completed with warnings');
+                }
+                this.fetchRecipes();
+            },
+            error: (err) => {
+                const msg = err?.error?.error || err?.message || 'Import failed';
+                this.toast.error(msg);
+                console.error('import failed', err);
+            },
+            complete: () => { this._busy = false; }
+        });
+    }
+
+    // add this field in your class:
+    private _busy = false;
+
+
 
     private newId(): string {
         // safe fallback if crypto.randomUUID isn’t available

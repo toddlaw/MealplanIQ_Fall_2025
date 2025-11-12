@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,26 +7,29 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import type { Recipe, Ingredient } from './my-recipes.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 export type Mode = 'create' | 'edit';
 export interface EditRecipeData {
-    mode: Mode;
-    recipe: Recipe;
+  mode: Mode;
+  recipe: Recipe;
 }
 
 @Component({
-    selector: 'app-edit-recipe-dialog',
-    standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatInputModule
-    ],
-    template: `
+  selector: 'app-edit-recipe-dialog',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
+  template: `
     <h2 mat-dialog-title>{{ data.mode === 'create' ? 'Add Recipe' : 'Edit Recipe' }}</h2>
     <div mat-dialog-content class="content">
       <mat-form-field appearance="fill" class="full">
@@ -35,7 +38,7 @@ export interface EditRecipeData {
       </mat-form-field>
 
       <h3>Ingredients</h3>
-      <div class="ing-row" *ngFor="let ing of model.ingredients; let i = index">
+      <div class="ing-row" *ngFor="let ing of model.ingredients; let i = index; trackBy: trackByIndex">
         <mat-form-field appearance="fill"><mat-label>Name</mat-label>
           <input matInput [(ngModel)]="ing.name" />
         </mat-form-field>
@@ -57,7 +60,7 @@ export interface EditRecipeData {
       </button>
 
       <h3>Instructions</h3>
-      <div class="step-row" *ngFor="let step of model.instructions; let i = index">
+      <div class="step-row" *ngFor="let step of model.instructions; let i = index; trackBy: trackByIndex">
         <span class="idx">{{ i + 1 }}</span>
         <mat-form-field appearance="fill" class="full">
           <mat-label>Step {{ i + 1 }}</mat-label>
@@ -77,7 +80,7 @@ export interface EditRecipeData {
       <button mat-raised-button color="primary" (click)="save()">Save</button>
     </div>
   `,
-    styles: [`
+  styles: [`
     .content { display: grid; gap: 12px; }
     .full { width: 100%; }
     .ing-row, .step-row {
@@ -91,24 +94,63 @@ export interface EditRecipeData {
     h3 { margin: 8px 0 0; }
   `]
 })
-export class EditRecipeDialogComponent {
-    model: Recipe;
+export class EditRecipeDialogComponent implements OnInit {   // <-- implement OnInit
+  model: Recipe;
 
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: EditRecipeData,
-        private ref: MatDialogRef<EditRecipeDialogComponent>
-    ) {
-        this.model = structuredClone(data.recipe);
-    }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: EditRecipeData,
+    private ref: MatDialogRef<EditRecipeDialogComponent>,
+    private http: HttpClient,
+  ) {
+    // start with what you already had (title from DB)
+    this.model = {
+      id: data.recipe.id,
+      title: data.recipe.title,
+      ingredients: (data.recipe.ingredients || []).map(x => ({ ...x })),
+      instructions: [...(data.recipe.instructions || [])],
+    };
+  }
 
-    addIngredient() {
-        (this.model.ingredients as Ingredient[]).push({ name: '' });
-    }
-    removeIngredient(i: number) { this.model.ingredients.splice(i, 1); }
+  ngOnInit(): void {
+    const uid = localStorage.getItem('uid');
+    const num = Number(this.model.id);
+    if (!uid || !Number.isFinite(num)) return;
 
-    addStep() { this.model.instructions.push(''); }
-    removeStep(i: number) { this.model.instructions.splice(i, 1); }
+    const url = `${environment.baseUrl}/api/recipes/${encodeURIComponent(uid)}/${num}/files`;
+    this.http.get<{ ingredients: Ingredient[]; instructions: string[] }>(url)
+      .subscribe({
+        next: (res) => {
+          if (Array.isArray(res.ingredients)) this.model.ingredients = res.ingredients;
+          if (Array.isArray(res.instructions)) this.model.instructions = res.instructions;
+        },
+        error: (err) => console.error('load CSV files failed', err)
+      });
+  }
 
-    close() { this.ref.close(); }
-    save() { this.ref.close(this.model); }
+  trackByIndex(index: number, _item: any) {
+    return index;
+  }
+
+
+  addIngredient() { (this.model.ingredients as Ingredient[]).push({ name: '' }); }
+  removeIngredient(i: number) { this.model.ingredients.splice(i, 1); }
+
+  addStep() { this.model.instructions.push(''); }
+  removeStep(i: number) { this.model.instructions.splice(i, 1); }
+
+  close() { this.ref.close(); }
+
+  save() {
+    const uid = localStorage.getItem('uid');
+    const num = Number(this.model.id);
+    if (!uid || !Number.isFinite(num)) { this.ref.close(this.model); return; }
+
+    const url = `${environment.baseUrl}/api/recipes/${encodeURIComponent(uid)}/${num}/files`;
+    const body = { ingredients: this.model.ingredients, instructions: this.model.instructions };
+
+    this.http.put(url, body).subscribe({
+      next: () => this.ref.close(this.model),
+      error: (err) => { console.error('save CSV files failed', err); this.ref.close(this.model); }
+    });
+  }
 }
