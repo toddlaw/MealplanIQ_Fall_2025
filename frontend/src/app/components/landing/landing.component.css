@@ -84,6 +84,20 @@ mat-panel-title {
 
 }
 
+mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.expansion-indicator {
+  transition: transform 0.3s ease;
+}
+
+.expansion-indicator.expanded {
+  transform: rotate(180deg);
+}
+
 
 .blue-text {
   color: rgb(46, 52, 212);

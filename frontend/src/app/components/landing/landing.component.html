@@ -617,11 +617,11 @@
         <div>
           <!-- group nutrient table into four cards -->
           <mat-card>
-            <mat-card-header
-              (click)="expanded = !expanded"
-              class="cursor-pointer"
-            >
+            <mat-card-header (click)="expanded = !expanded" class="cursor-pointer">
               <mat-card-title>Nutrition Information</mat-card-title>
+              <mat-icon class="expansion-indicator" [class.expanded]="expanded">
+                expand_more
+              </mat-icon>
             </mat-card-header>
 
             <mat-card-content *ngIf="expanded">
