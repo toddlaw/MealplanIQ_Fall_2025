@@ -785,6 +785,11 @@ export class LandingComponent implements OnInit {
     );
   }
 
+  addNew() {
+      const uid = localStorage.getItem('uid');
+      window.location.href = `http://localhost:4201?uid=${uid}`;
+    }
+
   updateNutrientTable(recipe: any) {
     console.log('recipe test:', recipe);
     const nutrientsToUpdate = [

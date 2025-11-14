@@ -491,13 +491,20 @@
           
         <app-popup></app-popup>
 
-        <div class="text-center">
+        <div class="text-center flex justify-center gap-4">
           <button
             mat-raised-button
             class="bg-secondary text-white hover:bg-primary"
             (click)="openShoppingListDialog()"
           >
             Open Shopping List
+          </button>
+          <button
+            mat-raised-button
+            class="bg-secondary text-white hover:bg-primary"
+            (click)="addNew()"
+          >
+            Add Custom Recipe
           </button>
         </div>
         <br />
