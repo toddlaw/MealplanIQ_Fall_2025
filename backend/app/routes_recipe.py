@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file
+from typing import Optional
+import re
 import csv, os
 from pathlib import Path
 import pymysql
@@ -376,3 +378,213 @@ def create_recipe(user_id):
         """, (user_id, data["id"], data["meal_type"], data["meal_slot"], data["title"]))
     conn.commit()
     return jsonify({"ok": True}), 201
+
+
+
+# Following functions are used for custom recipes to show up in the Replace Search
+
+
+
+TITLE_GUESS_FIELDS = ["title", "name", "recipe", "recipe_title"]
+
+def _read_first_row_csv(path: Path) -> Optional[dict]:
+    if not path.exists():
+        return None
+    try:
+        with path.open(newline="", encoding="utf-8") as f:
+            r = csv.DictReader(f)
+            row = next(r, None)
+            return row if row else None
+    except Exception:
+        return None
+
+def _title_from_sources(cur, uid: str, number: int) -> str:
+    """
+    Prefer DB title (custom_recipes.title). If missing, try the nutrients CSV header fields.
+    Fallback to a generic label.
+    """
+    cur.execute(
+        "SELECT title FROM custom_recipes WHERE user_id=%s AND `number`=%s LIMIT 1",
+        (uid, number),
+    )
+    row = cur.fetchone()
+    if row and row.get("title"):
+        return str(row["title"]).strip()
+
+    # fallback: try nutrients CSV
+    nutrients_csv = CSV_DIR / f"{uid}_{number}.csv"
+    first = _read_first_row_csv(nutrients_csv)
+    if first:
+        first = _normalize_headers(first)
+        for fld in TITLE_GUESS_FIELDS:
+            if fld.lower() in first and str(first[fld]).strip():
+                return str(first[fld]).strip()
+
+    return f"Custom Recipe {number}"
+
+@bp.get("/custom-recipes/<user_id>/search")
+def search_custom_recipes(user_id: str):
+    """
+    GET /api/custom-recipes/<user_id>/search?q=term&exact=true|false
+    Returns: [{ id, title, cuisine?, __source: 'custom' }]
+    """
+    # keep DB in sync with local CSVs before searching
+    _ = _sync_all_csvs(mode="update")
+
+    q = (request.args.get("q") or "").strip()
+    exact = (request.args.get("exact") or "false").lower() == "true"
+
+    params = [user_id]
+    where = ["user_id=%s"]
+
+    if q:
+        if exact:
+            # match title exactly OR match number exactly if q is numeric
+            where.append("(title = %s OR `number` = %s)")
+            if q.isdigit():
+                params.extend([q, int(q)])
+            else:
+                params.extend([q, -1])  # number won't match
+        else:
+            where.append("(title LIKE %s OR CAST(`number` AS CHAR) LIKE %s)")
+            like = f"%{q}%"
+            params.extend([like, like])
+
+    sql = f"""
+        SELECT `number`, title, region, subregion, country
+        FROM custom_recipes
+        WHERE {' AND '.join(where)}
+        ORDER BY `number`
+        LIMIT 100
+    """
+
+    conn = get_conn()
+    with conn.cursor(pymysql.cursors.DictCursor) as cur:
+        cur.execute(sql, tuple(params))
+        rows = cur.fetchall()
+
+    # shape for Angular suggestions
+    out = []
+    for r in rows:
+        cuisine = r.get("region") or r.get("subregion") or r.get("country")
+        out.append({
+            "id": int(r["number"]),
+            "title": r["title"] or f"Custom Recipe {r['number']}",
+            "cuisine": cuisine,
+            "__source": "custom",
+        })
+    return jsonify(out)
+
+
+@bp.get("/custom-recipes/<user_id>/<int:number>")
+def get_custom_recipe(user_id: str, number: int):
+    """
+    Returns a dialog-ready payload with title + calories + cuisine + 
+    prep/cook time + ingredients + instructions.
+    meal_type is used as the cuisine.
+    """
+    conn = get_conn()
+    with conn.cursor(pymysql.cursors.DictCursor) as cur:
+
+        cur.execute(
+            """
+            SELECT title,
+                   energy_kcal,
+                   meal_type,
+                   region,
+                   cooktime,
+                   preptime
+            FROM custom_recipes
+            WHERE user_id=%s AND `number`=%s
+            LIMIT 1
+            """,
+            (user_id, number),
+        )
+        row = cur.fetchone()
+
+        title = None
+        energy_kcal = None
+        meal_type = None
+        region = None
+        cooktime = None
+        preptime = None
+
+        if row:
+            title = (row.get("title") or "").strip() or None
+            energy_kcal = row.get("energy_kcal")
+            meal_type = row.get("meal_type")  
+            region = row.get("region")
+            cooktime = row.get("cooktime")
+            preptime = row.get("preptime")
+
+        # Fallback: extract a title from user CSV if DB title is missing
+        if not title:
+            title = _title_from_sources(cur, user_id, number)
+
+    # Build cuisine
+    cuisine = region 
+
+    # -------- Ingredients (CSV) --------
+    ing_file = _ing_path(user_id, number)
+    ingredients = []
+    if ing_file.exists():
+        with ing_file.open(newline="", encoding="utf-8") as f:
+            r = csv.DictReader(f)
+            for row in r:
+                lr = {(k or "").strip().lower(): v for k, v in row.items()}
+                ingredients.append({
+                    "name":          _lk(lr, "ingredient name", ""),
+                    "amount":        _lk(lr, "quantity", ""),
+                    "unit":          _lk(lr, "unit", ""),
+                    "note":          _lk(lr, "state", ""),
+                    "energy_kcal":   _lk(lr, "energy (kcal)", ""),
+                    "carbohydrates": _lk(lr, "carbohydrates", ""),
+                    "protein_g":     _lk(lr, "protein (g)", ""),
+                    "fat_g":         _lk(lr, "total lipid (fat) (g)", ""),
+                })
+
+    # -------- Instructions (CSV) --------
+    inst_file = _inst_path(user_id, number)
+    instructions = []
+    if inst_file.exists():
+        with inst_file.open(newline="", encoding="utf-8") as f:
+            r = csv.DictReader(f)
+            for row in r:
+                lr = {(k or "").strip().lower(): v for k, v in row.items()}
+                text = _lk(lr, "instruction", None)
+                if text is None or str(text).strip() == "":
+                    text = _lk(lr, "step", "")
+                instructions.append(str(text))
+
+    # -------- Response --------
+    return jsonify({
+        "id": number,
+        "title": title,
+        "source": "custom",
+
+        # Dialog-facing fields
+        "calories": energy_kcal,
+        "cuisine": cuisine,
+        "cook_time": cooktime,
+        "prep_time": preptime,
+
+        # CSV-loaded arrays
+        "ingredients": ingredients,
+        "instructions": instructions,
+    })
+
+
+
+@bp.get("/custom-recipes/<user_id>/<int:number>/ingredients.csv")
+def stream_custom_ingredients(user_id: str, number: int):
+    p = _ing_path(user_id, number)
+    if not p.exists():
+        return jsonify({"error": "ingredients CSV not found"}), 404
+    return send_file(p, mimetype="text/csv")
+
+@bp.get("/custom-recipes/<user_id>/<int:number>/instructions.csv")
+def stream_custom_instructions(user_id: str, number: int):
+    p = _inst_path(user_id, number)
+    if not p.exists():
+        return jsonify({"error": "instructions CSV not found"}), 404
+    return send_file(p, mimetype="text/csv")

@@ -13,6 +13,10 @@ import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-search-dialog',
   templateUrl: './search-dialog.component.html'
@@ -31,7 +35,58 @@ export class SearchDialogComponent {
     public dialogRef: MatDialogRef<SearchDialogComponent>,  // Reference to the search dialog itself
     private recipeService: RecipeService,                   // Service for recipe search and retrieval
     private dialog: MatDialog                                // Service to open additional dialogs (e.g. recipe details)
-  ) {}
+  ) { }
+
+  /** Helper: get the current authenticated user’s UID from localStorage */
+  private getUid(): string | null {
+    const id = localStorage.getItem('uid'); // adjust if different
+    console.log('[SearchDialog] UID =', id);
+    return id;
+  }
+
+
+  /**
+   * Combined search that merges both global and custom user recipes.
+   */
+  private runCombinedSearch(term: string, exact: boolean) {
+    const uid = this.getUid();
+
+    const global$ = this.recipeService.searchRecipes(term, exact).pipe(
+      map(list => list.map(r => ({ ...r, __source: 'global' }))),
+      catchError(err => {
+        console.error('Global search error:', err);
+        return of([]);
+      })
+    );
+
+    const custom$ = uid
+      ? this.recipeService.searchUserRecipes(uid, term, exact).pipe(
+        map(list => list.map(r => ({ ...r, __source: 'custom' }))),
+        catchError(err => {
+          console.error('Custom search error:', err);
+          return of([]);
+        })
+      )
+      : of([]);
+
+    forkJoin([global$, custom$])
+      .pipe(
+        map(([globalResults, customResults]) => {
+          const merged = [...customResults, ...globalResults];
+          // optional: de-dupe by id if needed
+          const seen = new Set();
+          return merged.filter(r => {
+            const key = `${r.__source}:${r.id}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+        })
+      )
+      .subscribe(merged => {
+        this.suggestedResults = merged;
+      });
+  }
 
   /**
    * Triggered when the search input changes.
@@ -41,15 +96,7 @@ export class SearchDialogComponent {
   onSearchChange(): void {
     this.isExactSearch = false;
     if (this.searchTerm.length >= 2) {
-      this.recipeService.searchRecipes(this.searchTerm).subscribe(
-        (results) => {
-          this.suggestedResults = results;
-        },
-        (error) => {
-          console.error('Search error:', error);
-          this.suggestedResults = [];
-        }
-      );
+      this.runCombinedSearch(this.searchTerm, false);
     } else {
       this.suggestedResults = [];
     }
@@ -61,17 +108,8 @@ export class SearchDialogComponent {
    */
   onExactSearch(): void {
     this.isExactSearch = true;
-    if (this.searchTerm.length === 0) return;
-
-    this.recipeService.searchRecipes(this.searchTerm, true).subscribe(
-      (results) => {
-        this.suggestedResults = results;
-      },
-      (error) => {
-        console.error('Exact search error:', error);
-        this.suggestedResults = [];
-      }
-    );
+    if (!this.searchTerm) return;
+    this.runCombinedSearch(this.searchTerm, true);
   }
 
   /**
@@ -81,19 +119,37 @@ export class SearchDialogComponent {
    * @param recipe - The recipe object selected by the user.
    */
   selectRecipe(recipe: any): void {
-    this.recipeService.getRecipeDetails(recipe.id).subscribe(
+    const uid = this.getUid();
+
+    const details$ =
+      recipe.__source === 'custom' && uid
+        ? this.recipeService.getCustomRecipeDetails(uid, recipe.id)
+        : this.recipeService.getRecipeDetails(recipe.id);
+
+    details$.subscribe(
       (fullRecipe) => {
+        const isCustom = recipe.__source === 'custom' && !!uid;
+
+        const ingredientsUrl = isCustom
+          ? this.recipeService.getCustomIngredientsCsvUrl(uid as string, recipe.id)
+          : this.getIngredientsCsvUrl(recipe.id);
+
+        const instructionsUrl = isCustom
+          ? this.recipeService.getCustomInstructionsCsvUrl(uid as string, recipe.id)
+          : this.getInstructionsCsvUrl(recipe.id);
+
         const detailDialogRef = this.dialog.open(RecipeDialogComponent, {
           data: {
-            recipe: recipe,
-            imageUrl: this.getImageUrl(recipe.id),
-            ingredientsUrl: this.getIngredientsCsvUrl(recipe.id),
-            instructionsUrl: this.getInstructionsCsvUrl(recipe.id),
+            recipe: fullRecipe ?? recipe,
+            imageUrl: isCustom
+              ? 'assets/images/placeholders/placeholder_missing_recipe.png'
+              : this.getImageUrl(recipe.id),
+            ingredientsUrl,
+            instructionsUrl,
             showActions: true
-          },
+          }
         });
 
-        // After recipe details dialog closes — if confirmed, return the recipe
         detailDialogRef.afterClosed().subscribe(confirmed => {
           if (confirmed) {
             this.dialogRef.close(recipe);
@@ -104,6 +160,13 @@ export class SearchDialogComponent {
         console.error('Error loading recipe details:', error);
       }
     );
+  }
+
+  /**
+   * Returns the placeholder image for missing recipes 
+   */
+  usePlaceholder(ev: Event) {
+    (ev.target as HTMLImageElement).src = 'assets/images/placeholders/placeholder_missing_recipe.png';
   }
 
   /**

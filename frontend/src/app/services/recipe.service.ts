@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class RecipeService {
   private baseUrl = `${environment.baseUrl}/api/recipes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   searchRecipes(query: string, exact: boolean = false): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/search?q=${query}&exact=${exact}`);
@@ -21,5 +21,25 @@ export class RecipeService {
 
   getRecipeDetails(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/${id}`);
+  }
+
+  searchUserRecipes(uid: string, q: string, exact = false) {
+    return this.http.get<any[]>(
+      `${environment.baseUrl}/api/custom-recipes/${encodeURIComponent(uid)}/search?q=${encodeURIComponent(q)}&exact=${exact}`
+    );
+  }
+
+  getCustomRecipeDetails(uid: string, id: number) {
+    return this.http.get<any>(
+      `${environment.baseUrl}/api/custom-recipes/${encodeURIComponent(uid)}/${id}`
+    );
+  }
+
+  getCustomIngredientsCsvUrl(uid: string, id: number): string {
+    return `${environment.baseUrl}/api/custom-recipes/${encodeURIComponent(uid)}/${id}/ingredients.csv`;
+  }
+
+  getCustomInstructionsCsvUrl(uid: string, id: number): string {
+    return `${environment.baseUrl}/api/custom-recipes/${encodeURIComponent(uid)}/${id}/instructions.csv`;
   }
 }

@@ -3,12 +3,7 @@
 <mat-dialog-content>
   <mat-form-field appearance="fill" class="w-full">
     <mat-label>Enter keyword</mat-label>
-    <input
-      matInput
-      [(ngModel)]="searchTerm"
-      (input)="onSearchChange()"
-      placeholder="e.g. ham, pasta, salad..."
-    />
+    <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="e.g. ham, pasta, salad..." />
     <button matSuffix mat-icon-button (click)="onExactSearch()">
       <mat-icon>search</mat-icon>
     </button>
@@ -18,17 +13,16 @@
     <p *ngIf="!isExactSearch"><strong>Suggestions:</strong></p>
     <p *ngIf="isExactSearch"><strong>Search results for "{{ searchTerm }}":</strong></p>
     <mat-list>
-      <mat-list-item
-        *ngFor="let suggestion of suggestedResults"
-        (click)="selectRecipe(suggestion)"
-        class="cursor-pointer"
-      >
-        <img
-          matListAvatar
-          [src]="getImageUrl(suggestion.id)"
-          alt="recipe image"
-        />
-        <div matLine><strong>{{ suggestion.title }}</strong></div>
+      <mat-list-item *ngFor="let suggestion of suggestedResults" (click)="selectRecipe(suggestion)"
+        class="cursor-pointer">
+        <img matListAvatar [src]="getImageUrl(suggestion.id)" alt="recipe image" (error)="usePlaceholder($event)"/>
+        <div matLine>
+          <strong>{{ suggestion.title }}</strong>
+          <span *ngIf="suggestion.__source === 'custom'" class="ml-2 text-xs text-blue-600">
+            (Your recipe)
+          </span>
+        </div>
+
         <div matLine class="text-sm text-gray-600">
           {{ suggestion.cuisine }}
         </div>

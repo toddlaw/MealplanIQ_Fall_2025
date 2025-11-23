@@ -10,6 +10,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { RecipeDialogComponent } from '../dialogues/recipe/recipe.component';
 import { RefreshComponent } from 'src/app/services/refresh/refresh.component';
 import { environment } from 'src/environments/environment';
+import { RecipeService } from 'src/app/services/recipe.service';
 import {
   units,
   activityLevels,
@@ -66,8 +67,16 @@ export class LandingComponent implements OnInit {
     private zone: NgZone,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private usersService: UsersService
-  ) {}
+    private usersService: UsersService,
+    private recipeService: RecipeService
+  ) { }
+
+  private getUid(): string | null {
+    const id = localStorage.getItem('uid');
+    console.log('[Landing] UID =', id);
+    return id;
+  }
+
 
   // change date format to e.g. September 14, 2024
   formatDate(date: string): string {
@@ -680,7 +689,7 @@ export class LandingComponent implements OnInit {
   /**
    * Click handler for the "Get Full Meal Plan" button
    */
-  getFullMealPlan() {}
+  getFullMealPlan() { }
 
   /**
    * Replace a recipe in the meal plan
@@ -1019,33 +1028,41 @@ export class LandingComponent implements OnInit {
   }
 
   openRecipeDialog(recipe: any): void {
-    const data = {
-      minDate: this.startDate.get('start')!.value?.getTime(),
-      maxDate: this.startDate.get('end')!.value?.getTime(),
-    };
+    const uid = this.getUid();
 
-    // if (
-    //   this.userSubscriptionTypeId === 1 ||
-    //   this.userSubscriptionTypeId === 2 ||
-    //   this.userSubscriptionTypeId === 3
-    // ) {
+    // Custom recipe if backend attached user_id (from custom_recipes table)
+    const isCustom = !!recipe.user_id;
+
+    // Default: global URLs
+    let ingredientsUrl = this.getIngredientsCsvUrl(recipe.id);
+    let instructionsUrl = this.getInstructionsCsvUrl(recipe.id);
+
+    if (isCustom && uid) {
+      ingredientsUrl = this.recipeService.getCustomIngredientsCsvUrl(uid, recipe.id);
+      instructionsUrl = this.recipeService.getCustomInstructionsCsvUrl(uid, recipe.id);
+    }
+
+    console.log('[Landing] openRecipeDialog recipe:', recipe);
+    console.log('[Landing] isCustom:', isCustom, 'uid:', uid);
+    console.log('[Landing] ingredientsUrl:', ingredientsUrl);
+    console.log('[Landing] instructionsUrl:', instructionsUrl);
+
     this.dialog.open(RecipeDialogComponent, {
       data: {
-        recipe: recipe,
-        imageUrl: this.getImageUrl(recipe.id),
-        ingredientsUrl: this.getIngredientsCsvUrl(recipe.id), // Added URL for ingredients CSV, @author BCIT May 2025
-        instructionsUrl: this.getInstructionsCsvUrl(recipe.id), // Added URL for instructions CSV, @author BCIT May 2025
-        showActions: false,
+        recipe,
+        imageUrl: isCustom
+          ? 'assets/images/placeholders/placeholder_missing_recipe.png'
+          : this.getImageUrl(recipe.id),
+        ingredientsUrl,
+        instructionsUrl,
+        showActions: false
       },
       width: '800px',
     });
-    // } else if (this.userSubscriptionTypeId === 0) {
-    //   const title = 'Sign Up and Try!';
-    //   const message =
-    //     'To see recipe details for this plan, please sign up.  No credit card or payment required.';
-    //   this.openDialog(title, message, '/sign-up', 'Sign Up');
-    // }
   }
+
+
+
 
   getShoppingListFromBackend(): Observable<ShoppingList[]> {
     return this.http.post<ShoppingList[]>(
@@ -1170,13 +1187,11 @@ export class LandingComponent implements OnInit {
 
     // Return message depending on value status
     if (actual < min && min != null) {
-      return `${cleanName} is ${actual}${
-        unit ? ' ' + unit : ''
-      }, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
+      return `${cleanName} is ${actual}${unit ? ' ' + unit : ''
+        }, lower than the recommended ${min}${unit ? ' ' + unit : ''}.`;
     } else if (actual > max && max != null) {
-      return `${cleanName} is ${actual}${
-        unit ? ' ' + unit : ''
-      }, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
+      return `${cleanName} is ${actual}${unit ? ' ' + unit : ''
+        }, higher than the recommended ${max}${unit ? ' ' + unit : ''}.`;
     } else {
       return ''; // No message if within range or if no min/max provided
     }

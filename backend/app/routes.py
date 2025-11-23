@@ -416,8 +416,13 @@ def replace_recipe_in_meal_plan():
     --------
     @author: BCIT May 2025
     """
-    data = request.json
-    return replace_recipe_logic(data)
+    raw_body = request.get_data(as_text=True)
+    print("\n[replace-route] Raw request body:", raw_body)
+
+    data = request.get_json(silent=True)
+    print("[replace-route] Parsed JSON type:", type(data), "keys:", list(data.keys()) if isinstance(data, dict) else data)
+
+    return replace_recipe_logic(data or {})
 
 
 @app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
