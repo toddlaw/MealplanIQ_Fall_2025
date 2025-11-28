@@ -21,18 +21,33 @@ from user_db.user_db import DatabaseManager
 # ---------- helpers for DB + custom CSVs ----------
 
 def _get_conn():
+    """
+    Internal helper to obtain a live DB connection from DatabaseManager.
+    Ensures the underlying connection is alive by calling ping(reconnect=True).
+    """
     dbm = DatabaseManager()
     dbm.db.ping(reconnect=True)
     return dbm.db
 
 
 # mirrors the directories in routes_recipe.py
+# Base project directory (two levels up from this file)
 BASE_DIR = Path(__file__).resolve().parent / ".." / ".."
+
+# Directory where custom ingredient CSVs are stored, e.g. custom_recipes/ingredients/<user>_<number>_ingredients.csv
 ING_DIR = (BASE_DIR / "custom_recipes" / "ingredients").resolve()
+
+# Directory where custom instruction CSVs are stored, e.g. custom_recipes/instructions/<user>_<number>_instructions.csv
 INST_DIR = (BASE_DIR / "custom_recipes" / "instructions").resolve()
 
 
 def _safe_path(base: Path, p: Path) -> Path:
+    """
+    Resolve a path and ensure it stays within the given base directory.
+
+    This guards against directory traversal or accidental references outside the
+    expected directory structure when constructing user-controlled paths.
+    """
     p = p.resolve()
     if base not in p.parents and p != base:
         raise ValueError("Unsafe path")
@@ -40,18 +55,35 @@ def _safe_path(base: Path, p: Path) -> Path:
 
 
 def _ing_path(user_id: str, number: int) -> Path:
+    """
+    Build a safe path for the ingredients CSV for a given user + custom recipe number.
+    """
     return _safe_path(ING_DIR, ING_DIR / f"{user_id}_{number}_ingredients.csv")
 
 
 def _inst_path(user_id: str, number: int) -> Path:
+    """
+    Build a safe path for the instructions CSV for a given user + custom recipe number.
+    """
     return _safe_path(INST_DIR, INST_DIR / f"{user_id}_{number}_instructions.csv")
 
 
 def _lk(lower_row: dict, key: str, default=""):
+    """
+    Lookup helper for CSV DictReader rows that have been lower-cased.
+
+    - lower_row: dict with lower-cased keys
+    - key:       original column label (any case / with spaces)
+    - default:   fallback value if the key is missing
+
+    Returns the value associated with the lower-cased key if present,
+    otherwise the provided default.
+    """
     return lower_row.get((key or "").strip().lower(), default)
 
 
 # The headers we wrote when saving ingredient CSVs
+# These are used as the header row when we reconstruct ingredients_with_quantities
 ING_HEADERS = [
     "Ingredient Name",
     "Quantity",
@@ -69,7 +101,17 @@ def _load_custom_recipe(user_id: str | None, number: int):
     Build a recipe dict for a custom recipe so it looks like a row
     from meal_db/meal_database.csv + parsed ingredient/instruction lists.
 
+    Steps:
+      1. Query custom_recipes table by user_id + number (or by number only if user_id is None).
+      2. Normalize some fields (e.g., energy_kcal).
+      3. Load ingredients_with_quantities from <user>_<number>_ingredients.csv (if it exists)
+         and prepend ING_HEADERS as the first row.
+      4. Load instructions array from <user>_<number>_instructions.csv (if it exists).
+
     If user_id is None, we try to infer it from the custom_recipes table.
+    Returns:
+      - dict representing the recipe (including ingredients_with_quantities + instructions)
+      - or None if no matching row is found.
     """
     conn = _get_conn()
     with conn.cursor(pymysql.cursors.DictCursor) as cur:
@@ -117,10 +159,12 @@ def _load_custom_recipe(user_id: str | None, number: int):
     ingredients_with_quantities = []
     ing_file = _ing_path(db_user_id, number)
     if ing_file.exists():
+        # Start with header row
         ingredients_with_quantities.append(ING_HEADERS[:])
         with ing_file.open(newline="", encoding="utf-8") as f:
             r = csv.DictReader(f)
             for row in r:
+                # Normalize keys to lower-case for robust lookup
                 lr = {(k or "").strip().lower(): v for k, v in row.items()}
                 ingredients_with_quantities.append([
                     _lk(lr, "ingredient name", ""),
@@ -145,6 +189,7 @@ def _load_custom_recipe(user_id: str | None, number: int):
             r = csv.DictReader(f)
             for row in r:
                 lr = {(k or "").strip().lower(): v for k, v in row.items()}
+                # primary column is "instruction"; some rows may only have "step"
                 text = _lk(lr, "instruction", None)
                 if text is None or str(text).strip() == "":
                     text = _lk(lr, "step", "")
@@ -156,11 +201,35 @@ def _load_custom_recipe(user_id: str | None, number: int):
 
     return recipe
 
+
 # ---------- main entry point used by routes.py ----------
 
 def replace_recipe_logic(data):
     """
     Replace a recipe in a specific position of a meal plan and update nutritional totals.
+
+    Expected payload:
+      data = {
+        "meal_plan": {...},          # current meal plan structure (with days/recipes/totals)
+        "recipe_id": <id or dict>,   # new recipe identifier, optionally with { id, __source, user_id }
+        "day_index": int,            # which day in meal_plan["days"]
+        "recipe_index": int,         # which recipe within that day to replace
+        "user_id": optional str      # explicit user_id for custom recipes
+      }
+
+    High-level steps:
+      1. Parse and validate new recipe ID + source (base vs custom).
+      2. Load meal_database.csv into recipe_df + snack_recipes_df.
+      3. Pop the old recipe out of the meal_plan, and ensure it's present in recipe_df
+         so its nutritional contribution can be subtracted.
+      4. Load the new recipe:
+           - from custom_recipes CSV + DB if source == "custom"
+           - from recipe_df if source == "base"
+      5. Ensure custom recipes are injected into recipe_df (so nutrition functions can see them).
+      6. Normalize fields expected by the frontend (id, calories, prep_time, meal_name).
+      7. Subtract old recipe nutrition, insert new recipe, then add new recipe nutrition.
+      8. Regenerate the shopping list and status nutrient info.
+      9. Return updated meal_plan + id_replaced.
     """
     print("\n[replace-logic] ===== ENTER =====")
     print("[replace-logic] Incoming data type:", type(data))
@@ -169,6 +238,7 @@ def replace_recipe_logic(data):
     else:
         print("[replace-logic] Incoming data value:", data)
 
+    # Extract main fields from incoming data
     meal_plan = data.get("meal_plan")
     recipe_id_raw = data.get("recipe_id")
     day_index = data.get("day_index")
@@ -178,12 +248,14 @@ def replace_recipe_logic(data):
     print("[replace-logic] recipe_id_raw:", recipe_id_raw, "type:", type(recipe_id_raw))
 
     # ---------------- parse recipe_id / source ----------------
+    # Default: treat as a "base" (non-custom) recipe if no source specified
     source = "base"  # default behaviour: old recipes continue to work
     new_id = None
     explicit_user_id = data.get("user_id")
 
     print("[replace-logic] explicit_user_id from payload:", explicit_user_id)
 
+    # New convention: recipe_id can be a dict with id + __source + user_id
     if isinstance(recipe_id_raw, dict):
         new_id = recipe_id_raw.get("id")
         source = recipe_id_raw.get("__source") or recipe_id_raw.get("source") or "base"
@@ -191,13 +263,16 @@ def replace_recipe_logic(data):
             explicit_user_id = recipe_id_raw.get("user_id")
         print("[replace-logic] recipe_id is dict -> new_id:", new_id, "source:", source, "explicit_user_id(now):", explicit_user_id)
     else:
+        # Old convention: recipe_id is just an ID
         new_id = recipe_id_raw
         print("[replace-logic] recipe_id is NOT dict -> new_id:", new_id, "source(default):", source)
 
+    # Basic validation that we have an ID
     if new_id is None:
         print("[replace-logic][ERROR] new_id is None -> returning 400 (Missing recipe id)")
         return jsonify({"error": "Missing recipe id", "debug": {"recipe_id_raw": str(recipe_id_raw)}}), 400
 
+    # Ensure ID is numeric for lookups
     try:
         new_id_int = int(new_id)
         print("[replace-logic] Parsed new_id_int:", new_id_int)
@@ -205,20 +280,26 @@ def replace_recipe_logic(data):
         print("[replace-logic][ERROR] Failed to cast new_id to int:", new_id)
         return jsonify({"error": f"Invalid recipe id: {new_id!r}"}), 400
 
-    # try to infer user_id for custom recipes if not passed explicitly
+    # If user_id wasn't provided explicitly, try to infer it from the meal_plan
     inferred_uid = explicit_user_id
     if not inferred_uid and isinstance(meal_plan, dict):
         inferred_uid = meal_plan.get("user_id")
     print("[replace-logic] inferred_uid:", inferred_uid)
 
     # ---------------- load base recipe dataframe (unchanged) -------------
+    # This serves as the core recipe database for both base + custom injection
     print("[replace-logic] Loading ./meal_db/meal_database.csv ...")
     recipe_df = pd.read_csv("./meal_db/meal_database.csv")
     print("[replace-logic] recipe_df loaded, shape:", recipe_df.shape)
+
+    # Subset of snack recipes for nutrition logic that treats snacks differently
     snack_recipes_df = recipe_df[recipe_df["meal_slot"] == "['snack']"]
     print("[replace-logic] snack_recipes_df shape:", snack_recipes_df.shape)
 
     # ---------------- remove old recipe from meal plan --------------------
+    # We must pop the old recipe out of the day/slot to:
+    #   - subtract its nutritional contribution
+    #   - insert the new recipe into the same position
     if not meal_plan or "days" not in meal_plan:
         print("[replace-logic][ERROR] meal_plan is missing or malformed:", meal_plan)
         return jsonify({"error": "Invalid meal_plan structure"}), 400
@@ -228,6 +309,8 @@ def replace_recipe_logic(data):
         print("[replace-logic] Popped old_recipe with id:", old_recipe.get("id"))
 
         # ---------------- ensure OLD recipe is in recipe_df -----------------
+        # Some legacy or generated recipes might not exist in meal_database.csv.
+        # We inject a synthetic row if necessary so update_nutrition_values can subtract it.
         try:
             old_id = int(old_recipe.get("id") or old_recipe.get("number"))
         except (TypeError, ValueError):
@@ -272,6 +355,7 @@ def replace_recipe_logic(data):
             ):
                 row_old["energy_kcal"] = float(old_recipe["energy_kcal"])
 
+            # Append synthetic old recipe row to recipe_df
             recipe_df = pd.concat(
                 [recipe_df, pd.DataFrame([row_old])],
                 ignore_index=True,
@@ -289,11 +373,13 @@ def replace_recipe_logic(data):
             )
 
     except Exception as e:
+        # Failed to pop the old recipe (invalid indices, missing day/recipes, etc.)
         print("[replace-logic][ERROR] Failed to pop old_recipe:", repr(e))
         return jsonify({"error": "Could not locate recipe to replace", "details": str(e)}), 400
 
     # ---------------- build new_recipe for base vs custom -----------------
     if source == "custom":
+        # Custom recipes are stored in custom_recipes table + CSVs
         print("[replace-logic] Using CUSTOM recipe branch")
         print("[replace-logic] Loading custom recipe for user_id:", inferred_uid, "number:", new_id_int)
         new_recipe = _load_custom_recipe(inferred_uid, new_id_int)
@@ -313,6 +399,7 @@ def replace_recipe_logic(data):
             )
         print("[replace-logic] Loaded custom recipe keys:", list(new_recipe.keys()))
     else:
+        # Base recipes come directly from meal_database.csv (recipe_df)
         print("[replace-logic] Using BASE recipe branch")
         new_recipe_row = recipe_df.loc[recipe_df["number"] == new_id_int]
         print("[replace-logic] Base recipe match count:", len(new_recipe_row))
@@ -320,9 +407,12 @@ def replace_recipe_logic(data):
             print("[replace-logic][ERROR] Base recipe not found for id:", new_id_int)
             return jsonify({"error": "New recipe not found."}), 400
 
+        # Convert row to a dict and replace NaN with None
         new_recipe = new_recipe_row.iloc[0].to_dict()
         new_recipe = {k: (None if pd.isnull(v) else v) for k, v in new_recipe.items()}
 
+        # Some "Snack" recipes have list-like fields stored as strings;
+        # convert them back to Python lists for uniform handling.
         if new_recipe.get("meal_slot") == "Snack":
             print("[replace-logic] Base recipe is a Snack, parsing list fields")
             if isinstance(new_recipe.get("instructions"), str):
@@ -384,38 +474,48 @@ def replace_recipe_logic(data):
                 f"snack_recipes_df: {snack_recipes_df.shape}"
             )
 
-
-
     # ---------------- normalize fields expected by the frontend -----------
+    # These keys are relied on by the Angular UI for display and behavior.
 
+    # "id" is the numeric identifier used by the frontend (fall back to new_id_int)
     new_recipe["id"] = int(new_recipe.get("number", new_id_int))
+
+    # "calories" is a frontend-friendly field derived from energy_kcal
     if new_recipe.get("energy_kcal") is not None:
         new_recipe["calories"] = int(float(new_recipe["energy_kcal"]))
     else:
         new_recipe["calories"] = None
     print("[replace-logic] new_recipe id:", new_recipe["id"], "calories:", new_recipe["calories"])
 
+    # Normalized prep time field: "preptime" → "prep_time"
     if "preptime" in new_recipe:
         new_recipe["prep_time"] = new_recipe["preptime"]
     else:
         new_recipe["prep_time"] = new_recipe.get("prep_time")
     print("[replace-logic] new_recipe prep_time:", new_recipe.get("prep_time"))
 
+    # "meal_name" used by frontend; preserve old label if present
     new_recipe["meal_name"] = old_recipe.get("meal_name", new_recipe.get("meal_slot"))
     print("[replace-logic] new_recipe meal_name:", new_recipe["meal_name"])
 
     # ---------------- update totals + shopping list (unchanged) ----------
+    # 1. Subtract the old recipe's nutrition from the plan
     print("[replace-logic] Updating nutrition values (subtract old)...")
     meal_plan = update_nutrition_values(
         meal_plan, old_recipe, "subtract", recipe_df, snack_recipes_df
     )
+
+    # 2. Insert new recipe into the same position in the day
     print("[replace-logic] Inserting new recipe into meal_plan...")
     meal_plan["days"][day_index]["recipes"].insert(recipe_index, new_recipe)
+
+    # 3. Add the new recipe's nutrition to the plan
     print("[replace-logic] Updating nutrition values (add new)...")
     meal_plan = update_nutrition_values(
         meal_plan, new_recipe, "add", recipe_df, snack_recipes_df
     )
 
+    # 4. Rebuild shopping list and status/nutrient summary for the UI
     print("[replace-logic] Regenerating shopping list + status info...")
     time.sleep(0.1)
     meal_plan = gen_shopping_list(meal_plan)

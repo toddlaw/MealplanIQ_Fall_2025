@@ -18,7 +18,6 @@ def get_conn():
     dbm.db.ping(reconnect=True)
     return dbm.db
 
-# MUST match your custom_recipes schema
 TABLE_COLUMNS = {
     "user_id", "number", "meal_type", "meal_slot", "title",
     "energy_kcal", "energy_kj", "fibre_g", "carbohydrates_g", "starch_g",
@@ -299,7 +298,7 @@ def _sync_all_csvs(mode: str = "update"):
                         continue
                     data = _normalize_headers(raw)
 
-                    # We expect CSVs to carry their own user_id (since this sync is user-agnostic)
+                    # We expect CSVs to carry their own user_id 
                     csv_user = (data.get("user_id") or "").strip()
                     if not csv_user:
                         # No user_id in file; we can't place it → skip
