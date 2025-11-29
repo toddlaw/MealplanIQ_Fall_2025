@@ -237,23 +237,44 @@ export class RecipeDialogComponent implements OnInit {
 
         dataRows.forEach(row => {
             const first = (row[0] || '').toString();
-
-            // New instruction section header
             if (first.startsWith('Part')) {
                 currentInstructionPart = (row[1] || '').replace(/"/g, '');
                 if (currentInstructionPart) {
                     this.instructions.push({ step: null, text: currentInstructionPart });
                 }
-
-                // Regular instruction
             } else if (first !== '') {
+                const rawText = (row[1] || '').toString();
+                const cleanText = this.normalizeInstructionText(rawText);
+
                 this.instructions.push({
                     step: Number(first),
-                    text: row[1] || '',
+                    text: cleanText,
                 });
             }
         });
     }
+
+    /**
+     * Parses Instructions to remove triple quotes used in instructions csv files
+     */
+    private normalizeInstructionText(raw: string): string {
+        if (!raw) return '';
+
+        let t = raw.trim();
+
+        // If wrapped in double-double quotes, strip one layer:
+        // ""cut up eggplant"" -> cut up eggplant
+        if (t.startsWith('""') && t.endsWith('""')) {
+            t = t.slice(2, -2);
+        }
+
+        // Collapse any remaining doubled quotes inside to single quotes
+        // (CSV escaping of inner quotes)
+        t = t.replace(/""/g, '"');
+
+        return t;
+    }
+
 
     /** Closes the dialog without returning a value */
     close(): void {

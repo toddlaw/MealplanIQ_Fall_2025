@@ -226,7 +226,7 @@ def replace_recipe_logic(data):
            - from custom_recipes CSV + DB if source == "custom"
            - from recipe_df if source == "base"
       5. Ensure custom recipes are injected into recipe_df (so nutrition functions can see them).
-      6. Normalize fields expected by the frontend (id, calories, prep_time, meal_name).
+      6. Normalize fields expected by the frontend (id, calories, prep_time, cook_time, meal_name).
       7. Subtract old recipe nutrition, insert new recipe, then add new recipe nutrition.
       8. Regenerate the shopping list and status nutrient info.
       9. Return updated meal_plan + id_replaced.
@@ -493,6 +493,13 @@ def replace_recipe_logic(data):
     else:
         new_recipe["prep_time"] = new_recipe.get("prep_time")
     print("[replace-logic] new_recipe prep_time:", new_recipe.get("prep_time"))
+
+    # Normalized cook time field: "cooktime" → "cook_time"
+    if "cooktime" in new_recipe:
+        new_recipe["cook_time"] = new_recipe["cooktime"]
+    else:
+        new_recipe["cook_time"] = new_recipe.get("cook_time")
+    print("[replace-logic] new_recipe cook_time:", new_recipe.get("cook_time"))
 
     # "meal_name" used by frontend; preserve old label if present
     new_recipe["meal_name"] = old_recipe.get("meal_name", new_recipe.get("meal_slot"))

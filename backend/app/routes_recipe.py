@@ -491,6 +491,8 @@ def get_custom_recipe(user_id: str, number: int):
                    energy_kcal,
                    meal_type,
                    region,
+                   subregion,
+                   country,
                    cooktime,
                    preptime
             FROM custom_recipes
@@ -505,6 +507,8 @@ def get_custom_recipe(user_id: str, number: int):
         energy_kcal = None
         meal_type = None
         region = None
+        subregion = None
+        country = None
         cooktime = None
         preptime = None
 
@@ -513,6 +517,8 @@ def get_custom_recipe(user_id: str, number: int):
             energy_kcal = row.get("energy_kcal")
             meal_type = row.get("meal_type")  
             region = row.get("region")
+            subregion = row.get("subregion")
+            country = row.get("country")
             cooktime = row.get("cooktime")
             preptime = row.get("preptime")
 
@@ -520,8 +526,8 @@ def get_custom_recipe(user_id: str, number: int):
         if not title:
             title = _title_from_sources(cur, user_id, number)
 
-    # Build cuisine
-    cuisine = region 
+    # Build cuisine with same fallback as search_custom_recipes
+    cuisine = region or subregion or country
 
     # -------- Ingredients (CSV) --------
     ing_file = _ing_path(user_id, number)
@@ -563,7 +569,7 @@ def get_custom_recipe(user_id: str, number: int):
 
         # Dialog-facing fields
         "calories": energy_kcal,
-        "cuisine": cuisine,
+        "region": cuisine,
         "cook_time": cooktime,
         "prep_time": preptime,
 

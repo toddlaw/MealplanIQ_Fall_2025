@@ -1029,6 +1029,7 @@ export class LandingComponent implements OnInit {
 
   openRecipeDialog(recipe: any): void {
     const uid = this.getUid();
+    console.log('==== Open Recipe Dialog ====', recipe);
 
     // Custom recipe if backend attached user_id (from custom_recipes table)
     const isCustom = !!recipe.user_id;

@@ -184,7 +184,7 @@ export class MyRecipesComponent {
         // Load cached profile data (if any) so user info is available quickly.
         this.usersService.loadCachedUserProfile();
 
-        // You can later use this subscription to react to profile changes.
+        // We can later use this subscription to react to profile changes.
         this.usersService.profile$.subscribe(() => { /* use if needed */ });
 
         // Minimal auth check: we consider presence of uid as "logged in".
