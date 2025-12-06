@@ -137,14 +137,26 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    const uid = localStorage.getItem('uid')!;
+
+    // Load cached first
     this.usersService.loadCachedUserProfile();
+
     this.usersService.profile$.subscribe((user) => {
-      if (user) {
-        this.prefillProfileInfo(user);
+      if (!user) {
+        // no cached, so fetch
+        this.usersService.fetchAndStoreUserProfile(uid)
+          .subscribe();
+        return;
       }
+
+      // user exists (cached or fetched)
+      this.prefillProfileInfo(user);
     });
+
     this.showSubscriptionStatus();
   }
+
 
   async sendProfileData() {
     const userId = localStorage.getItem('uid');

@@ -22,7 +22,7 @@ cd backend
 
 ```
 # Linux / MacOS
-python3 -m venv venv
+python3.10 -m venv venv
 
 # Windows
 python -m venv venv
