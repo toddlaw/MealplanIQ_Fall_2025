@@ -14,19 +14,21 @@ from app.payment_stripe import (
     create_customer_portal_by_id
 )
 from app.manage_user_data import *
-from app.mealplan_service import download_mealplan_json_from_gcs
+from app.mealplan_service import download_mealplan_json_from_gcs, upload_custom_recipe_assets_to_gcs
 from user_db.user_db import instantiate_database
 import stripe
 from app.find_matched_recipe_and_update import find_matched_recipe_and_update, find_matched_recipe_and_delete, update_nutrition_values
 from app.recipe_management.search import search_recipes_logic
 from app.recipe_management.replace import replace_recipe_logic
 from app.recipe_management.get_recipe import get_recipe_logic
+from app.models import CsvUploadPayload
 
 
 ALLOWED = [
     "https://www.mealplaniq.com",
     "https://mealplaniq.com",
     "http://localhost:4200", 
+    "http://localhost:4201", 
     "https://mealplaniq-questionnaire-45646449510.us-central1.run.app",
 ]
 
@@ -466,3 +468,20 @@ def handle_check_email():
         has_user_id = db.check_user_id_existence_by_email(email)
         return {"exists": bool(exists), "has_user_id": bool(has_user_id)}, 200
     return {"exists": bool(exists)}, 200
+
+
+
+
+@app.route("/custom-recipes/upload_csvs", methods=["POST", "OPTIONS"])
+def upload_custom_ingredients_and_instructions_to_bucket():
+    if request.method == "OPTIONS":
+        return ("", 204)
+    data = request.get_json() or {}
+
+    return upload_custom_recipe_assets_to_gcs(
+        recipe_id=data["recipe_id"],
+        ingredients_filename=data["ingredients_filename"],
+        ingredients_csv=data["ingredients_csv"],
+        instructions_filename=data["instructions_filename"],
+        instructions_csv=data["instructions_csv"],
+    )
