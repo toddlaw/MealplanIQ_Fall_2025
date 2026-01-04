@@ -88,3 +88,54 @@ def read_recipe_assets_from_gcs(recipe_id: str, *,
     ingredients  = read_csv_rows_from_gcs(bucket_name, ingredients_blob,  encoding="utf-8")
 
     return instructions, ingredients
+
+def _upload_csv_string_to_gcs(bucket_name: str, blob_path: str, csv_content: str):
+    client = _get_storage_client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+
+    blob.upload_from_string(
+        data=csv_content,
+        content_type="text/csv; charset=utf-8",
+    )
+
+    print(f"[GCS] Uploaded CSV to gs://{bucket_name}/{blob_path}")
+
+def upload_custom_recipe_assets_to_gcs(
+    recipe_id: str,
+    *,
+    ingredients_csv: str,
+    ingredients_filename: str,
+    instructions_csv: str,
+    instructions_filename: str,
+    bucket_name: str = "meal-plan-data",
+    base_prefix: str = "meal_db",
+):
+    rid = str(recipe_id)
+
+    ingredient_blob_path = f"{base_prefix}/ingredients/{ingredients_filename}"
+    instructions_blob = f"{base_prefix}/instructions/{instructions_filename}"
+
+    # Upload ingredients
+    _upload_csv_string_to_gcs(bucket_name, ingredient_blob_path, ingredients_csv)
+
+    # Upload instructions
+    _upload_csv_string_to_gcs(bucket_name, instructions_blob, instructions_csv)
+
+    print(f"[GCS] Uploaded recipe assets for recipe_id={rid}")
+
+    return {
+        "ingredients_path": ingredient_blob_path,
+        "instructions_path": instructions_blob,
+    }
+
+def read_custom_recipe_assets_from_gcs(user_id: str, *,
+                                number: int,
+                                bucket_name: str = "meal-plan-data",
+                                base_prefix: str = "meal_db"):
+
+    instructions_blob = f"{base_prefix}/instructions/instructions_{recipe_id}.csv"
+    ingredients_blob  = f"{base_prefix}/ingredients/{recipe_id}.csv"
+
+    instructions = read_csv_rows_from_gcs(bucket_name, instructions_blob, encoding="utf-8")
+    ingredients  = read_csv_rows_from_gcs(bucket_name, ingredients_blob,  encoding="utf-8")
