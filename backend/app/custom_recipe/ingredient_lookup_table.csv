@@ -1,0 +1,1136 @@
+﻿Original Name from Recipes,"Corresponding FNDDS Name ""Main Food Description""",Same or Not,ingredient_id,Database
+"""a""",,,Not necessary,
+"""aburage (fried tofu pockets)""",,,41421010,FNDDS_nutrients
+"""acorn squash""",,,11493,FNDDS_ingredients
+"""active dry yeast""",,,18374,FNDDS_ingredients
+"""ajitsuke tamago (marinated soft-boiled eggs)""",,,31102000,FNDDS_nutrients
+"""all-purpose flour""",,,20081,FNDDS_ingredients
+"""allspice""","""allspice""",Same,171315,FNDDS_ingredients
+"""almond butter""","""Almond butter""",Same,12195,FNDDS_ingredients
+"""almond milk""",,,14091,FNDDS_ingredients
+"""almonds""",,,12061,FNDDS_ingredients
+"""ancho chile powder""",,,2009,FNDDS_ingredients
+"""ancho chiles - dried whole""",,,169396,MyFood
+"""anchovies""","""anchovies""",Same,26101110,FNDDS_nutrients
+"""anchovy fillets packed in olive oil""",,,15002,FNDDS_ingredients
+"""aonori (dried seaweed flakes)""",,,168457,FNDDS_ingredients
+"""apple - small""",,,9003,FNDDS_ingredients
+"""apple cider vinegar""",,,2048,FNDDS_ingredients
+"""apple juice""",,,9517,FNDDS_ingredients
+"""apple""",,,9003,FNDDS_ingredients
+"""apples - large""",,,9003,FNDDS_ingredients
+"""apples - medium""",,,9003,FNDDS_ingredients
+"""apples""",,,9003,FNDDS_ingredients
+"""apricot or peach jam""",,,19297,FNDDS_ingredients
+"""apricot preserves""","""apricot preserves""",Same,19297,FNDDS_ingredients
+"""apricots""","""apricots""",Same,63103010,FNDDS_nutrients
+"""arborio rice""",,,20055,FNDDS_ingredients
+"""artichoke hearts (canned or frozen)""",,,11008,FNDDS_ingredients
+"""artichoke hearts""",,,11008,FNDDS_ingredients
+"""artichokes""",,,11008,FNDDS_ingredients
+"""arugula""",,,11959,FNDDS_ingredients
+"""asparagus spears""",,,11011,FNDDS_ingredients
+"""asparagus""",,,11011,FNDDS_ingredients
+"""assorted meats""",,,Not necessary,
+"""assorted shellfish""",,,26300000,FNDDS_nutrients
+"""assorted vegetables""",,,788616,MyFood
+"""avocado - large""",,,9037,FNDDS_ingredients
+"""avocado - medium""",,,9037,FNDDS_ingredients
+"""avocado oil""",,,9037,FNDDS_ingredients
+"""avocado slices""",,,9037,FNDDS_ingredients
+"""avocado""",,,9037,FNDDS_ingredients
+"""avocados - large""",,,9037,FNDDS_ingredients
+"""b""",,,Not necessary,
+"""baby arugula""",,,11959,FNDDS_ingredients
+"""baby back ribs""",,,10003,FNDDS_ingredients
+"""baby bok choy""",,,11116,FNDDS_ingredients
+"""baby corn""",,,168525,FNDDS_ingredients
+"""baby potatoes (red or white)""",,,11367,FNDDS_ingredients
+"""baby spinach""",,,11457,FNDDS_ingredients
+"""bacon lardons""",,,167914,MyFood
+"""bacon slices""",,,167915,MyFood
+"""bacon""",,,167916,MyFood
+"""bagel""","""Bagel""",Same,51180010,FNDDS_nutrients
+"""baguette bread - large""",,,18029,FNDDS_ingredients
+"""baguette""","""baguette""",Same,18029,FNDDS_ingredients
+"""baked beans""","""Baked beans""",Same,41201010,FNDDS_nutrients
+"""baked tofu""",,,16127,FNDDS_ingredients
+"""baking powder""",,,18369,FNDDS_ingredients
+"""baking soda""",,,18372,FNDDS_ingredients
+"""balsamic glaze""",,,1,custom_table
+"""balsamic vinaigrette""",,,172241,FNDDS_ingredients
+"""balsamic vinegar""",,,172241,FNDDS_ingredients
+"""bamboo shoots""",,,11028,FNDDS_ingredients
+"""bamboo skewers""",,,Not necessary,
+"""banana""",,,9040,FNDDS_ingredients
+"""bananas""",,,9040,FNDDS_ingredients
+"""barbecue sauce""","""Barbecue sauce""",Same,74406010,FNDDS_nutrients
+"""basil leaves""",,,2029,FNDDS_ingredients
+"""basmati rice""",,,20044,FNDDS_ingredients
+"""bay leaf""",,,170917,FNDDS_ingredients
+"""bay leaves""",,,170917,FNDDS_ingredients
+"""bean sprouts""",,,788013,MyFood
+"""beef - cooked""",,,21000100,FNDDS_nutrients
+"""beef bones""",,,21302000,FNDDS_nutrients
+"""beef brisket""",,,13367,FNDDS_ingredients
+"""beef broth""",,,6008,FNDDS_ingredients
+"""beef chuck roast""",,,13285,FNDDS_ingredients
+"""beef chuck""",,,13285,FNDDS_ingredients
+"""beef marrow bones""",,,Not necessary,
+"""beef shank""",,,169442,MyFood
+"""beef short ribs""",,,13840,FNDDS_ingredients
+"""beef sirloin or tenderloin""",,,23625,FNDDS_ingredients
+"""beef sirloin steak""",,,23625,FNDDS_ingredients
+"""beef tenderloin steaks""",,,23625,FNDDS_ingredients
+"""beef tenderloin""",,,23625,FNDDS_ingredients
+"""beef tripe""",,,13341,FNDDS_ingredients
+"""beef""",,,21000100,FNDDS_nutrients
+"""beer""","""Beer""",Same,93101000,FNDDS_nutrients
+"""beets - medium""",,,11080,FNDDS_ingredients
+"""bell pepper - large""",,,11334,FNDDS_ingredients
+"""bell pepper - medium""",,,11334,FNDDS_ingredients
+"""bell pepper - small""",,,11334,FNDDS_ingredients
+"""bell pepper (any color)""",,,11334,FNDDS_ingredients
+"""bell pepper (red or green)""",,,11334,FNDDS_ingredients
+"""bell pepper""",,,11334,FNDDS_ingredients
+"""bell peppers - large""",,,11334,FNDDS_ingredients
+"""bell peppers (any color)""",,,11334,FNDDS_ingredients
+"""bell peppers (red and green)""",,,11334,FNDDS_ingredients
+"""bell peppers (red, yellow, or orange) - large""",,,11334,FNDDS_ingredients
+"""bell peppers (red, yellow, or orange)""",,,11334,FNDDS_ingredients
+"""bell peppers""",,,11334,FNDDS_ingredients
+"""beni shoga (red pickled ginger)""",,,169765,MyFood
+"""black beans (cooked and seasoned)""",,,16015,FNDDS_ingredients
+"""black beans""",,,16015,FNDDS_ingredients
+"""black coffee""",,,14179,FNDDS_ingredients
+"""black grapes""",,,63123000,FNDDS_nutrients
+"""black olives""",,,9193,FNDDS_ingredients
+"""black pepper - ground""",,,2030,FNDDS_ingredients
+"""black pepper""",,,2030,FNDDS_ingredients
+"""black peppercorns""",,,2030,FNDDS_ingredients
+"""black raspberries""",,,9302,FNDDS_ingredients
+"""black tea""",,,14199,FNDDS_ingredients
+"""blackberries""",,,9042,FNDDS_ingredients
+"""blue cheese crumbles""",,,1004,FNDDS_ingredients
+"""blue cheese or ranch dressing""",,,1004,FNDDS_ingredients
+"""blue cheese""",,,1004,FNDDS_ingredients
+"""blueberries""",,,9050,FNDDS_ingredients
+"""boiled potatoes - medium""",,,11367,FNDDS_ingredients
+"""boiling water""",,,Not necessary,
+"""bok choy""","""bok choy""",Same,11116,FNDDS_ingredients
+"""bone-in skin-on chicken thighs""",,,24150210,FNDDS_nutrients
+"""boneless pork belly""",,,167812,MyFood
+"""boneless pork loin chops""",,,10002,FNDDS_ingredients
+"""boneless pork shoulder or loin""",,,10002,FNDDS_ingredients
+"""boneless pork shoulder""",,,10002,FNDDS_ingredients
+"""boneless skinless chicken breast""",,,24120110,FNDDS_nutrients
+"""boneless skinless chicken breasts or thighs""",,,24120110,FNDDS_nutrients
+"""boneless skinless chicken breasts""",,,24120110,FNDDS_nutrients
+"""boneless skinless chicken thigh""",,,24150220,FNDDS_nutrients
+"""boneless skinless chicken thighs""",,,24150220,FNDDS_nutrients
+"""boneless skinless veal cutlets""",,,782030,MyFood
+"""bouquet garni (parsley, thyme, bay leaf tied together) - small""",,,2029,FNDDS_ingredients
+"""brandy""","""Brandy""",Same,93501000,FNDDS_nutrients
+"""bread - sourdough""",,,18029,FNDDS_ingredients
+"""bread - white""",,,18069,FNDDS_ingredients
+"""bread - whole wheat""",,,18064,FNDDS_ingredients
+"""bread cubes""",,,172751,MyFood
+"""bread""",,,18069,FNDDS_ingredients
+"""breadcrumbs""",,,18079,FNDDS_ingredients
+"""brie cheese""",,,1006,FNDDS_ingredients
+"""broccoli florets""",,,11090,FNDDS_ingredients
+"""broccoli""",,,11090,FNDDS_ingredients
+"""brown lentils""",,,16070,FNDDS_ingredients
+"""brown rice""",,,20036,FNDDS_ingredients
+"""brown sugar""",,,19334,FNDDS_ingredients
+"""brussels sprouts""",,,11098,FNDDS_ingredients
+"""buffalo sauce""","""Buffalo sauce""",Same,74406060,FNDDS_nutrients
+"""bun""",,,51150000,FNDDS_nutrients
+"""butter""",,,1001,FNDDS_ingredients
+"""buttermilk""",,,1088,FNDDS_ingredients
+"""butternut squash - medium""",,,11493,FNDDS_ingredients
+"""butternut squash""",,,11493,FNDDS_ingredients
+"""button mushrooms""",,,11260,FNDDS_ingredients
+"""cabbage - shredded""",,,11109,FNDDS_ingredients
+"""cabbage (green or purple)""",,,11109,FNDDS_ingredients
+"""cabbage""",,,11109,FNDDS_ingredients
+"""caesar dressing""","""Caesar dressing""",Same,84102000,FNDDS_nutrients
+"""cajun seasoning""",,,11109,FNDDS_ingredients
+"""calamari""",,,15175,FNDDS_ingredients
+"""canadian bacon""",,,10998,FNDDS_ingredients
+"""canned pinto beans""",,,16043,FNDDS_ingredients
+"""canned tuna in olive oil""",,,15121,FNDDS_ingredients
+"""canned tuna""",,,15121,FNDDS_ingredients
+"""cannellini beans""",,,173750,MyFood
+"""canola oil""","""Canola oil""",Same,82105500,FNDDS_nutrients
+"""cantaloupe""",,,9181,FNDDS_ingredients
+"""capers""","""capers""",Same,2054,FNDDS_nutrients
+"""carrot - large""",,,11124,FNDDS_ingredients
+"""carrot - medium""",,,11124,FNDDS_ingredients
+"""carrot - small""",,,11124,FNDDS_ingredients
+"""carrot""",,,11124,FNDDS_ingredients
+"""carrots - diced""",,,11124,FNDDS_ingredients
+"""carrots - medium""",,,11124,FNDDS_ingredients
+"""carrots - large""",,,11124,FNDDS_ingredients
+"""carrots - shredded""",,,11125,FNDDS_ingredients
+"""carrots""",,,11124,FNDDS_ingredients
+"""cashew nuts""",,,12085,FNDDS_ingredients
+"""cashews - roasted and salted""",,,12588,FNDDS_ingredients
+"""cashews - roasted unsalted""",,,12085,FNDDS_ingredients
+"""cashews""",,,12085,FNDDS_ingredients
+"""catfish fillets""",,,15234,FNDDS_ingredients
+"""cauliflower florets""",,,11138,FNDDS_ingredients
+"""cauliflower""",,,11138,FNDDS_ingredients
+"""cayenne pepper""",,,170932,MyFood
+"""cedar plank""","""cedar plank""",Same,Not necessary,
+"""celery seed""",,,11143,FNDDS_ingredients
+"""celery stalk - large""",,,11143,FNDDS_ingredients
+"""celery stalk""",,,11143,FNDDS_ingredients
+"""celery stalks - large""",,,11143,FNDDS_ingredients
+"""celery stalks""",,,11143,FNDDS_ingredients
+"""celery""",,,11143,FNDDS_ingredients
+"""char siu (barbecued pork)""",,,22000100,FNDDS_nutrients
+"""cheddar cheese - shredded""",,,1009,FNDDS_ingredients
+"""cheddar cheese""",,,1009,FNDDS_ingredients
+"""cheerios oat crunch""",,,785702,MyFood
+"""cheerios""","""cheerios""",Same,57123000,FNDDS_nutrients
+"""cheese filling (see below)""",,,Not necessary,
+"""cheese slices""",,,14410500,FNDDS_nutrients
+"""cheese""",,,14010000,FNDDS_nutrients
+"""cherry tomatoes (halved)""",,,11529,FNDDS_ingredients
+"""cherry tomatoes""",,,11529,FNDDS_ingredients
+"""chia seeds""","""Chia seeds""",Same,43108010,FNDDS_nutrients
+"""chicken - cooked""",,,99992405,FNDDS_nutrients
+"""chicken breast  - large""",,,5000,FNDDS_ingredients
+"""chicken breast - cooked and shredded""",,,5000,FNDDS_ingredients
+"""chicken breast - skinless and boneless""",,,5000,FNDDS_ingredients
+"""chicken breast""",,,5000,FNDDS_ingredients
+"""chicken breasts - medium""",,,5000,FNDDS_ingredients
+"""chicken breasts or thighs - boneless and skinless""",,,5000,FNDDS_ingredients
+"""chicken breasts""",,,5000,FNDDS_ingredients
+"""chicken broth - low-sodium""",,,6183,FNDDS_ingredients
+"""chicken broth""",,,6183,FNDDS_ingredients
+"""chicken drumsticks - skin-on""",,,5073,FNDDS_ingredients
+"""chicken feet""","""Chicken feet""",Same,24198500,FNDDS_nutrients
+"""chicken pieces""",,,99992405,FNDDS_nutrients
+"""chicken stock""",,,172884,MyFood
+"""chicken thighs - skin-on thighs""",,,5098,FNDDS_ingredients
+"""chicken thighs bone-in skin-on""",,,5098,FNDDS_ingredients
+"""chicken thighs""",,,5098,FNDDS_ingredients
+"""chicken wings""",,,5103,FNDDS_ingredients
+"""chicken""",,,99992405,FNDDS_nutrients
+"""chickpeas (canned)""",,,16057,FNDDS_ingredients
+"""chili flakes""",,,2009,FNDDS_ingredients
+"""chili garlic sauce""",,,2,custom_table
+"""chili oil""",,,3,custom_table
+"""chili powder""",,,2009,FNDDS_ingredients
+"""chipotle pepper""",,,4,custom_table
+"""chipotle peppers in adobo sauce""",,,5,custom_table
+"""chives""",,,11156,FNDDS_ingredients
+"""chocolate chips""","""Chocolate chips""",Same,91705200,FNDDS_nutrients
+"""chocolate protein powder""",,,95220100,FNDDS_nutrients
+"""chopped cilantro""",,,11165,FNDDS_ingredients
+"""chopped cooked chorizo""",,,100173,FNDDS_ingredients
+"""chopped cooked ham""",,,168223,MyFood
+"""chopped cooked spinach""",,,11464,FNDDS_ingredients
+"""chopped fresh chives or dill""",,,11156,FNDDS_ingredients
+"""chopped fresh chives""",,,11156,FNDDS_ingredients
+"""chopped fresh cilantro""",,,11165,FNDDS_ingredients
+"""chopped fresh herbs (parsley, basil, oregano)""",,,2029,FNDDS_ingredients
+"""chopped fresh herbs""",,,2029,FNDDS_ingredients
+"""chopped fresh oregano""",,,2027,FNDDS_ingredients
+"""chopped fresh parsley""",,,2029,FNDDS_ingredients
+"""chopped green cabbage""",,,11109,FNDDS_ingredients
+"""chopped green chiles""",,,168577,MyFood
+"""chopped napa cabbage""",,,11109,FNDDS_ingredients
+"""chopped tomatoes (canned)""",,,11531,FNDDS_ingredients
+"""chopped vegetables (such as onions, peppers, mushrooms)""",,,75311020,FNDDS_nutrients
+"""chopped white onion""",,,11283,FNDDS_ingredients
+"""chorizo sausage""",,,173859,MyFood
+"""chow mein noodles (fresh or dried)""",,,20113,FNDDS_ingredients
+"""chow mein noodles""",,,20113,FNDDS_ingredients
+"""chuck roast""",,,174018,MyFood
+"""chungjang (korean black bean paste)""",,,6,custom_table
+"""ciabatta bread""",,,51109010,FNDDS_nutrients
+"""cilantro leaves""",,,11165,FNDDS_ingredients
+"""cilantro""",,,11165,FNDDS_ingredients
+"""cinnamon""",,,2010,FNDDS_ingredients
+"""clam juice""",,,171882,MyFood
+"""clams""",,,171975,MyFood
+"""clarified butter (ghee)""",,,171314,MyFood
+"""coarse black pepper""",,,2030,FNDDS_ingredients
+"""coarse sea salt""",,,2047,FNDDS_ingredients
+"""cocoa powder""",,,19165,FNDDS_ingredients
+"""coconut flakes""",,,42106020,FNDDS_nutrients
+"""coconut milk""","""Coconut milk""",Same,11370000,FNDDS_nutrients
+"""coconut oil""","""Coconut oil""",Same,82101500,FNDDS_nutrients
+"""coconut water""",,,42403010,FNDDS_nutrients
+"""cod fillets""",,,15016,FNDDS_ingredients
+"""cod""",,,15016,FNDDS_ingredients
+"""cognac""","""cognac""",Same,2012,FNDDS_ingredients
+"""coke classic""",,,14148,FNDDS_ingredients
+"""cold unsalted butter""",,,1001,FNDDS_ingredients
+"""cold water""",,,Not necessary,
+"""coleslaw """,,,Not necessary,
+"""collard greens""",,,11164,FNDDS_ingredients
+"""cooked and shredded chicken""",,,99992405,FNDDS_nutrients
+"""cooked and shredded meat""",,,Not necessary,
+"""cooked chicken breast""",,,24120110,FNDDS_nutrients
+"""cooked chicken""",,,99992405,FNDDS_nutrients
+"""cooked octopus""",,,26205110,FNDDS_nutrients
+"""cooked protein (chicken, shrimp, tofu)""",,,Not necessary,
+"""cooked rice (preferably cold)""",,,20055,FNDDS_ingredients
+"""naan""",,,51108100,FNDDS_nutrients
+"""cooked rice""",,,20055,FNDDS_ingredients
+"""cooked shrimp""",,,15152,FNDDS_ingredients
+"""cooked spaghetti or pasta""",,,20121,FNDDS_ingredients
+"""cooked vegetables (chopped)""",,,75311020,FNDDS_nutrients
+"""cooked vermicelli noodles (thin rice noodles)""",,,16082,FNDDS_ingredients
+"""cooked white rice""",,,20055,FNDDS_ingredients
+"""cooking oil""",,,82101000,FNDDS_nutrients
+"""cooking spray""",,,171430,MyFood
+"""coriander leaves""",,,2012,FNDDS_ingredients
+"""coriander powder""",,,2012,FNDDS_ingredients
+"""coriander""","""coriander""",Same,2012,FNDDS_ingredients
+"""corn kernels (fresh or frozen)""",,,168398,MyFood
+"""corn kernels""",,,11167,FNDDS_ingredients
+"""corn on the cob""",,,168401,MyFood
+"""corn syrup""","""Corn syrup""",Same,91301030,FNDDS_nutrients
+"""corn tortillas - large""",,,18363,FNDDS_ingredients
+"""corn tortillas - small""",,,18363,FNDDS_ingredients
+"""corn tortillas (day-old or stale preferred)""",,,18363,FNDDS_ingredients
+"""corn tortillas""",,,18363,FNDDS_ingredients
+"""corn""",,,11167,FNDDS_ingredients
+"""cornichons""",,,7,custom_table
+"""cornmeal""",,,168867,MyFood
+"""cornstarch""","""cornstarch""",Same,20027,FNDDS_ingredients
+"""côte de boeuf""",,,174982,MyFood
+"""cotija cheese""",,,14134000,FNDDS_nutrients
+"""couscous""",,,169699,MyFood
+"""crackers""",,,174982,MyFood
+"""cranberries""",,,9078,FNDDS_ingredients
+"""cream cheese""",,,1017,FNDDS_ingredients
+"""cream of mushroom soup""",,,75607060,FNDDS_nutrients
+"""cream of tartar""",,,175041,MyFood
+"""cream of wheat""",,,56206990,FNDDS_nutrients
+"""cream""",,,1053,FNDDS_ingredients
+"""creamy peanut butter""",,,16398,FNDDS_ingredients
+"""crema mexicana (mexican sour cream)""",,,171257,MyFood
+"""cremini mushrooms - medium""",,,11266,FNDDS_ingredients
+"""cremini mushrooms""",,,11266,FNDDS_ingredients
+"""crispy tortilla strips""",,,173143,MyFood
+"""croutons""","""Croutons""",Same,18243,FNDDS_ingredients
+"""crumbled queso fresco cheese""",,,14133000,FNDDS_nutrients
+"""crushed breadcrumbs""",,,172806,MyFood
+"""crushed red pepper flakes""",,,8,custom_table
+"""crushed tomatoes (canned)""",,,11531,FNDDS_ingredients
+"""crushed tomatoes""",,,11531,FNDDS_ingredients
+"""crusty bread""",,,172675,MyFood
+"""cube steak""",,,781817,MyFood
+"""cucumber - large""",,,11205,FNDDS_ingredients
+"""cucumber - medium""",,,11205,FNDDS_ingredients
+"""cucumber""",,,11205,FNDDS_ingredients
+"""cucumber,english (seedless preferred)""",,,11205,FNDDS_ingredients
+"""cucumbers""",,,11205,FNDDS_ingredients
+"""cumin powder""",,,2014,FNDDS_ingredients
+"""cumin seeds""",,,2014,FNDDS_ingredients
+"""cumin""","""cumin""",Same,2014,FNDDS_ingredients
+"""curry powder""",,,170924,MyFood
+"""daikon radish - small""",,,11429,FNDDS_ingredients
+"""daikon radish""",,,11429,FNDDS_ingredients
+"""dark chocolate chips""",,,91705200,FNDDS_nutrients
+"""dark chocolate""",,,170274,MyFood
+"""dashi stock""",,,9,custom_table
+"""day-old bread""",,,51101000,FNDDS_nutrients
+"""diced cherry tomatoes""",,,11531,FNDDS_ingredients
+"""diced cooked ham""",,,22311000,FNDDS_nutrients
+"""diced tomato - medium""",,,11531,FNDDS_ingredients
+"""diced tomatoes""",,,11531,FNDDS_ingredients
+"""dijon mustard""",,,83105500,FNDDS_ingredients
+"""dill pickles""",,,168558,MyFood
+"""dill""",,,172233,MyFood
+"""ditalini pasta""",,,20120,FNDDS_ingredients
+"""doenjang (korean soybean paste)""",,,41420110,FNDDS_nutrients
+"""doubanjiang (fermented chili bean paste)""",,,10,custom_table
+"""dried anchovies - myulchi""",,,11,custom_table
+"""dried apricots""",,,9032,FNDDS_ingredients
+"""dried basil""",,,2003,FNDDS_ingredients
+"""dried pinto beans""",,,12,custom_table
+"""dried black soybeans (seoritae)""",,,172441,MyFood
+"""dried bonito flakes (katsuobushi)""",,,13,custom_table
+"""dried burdock root (gobo)""",,,788080,MyFood
+"""dried chickpeas""",,,16057,FNDDS_ingredients
+"""dried chili peppers""",,,169396,MyFood
+"""dried chilies de arbol""",,,169396,MyFood
+"""dried corn husks (approx. 8 inches long)""",,,Not necessary,
+"""dried cranberries""",,,9079,FNDDS_ingredients
+"""dried dill""",,,170925,MyFood
+"""dried fruit""",,,62101050,FNDDS_nutrients
+"""dried green lentils""",,,16070,FNDDS_ingredients
+"""dried hijiki seaweed""",,,14,custom_table
+"""dried mangoes""",,,9178,FNDDS_ingredients
+"""dried navy beans""",,,173746,MyFood
+"""dried oregano""",,,2027,FNDDS_ingredients
+"""dried parsley""",,,2029,FNDDS_ingredients
+"""dried pinto beans""",,,12,custom_table
+"""dried red chili peppers (arbol or similar)""",,,169396,MyFood
+"""dried red chili peppers""",,,169396,MyFood
+"""dried red chilies""",,,169396,MyFood
+"""dried thin wheat noodles""",,,168906,MyFood
+"""dried thyme""",,,2042,FNDDS_ingredients
+"""dried wakame seaweed""",,,168457,MyFood
+"""dried white beans""",,,784139,MyFood
+"""dry red wine""",,,173190,MyFood
+"""dry white wine""",,,174837,MyFood
+"""duck confit legs""",,,172411,MyFood
+"""duck fat""",,,15,custom_table
+"""duck sauce""","""Duck sauce""",Same,27046,FNDDS_ingredients
+"""edamame""",,,11212,FNDDS_ingredients
+"""egg - fried""",,,173423,MyFood
+"""egg - large""",,,1124,FNDDS_ingredients
+"""egg noodles""",,,20109,FNDDS_ingredients
+"""egg white - large""",,,172183,MyFood
+"""egg whites - large""",,,172184,MyFood
+"""egg whites""",,,172185,MyFood
+"""egg yolk - large""",,,172184,MyFood
+"""egg yolk""",,,172184,MyFood
+"""egg yolks""",,,172184,MyFood
+"""egg""",,,1124,FNDDS_ingredients
+"""eggplant - large""",,,11209,FNDDS_ingredients
+"""eggplant - medium""",,,11209,FNDDS_ingredients
+"""eggplant""",,,11209,FNDDS_ingredients
+"""eggs - large""",,,31102000,FNDDS_nutrients
+"""eggs""","""eggs""",Same,31102000,FNDDS_nutrients
+"""elbow macaroni""",,,56130000,FNDDS_nutrients
+"""enchilada sauce""",,,27063,FNDDS_ingredients
+"""english muffins""",,,172761,MyFood
+"""enoki mushrooms""",,,169382,MyFood
+"""espresso""",,,171891,MyFood
+"""extra virgin olive oil""",,,82104000,FNDDS_nutrients
+"""fava beans (fresh or frozen)""",,,168574,MyFood
+"""fava beans""",,,16053,FNDDS_ingredients
+"""fennel bulb""",,,11957,FNDDS_ingredients
+"""feta cheese""",,,1019,FNDDS_ingredients
+"""fettuccine""","""fettuccine""",Same,20120,FNDDS_ingredients
+"""fillings""",,,Not necessary,
+"""firm tofu""",,,172448,MyFood
+"""fish cake (odeng)""",,,783040,MyFood
+"""fish sauce""","""Fish sauce""",Same,6179,FNDDS_ingredients
+"""fish stock""",,,172890,FNDDS_ingredients
+"""fish""",,,26100100,FNDDS_ingredients
+"""five-spice powder""",,,16,FNDDS_ingredients
+"""flank steak""",,,168609,FNDDS_ingredients
+"""flour tortilla""",,,18364,FNDDS_ingredients
+"""flour tortillas - large""",,,18364,FNDDS_ingredients
+"""flour tortillas""",,,18364,FNDDS_ingredients
+"""flour""",,,168894,MyFood
+"""french bread""",,,784616,MyFood
+"""fried onion rings""",,,169840,MyFood
+"""fresh arugula""",,,75113080,FNDDS_nutrients
+"""fresh asparagus""",,,787884,MyFood
+"""fresh basil leaves - large""",,,2029,FNDDS_ingredients
+"""fresh basil leaves""",,,2029,FNDDS_ingredients
+"""fresh basil""",,,2029,FNDDS_ingredients
+"""fresh breadcrumbs""",,,174298,MyFood
+"""fresh cilantro""",,,11165,FNDDS_ingredients
+"""fresh clams""",,,171975,MyFood
+"""fresh cranberries""",,,9078,FNDDS_ingredients
+"""fresh dill or chives""",,,11156,FNDDS_ingredients
+"""fresh dill""",,,172233,MyFood
+"""fresh epazote leaves,optional""",,,Not necessary,
+"""fresh figs""",,,9089,FNDDS_ingredients
+"""fresh flat-leaf parsley""",,,2029,FNDDS_ingredients
+"""fresh ginger""",,,11216,FNDDS_ingredients
+"""fresh gooseberries""",,,173030,MyFood
+"""fresh green beans""",,,75101800,FNDDS_nutrients
+"""fresh mint leaves""",,,2065,FDA_website
+"""fresh mint""",,,2065,FDA_website
+"""fresh mozzarella""",,,14107010,FNDDS_nutrients
+"""fresh oregano leaves""",,,2027,FNDDS_ingredients
+"""fresh oregano""",,,2027,FNDDS_ingredients
+"""fresh parsley""",,,2029,FNDDS_ingredients
+"""fresh pesto""",,,81302070,FNDDS_nutrients
+"""fresh rosemary sprig""",,,173473,MyFood
+"""fresh rosemary sprigs""",,,173473,MyFood
+"""fresh rosemary""",,,173473,MyFood
+"""fresh spinach""",,,11457,FNDDS_ingredients
+"""fresh tarragon leaves""",,,2041,FDA_website
+"""fresh thyme leaves""",,,2042,FNDDS_ingredients
+"""fresh thyme sprigs""",,,2042,FNDDS_ingredients
+"""fresh thyme""",,,2042,FNDDS_ingredients
+"""freshly grated nutmeg""",,,2025,FNDDS_ingredients
+"""freshly ground black pepper""",,,2030,FNDDS_ingredients
+"""fried eggs - large""",,,31102000,FNDDS_nutrients
+"""fried or steamed eggs""",,,31102000,FNDDS_nutrients
+"""frozen acai puree""",,,173175,MyFood
+"""frozen banana""",,,9040,FNDDS_ingredients
+"""frozen corn""",,,11167,FNDDS_ingredients
+"""frozen edamame""",,,11212,FNDDS_ingredients
+"""frozen lima beans""",,,169953,MyFood
+"""frozen mango chunks""",,,169110,MyFood
+"""frozen mixed berries""",,,6320100,FNDDS_nutrients
+"""frozen peaches""",,,169116,MyFood
+"""frozen peas""",,,11313,FNDDS_ingredients
+"""frozen pineapple chunks""",,,9266,FNDDS_ingredients
+"""frozen spinach""",,,11464,FNDDS_ingredients
+"""frozen strawberries""",,,9316,FNDDS_ingredients
+"""frozen vegetable mix""",,,788616,MyFood
+"""fully cooked ham""",,,174611,MyFood
+"""furikake seasoning""",,,17,custom_table
+"""garam masala""",,,18,custom_table
+"""garlic - large""",,,11215,FNDDS_ingredients
+"""garlic - medium""",,,11215,FNDDS_ingredients
+"""garlic chives (buchu)""",,,11156,FNDDS_ingredients
+"""garlic powder""",,,2020,FNDDS_ingredients
+"""garlic""",,,11215,FNDDS_ingredients
+"""ginger""",,,11216,FNDDS_ingredients
+"""ginger-garlic paste""",,,19,custom_table
+"""glutinous rice flour""",,,1157,FNDDS_ingredients
+"""goat cheese""",,,14104700,FNDDS_nutrients
+"""gochujang (Korean chili paste)""",,,20,custom_table
+"""goji berries""","""goji berries""",Same,173032,MyFood
+"""gorgonzola cheese""",,,14010000,FNDDS_nutrients
+"""graham cracker crumbs""",,,54102010,FNDDS_ingredients
+"""graham crackers""","""Graham crackers""",Same,54102010,FNDDS_nutrients
+"""granola bar""",,,53710400,FNDDS_nutrients
+"""granola""",,,171646,MyFood
+"""granulated sugar""",,,91101010,FNDDS_nutrients
+"""grapefruit juice""",,,9123,FNDDS_ingredients
+"""grapefruit""",,,9112,FNDDS_ingredients
+"""grapes""",,,63123000,FNDDS_nutrients
+"""grated daikon radish""",,,11429,FNDDS_ingredients
+"""grated ginger""",,,11216,FNDDS_ingredients
+"""grated parmesan cheese""",,,1032,FNDDS_ingredients
+"""greek vinaigrette""",,,21,custom_table
+"""greek yogurt""",,,1293,FNDDS_ingredients
+"""green beans""",,,169963,MyFood
+"""green bell pepper - large""",,,11334,FNDDS_ingredients
+"""green bell pepper - medium""",,,11334,FNDDS_ingredients
+"""green bell pepper - small""",,,11334,FNDDS_ingredients
+"""green bell pepper""",,,11334,FNDDS_ingredients
+"""green cabbage""",,,11109,FNDDS_ingredients
+"""green chiles (canned)""",,,168577,MyFood
+"""green chiles""",,,168577,MyFood
+"""green lentils""",,,16070,FNDDS_ingredients
+"""green lettuce leaves""",,,11253,FNDDS_ingredients
+"""green olives""",,,9533,FNDDS_ingredients
+"""green onion""",,,11291,FNDDS_ingredients
+"""green onions - medium""",,,11291,FNDDS_ingredients
+"""green onions""",,,11291,FNDDS_ingredients
+"""green peppercorns""",,,2030,FNDDS_ingredients
+"""green tomatoes - medium""",,,11527,FNDDS_ingredients
+"""grilled chicken breast""",,,24120110,FNDDS_nutrients
+"""grilled chicken or fish (flaked)""",,,Not necessary,
+"""grilled corn""",,,Not necessary,
+"""ground beef""",,,23575,FNDDS_ingredients
+"""ground black pepper""",,,2030,FNDDS_ingredients
+"""ground cinnamon""",,,2010,FNDDS_ingredients
+"""ground cloves""",,,171321,MyFood
+"""ground coriander""",,,2012,FNDDS_ingredients
+"""ground cumin""",,,2014,FNDDS_ingredients
+"""ground ginger""",,,11216,FNDDS_ingredients
+"""ground lamb""",,,172544,MyFood
+"""ground nutmeg""",,,2025,FNDDS_ingredients
+"""ground paprika""",,,2028,FNDDS_ingredients
+"""ground pork""",,,167903,MyFood
+"""ground sausage links""",,,172934,MyFood
+"""ground sichuan peppercorn""",,,22,custom_table
+"""ground turmeric""",,,2043,FNDDS_ingredients
+"""ground white pepper""",,,170933,MyFood
+"""gruyere cheese - shredded""",,,1023,FNDDS_ingredients
+"""gruyere cheese""",,,1023,FNDDS_ingredients
+"""gruyère cheese""",,,1023,FNDDS_ingredients
+"""guacamole""",,,786833,MyFood
+"""guajillo chiles - dried""",,,23,custom_table
+"""guanciale""",,,24,custom_table
+"""guava""",,,173044,MyFood
+"""gyoza wrappers""",,,172802,MyFood
+"""haddock fillets""",,,174198,MyFood
+"""half-and-half""",,,171255,MyFood
+"""halibut fillet""",,,174201,MyFood
+"""halloumi cheese""",,,14010000,FNDDS_nutrients
+"""ham hock""",,,22708010,FNDDS_nutrients
+"""ham""","""Ham""",Same,22311000,FNDDS_nutrients
+"""cooked ham""",,,174611,MyFood
+"""hamburger buns""",,,172796,MyFood
+"""hard-boiled eggs""",,,31102000,FNDDS_nutrients
+"""heavy cream""",,,1053,FNDDS_ingredients
+"""heavy whipping cream""",,,1053,FNDDS_ingredients
+"""herbes de provence""",,,25,custom_table
+"""hoisin sauce""","""Hoisin sauce""",Same,6175,FNDDS_ingredients
+"""hollandaise sauce""","""Hollandaise sauce""",Same,81302010,FNDDS_nutrients
+"""hominy""",,,75217520,FNDDS_nutrients
+"""honey nut cheerios""",,,57241000,FNDDS_nutrients
+"""honey""","""Honey""",Same,91302010,FNDDS_nutrients
+"""honeydew melon""",,,169911,MyFood
+"""horseradish""","""Horseradish""",Same,75503090,FNDDS_nutrients
+"""hot sauce""",,,174527,MyFood
+"""hotdog buns""",,,172796,MyFood
+"""hummus""",,,784242,MyFood
+"""ice cubes""",,,Not necessary,
+"""ice water""",,,Not necessary,
+"""iceberg lettuce""",,,11252,FNDDS_ingredients
+"""ikura (salmon roe)""",,,175132,MyFood
+"""imitation crab meat""","""Imitation crab meat""",Same,27250520,FNDDS_nutrients
+"""instant coffee""",,,174130,MyFood
+"""irigoma (white sesame seeds)""",,,170151,MyFood
+"""italian dressing""",,,4021,FNDDS_ingredients
+"""italian sausage (mild or hot)""",,,7089,FNDDS_ingredients
+"""italian sausage""","""Italian sausage""",Same,782359,MyFood
+"""italian seasoned breadcrumbs""",,,172806,MyFood
+"""italian seasoning""",,,26,custom_table
+"""jalapeno pepper - medium""",,,11979,FNDDS_ingredients
+"""jalapeno pepper""",,,168576,MyFood
+"""jalapeno""",,,168576,MyFood
+"""jalapenos""",,,168576,MyFood
+"""japanese eggplant (or regular eggplant) - medium""",,,11209,FNDDS_ingredients
+"""jumbo pasta shells""",,,20120,FNDDS_ingredients
+"""kahlua (or other coffee liqueur)""",,,14414,FNDDS_ingredients
+"""kalamata olives""","""kalamata olives""",Same,9193,FNDDS_ingredients
+"""kale""",,,11233,FNDDS_ingredients
+"""kasuri methi (dried fenugreek leaves)""",,,171324,MyFood
+"""ketchup""","""Ketchup""",Same,74401010,FNDDS_nutrients
+"""kewpie mayonnaise""",,,27,custom_table
+"""key limes - large""",,,168155,MyFood
+"""kidney beans""",,,16028,FNDDS_ingredients
+"""kimchi juice""",,,28,custom_table
+"""kimchi""","""Kimchi""",Same,75502520,FNDDS_nutrients
+"""kiwi - medium""",,,168153,MyFood
+"""kiwi""",,,168153,MyFood
+"""kombu (dried kelp)""",,,11445,FNDDS_ingredients
+"""kombu tsukudani (kelp simmered in soy sauce)""",,,29,custom_table
+"""korean anchovy broth""",,,30,custom_table
+"""korean beef (bulgogi)""",,,31,custom_table
+"""korean black bean noodles (jjajangmyeon noodles)""",,,32,custom_table
+"""korean cucumber""",,,11205,FNDDS_ingredients
+"""korean fish cake broth (dashi)""",,,6963,FNDDS_ingredients
+"""korean glass noodles (japchae)""",,,41425010,FNDDS_nutrients
+"""korean pancake (buchimgae)""",,,Not necessary,
+"""korean pear - medium""",,,168177,MyFood
+"""korean radish (or daikon) - medium""",,,11429,FNDDS_ingredients
+"""korean radish (or daikon)""",,,11429,FNDDS_ingredients
+"""korean radish""",,,11429,FNDDS_ingredients
+"""korean red pepper flakes (gochugaru)""",,,33,custom_table
+"""korean rice cakes (tteokbokki)""",,,786285,MyFood
+"""korean sesame seeds""",,,170151,MyFood
+"""korean shrimp paste - saeujeot""",,,34,custom_table
+"""korean spinach""",,,11464,FNDDS_ingredients
+"""korean sweet potato noodles (dangmyeon)""",,,35,custom_table
+"""korean zucchini - hobak - medium""",,,11477,FNDDS_ingredients
+"""korean-style short ribs""",,,36,custom_table
+"""kosher salt""",,,37,custom_table
+"""ladyfingers""",,,172821,MyFood
+"""lamb shoulder""",,,174324,MyFood
+"""lamb""",,,172479,MyFood
+"""large shrimp""",,,15152,FNDDS_ingredients
+"""lasagna noodles""",,,20120,FNDDS_ingredients
+"""leafy green vegetables""",,,11253,FNDDS_ingredients
+"""lean ground beef""",,,23562,FNDDS_ingredients
+"""lean ground pork""",,,10024,FNDDS_ingredients
+"""leek""",,,75218400,FNDDS_ingredients
+"""leeks - large""",,,75218400,FNDDS_ingredients
+"""leeks""","""leeks""",Same,75218400,FNDDS_nutrients
+"""lemon juice""",,,9152,FNDDS_ingredients
+"""lemon wedge""",,,9150,FNDDS_ingredients
+"""lemon wedges""",,,9150,FNDDS_ingredients
+"""lemon zest""",,,9156,FNDDS_ingredients
+"""lemon""",,,9150,FNDDS_ingredients
+"""lentils (any variety)""",,,16070,FNDDS_ingredients
+"""lentils""",,,16070,FNDDS_ingredients
+"""lettuce leaves""",,,11253,FNDDS_ingredients
+"""lettuce""",,,11253,FNDDS_ingredients
+"""light brown sugar""",,,168833,MyFood
+"""light mayonnaise""",,,168094,MyFood
+"""lime - large""",,,168155,MyFood
+"""lime juice""",,,168156,MyFood
+"""lime wedges""",,,168155,MyFood
+"""lime zest""",,,9156,FNDDS_ingredients
+"""lime""",,,168155,MyFood
+"""limes""",,,168155,MyFood
+"""linguine""","""linguine""",Same,20120,FNDDS_ingredients
+"""littleneck clams""",,,782758,MyFood
+"""lo mein noodles - dried""",,,169733,MyFood
+"""lo mein noodles""",,,36625,FNDDS_ingredients
+"""long-grain white rice""",,,20444,FNDDS_ingredients
+"""low-sodium chicken broth""",,,6183,FNDDS_ingredients
+"""lump crab meat""",,,782767,MyFood
+"""lychee""","""Lychee""",Same,63126510,FNDDS_nutrients
+"""macaroni""",,,169736,MyFood
+"""mango""",,,169910,MyFood
+"""maple syrup""",,,170276,MyFood
+"""margerine""",,,171415,MyFood
+"""marinara sauce""",,,6931,FNDDS_ingredients
+"""marsala wine (dry)""",,,93402000,FNDDS_ingredients
+"""masa harina (corn flour)""",,,784713,MyFood
+"""mascarpone cheese""",,,14010000,FNDDS_nutrients
+"""mashed potatoes""",,,11367,FNDDS_ingredients
+"""mayonnaise""",,,81302040,FNDDS_nutrients
+"""meat""",,,Not necessary,
+"""melted butter""",,,1001,FNDDS_ingredients
+"""mexican melting cheese (oaxaca or quesadilla)""",,,14120010,FNDDS_nutrients
+"""milk - one percent""",,,11112210,FNDDS_nutrients
+"""milk""",,,11100000,FNDDS_nutrients
+"""minced ginger""",,,11216,FNDDS_ingredients
+"""mint leaves""",,,173475,MyFood
+"""mirin""",,,167723,MyFood
+"""miso paste""",,,41420110,FNDDS_nutrients
+"""mitsuba (japanese parsley)""",,,2029,FNDDS_ingredients
+"""mixed greens""",,,787801,MyFood
+"""mixed mushrooms""",,,788289,MyFood
+"""mixed salad greens""",,,787801,MyFood
+"""mixed seafood""",,,15149,FNDDS_nutrients
+"""molasses""","""Molasses""",Same,91303000,FNDDS_nutrients
+"""monterey jack cheese - shredded""",,,100296,MyFood
+"""monterey jack cheese""",,,100296,MyFood
+"""mozzarella cheese""",,,1029,FNDDS_ingredients
+"""mulato chiles - dried whole""",,,38,custom_table
+"""mung bean sprouts""",,,169957,MyFood
+"""mushrooms""",,,788289,MyFood
+"""mussels""","""Mussels""",Same,26313110,FNDDS_nutrients
+"""mustard""","""Mustard""",Same,75506010,FNDDS_nutrients
+"""myoga ginger""",,,11216,FNDDS_ingredients
+"""napa cabbage - medium""",,,11109,FNDDS_ingredients
+"""napa cabbage""",,,11109,FNDDS_ingredients
+"""narutomaki (fish cake slices)""",,,783040,MyFood
+"""nectarines""","""nectarines""",Same,63131010,FNDDS_nutrients
+"""neutral oil""",,,789032,MyFood
+"""nicoise olives or large green olives""",,,9533,FNDDS_ingredients
+"""noodles""",,,56112000,FNDDS_nutrients
+"""nopales pads (fresh or canned, pre-sliced)""",,,11963,FNDDS_ingredients
+"""nori seaweed""",,,75232000,FNDDS_nutrients
+"""nuka (rice bran)""",,,169713,MyFood
+"""nutmeg""","""nutmeg""",Same,2025,FNDDS_ingredients
+"""nutritional yeast""",,,39,custom_table
+"""nuts""",,,170585,MyFood
+"""oaxaca cheese""",,,14010000,FNDDS_nutrients
+"""okonomiyaki sauce""",,,40,custom_table
+"""okra""",,,11281,FNDDS_ingredients
+"""old bay seasoning""",,,41,custom_table
+"""olive oil""","""Olive oil""",Same,82104000,FNDDS_nutrients
+"""olives (black or green)""",,,9193,FNDDS_ingredients
+"""olives""",,,9193,FNDDS_ingredients
+"""onion - large""",,,11283,FNDDS_ingredients
+"""onion - medium""",,,11283,FNDDS_ingredients
+"""onion - small""",,,11283,FNDDS_ingredients
+"""onion powder""",,,171327,MyFood
+"""onion""",,,11283,FNDDS_ingredients
+"""optional additional ingredients",,,Not necessary,
+"""optional additions",,,Not necessary,
+"""optional additions (choose one or combine)",,,Not necessary,
+"""optional fillings""","""optional fillings""",Same,Not necessary,
+"""optional toppings for serving""",,,Not necessary,
+"""optional toppings""","""optional toppings""",Same,Not necessary,
+"""orange bell pepper - medium""",,,11334,FNDDS_ingredients
+"""orange juice""",,,169098,MyFood
+"""orange zest""",,,169103,MyFood
+"""orange""",,,169097,MyFood
+"""oranges""","""oranges""",Same,61119010,FNDDS_nutrients
+"""oregano""","""oregano""",Same,2027,FNDDS_ingredients
+"""overripe bananas - large""",,,173944,MyFood
+"""oxtail""",,,781840,MyFood
+"""oxtails""",,,781840,MyFood
+"""oyster sauce - vegetarian""",,,42,custom_table
+"""oyster sauce""","""Oyster sauce""",Same,28520100,FNDDS_nutrients
+"""packed light brown sugar""",,,168833,MyFood
+"""pancetta""","""pancetta""",Same,167914,MyFood
+"""paneer""",,,14110050,FNDDS_nutrients
+"""panko breadcrumbs""",,,172806,MyFood
+"""papaya""",,,169926,MyFood
+"""paprika""","""paprika""",Same,2028,FNDDS_ingredients
+"""parboiled rice""",,,169707,MyFood
+"""parchment paper""",,,Not necessary,
+"""parmesan cheese rind""",,,1032,FNDDS_ingredients
+"""parmesan cheese""",,,1032,FNDDS_ingredients
+"""parmigiano-reggiano cheese""",,,14108010,FNDDS_nutrients
+"""parsley""",,,2029,FNDDS_ingredients
+"""parsnips""",,,11299,FNDDS_ingredients
+"""pasilla chiles - dried""",,,168579,MyFood
+"""pasilla chiles - whole""",,,Not necessary,
+"""passion fruit""",,,169108,MyFood
+"""pasta (long, such as spaghetti, linguine, or fettuccine)""",,,20120,FNDDS_ingredients
+"""pasta (such as penne or fusilli)""",,,20120,FNDDS_ingredients
+"""pasta (such as penne or spaghetti)""",,,20120,FNDDS_ingredients
+"""pasta""",,,20120,FNDDS_ingredients
+"""peaches""",,,169928,MyFood
+"""peanut butter""","""Peanut butter""",Same,42202000,FNDDS_nutrients
+"""peanut oil""",,,171410,
+"""peanut sauce""","""Peanut sauce""",Same,42204050,FNDDS_nutrients
+"""peanuts""",,,16087,FNDDS_ingredients
+"""pear""",,,9252,FNDDS_ingredients
+"""pearl onions""",,,11283,FNDDS_ingredients
+"""pears""",,,9252,FNDDS_ingredients
+"""peas""",,,11313,FNDDS_ingredients
+"""pecans""",,,12142,FNDDS_ingredients
+"""pecorino romano cheese""",,,14010000,FNDDS_nutrients
+"""penne pasta""",,,20120,FNDDS_ingredients
+"""pepitas (pumpkin seeds)""",,,784458,MyFood
+"""pepper""",,,170931,MyFood
+"""peppercorns""",,,2030,FNDDS_ingredients
+"""pepperoni""",,,7057,FNDDS_ingredients
+"""perilla leaves (kkaennip)""",,,43,custom_table
+"""phyllo dough""",,,172791,MyFood
+"""pickle relish""",,,168561,MyFood
+"""pickled jalapenos""",,,75511040,FNDDS_nutrients
+"""pickled plum (umeboshi)""",,,44,custom_table
+"""pickled vegetables""",,,75515100,FNDDS_nutrients
+"""pico de gallo""",,,787711,MyFood
+"""pie crust""",,,18335,FNDDS_ingredients
+"""pie crust""",,,18335,FNDDS_ingredients
+"""piloncillo cone (unrefined cane sugar cone) - whole""",,,45,custom_table
+"""pimentón (spanish paprika)""",,,2028,FNDDS_ingredients
+"""pimentos""",,,168559,MyFood
+"""pine nuts""","""Pine nuts""",Same,42113000,FNDDS_nutrients
+"""pineapple chunks""",,,9266,FNDDS_ingredients
+"""pineapple""",,,9266,FNDDS_ingredients
+"""pinto beans (dry)""",,,16043,FNDDS_ingredients
+"""pita bread""",,,172816,MyFood
+"""pizza dough""",,,46,custom_table
+"""pizza sauce""",,,172880,MyFood
+"""plain greek yogurt""",,,1293,FNDDS_ingredients
+"""plain yogurt""",,,100295,FNDDS_ingredients
+"""plant-based milk""",,,172446,MyFood
+"""plums""",,,9279,FNDDS_ingredients
+"""poblano pepper - medium""",,,47,custom_table
+"""poblano peppers - medium""",,,47,custom_table
+"""poblano peppers""",,,47,custom_table
+"""polenta""","""polenta""",Same,56201517,FNDDS_nutrients
+"""pork belly - skin-on""",,,167812,MyFood
+"""pork belly""",,,167812,MyFood
+"""pork bones (femur or back bones)""",,,22706010,FNDDS_nutrients
+"""pork chops (bone-in or boneless)""",,,10064,FNDDS_ingredients
+"""pork loin chops (boneless)""",,,10002,FNDDS_ingredients
+"""pork loin or tenderloin""",,,10002,FNDDS_ingredients
+"""pork loin roast""",,,10002,FNDDS_ingredients
+"""pork loin""",,,10002,FNDDS_ingredients
+"""pork ribs (baby back or spare)""",,,10193,FNDDS_ingredients
+"""pork shoulder (boneless)""",,,10002,FNDDS_ingredients
+"""pork shoulder""",,,10002,FNDDS_ingredients
+"""pork tenderloin""",,,10061,FNDDS_ingredients
+"""portabello mushrooms""",,,11243,FNDDS_ingredients
+"""portobello mushrooms - large""",,,169243,MyFood
+"""potato - medium""",,,71000100,FNDDS_nutrients
+"""potato starch""",,,11413,FNDDS_ingredients
+"""potatoes - large""",,,11367,FNDDS_ingredients
+"""potatoes - medium""",,,11367,FNDDS_ingredients
+"""potatoes""",,,11367,FNDDS_ingredients
+"""powdered gelatin""",,,169599,MyFood
+"""powdered sugar""",,,19336,FNDDS_ingredients
+"""prime rib roast""",,,169511,MyFood
+"""prosciutto slices""","""prosciutto slices""",Same,22311450,FNDDS_nutrients
+"""prosciutto""",,,22311450,FNDDS_nutrients
+"""protein bar""",,,53729000,FNDDS_nutrients
+"""puff pastry""",,,172738,MyFood
+"""pumpkin - small""",,,11422,FNDDS_ingredients
+"""pumpkin seeds""",,,784458,MyFood
+"""pumpkin""",,,11422,FNDDS_ingredients
+"""queso fresco cheese - shredded""",,,1413300,FNDDS_nutrients
+"""queso fresco cheese""",,,1413300,FNDDS_nutrients
+"""queso fresco""","""Queso Fresco""",Same,14133000,FNDDS_nutrients
+"""quinoa""",,,20137,FNDDS_ingredients
+"""rack of lamb""",,,172629,MyFood
+"""radicchio""",,,11952,FNDDS_ingredients
+"""radishes""",,,11429,FNDDS_ingredients
+"""raisins""","""Raisins""",Same,9298,FNDDS_ingredients
+"""ramen noodles""",,,16082,FNDDS_ingredients
+"""ranch dressing""","""Ranch dressing""",Same,83113500,FNDDS_nutrients
+"""ravioli""",,,786084,MyFood
+"""raw cashews - whole""",,,12085,FNDDS_ingredients
+"""raw shrimp""",,,15152,FNDDS_ingredients
+"""reblochon cheese""",,,14010000,FNDDS_nutrients
+"""red bell pepper - large""",,,11334,FNDDS_ingredients
+"""red bell pepper - medium""",,,11334,FNDDS_ingredients
+"""red bell pepper""",,,11334,FNDDS_ingredients
+"""red cabbage""",,,11112,FNDDS_ingredients
+"""red chili flakes""",,,48,custom_table
+"""red chili pepper - small""",,,11819,FNDDS_ingredients
+"""red chili powder""",,,2009,FNDDS_ingredients
+"""red chili sauce""",,,171595,MyFood
+"""red lentils""",,,16070,FNDDS_ingredients
+"""red onion - large""",,,11283,FNDDS_ingredients
+"""red onion - medium""",,,11283,FNDDS_ingredients
+"""red onion""",,,11283,FNDDS_ingredients
+"""red pepper flakes""",,,49,custom_table
+"""red raspberries""",,,9302,FNDDS_ingredients
+"""red wine - dry""",,,173190,MyFood
+"""red wine""",,,173190,MyFood
+"""redcurrants""",,,173964,MyFood
+"""refried beans""","""Refried beans""",Same,41205010,FNDDS_nutrients
+"""rib eye steaks""",,,173054,MyFood
+"""ribeye beef (such as ribeye or flank steak)""",,,173054,MyFood
+"""ribeye beef""",,,173054,MyFood
+"""ribeye steak""",,,173054,MyFood
+"""ribeye steaks""",,,173054,MyFood
+"""rice noodles""",,,16082,FNDDS_ingredients
+"""rice or crusty bread""",,,Not necessary,
+"""rice paper wrappers""",,,54319500,FNDDS_nutrients
+"""rice spring roll wrappers (round)""",,,54319500,FNDDS_nutrients
+"""rice vinegar - seasoned""",,,50,custom_table
+"""rice vinegar - unseasoned""",,,51,custom_table
+"""rice vinegar - white""",,,52,custom_table
+"""rice vinegar""",,,53,custom_table
+"""rice""",,,20055,FNDDS_ingredients
+"""ricotta cheese""",,,1036,FNDDS_ingredients
+"""rigatoni pasta""",,,20120,FNDDS_ingredients
+"""ripe tomatoes - large""",,,11529,FNDDS_ingredients
+"""ripe tomatoes""",,,11529,FNDDS_ingredients
+"""roasted corn""",,,11167,FNDDS_ingredients
+"""roasted peanuts""",,,173086,MyFood
+"""rolled oats""",,,169705,MyFood
+"""roma tomato - large""",,,11529,FNDDS_ingredients
+"""roma tomato - medium""",,,11529,FNDDS_ingredients
+"""roma tomatoes - large""",,,11529,FNDDS_ingredients
+"""roma tomatoes - medium""",,,11529,FNDDS_ingredients
+"""roma tomatoes""",,,11529,FNDDS_ingredients
+"""romaine lettuce""",,,11257,FNDDS_ingredients
+"""rosemary sprig""","""rosemary sprig""",Same,173473,MyFood
+"""rosemary""","""rosemary""",Same,171333,MyFood
+"""rouille""","""rouille""",Same,Not necessary,
+"""round dumpling wrappers""",,,172802,MyFood
+"""russet potatoes - large""",,,100283,FNDDS_ingredients
+"""russet potatoes - medium""",,,100283,FNDDS_ingredients
+"""russet potatoes""",,,100283,FNDDS_ingredients
+"""saffron threads""","""saffron threads""",Same,170934,MyFood
+"""saffron""","""saffron""",Same,170934,MyFood
+"""sage leaves (fresh)""",,,2038,FNDDS_ingredients
+"""sage leaves""",,,2038,FNDDS_ingredients
+"""sage""",,,2038,FNDDS_ingredients
+"""sake""","""sake""",Same,43479,FNDDS_ingredients
+"""salad greens""",,,787801,MyFood
+"""salmon fillet""",,,15083,FNDDS_ingredients
+"""salmon flakes (cooked and flaked)""",,,15083,FNDDS_ingredients
+"""salsa (roja or verde)""",,,174524,MyFood
+"""salsa""",,,174524,MyFood
+"""salt""",,,2047,FNDDS_ingredients
+"""sashimi-grade salmon""",,,15083,FNDDS_ingredients
+"""sashimi-grade tuna""",,,173706,MyFood
+"""sausage""",,,7954,FNDDS_ingredients
+"""scallop shells - large""",,,Not necessary,
+"""scallops - dry packed""",,,167742,MyFood
+"""sea bass fillets""",,,782641,MyFood
+"""sea salt""",,,54,custom_table
+"""sea scallops""",,,782798,MyFood
+"""seedless cucumbers (english or persian) - large""",,,11205,FNDDS_ingredients
+"""self-rising flour""",,,168895,MyFood
+"""semi-sweet chocolate chips""",,,Not necessary,
+"""semolina flour""",,,168933,MyFood
+"""serrano pepper""",,,169935,MyFood
+"""sesame oil""","""Sesame oil""",Same,82107000,FNDDS_nutrients
+"""sesame seeds""","""Sesame seeds""",Same,43103000,FNDDS_nutrients
+"""shallot - medium""",,,170499,MyFood
+"""shallots - large""",,,170499,MyFood
+"""shallots""","""shallots""",Same,170499,MyFood
+"""shaoxing wine (or dry sherry)""",,,173190,MyFood
+"""sharp cheddar cheese - shredded""",,,1009,FNDDS_ingredients
+"""sharp cheddar cheese""",,,1009,FNDDS_ingredients
+"""shichimi togarashi (japanese seven-spice powder)""",,,55,custom_table
+"""shiitake mushrooms - dried""",,,11238,FNDDS_ingredients
+"""shiitake mushrooms - large""",,,11238,FNDDS_ingredients
+"""shiitake mushrooms""",,,11238,FNDDS_ingredients
+"""shishito peppers""",,,56,custom_table
+"""shiso leaves""",,,Not necessary,
+"""shortening""",,,4615,FNDDS_ingredients
+"""short-grain rice""",,,56205190,FNDDS_nutrients
+"""short-grain white rice - cooked""",,,20055,FNDDS_ingredients
+"""short-grain white rice""",,,168881,MyFood
+"""shredded cabbage""",,,11109,FNDDS_ingredients
+"""shredded cheddar cheese""",,,1009,FNDDS_ingredients
+"""shredded cheese (cheddar or mozzarella)""",,,1009,FNDDS_ingredients
+"""shredded cheese (cheddar, monterey jack, or mexican blend)""",,,14010000,FNDDS_nutrients
+"""shredded cheese""",,,14010000,FNDDS_nutrients
+"""shredded chicken""",,,99992405,FNDDS_nutrients
+"""shredded chihuahua cheese""",,,14010000,FNDDS_nutrients
+"""shredded coconut""",,,167753,MyFood
+"""shredded cooked beef""",,,21602010,FNDDS_nutrients
+"""shredded cooked chicken breast""",,,99992405,FNDDS_nutrients
+"""shredded cooked chicken""",,,99992405,FNDDS_nutrients
+"""shredded cooked vegetables""",,,75311020,FNDDS_nutrients
+"""shredded green or white cabbage""",,,11109,FNDDS_ingredients
+"""shredded mozzarella cheese""",,,1029,FNDDS_ingredients
+"""shredded napa cabbage""",,,11109,FNDDS_ingredients
+"""shreddies""","""shreddies""",Same,57214000,FNDDS_nutrients
+"""shrimp - medium""",,,15152,FNDDS_ingredients
+"""shrimp tempura""",,,Not necessary,
+"""shrimp""",,,15152,FNDDS_ingredients
+"""shrimp, peeled and deveined""",,,15152,FNDDS_ingredients
+"""sichuan pepper powder""",,,57,custom_table
+"""sichuan peppercorns""",,,58,custom_table
+"""silken tofu""",,,173784,MyFood
+"""skewers""","""skewers""",Same,Not necessary,
+"""skirt steak""",,,173379,MyFood
+"""sliced almonds""",,,12061,FNDDS_ingredients
+"""sliced kamaboko (fish cake)""",,,783040,MyFood
+"""sliced pork belly (chashu pork)""",,,22708020,FNDDS_nutrients
+"""sliced red onion""",,,11283,FNDDS_ingredients
+"""sliced turkey breast""",,,7081,FNDDS_ingredients
+"""slivered almonds""",,,12061,FNDDS_ingredients
+"""small pasta""",,,20120,FNDDS_ingredients
+"""smoked paprika""",,,2028,FNDDS_ingredients
+"""smoked salmon""",,,15083,FNDDS_ingredients
+"""smoked sausage""",,,174607,MyFood
+"""smoked turkey leg or neck""",,,782270,MyFood
+"""snap peas""",,,170010,MyFood
+"""snow peas""",,,170010,MyFood
+"""soft tofu""",,,172449,MyFood
+"""sour cherries""",,,171716,MyFood
+"""sour cream""",,,1179,FNDDS_ingredients
+"""soy milk""","""Soy milk""",Same,11320000,FNDDS_nutrients
+"""soy sauce - light""",,,16123,FNDDS_ingredients
+"""soy sauce - low sodium""",,,16424,FNDDS_ingredients
+"""soy sauce""","""Soy sauce""",Same,16123,FNDDS_ingredients
+"""soybean sprouts""",,,75101000,FNDDS_nutrients
+"""soybeans""",,,170530,MyFood
+"""spaghetti""",,,20120,FNDDS_ingredients
+"""spam""","""Spam""",Same,25230530,FNDDS_nutrients
+"""sparkling water (or club soda)""",,,Not necessary,
+"""special k cereal""",,,785729,MyFood
+"""spinach leaves""",,,11457,FNDDS_ingredients
+"""spinach""",,,11464,FNDDS_ingredients
+"""sprite""","""sprite""",Same,14145,FNDDS_ingredients
+"""alfalfa sprouts""",,,168384,MyFood
+"""crab""",,,782767,MyFood
+"""sriracha sauce""",,,171186,MyFood
+"""sriracha""","""sriracha""",Same,171186,MyFood
+"""standing rib roast""",,,172478,MyFood
+"""steak (such as filet mignon or ribeye)""",,,21101000,FNDDS_nutrients
+"""steamed rice cooked""",,,56205190,FNDDS_nutrients
+"""steamed vegetables""",,,Not necessary,
+"""stewing beef""",,,21410000,FNDDS_nutrients
+"""strawberries""",,,167762,MyFood
+"""sugar - white""",,,19335,FNDDS_ingredients
+"""sugar""",,,19335,FNDDS_ingredients
+"""sun-dried tomatoes""","""Sun-dried tomatoes""",Same,74206000,FNDDS_nutrients
+"""sushi rice vinegar""",,,59,custom_table
+"""sushi rice""",,,56205190,FNDDS_nutrients
+"""sweet and sour sauce""","""Sweet and sour sauce""",Same,91361010,FNDDS_nutrients
+"""sweet cherries""",,,167770,MyFood
+"""sweet chili sauce""",,,60,custom_table
+"""sweet potato - large""",,,100286,FNDDS_ingredients
+"""sweet potato - medium""",,,100286,FNDDS_ingredients
+"""sweet potato starch noodles (dangmyeon)""",,,61,custom_table
+"""sweet potato""",,,100286,FNDDS_ingredients
+"""sweet potatoes - large""",,,100286,FNDDS_ingredients
+"""sweet potatoes - medium""",,,100286,FNDDS_ingredients
+"""sweet potatoes""",,,100286,FNDDS_ingredients
+"""sweetened condensed milk""",,,171275,MyFood
+"""swiss cheese""",,,1040,FNDDS_ingredients
+"""tabasco sauce""",,,6169,FNDDS_ingredients
+"""taco seasoning""",,,172243,MyFood
+"""taco shells""",,,172800,MyFood
+"""taco toppings""",,,Not necessary,
+"""tagliatelle""","""tagliatelle""",Same,20120,FNDDS_ingredients
+"""tahini sauce""",,,170189,MyFood
+"""tahini""","""Tahini""",Same,43103300,FNDDS_nutrients
+"""takoyaki sauce""",,,62,custom_table
+"""tamarind paste""",,,63409020,FNDDS_nutrients
+"""tangerines""",,,168184,MyFood
+"""tenkasu (tempura flakes)""",,,172806,MyFood
+"""thin strips of red chili pepper""",,,Not necessary,
+"""thinly sliced beef""",,,21101140,FNDDS_nutrients
+"""thyme leaves""",,,2042,FNDDS_ingredients
+"""thyme sprigs""","""thyme sprigs""",Same,2042,FNDDS_ingredients
+"""thyme""","""thyme""",Same,2042,FNDDS_ingredients
+"""tilapia fillets""",,,174177,MyFood
+"""toasted almonds""",,,12061,FNDDS_ingredients
+"""toasted coconut flakes""",,,168586,MyFood
+"""toasted pecans""",,,170183,MyFood
+"""toasted pine nuts""",,,170591,MyFood
+"""toasted pumpkin seeds""",,,169415,MyFood
+"""toasted sesame oil""",,,82107000,FNDDS_nutrients
+"""toasted sesame seeds""",,,169416,MyFood
+"""tofu""","""tofu""",Same,16127,FNDDS_ingredients
+"""tomato - large""",,,11529,FNDDS_ingredients
+"""tomato - medium""",,,11529,FNDDS_ingredients
+"""tomato paste""",,,11546,FNDDS_ingredients
+"""tomato sauce (crushed or diced)""",,,11549,FNDDS_ingredients
+"""tomato sauce""",,,11549,FNDDS_ingredients
+"""tomato""",,,11529,FNDDS_ingredients
+"""tomatoes - large""",,,11529,FNDDS_ingredients
+"""tomatoes""",,,170050,MyFood
+"""tonkatsu sauce""",,,63,custom_table
+"""toppings (avocado""",,,Not necessary,
+"""toppings (optional)""","""toppings (optional)""",Same,Not necessary,
+"""trout fillets""",,,175155,MyFood
+"""tuna - sushi grade""",,,173106,MyFood
+"""tuna (canned in water)""",,,171988,MyFood
+"""tuna steak""",,,782687,MyFood
+"""tuna steaks""",,,782687,MyFood
+"""tuna""",,,782687,MyFood
+"""turkey""",,,171491,MyFood
+"""turmeric powder""",,,2043,FNDDS_ingredients
+"""turmeric""","""turmeric""",Same,2043,FNDDS_ingredients
+"""turnips - large""",,,170058,MyFood
+"""tzatziki sauce""",,,781161,MyFood
+"""unsalted butter""",,,1145,FNDDS_ingredients
+"""unsweetened cocoa powder""",,,19165,FNDDS_ingredients
+"""vanilla extract""",,,2052,FNDDS_ingredients
+"""vanilla greek yogurt""",,,1293,FNDDS_ingredients
+"""vanilla ice cream""",,,19089,FNDDS_ingredients
+"""vanilla protein powder""",,,173180,MyFood
+"""vegan butter""",,,173580,MyFood
+"""vegan cheese - shredded""",,,14502000,FNDDS_nutrients
+"""vegan cheese""",,,14502000,FNDDS_nutrients
+"""vegan cream cheese""",,,64,custom_table
+"""vegan mozzarella""",,,14502000,FNDDS_nutrients
+"""vegan parmesan""",,,65,custom_table
+"""vegetable broth - low-sodium""",,,66,custom_table
+"""vegetable broth""",,,171583,MyFood
+"""vegetable oil""",,,82101000,FNDDS_nutrients
+"""vegetable shortening""",,,4615,FNDDS_ingredients
+"""vegetables (your choice)""",,,169085,MyFood
+"""vidalia onion - large""",,,11283,FNDDS_ingredients
+"""vinegar""","""Vinegar""",Same,2053,FNDDS_ingredients
+"""vodka""","""Vodka""",Same,93505000,FNDDS_nutrients
+"""wakame seaweed""",,,170496,MyFood
+"""walnuts""",,,170187,MyFood
+"""warm milk""",,,170872,MyFood
+"""warm water""",,,Not necessary,
+"""wasabi paste""","""Wasabi paste""",Same,75534550,FNDDS_nutrients
+"""wasabi""",,,171183,MyFood
+"""water chestnuts""",,,170066,MyFood
+"""water""",,,Not necessary,
+"""watermelon""",,,167765,MyFood
+"""white bread""",,,174924,MyFood
+"""white button mushrooms""",,,11260,FNDDS_ingredients
+"""white fish fillets""",,,26158100,FNDDS_nutrients
+"""white grapes""",,,174682,MyFood
+"""white miso paste""",,,41420110,FNDDS_nutrients
+"""white onion - large""",,,11283,FNDDS_ingredients
+"""white onion - medium""",,,11283,FNDDS_ingredients
+"""white onion""",,,11283,FNDDS_ingredients
+"""white or button mushrooms""",,,11260,FNDDS_ingredients
+"""white pepper""",,,170933,MyFood
+"""white rice - cooked""",,,56205001,FNDDS_nutrients
+"""white rice""",,,20044,FNDDS_nutrients
+"""white sesame seeds""",,,170151,MyFood
+"""white sugar""",,,91101010,FNDDS_nutrients
+"""white vinegar""",,,2053,FNDDS_ingredients
+"""white wine (dry)""",,,174837,MyFood
+"""white wine""",,,174837,MyFood
+"""whole black peppercorns""",,,2030,FNDDS_ingredients
+"""whole grain bread""",,,18064,FNDDS_ingredients
+"""whole grain tortilla""",,,28295,FNDDS_ingredients
+"""whole milk ricotta cheese""",,,14201500,FNDDS_nutrients
+"""whole milk""",,,171265,MyFood
+"""wild rice""",,,169726,MyFood
+"""wonton wrappers""",,,172802,MyFood
+"""wood ear mushrooms""",,,Not necessary,
+"""wooden skewers""","""wooden skewers""",Same,Not necessary,
+"""worcestershire sauce""","""Worcestershire sauce""",Same,41420450,FNDDS_nutrients
+"""yakisoba noodles""",,,168906,MyFood
+"""yakitori skewers""",,,Not necessary,
+"""yellow bell pepper""",,,11334,FNDDS_ingredients
+"""yellow miso paste""","""Miso""",,Not necessary,
+"""yellow mustard""",,,2046,FNDDS_ingredients
+"""yellow onion - large""",,,11283,FNDDS_ingredients
+"""yellow onion - medium""",,,11283,FNDDS_ingredients
+"""yellow onion""",,,11283,FNDDS_ingredients
+"""yellow onions - large""",,,11283,FNDDS_ingredients
+"""yellow onions""",,,11283,FNDDS_ingredients
+"""yellow raisins""","""Raisins""",,168164,MyFood
+"""yellow squash - medium""",,,170487,MyFood
+"""yellow squash""",,,95233020,FNDDS_nutrients
+"""yuzu kosho paste""",,,67,custom_table
+"""ziti pasta""",,,20120,FNDDS_ingredients
+"""zucchini - medium""",,,11480,FNDDS_ingredients
+"""zucchini flowers""",,,11480,FNDDS_ingredients
+"""zucchini""",,,11480,FNDDS_ingredients
