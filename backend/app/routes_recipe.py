@@ -2,16 +2,27 @@ from flask import Blueprint, jsonify, request, send_file
 from typing import Optional
 import re
 import csv, os
+import io
 from pathlib import Path
 import pymysql
 from user_db.user_db import DatabaseManager
+from app.custom_recipe.nutrition_calc import calc_nutrition, extract_ingredients_for_calc
+from .mealplan_service import read_blob_bytes_from_gcs, read_blob_text_from_gcs, _upload_csv_string_to_gcs
+from io import BytesIO
+
+
 
 bp = Blueprint("recipes", __name__, url_prefix="/api")
 
-CSV_DIR = (Path(__file__).resolve().parent / ".." / ".." / "custom_recipes"/"nutrients").resolve()
-ING_DIR = (Path(__file__).resolve().parent / ".." / ".." / "custom_recipes"/"ingredients").resolve()
-INST_DIR = (Path(__file__).resolve().parent / ".." / ".." / "custom_recipes"/"instructions").resolve()
-print(f"[recipes] CSV_DIR = {CSV_DIR}")
+CUSTOM_BUCKET = "meal-plan-data"
+CUSTOM_BASE_PREFIX = "meal_db"
+
+
+def _gcs_ing_blob(user_id: str, number: int) -> str:
+    return f"{CUSTOM_BASE_PREFIX}/ingredients/{user_id}_{number}_ingredients.csv"
+
+def _gcs_inst_blob(user_id: str, number: int) -> str:
+    return f"{CUSTOM_BASE_PREFIX}/instructions/{user_id}_{number}_instructions.csv"
 
 def get_conn():
     dbm = DatabaseManager()
@@ -34,7 +45,7 @@ TABLE_COLUMNS = {
     "riboflavin_mg", "niacin_mg", "vitamin_B5_pantothenic_acid_mg", "vitamin_B6_mg",
     "vitamin_B12_added_ug", "vitamin_B12_ug", "folate_DFE_ug", "folate_food_ug",
     "folate_total_ug", "folic_acid_g", "vitamin_C_total_ascorbic_acid_mg",
-    "vitiamin_D_IU", "vitamin_D2D3_g", "vitamin_D2_ergocalciferol_g",
+    "vitiamin_D_IU", "vitamin_D2D3_ug", "vitamin_D2_ergocalciferol_g",
     "vitamin_E_alphatocopherol_mg", "vitamin_E_added_mg", "tocopherol_beta_mg",
     "tocopherol_delta_mg", "tocopherol_gamma_mg", "tocotrienol_alpha_mg",
     "tocotrienol_beta_mg", "tocotrienol_delta_mg", "tocotrienol_gamma_mg",
@@ -50,21 +61,6 @@ TABLE_COLUMNS = {
     "fight_cancer_score", "lose_weight_score",
 }
 
-def _safe_path(base: Path, p: Path) -> Path:
-    p = p.resolve()
-    if base not in p.parents and p != base:
-        raise ValueError("Unsafe path")
-    return p
-
-def _ing_path(user_id: str, number: int) -> Path:
-    return _safe_path(ING_DIR, (ING_DIR / f"{user_id}_{number}_ingredients.csv"))
-
-def _inst_path(user_id: str, number: int) -> Path:
-    return _safe_path(INST_DIR, (INST_DIR / f"{user_id}_{number}_instructions.csv"))
-
-def _ensure_dirs():
-    os.makedirs(ING_DIR, exist_ok=True)
-    os.makedirs(INST_DIR, exist_ok=True)
 
 def _lk(lower_row: dict, key: str, default=""):
     """Lookup using a row whose keys are already lower-cased."""
@@ -88,36 +84,42 @@ INST_HEADERS = ["Step", "Instruction"]
 
 @bp.get("/recipes/<user_id>/<int:number>/files")
 def get_recipe_files(user_id: str, number: int):
-    ing_file = _ing_path(user_id, number)
-    inst_file = _inst_path(user_id, number)
+    ing_blob = _gcs_ing_blob(user_id, number)
+    inst_blob = _gcs_inst_blob(user_id, number)
 
     ingredients = []
-    if ing_file.exists():
-        with ing_file.open(newline="", encoding="utf-8") as f:
-            r = csv.DictReader(f)
-            for row in r:
-                lr = { (k or "").strip().lower(): v for k, v in row.items() }
-                ingredients.append({
-                    "name":          _lk(lr, "ingredient name", ""),
-                    "amount":        _lk(lr, "quantity", ""),
-                    "unit":          _lk(lr, "unit", ""),
-                    "note":          _lk(lr, "state", ""),
-                    "energy_kcal":   _lk(lr, "energy (kcal)", ""),
-                    "carbohydrates": _lk(lr, "carbohydrates", ""),
-                    "protein_g":     _lk(lr, "protein (g)", ""),
-                    "fat_g":         _lk(lr, "total lipid (fat) (g)", ""),
-                })
+    try:
+        ing_text = read_blob_text_from_gcs(CUSTOM_BUCKET, ing_blob)
+        f = io.StringIO(ing_text)
+        r = csv.DictReader(f)
+        for row in r:
+            lr = {(k or "").strip().lower(): v for k, v in row.items()}
+            ingredients.append({
+                "name":          _lk(lr, "ingredient name", ""),
+                "amount":        _lk(lr, "quantity", ""),
+                "unit":          _lk(lr, "unit", ""),
+                "note":          _lk(lr, "state", ""),
+                "energy_kcal":   _lk(lr, "energy (kcal)", ""),
+                "carbohydrates": _lk(lr, "carbohydrates", ""),
+                "protein_g":     _lk(lr, "protein (g)", ""),
+                "fat_g":         _lk(lr, "total lipid (fat) (g)", ""),
+            })
+    except FileNotFoundError:
+        pass
 
     instructions = []
-    if inst_file.exists():
-        with inst_file.open(newline="", encoding="utf-8") as f:
-            r = csv.DictReader(f)
-            for row in r:
-                lr = { (k or "").strip().lower(): v for k, v in row.items() }
-                text = _lk(lr, "instruction", None)
-                if text is None or str(text).strip() == "":
-                    text = _lk(lr, "step", "")
-                instructions.append(str(text))
+    try:
+        inst_text = read_blob_text_from_gcs(CUSTOM_BUCKET, inst_blob)
+        f = io.StringIO(inst_text)
+        r = csv.DictReader(f)
+        for row in r:
+            lr = {(k or "").strip().lower(): v for k, v in row.items()}
+            text = _lk(lr, "instruction", None)
+            if text is None or str(text).strip() == "":
+                text = _lk(lr, "step", "")
+            instructions.append(str(text))
+    except FileNotFoundError:
+        pass
 
     return jsonify({"ingredients": ingredients, "instructions": instructions})
 
@@ -125,64 +127,104 @@ def get_recipe_files(user_id: str, number: int):
 
 @bp.put("/recipes/<user_id>/<int:number>/files")
 def put_recipe_files(user_id: str, number: int):
-    """
-    Body:
-      {
-        ingredients: [{
-          name, amount, unit, note,
-          energy_kcal?, carbohydrates?, protein_g?, fat_g?
-        }],
-        instructions: [string]
-      }
-    Overwrites the two CSVs for this recipe with the EXACT required headers.
-    """
     data = request.get_json(silent=True) or {}
     ingredients = data.get("ingredients") or []
     instructions = data.get("instructions") or []
 
-    _ensure_dirs()
+    # --- build Ingredients CSV in memory ---
+    ing_buffer = io.StringIO()
+    w = csv.DictWriter(ing_buffer, fieldnames=ING_HEADERS)
+    w.writeheader()
 
-    # --- write Ingredients CSV with exact headers ---
-    ing_file = _ing_path(user_id, number)
-    with ing_file.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=ING_HEADERS)
-        w.writeheader()
-        for ing in ingredients:
-            # UI core fields
-            name   = (ing.get("name") or "").strip()
-            qty    = ing.get("amount") if ing.get("amount") is not None else ""
-            unit   = (ing.get("unit") or "").strip()
-            state  = (ing.get("note") or "").strip()  # map UI note -> State
+    for ing in ingredients:
+        name   = (ing.get("name") or "").strip()
+        qty    = ing.get("amount") if ing.get("amount") is not None else ""
+        unit   = (ing.get("unit") or "").strip()
+        state  = (ing.get("note") or "").strip()
 
-            # Optional preserved fields (write blanks if not provided)
-            energy_kcal   = ing.get("energy_kcal", "")
-            carbohydrates = ing.get("carbohydrates", "")
-            protein_g     = ing.get("protein_g", "")
-            fat_g         = ing.get("fat_g", "")
+        w.writerow({
+            "Ingredient Name":       name,
+            "Quantity":              qty,
+            "Unit":                  unit,
+            "State":                 state,
+            "Energy (kcal)":         ing.get("energy_kcal", ""),
+            "Carbohydrates":         ing.get("carbohydrates", ""),
+            "Protein (g)":           ing.get("protein_g", ""),
+            "Total Lipid (Fat) (g)": ing.get("fat_g", ""),
+        })
 
-            w.writerow({
-                "Ingredient Name":       name,
-                "Quantity":              qty,
-                "Unit":                  unit,
-                "State":                 state,
-                "Energy (kcal)":         energy_kcal,
-                "Carbohydrates":         carbohydrates,
-                "Protein (g)":           protein_g,
-                "Total Lipid (Fat) (g)": fat_g,
-            })
+    ingredients_csv = ing_buffer.getvalue()
 
-    # --- write Instructions CSV with exact headers ---
-    inst_file = _inst_path(user_id, number)
-    with inst_file.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=INST_HEADERS)
-        w.writeheader()
-        for idx, text in enumerate(instructions, start=1):
-            w.writerow({
-                "Step": idx,
-                "Instruction": (text or "").strip(),
-            })
+    # --- build Instructions CSV in memory ---
+    inst_buffer = io.StringIO()
+    w = csv.DictWriter(inst_buffer, fieldnames=INST_HEADERS)
+    w.writeheader()
 
-    return jsonify({"ok": True})
+    for idx, text in enumerate(instructions, start=1):
+        w.writerow({
+            "Step": idx,
+            "Instruction": (text or "").strip(),
+        })
+
+    instructions_csv = inst_buffer.getvalue()
+
+    # --- upload both CSVs to GCS ---
+    ingredients_filename  = f"{user_id}_{number}_ingredients.csv"
+    instructions_filename = f"{user_id}_{number}_instructions.csv"
+
+    _upload_csv_string_to_gcs(
+        "meal-plan-data",
+        f"meal_db/ingredients/{ingredients_filename}",
+        ingredients_csv,
+    )
+    _upload_csv_string_to_gcs(
+        "meal-plan-data",
+        f"meal_db/instructions/{instructions_filename}",
+        instructions_csv,
+    )
+
+    # -------------------------
+    # ✅ DB update (sync fields)
+    # -------------------------
+    # cooking_instructions: list -> newline string
+    cooking_instructions = "\n".join(
+        [str(x).strip() for x in instructions if str(x).strip()]
+    ) or None
+
+    # ingredients strings (DB format)
+    # NOTE: _build_ingredients_strings expects raw items like {name, quantity/unit...}
+    # your UI uses amount, so map to quantity for that helper
+    raw_for_build = []
+    for ing in ingredients:
+        raw_for_build.append({
+            "name": ing.get("name"),
+            "quantity": ing.get("amount"),  # important
+            "unit": ing.get("unit"),
+        })
+
+    ingredients_str, ingredients_with_qty_str = _build_ingredients_strings(raw_for_build)
+
+    # If you want nutrition totals updated too, you can also re-run calc_nutrition here
+    # (optional; commented out to keep PUT fast)
+    # ingredients_for_calc = extract_ingredients_for_calc(raw_for_build)
+    # nut = calc_nutrition(ingredients_for_calc)
+    # totals = nut.get("totals") or {}
+    conn = get_conn()
+    with conn.cursor() as cur:
+        cur.execute("""
+            UPDATE custom_recipes
+            SET ingredients=%s,
+                ingredients_with_quantities=%s,
+                cooking_instructions=%s
+            WHERE user_id=%s AND `number`=%s
+        """, (ingredients_str, ingredients_with_qty_str, cooking_instructions, user_id, number))
+        conn.commit()
+
+    res = {"rows_affected": cur.rowcount}
+
+    return jsonify({"ok": True, "db": res})
+
+
 
 
 def _coerce(v):
@@ -276,60 +318,6 @@ def _upsert_row(cur, data: dict, mode: str = "update"):
     cur.execute(sql, tuple(row[c] for c in columns))
     return {"ok": True, "skipped": False, "user_id": user_id, "number": number}
 
-def _sync_all_csvs(mode: str = "update"):
-    """
-    Scan CSV_DIR, read first row of each CSV, and upsert user-agnostically.
-    Requires each CSV to include a 'user_id' field to know who owns the row.
-    """
-    csv_files = sorted([p for p in CSV_DIR.glob("*.csv") if p.is_file()])
-    if not csv_files:
-        return {"ok": True, "files": 0, "inserted_or_updated": 0, "skipped": 0}
-
-    conn = get_conn()
-    inserted_or_updated = 0
-    skipped = 0
-    with conn.cursor(pymysql.cursors.DictCursor) as cur:
-        for path in csv_files:
-            try:
-                with open(path, encoding="utf-8") as f:
-                    r = csv.DictReader(f)
-                    raw = next(r, None)
-                    if not raw:
-                        continue
-                    data = _normalize_headers(raw)
-
-                    # We expect CSVs to carry their own user_id 
-                    csv_user = (data.get("user_id") or "").strip()
-                    if not csv_user:
-                        # No user_id in file; we can't place it → skip
-                        print(f"[recipes-sync] SKIP {path.name}: missing user_id")
-                        skipped += 1
-                        continue
-
-                    res = _upsert_row(cur, data, mode=mode)
-                    if res.get("ok"):
-                        if res.get("skipped"):
-                            skipped += 1
-                        else:
-                            inserted_or_updated += 1
-                    else:
-                        skipped += 1
-                        print(f"[recipes-sync] SKIP {path.name}: {res}")
-            except Exception as e:
-                skipped += 1
-                print(f"[recipes-sync] ERROR in {path.name}: {e!r}")
-
-        conn.commit()
-
-    return {"ok": True, "files": len(csv_files), "inserted_or_updated": inserted_or_updated, "skipped": skipped}
-
-# Optional manual trigger (handy for testing)
-@bp.post("/recipes/sync")
-def manual_sync():
-    mode = (request.json or {}).get("mode") or "update"
-    out = _sync_all_csvs(mode=mode)
-    return jsonify(out)
-
 @bp.get("/recipes")
 def list_recipes():
     """
@@ -337,13 +325,15 @@ def list_recipes():
     then return recipes for the requested user_id only.
     """
     # Auto-sync first (update existing or insert new)
-    _ = _sync_all_csvs(mode="update")
+    # _ = _sync_all_csvs(mode="update")
 
     user_id = request.args.get("user_id")
     where = "WHERE user_id=%s" if user_id else ""
     params = (user_id,) if user_id else ()
 
     conn = get_conn()
+
+    
     with conn.cursor(pymysql.cursors.DictCursor) as cur:
         cur.execute(f"""
             SELECT user_id, `number`, title, meal_type, meal_slot
@@ -383,7 +373,6 @@ def create_recipe(user_id):
 # Following functions are used for custom recipes to show up in the Replace Search
 
 
-
 TITLE_GUESS_FIELDS = ["title", "name", "recipe", "recipe_title"]
 
 def _read_first_row_csv(path: Path) -> Optional[dict]:
@@ -398,10 +387,6 @@ def _read_first_row_csv(path: Path) -> Optional[dict]:
         return None
 
 def _title_from_sources(cur, uid: str, number: int) -> str:
-    """
-    Prefer DB title (custom_recipes.title). If missing, try the nutrients CSV header fields.
-    Fallback to a generic label.
-    """
     cur.execute(
         "SELECT title FROM custom_recipes WHERE user_id=%s AND `number`=%s LIMIT 1",
         (uid, number),
@@ -409,16 +394,6 @@ def _title_from_sources(cur, uid: str, number: int) -> str:
     row = cur.fetchone()
     if row and row.get("title"):
         return str(row["title"]).strip()
-
-    # fallback: try nutrients CSV
-    nutrients_csv = CSV_DIR / f"{uid}_{number}.csv"
-    first = _read_first_row_csv(nutrients_csv)
-    if first:
-        first = _normalize_headers(first)
-        for fld in TITLE_GUESS_FIELDS:
-            if fld.lower() in first and str(first[fld]).strip():
-                return str(first[fld]).strip()
-
     return f"Custom Recipe {number}"
 
 @bp.get("/custom-recipes/<user_id>/search")
@@ -428,7 +403,7 @@ def search_custom_recipes(user_id: str):
     Returns: [{ id, title, cuisine?, __source: 'custom' }]
     """
     # keep DB in sync with local CSVs before searching
-    _ = _sync_all_csvs(mode="update")
+    # _ = _sync_all_csvs(mode="update")
 
     q = (request.args.get("q") or "").strip()
     exact = (request.args.get("exact") or "false").lower() == "true"
@@ -478,13 +453,11 @@ def search_custom_recipes(user_id: str):
 @bp.get("/custom-recipes/<user_id>/<int:number>")
 def get_custom_recipe(user_id: str, number: int):
     """
-    Returns a dialog-ready payload with title + calories + cuisine + 
+    Returns a dialog-ready payload with title + calories + cuisine +
     prep/cook time + ingredients + instructions.
-    meal_type is used as the cuisine.
     """
     conn = get_conn()
     with conn.cursor(pymysql.cursors.DictCursor) as cur:
-
         cur.execute(
             """
             SELECT title,
@@ -515,81 +488,190 @@ def get_custom_recipe(user_id: str, number: int):
         if row:
             title = (row.get("title") or "").strip() or None
             energy_kcal = row.get("energy_kcal")
-            meal_type = row.get("meal_type")  
+            meal_type = row.get("meal_type")
             region = row.get("region")
             subregion = row.get("subregion")
             country = row.get("country")
             cooktime = row.get("cooktime")
             preptime = row.get("preptime")
 
-        # Fallback: extract a title from user CSV if DB title is missing
         if not title:
             title = _title_from_sources(cur, user_id, number)
 
-    # Build cuisine with same fallback as search_custom_recipes
     cuisine = region or subregion or country
 
-    # -------- Ingredients (CSV) --------
-    ing_file = _ing_path(user_id, number)
+    # -------- Ingredients (GCS CSV) --------
     ingredients = []
-    if ing_file.exists():
-        with ing_file.open(newline="", encoding="utf-8") as f:
-            r = csv.DictReader(f)
-            for row in r:
-                lr = {(k or "").strip().lower(): v for k, v in row.items()}
-                ingredients.append({
-                    "name":          _lk(lr, "ingredient name", ""),
-                    "amount":        _lk(lr, "quantity", ""),
-                    "unit":          _lk(lr, "unit", ""),
-                    "note":          _lk(lr, "state", ""),
-                    "energy_kcal":   _lk(lr, "energy (kcal)", ""),
-                    "carbohydrates": _lk(lr, "carbohydrates", ""),
-                    "protein_g":     _lk(lr, "protein (g)", ""),
-                    "fat_g":         _lk(lr, "total lipid (fat) (g)", ""),
-                })
+    ing_blob = _gcs_ing_blob(user_id, number)
+    try:
+        ing_text = read_blob_text_from_gcs(CUSTOM_BUCKET, ing_blob)
+        f = io.StringIO(ing_text)
+        r = csv.DictReader(f)
+        for row in r:
+            lr = {(k or "").strip().lower(): v for k, v in row.items()}
+            ingredients.append({
+                "name":          _lk(lr, "ingredient name", ""),
+                "amount":        _lk(lr, "quantity", ""),
+                "unit":          _lk(lr, "unit", ""),
+                "note":          _lk(lr, "state", ""),
+                "energy_kcal":   _lk(lr, "energy (kcal)", ""),
+                "carbohydrates": _lk(lr, "carbohydrates", ""),
+                "protein_g":     _lk(lr, "protein (g)", ""),
+                "fat_g":         _lk(lr, "total lipid (fat) (g)", ""),
+            })
+    except FileNotFoundError:
+        pass  # no ingredients csv yet
 
-    # -------- Instructions (CSV) --------
-    inst_file = _inst_path(user_id, number)
+    # -------- Instructions (GCS CSV) --------
     instructions = []
-    if inst_file.exists():
-        with inst_file.open(newline="", encoding="utf-8") as f:
-            r = csv.DictReader(f)
-            for row in r:
-                lr = {(k or "").strip().lower(): v for k, v in row.items()}
-                text = _lk(lr, "instruction", None)
-                if text is None or str(text).strip() == "":
-                    text = _lk(lr, "step", "")
-                instructions.append(str(text))
+    inst_blob = _gcs_inst_blob(user_id, number)
+    try:
+        inst_text = read_blob_text_from_gcs(CUSTOM_BUCKET, inst_blob)
+        f = io.StringIO(inst_text)
+        r = csv.DictReader(f)
+        for row in r:
+            lr = {(k or "").strip().lower(): v for k, v in row.items()}
+            text = _lk(lr, "instruction", None)
+            if text is None or str(text).strip() == "":
+                # fallback: sometimes step column contains the text
+                text = _lk(lr, "step", "")
+            instructions.append(str(text))
+    except FileNotFoundError:
+        pass  # no instructions csv yet
 
-    # -------- Response --------
     return jsonify({
         "id": number,
         "title": title,
         "source": "custom",
-
-        # Dialog-facing fields
         "calories": energy_kcal,
         "region": cuisine,
         "cook_time": cooktime,
         "prep_time": preptime,
-
-        # CSV-loaded arrays
         "ingredients": ingredients,
         "instructions": instructions,
     })
 
-
-
 @bp.get("/custom-recipes/<user_id>/<int:number>/ingredients.csv")
 def stream_custom_ingredients(user_id: str, number: int):
-    p = _ing_path(user_id, number)
-    if not p.exists():
+    blob_path = _gcs_ing_blob(user_id, number)
+    try:
+        data = read_blob_bytes_from_gcs(CUSTOM_BUCKET, blob_path)
+    except FileNotFoundError:
         return jsonify({"error": "ingredients CSV not found"}), 404
-    return send_file(p, mimetype="text/csv")
+
+    return send_file(
+        BytesIO(data),
+        mimetype="text/csv; charset=utf-8",
+        as_attachment=False,
+        download_name=f"{user_id}_{number}_ingredients.csv",
+    )
+
 
 @bp.get("/custom-recipes/<user_id>/<int:number>/instructions.csv")
 def stream_custom_instructions(user_id: str, number: int):
-    p = _inst_path(user_id, number)
-    if not p.exists():
+    blob_path = _gcs_inst_blob(user_id, number)
+    try:
+        data = read_blob_bytes_from_gcs(CUSTOM_BUCKET, blob_path)
+    except FileNotFoundError:
         return jsonify({"error": "instructions CSV not found"}), 404
-    return send_file(p, mimetype="text/csv")
+
+    return send_file(
+        BytesIO(data),
+        mimetype="text/csv; charset=utf-8",
+        as_attachment=False,
+        download_name=f"{user_id}_{number}_instructions.csv",
+    )
+
+def _quote_py(s: str) -> str:
+    return "'" + str(s).replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+def _build_ingredients_strings(raw_ingredients):
+    """
+    raw_ingredients: [{name, quantity, unit, ...}] (quantity string 가능)
+    return:
+      ingredients_str: "['water','lentil']"
+      ingredients_with_qty_str: "['water',1.0,'lentil',0.5]"
+    """
+    items = []
+    for it in (raw_ingredients or []):
+        name = str(it.get("name", "")).strip()
+        qty = extract_ingredients_for_calc([it])[0]["quantity"]  # parse_quantity 
+        items.append((name, qty))
+
+    ingredients_str = "[" + ", ".join(_quote_py(n) for (n, _) in items) + "]"
+    ingredients_with_qty_str = "[" + ", ".join(
+        f"{_quote_py(n)}, {float(qty)}" for (n, qty) in items
+    ) + "]"
+    return ingredients_str, ingredients_with_qty_str
+
+
+@bp.route("/custom-recipes/<user_id>/<int:number>/save", methods=["PUT", "OPTIONS"])
+def save_custom_recipe(user_id: str, number: int):
+
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    body = request.get_json(silent=True) or {}
+
+    title     = (body.get("title") or "").strip()
+    meal_type = (body.get("meal_type") or "Lunch").strip()
+    meal_slot = (body.get("meal_slot") or "Main").strip()
+
+    region    = (body.get("region") or "").strip() or None
+    subregion = (body.get("subregion") or "").strip() or None
+    country   = (body.get("country") or "").strip() or None
+
+    cooktime  = body.get("cooktime")
+    preptime  = body.get("preptime")
+
+    raw_ingredients = body.get("ingredients") or []
+    instructions = body.get("instructions") or []
+
+    if not isinstance(raw_ingredients, list) or len(raw_ingredients) == 0:
+        return jsonify({"ok": False, "error": "ingredients must be a non-empty list"}), 400
+
+    if isinstance(instructions, list):
+        cooking_instructions = "\n".join(
+            [str(x).strip() for x in instructions if str(x).strip()]
+        )
+    else:
+        cooking_instructions = str(instructions or "").strip()
+
+    ingredients_str, ingredients_with_qty_str = _build_ingredients_strings(raw_ingredients)
+
+    ingredients_for_calc = extract_ingredients_for_calc(raw_ingredients)
+    try:
+        nut = calc_nutrition(ingredients_for_calc)
+        per_ingredient = nut.get("per_ingredient") or []
+        totals = nut.get("totals") or {}
+    except Exception as e:
+        return jsonify({"ok": False, "error": f"nutrition_calc_failed: {e!r}"}), 500
+
+    # ✅ DB upsert payload
+    data = {
+        "user_id": user_id,
+        "number": number,
+        "title": title or f"Custom Recipe {number}",
+        "meal_type": meal_type,
+        "meal_slot": meal_slot,
+        "region": region,
+        "subregion": subregion,
+        "country": country,
+        "cooktime": cooktime,
+        "preptime": preptime,
+        "ingredients": ingredients_str,
+        "ingredients_with_quantities": ingredients_with_qty_str,
+        "cooking_instructions": cooking_instructions or None,
+    }
+
+    # totals -> TABLE_COLUMNS
+    for k, v in (totals or {}).items():
+        if k in TABLE_COLUMNS:
+            data[k] = v
+
+    conn = get_conn()
+    with conn.cursor(pymysql.cursors.DictCursor) as cur:
+        res = _upsert_row(cur, data, mode="update")
+        conn.commit()
+
+    return jsonify({"ok": True, "result": res, "totals": totals, "per_ingredient": per_ingredient})
