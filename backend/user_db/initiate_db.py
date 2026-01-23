@@ -562,7 +562,7 @@ class DatabaseSchemaManager:
         );
         """
         try:
-            cursor.execute(drop_table_sql)
+            # cursor.execute(drop_table_sql)
             cursor.execute(create_table_sql)
             self.db.commit()
             print("custom_recipes table created successfully.")
