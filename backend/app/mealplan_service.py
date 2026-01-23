@@ -129,13 +129,40 @@ def upload_custom_recipe_assets_to_gcs(
         "instructions_path": instructions_blob,
     }
 
-def read_custom_recipe_assets_from_gcs(user_id: str, *,
-                                number: int,
-                                bucket_name: str = "meal-plan-data",
-                                base_prefix: str = "meal_db"):
-
-    instructions_blob = f"{base_prefix}/instructions/instructions_{recipe_id}.csv"
-    ingredients_blob  = f"{base_prefix}/ingredients/{recipe_id}.csv"
+def read_custom_recipe_assets_from_gcs(
+    user_id: str,
+    *,
+    number: int,
+    bucket_name: str = "meal-plan-data",
+    base_prefix: str = "meal_db",
+):
+    instructions_blob = f"{base_prefix}/instructions/{user_id}_{number}_instructions.csv"
+    ingredients_blob  = f"{base_prefix}/ingredients/{user_id}_{number}_ingredients.csv"
 
     instructions = read_csv_rows_from_gcs(bucket_name, instructions_blob, encoding="utf-8")
     ingredients  = read_csv_rows_from_gcs(bucket_name, ingredients_blob,  encoding="utf-8")
+
+    return instructions, ingredients
+
+
+def read_blob_bytes_from_gcs(bucket_name: str, blob_path: str) -> bytes:
+    client = _get_storage_client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+
+    if not blob.exists():
+        raise FileNotFoundError(f"GCS object not found: gs://{bucket_name}/{blob_path}")
+
+    return blob.download_as_bytes()
+
+def read_blob_text_from_gcs(bucket_name: str, blob_path: str, *, encoding="utf-8") -> str:
+    client = _get_storage_client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+
+    if not blob.exists():
+        raise FileNotFoundError(f"GCS object not found: gs://{bucket_name}/{blob_path}")
+
+    with blob.open("rt", encoding=encoding, errors="underscorereplace", newline="") as f:
+        return f.read()
+
