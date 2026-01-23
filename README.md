@@ -91,7 +91,10 @@ npm install -g @angular/cli
 2. Make sure the Python environment is activated and run backend server in the backend directory
 
 ```
-flask run
+flask run 
+or
+python -m flask run
+
 ```
 
 3.  Run the frontend server in the frontend directory
